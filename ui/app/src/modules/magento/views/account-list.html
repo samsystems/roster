@@ -1,0 +1,42 @@
+<div data-ng-controller="MagentoAccountListController">
+    <!-- Toolbar message -->
+    <div class="data-table-toolbar">
+        <div class="row">
+            <div class="col-sm-6">
+                <a data-toggle="tooltip" title="Refresh" class="btn btn-default" data-ng-click="createAccount()"><i class="fa fa-plus"> Add</i></a>
+            </div>
+        </div><!-- End div .row -->
+    </div><!-- End div .data-table-toolbar -->
+    <!-- End toolbar message -->
+
+    <div class="panel-body" >
+        <div data-ng-if="!accounts.length">{{'No Accounts Available.' | translate}}</div>
+    </div>
+
+    <div class="the-box default margin-bottom">
+        <div data-ng-if="accounts.length > 0" class="table-responsive table-hover">
+            <table class="table table-striped " >
+                <thead>
+                <tr>
+                    <th >{{'Host' | translate }}</th>
+                    <th >{{'Username' | translate }}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr  class="items" data-ng-repeat="account in accounts">
+                        <td style="cursor:pointer;" ng-click="selectAccount(account)">
+                                     <span class="name">
+                                         {{account.host}}
+                                    </span>
+                        </td>
+                        <td style="cursor:pointer;" ng-click="selectAccount(account)">{{account.username}}</td>
+                        <td>
+                            <a><span class="badge ng-scope" data-tooltip="Remove" data-ng-click="removeAccount(account)"><i class="fa fa-times"></i></span></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

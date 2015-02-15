@@ -1,0 +1,258 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Roster | Inventory Management System</title>
+
+    <!-- Mobile specific metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=no">
+
+    <!-- Force IE9 to render in normal mode -->
+    <!--[if IE]><meta http-equiv="x-ua-compatible" content="IE=9" /><![endif]-->
+
+    <meta name="author" content="" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="application-name" content="" />
+
+    <!-- Import google fonts - Heading first/ text second -->
+    <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/AngularJS-Toaster/toaster.css" />
+    <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="bower_components/angular-dialog-service/dialogs.min.css" />
+    <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css" />
+    <link rel="stylesheet" href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css" />
+    <link rel="stylesheet" href="bower_components/ng-table/dist/ng-table.min.css" />
+    <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
+    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+    <link rel="stylesheet" href="bower_components/sweetalert/lib/sweet-alert.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css(.tmp) styles/style.css -->
+    <link rel="stylesheet" href="styles/icons.css" />
+    <link rel="stylesheet" href="styles/bootstrap-custom.css" />
+    <link rel="stylesheet" href="styles/plugins.css" />
+    <link rel="stylesheet" href="src/components/amitava82-angular-multiselect/src/style.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <!-- endbuild -->
+
+    <!-- Windows8 touch icon ( http://www.buildmypinnedsite.com/ )-->
+    <meta name="msapplication-TileColor" content="#3399cc" />
+</head>
+<body ng-app="inventory" ng-class="{'login-page': state == 'login'}" class="tooltips full-content">
+    <!--[if lt IE 7]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <toaster-container></toaster-container>
+
+    <div ui-view></div>
+
+    <!-- build:js(.) src/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <script src="bower_components/ng-file-upload/ng-file-upload-shim.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+    <!-- build:js(.) src/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/AngularJS-Toaster/toaster.js"></script>
+    <script src="bower_components/highcharts-ng/dist/highcharts-ng.js"></script>
+    <script src="bower_components/highcharts-release/highcharts.js"></script>
+    <script src="bower_components/highcharts-release/highcharts-more.js"></script>
+    <script src="bower_components/highcharts-release/modules/exporting.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/angular-wizard/dist/angular-wizard.js"></script>
+    <script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="bower_components/angular-dialog-service/dialogs.min.js"></script>
+    <script src="bower_components/angular-dialog-service/dialogs-default-translations.min.js"></script>
+    <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+    <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+    <script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+    <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
+    <script src="bower_components/underscore.string/lib/underscore.string.js"></script>
+    <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
+    <script src="bower_components/ng-table/dist/ng-table.min.js"></script>
+    <script src="bower_components/angular-inflector/dist/angular-inflector.min.js"></script>
+    <script src="bower_components/angular-restmod/dist/angular-restmod-bundle.min.js"></script>
+    <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="bower_components/sweetalert/lib/sweet-alert.js"></script>
+    <script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
+    <script src="bower_components/angular-validation/dist/angular-validation.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) src/scripts.js -->
+    <script src="bower_components/angular-restmod/dist/styles/ams.min.js"></script>
+    <script src="bower_components/angular-validation/dist/angular-validation-rule.js"></script>
+    <script src="src/components/accounting/accounting.js"></script>
+    <script src="src/components/amitava82-angular-multiselect/src/multiselect-tpls.js"></script>
+    <script src="src/components/bootstrap-filestyle/bootstrap-filestyle.min.js"></script>
+
+    <script src="src/config.js"></script>
+    <script src="src/app.js"></script>
+    <script src="src/modules/common/Module.js"></script>
+    <script src="src/modules/common/services/AuthenticationService.js"></script>
+    <script src="src/modules/common/services/TokenInterceptor.js"></script>
+    <script src="src/modules/common/models/BaseModel.js"></script>
+    <script src="src/modules/common/services/Base64.js"></script>
+    <script src="src/modules/common/services/BasicAuth.js"></script>
+    <script src="src/modules/common/services/DateTimeService.js"></script>
+    <script src="src/modules/common/services/UUIDService.js"></script>
+    <script src="src/modules/common/services/LanguageAsyncLoaderService.js"></script>
+    <script src="src/modules/common/services/CurrencyService.js"></script>
+    <script src="src/modules/common/services/QuestionSetService.js"></script>
+    <script src="src/modules/common/services/ServiceService.js"></script>
+    <script src="src/modules/common/services/FrequencyService.js"></script>
+    <script src="src/modules/common/services/PermissionService.js"></script>
+    <script src="src/modules/common/services/DocumentService.js"></script>
+    <script src="src/modules/common/models/Country.js"></script>
+    <script src="src/modules/common/services/CommunService.js"></script>
+    <script src="src/modules/common/models/State.js"></script>
+    <script src="src/modules/common/filters/OutputDateFilter.js"></script>
+    <script src="src/modules/common/filters/OutputDateTimeFilter.js"></script>
+    <script src="src/modules/common/filters/InputDateFilter.js"></script>
+    <script src="src/modules/common/filters/InputDateTimeFilter.js"></script>
+    <script src="src/modules/common/filters/StartFromFilter.js"></script>
+    <script src="src/modules/common/filters/UCFirstFilter.js"></script>
+    <script src="src/modules/common/filters/WhenEmptyFilter.js"></script>
+    <script src="src/modules/common/filters/IfFilter.js"></script>
+    <script src="src/modules/common/filters/DateTimeElapsedFilter.js"></script>
+    <script src="src/modules/common/filters/PhoneFilter.js"></script>
+    <script src="src/modules/common/directives/CompileDirective.js"></script>
+    <script src="src/modules/common/directives/DateTimePickerDirective.js"></script>
+    <script src="src/modules/common/directives/CurrencyDirective.js"></script>
+    <script src="src/modules/common/directives/QuestionSetDirective.js"></script>
+    <script src="src/modules/common/directives/DynamicAttributesDirective.js"></script>
+    <script src="src/modules/common/directives/NgUniqueDirective.js"></script>
+    <script src="src/modules/common/directives/NavBarDirective.js"></script>
+    <script src="src/modules/common/directives/SideBarUserInfoDirective.js"></script>
+    <script src="src/modules/common/directives/NavBarNotificationsDirective.js"></script>
+    <script src="src/modules/common/directives/LeftSidebarDirective.js"></script>
+    <script src="src/modules/common/directives/RightSidebarDirective.js"></script>
+    <script src="src/modules/common/directives/PageDirective.js"></script>
+    <script src="src/modules/common/directives/PageContentDirective.js"></script>
+    <script src="src/modules/common/directives/PanelDirective.js"></script>
+    <script src="src/modules/common/directives/PageContentTitleDirective.js"></script>
+    <script src="src/modules/common/directives/FormDirective.js"></script>
+    <script src="src/modules/common/controllers/LoginController.js"></script>
+    <script src="src/modules/common/controllers/RegisterController.js"></script>
+    <script src="src/modules/common/controllers/ForgotController.js"></script>
+    <script src="src/modules/common/providers/PrintProvider.js"></script>
+
+    <script src="src/modules/dashboard/Module.js"></script>
+    <script src="src/modules/dashboard/controllers/DashboardController.js"></script>
+
+    <script src="src/modules/profile/Module.js"></script>
+    <script src="src/modules/profile/controllers/ProfileController.js"></script>
+
+    <script src="src/modules/product/Module.js"></script>
+    <script src="src/modules/product/models/Product.js"></script>
+    <script src="src/modules/product/models/Note.js"></script>
+    <script src="src/modules/product/controllers/ProductController.js"></script>
+    <script src="src/modules/product/controllers/ProductFormController.js"></script>
+    <script src="src/modules/product/controllers/ReviewProductController.js"></script>
+
+    <script src="src/modules/purchase/Module.js"></script>
+    <script src="src/modules/purchase/controllers/AllPurchaseController.js"></script>
+    <script src="src/modules/purchase/controllers/BilledPurchaseController.js"></script>
+    <script src="src/modules/purchase/controllers/DraftPurchaseController.js"></script>
+    <script src="src/modules/purchase/controllers/ApprovedPurchaseController.js"></script>
+    <script src="src/modules/purchase/controllers/AwaitingPurchaseController.js"></script>
+    <script src="src/modules/purchase/controllers/PurchaseController.js"></script>
+    <script src="src/modules/purchase/controllers/PurchaseFormController.js"></script>
+    <script src="src/modules/purchase/controllers/ReviewPurchaseController.js"></script>
+    <script src="src/modules/purchase/models/PurchaseOrder.js"></script>
+
+    <script src="src/modules/sale/Module.js"></script>
+    <script src="src/modules/sale/controllers/SaleController.js"></script>
+    <script src="src/modules/sale/controllers/SaleFormController.js"></script>
+    <script src="src/modules/sale/controllers/ReviewSaleController.js"></script>
+
+    <script src="src/modules/notification/Module.js"></script>
+    <script src="src/modules/notification/models/NotificationService.js"></script>
+    <script src="src/modules/notification/controllers/NotificationController.js"></script>
+    <script src="src/modules/notification/controllers/NotificationController.js"></script>
+    <script src="src/modules/notification/controllers/NotificationFormController.js"></script>
+    <script src="src/modules/notification/controllers/NotificationViewController.js"></script>
+
+    <script src="src/modules/vendor/Module.js"></script>
+    <script src="src/modules/vendor/models/Vendor.js"></script>
+    <script src="src/modules/vendor/controllers/VendorController.js"></script>
+    <script src="src/modules/vendor/controllers/VendorListController.js"></script>
+    <script src="src/modules/vendor/controllers/VendorFormController.js"></script>
+    <script src="src/modules/vendor/controllers/VendorViewController.js"></script>
+
+    <script src="src/modules/invoice/Module.js"></script>
+    <script src="src/modules/invoice/models/Invoice.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceListDraftController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceListCompletedController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceListPaidController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceListAllController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceListVoidController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceFormController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoiceViewController.js"></script>
+    <script src="src/modules/invoice/controllers/InvoicePrintController.js"></script>
+
+    <script src="src/modules/contact/Module.js"></script>
+    <script src="src/modules/contact/models/Contact.js"></script>
+    <script src="src/modules/contact/controllers/ContactController.js"></script>
+    <script src="src/modules/contact/controllers/ContactListController.js"></script>
+
+    <script src="src/modules/customer/Module.js"></script>
+    <script src="src/modules/customer/models/Customer.js"></script>
+    <script src="src/modules/customer/controllers/CustomerController.js"></script>
+    <script src="src/modules/customer/controllers/CustomerListController.js"></script>
+    <script src="src/modules/customer/controllers/CustomerFormController.js"></script>
+    <script src="src/modules/customer/controllers/CustomerViewController.js"></script>
+
+    <script src="src/modules/company/Module.js"></script>
+    <script src="src/modules/company/models/Company.js"></script>
+    <script src="src/modules/company/controllers/CompanyController.js"></script>
+    <script src="src/modules/company/controllers/CompanyFormController.js"></script>
+    <script src="src/modules/company/controllers/CompanyViewController.js"></script>
+
+    <script src="src/modules/group/Module.js"></script>
+    <script src="src/modules/group/controllers/GroupController.js"></script>
+    <script src="src/modules/group/models/Group.js"></script>
+    <script src="src/modules/group/wizards/GroupWizard.js"></script>
+
+    <script src="src/modules/user/Module.js"></script>
+    <script src="src/modules/user/directives/PassCheck.js"></script>
+    <script src="src/modules/user/controllers/UserController.js"></script>
+    <script src="src/modules/user/controllers/UserListController.js"></script>
+    <script src="src/modules/user/controllers/UserFormController.js"></script>
+    <script src="src/modules/user/models/User.js"></script>
+
+    <script src="src/modules/magento/Module.js"></script>
+    <script src="src/modules/magento/controllers/MagentoAccountController.js"></script>
+    <script src="src/modules/magento/controllers/MagentoAccountListController.js"></script>
+    <script src="src/modules/magento/controllers/MagentoAccountFormController.js"></script>
+    <script src="src/modules/magento/models/MagentoAccount.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

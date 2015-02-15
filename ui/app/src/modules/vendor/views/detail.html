@@ -1,0 +1,111 @@
+<!-- Page header -->
+<div class="page-heading animated fadeInDownBig">
+    <h1>Vendor Detail</h1>
+</div>
+<div class="row">
+    <div class="box-info">
+        <p class="text-right"><strong>{{vendor.created | outputFormatDateTime }}</strong></p>
+        <div>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td colspan="2">
+                        <a class="btn btn-danger btn-sm" data-ng-click="removeVendor(vendor)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
+                        <a href="#/vendor" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 100px;"><strong>Name</strong></td>
+                    <td>{{vendor.name}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Category</strong></td>
+                    <td>{{vendor.category}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Phone</strong></td>
+                    <td>{{vendor.phone}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Fax</strong></td>
+                    <td>{{vendor.fax}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email</strong></td>
+                    <td>{{vendor.email}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Address</strong></td>
+                    <td>{{vendor.address}}</td>
+                </tr>
+                <tr>
+                    <td><strong>City</strong></td>
+                    <td>{{vendor.city}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Zip Code</strong></td>
+                    <td>{{vendor.zipcode}}</td>
+                </tr>
+                <tr>
+                    <td><strong>State</strong></td>
+                    <td>{{vendor.state.name}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Country</strong></td>
+                    <td>{{vendor.country.name}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Notes</strong></td>
+                    <td>{{vendor.notes}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="table-responsive" ng-show="contacts.length > 0" style="margin: 20px 0 0 18px">
+                <p><strong>Contacts:</strong></p>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width: 15%">First Name</th>
+                        <th style="width: 15%">Last Name</th>
+                        <th style="width: 10%">Phone</th>
+                        <th style="width: 10%">Email</th>
+                        <th style="width: 15%">Photo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="contact in contacts">
+                        <td style="cursor:pointer;">
+                            {{contact.name}}
+                        </td>
+                        <td style="cursor:pointer;">
+                            {{contact.last_name}}
+                        </td>
+                        <td style="cursor:pointer;">
+                            {{contact.phone}}
+                        </td>
+                        <td style="cursor:pointer;">
+                            {{contact.email}}
+                        </td>
+                        <td style="cursor:pointer;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="inner">
+                                        <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
+                                            <div class="img-wrap" style="height: 232px; width: 307px;"
+                                                 ng-show="contact.document.id">
+                                                <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
+                                                     alt="" class="mfp-fade">
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

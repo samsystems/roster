@@ -1,0 +1,28 @@
+<div class="the-box default">
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="group-name" class="col-sm-2 control-label">{{'Name' | translate}}</label>
+            <div class="col-sm-10">
+                <input id="group-name" type="text" class="form-control" ng-model="group.name" validator="required">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="group-description" class="col-sm-2 control-label">{{'Description' | translate}}</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="group-description" ng-model="group.description" validator="required"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="group-email" class="col-sm-2 control-label">{{'Email' | translate}}</label>
+            <div class="col-sm-10">
+                <input id="group-email" type="text" class="form-control" ng-model="group.email" validator="required,email">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary ng-binding" data-ng-click="$close()">{{'Cancel' | translate}}</button>
+                <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>

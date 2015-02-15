@@ -1,0 +1,103 @@
+<page-content-title title="Vendors">
+
+  <div class="btn-group mr10 mb10">
+    <a title="Add" class="btn btn-primary" href="#/vendors/create"><i class="fa fa-plus"> New vendor</i></a>
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu" style="margin-left: -32.5px;">
+      <li>
+        <a href="#">Import vendors</a>
+      </li>
+    </ul>
+  </div>
+
+</page-content-title>
+
+<panel type="plain">
+  <div class="row">
+    <div class="col-sm-5">
+      <form role="form" ng-submit="search(searchVendor)">
+        <input type="text" data-ng-model="searchVendor" class="form-control" placeholder="Search ..."/>
+      </form>
+    </div>
+    <div class="col-sm-3">
+      <div class="pull-right" data-ng-if="vendors.length > 0">
+        <span class="paging-status">{{1+((page-1)*limitInPage)}} - {{(companies.length < limitInPage) ? total.count : (((page-1)*limitInPage)+limitInPage) }} of {{total.count}}</span>
+        <div class="btn-group">
+          <a class="btn btn-default" data-ng-click="setPage(page-1)" data-ng-class="{disabled: page == 1}"><i class="fa fa-chevron-left"></i></a>
+          <a class="btn btn-default" data-ng-click="setPage(page+1)" data-ng-class="{disabled: page >= (total.count/limitInPage)}"><i class="fa fa-chevron-right"></i></a>
+        </div>
+      </div>
+    </div><!-- End div .col-sm-3 -->
+  </div><!-- End div .row -->
+  <br />
+  <div class="table-responsive table-hover">
+    <table ng-table="vendorTable" class="table table-hover table-message" template-pagination="custom/pager">
+      <col width="20%"/>
+      <col width="10%"/>
+      <col width="10%"/>
+      <col width="10%"/>
+      <col width="15%"/>
+
+      <tr  class="items" data-ng-repeat="vendor in $data">
+        <td data-title="'Name'" sortable="'name'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
+          {{vendor.Name}}
+        </td>
+        <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
+          {{bendor.Phone}}
+        </td>
+        <td data-title="'Email'" sortable="'email'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
+          {{vendor.Email}}
+        </td>
+        <td data-title="'Open Balance'" sortable="'openBalance'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
+          {{vendor.Address1}}
+        </td>
+        <td data-title="'Action'">
+          <div class="btn-group">
+            <button type="button" class="btn btn-default fa fa-edit" data-ng-click="selectVendor(vendor)"></button>
+            <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeVendor(vendor)"></button>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <!-- Footer message toolbar -->
+    <script type="text/ng-template" id="custom/pager">
+      <div class="data-table-toolbar">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="pull-right">
+
+              <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
+              <div class="btn-group">
+                                        <span ng-repeat="page in pages"
+                                              ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                              ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                                            <a ng-switch-when="next" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
+                                        </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <!-- End Footer message toolbar -->
+  </div>
+</panel>
+<div>
+  <!-- Toolbar message -->
+  <div class="data-table-toolbar">
+
+  </div><!-- End div .data-table-toolbar -->
+  <!-- End toolbar message -->
+
+  <div class="panel-body" >
+    <div data-ng-if="total.count==0">{{'No Vendor Available.' | translate}}</div>
+  </div>
+
+  <div class="the-box default margin-bottom">
+
+  </div>
+</div>

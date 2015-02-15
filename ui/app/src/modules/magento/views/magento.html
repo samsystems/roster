@@ -1,0 +1,13 @@
+<div class="page-heading animated fadeInDownBig">
+    <h1>Magento Accounts Linked</h1>
+</div>
+<div class="box-info">
+    <wizard data-hide-indicators="true">
+        <wz-step data-title="{{step.list}}">
+            <ng-include src="'/src/modules/magento/views/account-list.html'"></ng-include>
+        </wz-step>
+        <wz-step data-title="{{step.form}}">
+            <ng-include src="'/src/modules/magento/views/account-form.html'"></ng-include>
+        </wz-step>
+    </wizard>
+</div>

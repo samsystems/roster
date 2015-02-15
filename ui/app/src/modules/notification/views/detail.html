@@ -1,0 +1,36 @@
+<!-- Page header -->
+<div class="page-heading animated fadeInDownBig">
+    <h1>Notification Detail</h1>
+</div>
+<div class="row">
+    <div class="box-info">
+        <p class="text-right"><strong>{{notification.getCreated() | outputFormatDateTime }}</strong></p>
+        <div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td colspan="2">
+                            <a class="btn btn-danger btn-sm" data-ng-click="removeNotification(notification)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
+                            <a href="#/notification" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100px;"><strong>From</strong></td>
+                        <td>{{notification.creator.getFullName()}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Title</strong></td>
+                        <td>{{notification.getTitle()}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p style="text-align: justify">
+                                {{notification.getCategory()}}
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

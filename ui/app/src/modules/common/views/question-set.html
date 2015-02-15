@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <a class="list-group-item" data-ng-repeat="questionSet in model.questionSets" data-ng-click="switchQuestionSet()" data-ng-class="{active: questionSet.visible}">{{questionSet.name}}</a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div id="questionSet-{{questionSet.id}}" data-ng-class="{hide: !questionSet.visible}" data-ng-repeat="questionSet in model.questionSets" class="no-margin">
+            <form class="form-horizontal" role="form" data-ng-repeat="question in questionSet.questions">
+                <div class="form-group col-md-12">
+                    <label class="col-md-4 control-label">{{question.name}}</label>
+                    <div class="col-md-8" data-ng-if="question.inputs.length">
+                        <div data-ng-if="question.inputs.length" data-ng-repeat="input in question.inputs">
+                            <!-- Select -->
+                            <select data-ng-model="input.answer" class="form-control" data-ng-if="input.type == 'select'" data-ng-options="v.value as v.description for v in input.values"></select>
+
+                            <!-- MultiSelect -->
+                            <multiselect data-ng-model="input.answer" data-ng-if="input.type == 'multiselect'" data-options="v.value as v.description for v in input.values" multiple="true"></multiselect>
+
+                            <!-- Input -->
+                            <input data-ng-model="input.answer" type="text" class="form-control" data-ng-if="input.type == 'input'" />
+
+                            <!-- TextBox -->
+                            <input data-ng-model="input.answer" type="text" class="form-control" data-ng-if="input.type == 'textbox'" />
+
+                            <!-- Checkbox -->
+                            <input data-ng-model="input.answer" type="text" class="form-control" data-ng-if="input.type == 'checkbox'" />
+
+                            <!-- Textarea -->
+                            <textarea data-ng-model="input.answer" class="form-control" data-ng-if="input.type == 'textarea'" rows="2"></textarea>
+
+                            <!-- Yes / No Radio -->
+                            <label class="radio-inline" data-ng-if="input.type == 'yn-radio'">
+                                <input data-ng-model="input.answer" type="radio" value="Yes">{{'Yes' | translate }}
+                            </label>
+                            <label class="radio-inline" data-ng-if="input.type == 'yn-radio'">
+                                <input data-ng-model="input.answer" type="radio" value="No"> {{'No' | translate }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

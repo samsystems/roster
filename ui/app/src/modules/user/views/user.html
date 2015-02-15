@@ -1,0 +1,13 @@
+<page-content-title title="Users"></page-content-title>
+<panel title="Users" type="plain">
+    <div data-ng-controller="UserController">
+        <wizard data-hide-indicators="true">
+            <wz-step data-title="{{step.list}}">
+                <ng-include src="'/src/modules/user/views/user-list.html'"></ng-include>
+            </wz-step>
+            <wz-step data-title="{{step.form}}">
+                <ng-include src="'/src/modules/user/views/user-form.html'"></ng-include>
+            </wz-step>
+        </wizard>
+    </div>
+</panel>

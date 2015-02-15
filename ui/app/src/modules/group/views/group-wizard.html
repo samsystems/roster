@@ -1,0 +1,10 @@
+<div id="UserWizardContainer" class="wizard">
+    <wizard data-hide-indicators="true">
+        <wz-step data-title="{{step.list}}">
+            <ng-include src="'/src/modules/group/views/group-list.html'"></ng-include>
+        </wz-step>
+        <wz-step data-title="{{step.form}}">
+            <ng-include src="'/src/modules/group/views/group-form.html'"></ng-include>
+        </wz-step>
+    </wizard>
+</div>

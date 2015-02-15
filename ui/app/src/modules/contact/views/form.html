@@ -1,0 +1,124 @@
+<div class="moduleContainer wizard">
+    <div class="page-heading animated fadeInDownBig">
+        <h1>{{'Create/Update Contact'}}</h1>
+    </div>
+
+
+    <div class="animated active fadeInRight">
+        <div class="row">
+            <div class="col-md-12">
+                <form role="form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="col-md-12 control-label">{{'First Name' | translate}}:</label>
+
+                                <div class="col-md-12">
+                                    <input id="name" data-ng-model="contact.name" type="text" class="form-control"
+                                           validator="required">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="last_name">{{'Last Name' |
+                                    translate}}:</label>
+
+                                <div class="col-md-12">
+                                    <input id="last_name" data-ng-model="contact.last_name" type="text"
+                                           class="form-control" validator="required">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone" class="col-md-12 control-label">{{'Phone' | translate}}:</label>
+
+                                <div class="col-md-12">
+                                    <input id="phone" data-ng-model="contact.phone" type="text" class="form-control"
+                                           validator="required,phone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email" class="col-md-12 control-label">{{'Email' | translate}}:</label>
+
+                                <div class="col-md-12">
+                                    <input id="email" data-ng-model="contact.email" type="text" class="form-control"
+                                           validator="required,email">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="position" class="control-label col-md-12">{{'Position' | translate}}:</label>
+
+                                <div class="col-md-12">
+                                    <input id="position" data-ng-model="contact.position" type="text" class="form-control"
+                                           validator="required">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="notes" class="control-label col-md-12">{{'Notes' | translate}}:</label>
+
+                                <div class="col-md-12">
+                                    <textarea id="notes" data-ng-model="contact.notes" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 20px 0 0 5px">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="notes" class="control-label">{{'Photo' | translate}}:</label>
+                                <input id="photo" type="file" class="btn  form-control"  ng-model="uploadFile"
+                                       data-ng-file-select="onFileSelect($files)"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left: 20px">
+                        <div class="col-md-6" >
+                            <div class="box-info">
+                                <div class="inner">
+                                    <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
+                                        <div class="img-wrap" style="height: 232px; width: 307px;" ng-show="contact.document.id">
+                                            <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
+                                                 alt="" class="mfp-fade">
+                                        </div>
+                                        <div class="caption-static">
+                                            {{contact.document.name}}
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row modal-footer" style="border-top:0px;">
+                        <div class="row col-md-4 pull-right">
+                            <button class="btn btn-primary ng-binding" data-ng-click="$close()">{{'Cancel' |
+                                translate}}
+                            </button>
+                            <button class="btn btn-success ng-binding" data-ng-click="$save()">{{'Save' | translate}}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#photo').addClass('hidden');
+    $(":file").filestyle({
+        buttonText: "Search Photo"
+    });
+</script>

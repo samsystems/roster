@@ -1,0 +1,32 @@
+<!-- End page header -->
+<div class="row">
+    <div class="col-md-12">
+        <tabset data-ng-controller="InvoiceController">
+            <tab heading="{{'Summary' | translate }}">
+                <ng-include  src="'/src/modules/sale/views/list.html'"></ng-include>
+            </tab>
+
+            <tab heading="{{'All' | translate }} ({{qty_all}})">
+                <ng-include src="'/src/modules/invoice/views/all-invoice.html'"></ng-include>
+            </tab>
+
+            <tab heading="{{'Draft' | translate }} ({{qty_draft}})">
+                <ng-include src="'/src/modules/invoice/views/draft-invoice.html'"></ng-include>
+            </tab>
+
+
+            <tab heading="{{'Unpaid' | translate }}  ({{qty_completed}})">
+                <ng-include src="'/src/modules/invoice/views/unpaid-invoice.html'"></ng-include>
+            </tab>
+
+            <tab heading="{{'Paid' | translate }}  ({{qty_paid}})">
+                <ng-include src="'/src/modules/invoice/views/paid-invoice.html'"></ng-include>
+            </tab>
+        </tabset>
+    </div>
+    <!-- End div .col-sm-8 -->
+</div>
+<!-- End div .row -->
+<div id="pdf" style="display: none" data-ng-controller="InvoiceController">
+    <ng-include src="'/src/modules/invoice/views/printPDF.html'"></ng-include>
+</div>

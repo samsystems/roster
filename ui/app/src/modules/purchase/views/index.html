@@ -1,0 +1,103 @@
+<page-content-title title="Purchase">
+    <a href="#/purchase/new"><button class="btn btn-success"><i class="fa fa-plus"></i> {{'New Purchase Order' | translate}}</button></a>
+</page-content-title>
+
+<div class="row">
+    <!-- .row -->
+    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <!-- .col-md-3 -->
+        <panel title="Drafts ({{resume.draft.cant}})">
+            <div class="progressbar-stats-1 dark">
+                <div class="stats">
+                    <i class="l-banknote"></i>
+                    <div class="stats-number money" data-from="0" data-to="24568">{{resume.draft.amount}}</div>
+                </div>
+                <div class="progress animated-bar flat transparent progress-bar-xs mb10 mt0">
+                    <div class="progress-bar progress-bar-white" role="progressbar" data-transitiongoal="55"></div>
+                </div>
+                <div class="comparison">
+                    <p class="mb0"><i class="fa fa-arrow-circle-o-down s20 mr5 pull-left"></i> 1% down from last month</p>
+                </div>
+            </div>
+        </panel>
+        <!-- End .panel -->
+    </div>
+    <!-- / .col-md-3 -->
+    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <!-- .col-md-3 -->
+        <panel title="Awaiting Approval ({{resume.awaiting.cant}})" type="warning">
+            <div class="progressbar-stats-1">
+                <div class="stats">
+                    <i class="l-banknote"></i>
+                    <div class="stats-number money" data-from="0" data-to="76">{{resume.awaiting.amount}}</div>
+                </div>
+                <div class="progress animated-bar flat transparent progress-bar-xs mb10 mt0">
+                    <div class="progress-bar progress-bar-white" role="progressbar" data-transitiongoal="63"></div>
+                </div>
+                <div class="comparison">
+                    <p class="mb0"><i class="fa fa-arrow-circle-o-up s20 mr5 pull-left"></i> 10% up from last month</p>
+                </div>
+            </div>
+        </panel>
+        <!-- End .panel -->
+    </div>
+    <!-- / .col-md-3 -->
+    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <!-- .col-md-3 -->
+        <panel title="Approved ({{resume.approved.cant}})" type="info">
+            <div class="progressbar-stats-1">
+                <div class="stats">
+                    <i class="l-banknote"></i>
+                    <div class="stats-number money" data-from="0" data-to="2547">{{resume.approved.amount}}</div>
+                </div>
+                <div class="progress animated-bar flat transparent progress-bar-xs mb10 mt0">
+                    <div class="progress-bar progress-bar-white" role="progressbar" data-transitiongoal="86"></div>
+                </div>
+                <div class="comparison">
+                    <p class="mb0"><i class="fa fa-arrow-circle-o-up s20 mr5 pull-left"></i> 2% up from last month</p>
+                </div>
+            </div>
+        </panel>
+        <!-- End .panel -->
+    </div>
+    <!-- / .col-md-3 -->
+    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <!-- .col-md-3 -->
+        <panel title="Billed ({{resume.billed.cant}})" type="success">
+            <div class="progressbar-stats-1">
+                <div class="stats">
+                    <i class="l-banknote"></i>
+                    <div class="stats-number money" data-from="0" data-to="78">{{resume.billed.amount}}</div>
+                </div>
+                <div class="progress animated-bar flat transparent progress-bar-xs mb10 mt0">
+                    <div class="progress-bar progress-bar-white" role="progressbar" data-transitiongoal="35"></div>
+                </div>
+                <div class="comparison">
+                    <p class="mb0"><i class="fa fa-arrow-circle-o-down s20 mr5 pull-left"></i> 2% down from last month</p>
+                </div>
+            </div>
+        </panel>
+        <!-- End .panel -->
+    </div>
+    <!-- / .col-md-3 -->
+</div>
+
+<panel type="plain">
+    <tabset>
+        <tab heading="All ({{resume.draft.cant + resume.awaiting.cant + resume.approved.cant + resume.billed.cant}})" data-ng-click="init()" data-ng-controller="AllPurchaseController">
+            <ng-include src="'/src/modules/purchase/views/all-purchase.html'"></ng-include>
+        </tab>
+        <tab heading="Drafts ({{resume.draft.cant}})"  data-ng-click="init()" data-ng-controller="DraftPurchaseController">
+            <ng-include src="'/src/modules/purchase/views/draft-purchase.html'"></ng-include>
+        </tab>
+        <tab heading="Awaiting Approval ({{resume.awaiting.cant}})" data-ng-click="init()" data-ng-controller="AwaitingPurchaseController">
+            <ng-include src="'/src/modules/purchase/views/awaiting-purchase.html'"></ng-include>
+        </tab>
+        <tab heading="Approved ({{resume.approved.cant}})" data-ng-click="init()" data-ng-controller="ApprovedPurchaseController">
+            <ng-include src="'/src/modules/purchase/views/approved-purchase.html'"></ng-include>
+        </tab>
+        <tab heading="Billed ({{resume.billed.cant}})" data-ng-click="init()" data-ng-controller="BilledPurchaseController">
+            <ng-include src="'/src/modules/purchase/views/billed-purchase.html'"></ng-include>
+        </tab>
+    </tabset>
+</panel>

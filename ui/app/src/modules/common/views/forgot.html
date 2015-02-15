@@ -1,0 +1,22 @@
+<div class="container">
+    <!-- Begin Forgot Password Page -->
+    <div class="full-content-center animated fadeInDownBig">
+        <a href="#fakelink"><img src="images/roster_850x300.png" width="450px" class="logo" alt="Logo"></a>
+        <div class="login-wrap">
+            <div class="box-info">
+                <h2 class="text-center"><strong>Forgot</strong> password</h2>
+
+                <form role="form" name="loginForm" data-ng-controller="ForgotController" data-ng-submit="forgot(credentials)" >
+                    <div class="form-group login-input">
+                        <i class="fa fa-user overlay"></i>
+                        <input type="email" data-ng-model="credentials.email" class="form-control text-input" placeholder="Your email">
+                    </div>
+                    <p class="text-center" data-ng-show="credentials.message">{{credentials.message}}</p>
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-lock"></i> Reset Password</button>
+                </form>
+            </div>
+            <p class="text-center"><a href="#/login"><i class="fa fa-sign-in"></i> Back to login</a></p>
+        </div>
+    </div>
+    <!-- End Forgot Password Page -->
+</div>

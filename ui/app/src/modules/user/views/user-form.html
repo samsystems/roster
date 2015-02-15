@@ -1,0 +1,140 @@
+<div class="moduleContainer wizard" data-ng-controller="UserFormController">
+    <div class="page-heading animated fadeInDownBig">
+        <h1>{{'Edit/Create User'}}</h1>
+    </div>
+    <form class="form-horizontal" id="form_user" name="form_user">
+        <div class="row">
+            <!-- Left Section -->
+            <div class="col-md-6 " >
+                <!--   Username     -->
+                <div class="form-group">
+                    <label for="username" class="col-md-6 control-label text-center" >{{'Username' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input name="username" id="username" data-value-id="{{user.id}}" data-ng-model="user.username" type="text" class="form-control" validator="required, uniqueUsername"  />
+                    </div>
+                    <span class="help-block" ng-show="form_user.username.$error.unique">Username is already taken.</span>
+                </div>
+                <!--   Password     -->
+                <div class="form-group">
+                    <label for="password" class="col-md-6 control-label text-center" >{{'Password' | translate}}:</label>
+                    <div class="input-group-btn" >
+                        <input id="password" data-ng-model="user.password" type="password" class="form-control" >
+                    </div>
+                </div>
+                <!--   First Name     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="firstName">{{'First Name' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input id="firstName" data-ng-model="user.firstName" type="text" class="form-control" validator="required" >
+                    </div>
+                </div>
+                <!--   Expiration     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="address">{{'Address' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input id="address" data-ng-model="user.address.line1" type="text" class="form-control">
+                    </div>
+                </div>
+                <!--   City     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="city">{{'City' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input id="city" data-ng-model="user.address.city" type="text" class="form-control">
+                    </div>
+                </div>
+                <!--   Country     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="country">{{'Country' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <select id="country" class="form-control" data-ng-model="user.country.id" data-ng-options ="country.id as country.name for country in countries"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="company">{{'Company' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <select id="company" class="form-control" data-ng-model="user.company.id" data-ng-options ="company.id as company.name for company in companies"></select>
+                    </div>
+                </div>
+                <!--   Groups     -->
+                <div class="form-group">
+                    <label for="groups" class="col-md-6 control-label text-center">{{'Groups' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <select id="groups" class="form-control" data-ng-model="user.group.id" data-ng-options ="group.id as group.name for group in groups"></select>
+                    </div>
+                </div>
+                <!--  Account Locked   -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center">{{'Account Locked' | translate}}:</label>
+                    <div class="input-group-btn col-xs-2 col-xs-offset-5">
+                        <input type="checkbox" data-ng-model = "user.account.lock.locked" name="locked" id="locked" value="1" class="">
+                    </div>
+                </div>
+            </div>
+            <!-- Right Section -->
+            <div class="col-md-6">
+                <!--   Email     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="email">{{'Email' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input data-ng-model="user.email" class="form-control" name="email" placeholder="email" validator="required, email">
+                    </div>
+                </div>
+                <!--   Password Confirm     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center">{{'Password Confirm' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input data-ng-model="user.passwordConfirm" type="password" class="form-control" passwd-check="user.password" >
+                    </div>
+                </div>
+                <!--   Last Name     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="lastName">{{'Last Name' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input data-ng-model="user.lastName" type="text" class="form-control" validator="required" >
+                    </div>
+                </div>
+                <!--   Address 2     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="address">{{'Address 2' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input data-ng-model="user.address.line2" type="text" class="form-control">
+                    </div>
+                </div>
+                <!--   State     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center">{{'State' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input data-ng-model="user.address.state" type="text" class="form-control">
+                    </div>
+                </div>
+                <!--   Postal     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center">{{'Postal' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input data-ng-model="user.address.postalCode" type="text" class="form-control">
+                    </div>
+                </div>
+                <!--   Date of Birth     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="dob">{{'Date of Birth' | translate}}:</label>
+                    <div class="input-group">
+                        <date-time-picker ng-model="user.dob" data-placeholder="{{'Date' | translate}}" data-format="date" validator="required"></date-time-picker>
+                    </div>
+                </div>
+                <!--   Account Expiration Date    -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center">{{'Expiration Date' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <date-time-picker ng-model="user.account.expires" data-placeholder="{{'Date' | translate}}" data-format="date"></date-time-picker>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row modal-footer" style="border-top:0px;">
+            <div class="row col-md-4 pull-right">
+                <button class="btn btn-primary ng-binding" data-ng-click="$close()">{{'Cancel' | translate}}</button>
+                <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>

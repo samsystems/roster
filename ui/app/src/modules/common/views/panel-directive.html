@@ -1,0 +1,13 @@
+<div class="panel {{panel.type}} panelClose panelRefresh" ng-class="{'plain': panel.isPlain, 'tile': !panel.isPlain}">
+    <!-- Start .panel -->
+    <div class="panel-heading">
+        <h4 class="panel-title"><i ng-if="panel.iconClass" class="{{panel.iconClass}}"></i> {{panel.title}}</h4>
+        <div class="panel-controls panel-controls-right">
+            <a href="#" class="panel-refresh"><i class="fa fa-circle-o"></i></a>
+            <a href="#" class="panel-close"><i class="fa fa-times"></i></a>
+        </div>
+    </div>
+    <div class="panel-body pt0">
+        <ng-transclude></ng-transclude>
+    </div>
+</div>

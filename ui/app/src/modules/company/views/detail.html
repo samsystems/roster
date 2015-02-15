@@ -1,0 +1,74 @@
+<page-content-title title="Company Detail">
+    <a title="Add" class="btn btn-default" href="#/companies"><i class="fa fa-plus"> Back to list</i></a>
+</page-content-title>
+<panel type="plain">
+    <div class="row">
+        <div class="box-info">
+            <p class="text-right"><strong>{{company.created | outputFormatDateTime }}</strong></p>
+            <div>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td colspan="2">
+                            <a class="btn btn-danger btn-sm" data-ng-click="removeCompany(company)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
+                            <a href="#/companies" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100px;"><strong>Name</strong></td>
+                        <td>{{company.Name}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone</strong></td>
+                        <td>{{company.Phone}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mobile</strong></td>
+                        <td>{{company.Mobile}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fax</strong></td>
+                        <td>{{company.Fax}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>{{company.Email}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address</strong></td>
+                        <td>{{company.Address1}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>City</strong></td>
+                        <td>{{company.City}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zip Code</strong></td>
+                        <td>{{company.ZipCode}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tax</strong></td>
+                        <td>{{company.Tax}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tax ID</strong></td>
+                        <td>{{company.TaxId}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Order Number</strong></td>
+                        <td>{{company.OrderNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>State</strong></td>
+                        <td>{{company.State.Name}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country</strong></td>
+                        <td>{{company.Country.Name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</panel>

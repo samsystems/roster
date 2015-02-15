@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-info">
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-success"><i class="fa fa-copy"></i> COPY TO</button>
+                    <button class="btn btn-warning"><i class="fa fa-send"></i> EMAIL</button>
+                    <button class="btn btn-default"><i class="fa fa-print"></i> PRINT</button>
+                </div>
+                <div class="col-md-12">
+                    <table ng-table="purchaseBilledTable" class="table table-hover table-message" template-pagination="custom/pager">
+                        <col width="20%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
+                        <col width="25%"/>
+                        <col width="10%"/>
+                        <col width="15%"/>
+
+                        <tr  class="items" data-ng-repeat="purchase in $data">
+                            <td data-title="'Number'" sortable="'name'"style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                                {{purchase.OrderNumber}}
+                            </td>
+                            <td data-title="'Reference'" sortable="'price'" style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                                {{purchase.Reference}}
+                            </td>
+                            <td data-title="'Supplier'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                                {{purchase.Supplier}}
+                            </td>
+                            <td data-title="'Date'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                                {{purchase.Date | outputFormatDate}}
+                            </td>
+                            <td  data-title="'Delivery Date'" sortable="'description'" style="cursor:pointer;">
+                                {{purchase.DateRaised | outputFormatDate}}
+                            </td>
+                            <td  data-title="'Amount'" sortable="'description'" style="cursor:pointer;">
+                                {{purchase.Amount | currency: 'USD'}}
+                            </td>
+                            <td data-title="'Action'">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default fa fa-edit" data-ng-click="selectProduct(purchase)"></button>
+                                    <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(purchase)"></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <script type="text/ng-template" id="custom/pager">
+                        <div class="data-table-toolbar">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="pull-right">
+                                        <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
+                                        <div class="btn-group">
+                                                <span ng-repeat="page in pages"
+                                                      ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                                      ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                                                    <a ng-switch-when="prev" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                                                    <a ng-switch-when="next" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

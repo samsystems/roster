@@ -1,0 +1,65 @@
+<page-content-title title="Notifications">
+    <a title="Add Notification" class="btn btn-success" href="#/notifications/create"><i class="fa fa-plus"> Add Notification</i></a>
+</page-content-title>
+<panel type="plain">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Toolbar message -->
+            <div class="data-table-toolbar">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <form role="form" ng-submit="search(searchNotification)">
+                            <input type="text" data-ng-model="searchNotification" class="form-control" placeholder="Search ..."/>
+                        </form>
+                    </div>
+                </div><!-- End div .row -->
+            </div><!-- End div .data-table-toolbar -->
+            <!-- End toolbar message -->
+
+
+            <!-- Message table -->
+            <div class="table-responsive">
+                <table ng-table="notificationTable" class="table table-hover table-message" template-pagination="custom/pager">
+                    <colgroup>
+                        <col width="400px">
+                        <col>
+                        <col width="100px">
+                        <col width="1px">
+                    </colgroup>
+                    <tr data-ng-class="{unread: notification.isRead()}" data-ng-repeat="notification in $data">
+                        <td data-title="'Subject'" sortable="'category'"><a href="#/notifications/view/{{notification.getId()}}">{{notification.getCategory()}}</a></td>
+                        <td data-title="'Details'" sortable="'category'">{{notification.getTitle()}}</td>
+                        <td>{{notification.getCreated() | timeElapsed }}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeNotification(notification)"></button>
+                        </td>
+                    </tr>
+                </table>
+            </div><!-- End div .table-responsive -->
+            <!-- End message table -->
+
+            <!-- Footer message toolbar -->
+            <script type="text/ng-template" id="custom/pager">
+                <div class="data-table-toolbar">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="pull-right">
+
+                                <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
+                                <div class="btn-group">
+                                    <span ng-repeat="page in pages"
+                                        ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                        ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                                        <a ng-switch-when="prev" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                                        <a ng-switch-when="next" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </script>
+            <!-- End Footer message toolbar -->
+        </div><!-- End div .col-md-10 -->
+    </div><!-- End div .row -->
+</panel>

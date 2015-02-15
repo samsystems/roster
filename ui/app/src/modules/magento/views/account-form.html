@@ -1,0 +1,41 @@
+<div class="moduleContainer wizard" data-ng-controller="MagentoAccountFormController">
+    <div class="page-heading animated fadeInDownBig">
+        <h1>{{'Edit/Create Account'}}</h1>
+    </div>
+    <form class="form-horizontal" id="form_user" name="form_user">
+        <div class="row">
+            <!-- Left Section -->
+            <div class="col-md-6 " >
+                <!--   Host     -->
+                <div class="form-group">
+                    <label class="col-md-6 control-label text-center" for="host">{{'Host' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input id="host" data-ng-model="account.host" type="text" class="form-control" validator="required" >
+                    </div>
+                </div>
+                <!--   Username     -->
+                <div class="form-group">
+                    <label for="username" class="col-md-6 control-label text-center" >{{'Username' | translate}}:</label>
+                    <div class="input-group-btn">
+                        <input name="username" id="username" data-value-id="{{account.id}}" data-ng-model="account.username" type="text" class="form-control" validator="required"  />
+                    </div>
+                    <span class="help-block" ng-show="form_account.username.$error.unique">Username is already taken.</span>
+                </div>
+                <!--   Password     -->
+                <div class="form-group">
+                    <label for="password" class="col-md-6 control-label text-center" >{{'Password' | translate}}:</label>
+                    <div class="input-group-btn" >
+                        <input id="password" data-ng-model="account.password" type="password" class="form-control" validator="required"  >
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row modal-footer" style="border-top:0px;">
+            <div class="row col-md-4 pull-right">
+                <button class="btn btn-primary ng-binding" data-ng-click="$close()">{{'Cancel' | translate}}</button>
+                <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>

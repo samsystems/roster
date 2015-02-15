@@ -1,0 +1,48 @@
+<div class="the-box default">
+    <div class="row">
+        <div class="col-md-2  col-xs-2">
+            <button class="admin-trigger btn btn-success " data-ng-click="create()">{{'Create Group' | translate }}</button>
+        </div>
+        <div class="col-md-6  col-xs-6 col-xs-offset-4">
+            <form ng-submit="search(search.group)">
+                <div class="input-group">
+                    <input type="hidden" name="search_param" value="all" id="search_param">
+                    <input type="text" class="form-control input-search" name="x" ng-model="search.group" placeholder="Filter...">
+                        
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="search(search.group)" ><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="clear-space">&nbsp;</div>
+
+    <div data-ng-if="groups.length > 0" class="table-responsive table-hover">
+        <table class="table table-striped " >
+            <thead>
+            <tr>
+                <th >{{'Group Name' | translate }}</th>
+                <th >{{'Group Email' | translate }}</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr  class="items" data-ng-repeat="group in groups | filter: search.group">
+                <td style="cursor:pointer;" ng-click="selectTableRow($index,group)">
+                         <span class="name">
+                             {{group.name}}
+                        </span>
+                </td>
+                <td style="cursor:pointer;" ng-click="selectTableRow($index,group)">{{group.email}}</td>
+                <td>
+                    <a><span class="badge ng-scope" data-tooltip="Remove" data-ng-click="remove(index,group)"><i class="fa fa-times"></i></span></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="well" data-ng-if="!groups.length">{{'No Groups Available.' | translate}}</div>
+</div>

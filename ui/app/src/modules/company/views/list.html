@@ -1,0 +1,94 @@
+<page-content-title title="Companies">
+    <a title="Add" class="btn btn-primary" href="#/companies/create"><i class="fa fa-plus"> New Company</i></a>
+</page-content-title>
+
+<panel type="plain">
+    <div class="row">
+        <div class="col-sm-5">
+            <form role="form" ng-submit="search(search.company)">
+                <input type="text" data-ng-model="search.company" class="form-control" placeholder="Search ..."/>
+            </form>
+        </div>
+    </div><!-- End div .row -->
+    <br />
+    <div class="table-responsive table-hover">
+        <table ng-table="companyTable" class="table table-hover table-message" template-pagination="custom/pager">
+            <col width="20%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="15%"/>
+
+            <tr  class="items" data-ng-repeat="company in $data">
+                <td data-title="'Name'" sortable="'name'" style="cursor:pointer;" data-ng-click="viewCompany(company)">
+                    {{company.Name}}
+                </td>
+                <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;" data-ng-click="viewCompany(company)">
+                    {{company.Phone}}
+                </td>
+                <td data-title="'Mobile'" sortable="'mobile'" style="cursor:pointer;" data-ng-click="viewCompany(company)">
+                    {{company.Mobile}}
+                </td>
+                <td data-title="'Fax'" sortable="'fax'" style="cursor:pointer;" data-ng-click="viewCompany(company)">
+                    {{company.Fax}}
+                </td>
+                <td data-title="'Email'" sortable="'email'" style="cursor:pointer;" data-ng-click="viewCompany(company)">
+                    {{company.Email}}
+                </td>
+                <td data-title="'Address'" sortable="'address1'" style="cursor:pointer;" data-ng-click="viewCompany(company)">
+                    {{company.Address1}}
+                </td>
+                <td data-title="'City'" sortable="'city'" style="cursor:pointer;" data-ng-click="viewCompany(company)">
+                    {{company.City}}
+                </td>
+
+
+                <td data-title="'Action'">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default fa fa-edit" data-ng-click="editCompany(company)"></button>
+                        <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeCompany(company)"></button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- Footer message toolbar -->
+        <script type="text/ng-template" id="custom/pager">
+            <div class="data-table-toolbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pull-right">
+
+                            <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
+                            <div class="btn-group">
+                                        <span ng-repeat="page in pages"
+                                              ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                              ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                                            <a ng-switch-when="next" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <!-- End Footer message toolbar -->
+    </div>
+</panel>
+<div>
+    <!-- Toolbar message -->
+    <div class="data-table-toolbar">
+
+    </div><!-- End div .data-table-toolbar -->
+    <!-- End toolbar message -->
+
+    <div class="panel-body" >
+        <div data-ng-if="total.count==0">{{'No Company Available.' | translate}}</div>
+    </div>
+
+    <div class="the-box default margin-bottom">
+
+    </div>
+</div>

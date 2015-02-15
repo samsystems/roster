@@ -1,0 +1,326 @@
+<page-content-title title="User Profile"></page-content-title>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <!-- col-lg-4 start here -->
+        <panel title="Profile details" type="plain">
+            <div class="row profile">
+                <!-- Start .row -->
+                <div class="col-md-4">
+                    <div class="profile-avatar">
+                        <img src="images/no-photo.jpg" alt="Avatar">
+
+                        <p class="mt10">
+                            Online
+                                <span class="device">
+                                    <i class="fa fa-mobile s16"></i>
+                                </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="profile-name">
+                        <h3>{{user.getFullName()}}</h3>
+
+                        <p class="job-title mb0"><i class="fa fa-building"></i> SEO in SAM Systems</p>
+                        <p class="job-title mb0"><i class="fa fa-map-marker"></i> {{user.getCountryName()}}</p>
+
+                        <p class="balance">
+                            Balance: <span>146$</span>
+                        </p>
+                        <a href="mailto:{{user.getEmail()}}" class="btn btn-primary btn-large mr10">
+                            <i class="fa fa-envelope"></i> Send email
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="contact-info bt">
+                        <div class="row">
+                            <!-- Start .row -->
+                            <div class="col-md-4">
+                                <dl class="mt20">
+                                    <dt class="text-muted">Phone</dt>
+                                    <dd>{{user.getPhone1() | phone}}</dd>
+                                    <dt class="text-muted">Mobile</dt>
+                                    <dd>(368)-234-112</dd>
+                                    <dt class="text-muted">Fax</dt>
+                                    <dd>(362)-666-347</dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-8">
+                                <dl class="mt20">
+                                    <dt class="text-muted">Email</dt>
+                                    <dd>{{user.getEmail()}}</dd>
+                                    <dt class="text-muted">Website</dt>
+                                    <dd>{{user.getWeb()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <!-- End .row -->
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="profile-info bt">
+                        <h5 class="text-muted">Profile info</h5>
+
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores minus consequuntur corporis
+                            optio accusantium perspiciatis veritatis temporibus nostrum, saepe omnis aperiam illum odit,
+                            quos, cum eveniet
+                            possimus illo. Saepe sunt porro culpa repellat dolorem aperiam, quae nihil, maxime ducimus
+                            officiis voluptate. Libero obcaecati laboriosam reprehenderit adipisci harum ad, veniam
+                            explicabo.</p>
+                    </div>
+                    <div class="profile-tags">
+                        <h5 class="text-muted">Tags</h5>
+
+                        <form role="form" class="form-horizontal mb15">
+                            <input type="text" value="CEO, Worker" data-role="tagsinput">
+                        </form>
+                    </div>
+                    <div class="social bt">
+                        <h5 class="text-muted">Social</h5>
+                        <dl class="dl-horizontal mb0">
+                            <dt>
+                                                            <span class="text-muted">
+                                            <i class="fa fa-facebook-square"></i>
+                                            Facebook:
+                                        </span>
+                            </dt>
+                            <dd><a href="#">facebook.com/1231</a>
+                            </dd>
+                            <dt>
+                                                            <span class="text-muted">
+                                            <i class="fa fa-twitter"></i>
+                                            Twitter:
+                                        </span>
+                            </dt>
+                            <dd><a href="#">twitter.com/profile/3234.html</a>
+                            </dd>
+                            <dt>
+                                                            <span class="text-muted">
+                                            <i class="fa fa-google-plus"></i>
+                                            Google+:
+                                        </span>
+                            </dt>
+                            <dd><a href="#">plus.google.com/jonathansmith</a>
+                            </dd>
+                            <dt>
+                                                            <span class="text-muted">
+                                            <i class="fa fa-linkedin"></i>
+                                            LinkedIn:
+                                        </span>
+                            </dt>
+                            <dd><a href="#">linkd.in/123123</a>
+                            </dd>
+                            <dt>
+                                                            <span class="text-muted">
+                                            <i class="fa fa-pinterest"></i>
+                                            Pinterest:
+                                        </span>
+                            </dt>
+                            <dd><a href="#">pinterst.com/profile/3234.html</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </panel>
+        <!-- End .panel -->
+        <panel title="User stats" type="plain">
+            <ul class="progressbars-stats list-unstyled">
+                <li>
+                    <div class="progressbar-icon"><i class="glyphicon glyphicon-comment"></i>
+                    </div>
+                    <span class="progressbar-text">Pending Orders</span>
+
+                    <div class="progress animated-bar flat mt0">
+                        <div class="progress-bar progress-bar-primary" role="progressbar"
+                             data-transitiongoal="83"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="progressbar-icon"><i class="glyphicon glyphicon-hdd"></i>
+                    </div>
+                    <span class="progressbar-text">Completed Orders</span>
+
+                    <div class="progress animated-bar flat mt0">
+                        <div class="progress-bar progress-bar-danger" role="progressbar" data-transitiongoal="98"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="progressbar-icon"><i class="fa fa-pie-chart"></i>
+                    </div>
+                    <span class="progressbar-text">Total Orders</span>
+
+                    <div class="progress animated-bar flat mt0">
+                        <div class="progress-bar progress-bar-success" role="progressbar"
+                             data-transitiongoal="62"></div>
+                    </div>
+                </li>
+            </ul>
+        </panel>
+        <!-- End .panel -->
+    </div>
+    <!-- col-lg-4 end here -->
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <!-- col-lg-4 start here -->
+        <tabset class="tabs mb20">
+            <tab heading="Overview">
+                <h5>Activity feed</h5>
+                <ul class="timeline timeline-icons">
+                    <li>
+                        <p>
+                            <a href="#">Jonathan Smith</a> attached new <a href="#">file</a>
+                            <span class="timeline-icon"><i class="fa fa-file-text-o"></i></span>
+                            <span class="timeline-date">Dec 10, 22:00</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Jonathan Smith</a> make <a href="#">3 comments</a>
+                            <span class="timeline-icon"><i class="fa fa-comment"></i></span>
+                            <span class="timeline-date">Dec 8, 13:35</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Jonathan Smith</a> deposit 300$
+                            <span class="timeline-icon"><i class="fa fa-money color-green"></i></span>
+                            <span class="timeline-date">Dec 6, 10:17</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Jonathan Smith</a> purchase <a href="#">3 items</a>
+                            <span class="timeline-icon"><i class="fa fa-shopping-cart color-red"></i></span>
+                            <span class="timeline-date">Dec 5, 04:36</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">1 support </a> request is received from <a href="#">Jonathan Smith</a>
+                            <span class="timeline-icon"><i class="fa fa-life-ring color-gray-light"></i></span>
+                            <span class="timeline-date">Dec 4, 18:40</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">12 settings </a> are changed from <a href="#">Jonathan Smith</a>
+                            <span class="timeline-icon"><i class="glyphicon glyphicon-cog"></i></span>
+                            <span class="timeline-date">Dec 3, 23:17</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Jonathan Smith</a> change your photo
+                            <span class="timeline-icon"><i class="l-basic-photo"></i></span>
+                            <span class="timeline-date">Dec 2, 05:17</span>
+                        </p>
+                    </li>
+                </ul>
+                <a href="#" class="btn btn-default timeline-load-more-btn"><i class="fa fa-refresh"></i> Load more </a>
+            </tab>
+            <tab heading="Edit">
+                <form class="form-horizontal group-border stripped" role="form" name="userForm">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="firstname">First Name</label>
+
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="firstname" name="firstname"
+                                   ng-model="user.firstName" validator="required">
+                        </div>
+                    </div>
+                    <!-- End .form-group  -->
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="lastname">Last Name</label>
+
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="lastname" name="lastname"
+                                   ng-model="user.lastName" validator="required">
+                        </div>
+                    </div>
+                    <!-- End .form-group  -->
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="email">Email</label>
+
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="email" name="email" ng-model="user.email"
+                                   validator="required, email">
+                        </div>
+                    </div>
+                    <!-- End .form-group  -->
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="phone1">Phone</label>
+
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="phone1" name="phone1" ng-model="user.phone1">
+                        </div>
+                    </div>
+                    <!-- End .form-group  -->
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="website">Website</label>
+
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="website" name="website" ng-model="user.website">
+                        </div>
+                    </div>
+                    <!-- End .form-group  -->
+                    <div class="form-group form-group-vertical">
+                        <label class="col-lg-3 control-label" for="password">Change password</label>
+
+                        <div class="col-lg-9">
+                            <input type="password" class="form-control" id="password" name="password"
+                                   ng-model="user.password">
+                            <input type="password" class="form-control" id="password1" name="password1"
+                                   placeholder="Repeat your password" ng-model="user.passwordConfirm">
+                        </div>
+                    </div>
+                    <!-- End .form-group  -->
+                    <div class="form-group">
+                        <div class="col-lg-9 col-lg-offset-3">
+                            <a href="#" class="btn btn-primary" ng-click="save()">Update</a>
+                        </div>
+                    </div>
+                    <!-- End .form-group  -->
+                </form>
+            </tab>
+        </tabset>
+        <!-- End .tabs -->
+    </div>
+    <!-- col-lg-4 end here -->
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <!-- col-lg-4 start here -->
+        <div class="panel panel-default plain">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title">User purchase</h4>
+            </div>
+            <div class="panel-body">
+                <div id="user-purchase-chart" style="width: 100%; height:250px;"></div>
+                <div class="row">
+                    <!-- Start .row -->
+                    <div class="mt20 bt"></div>
+                    <div class="col-lg-6 text-center">
+                        <!-- col-lg-6 start here -->
+                        <h5 class="mt20 mb0">Stats by type</h5>
+
+                        <div id="morris-donut" style="width: 100%; height:180px;"></div>
+                    </div>
+                    <!-- col-lg-6 end here -->
+                    <div class="col-lg-6 text-center">
+                        <!-- col-lg-6 start here -->
+                        <h5 class="mt20 mb0">Purchase distribution</h5>
+
+                        <div class="canvas-holder mt15">
+                            <canvas id="radar-chartjs" height="180"></canvas>
+                        </div>
+                    </div>
+                    <!-- col-lg-6 end here -->
+                </div>
+                <!-- End .row -->
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+    <!-- col-lg-4 end here -->
+</div>

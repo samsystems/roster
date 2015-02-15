@@ -1,0 +1,88 @@
+<page-content-title title="Products / Services">
+    <a title="Add" class="btn btn-primary" href="#/products/create"><i class="fa fa-plus"> New Product / Service</i></a>
+</page-content-title>
+<panel title="Products / Services List" type="plain">
+    <!-- Toolbar message -->
+    <div class="data-table-toolbar">
+        <div class="row">
+            <div class="col-sm-5">
+                <form role="form" ng-submit="search(search.product)">
+                    <input type="text" data-ng-model="search.product" class="form-control" placeholder="Search ..."/>
+                </form>
+            </div>
+        </div><!-- End div .row -->
+    </div><!-- End div .data-table-toolbar -->
+    <!-- End toolbar message -->
+
+    <div class="table-responsive table-hover">
+        <table ng-table="productTable" class="table table-hover table-message" template-pagination="custom/pager">
+            <col width="20%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="25%"/>
+            <col width="10%"/>
+            <col width="15%"/>
+
+            <tr  class="items" data-ng-repeat="product in $data">
+                <td data-title="'Name'" sortable="'name'"style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    {{product.getName()}}
+                </td>
+                <td data-title="'Price'" sortable="'price'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    {{product.getPrice() | currency: 'USD'}}
+                </td>
+                <td data-title="'Stock'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    {{product.getStock()}}
+                </td>
+                <td data-title="'Size'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    {{product.getSize()}}
+                </td>
+                <td  data-title="'Description'" sortable="'description'" style="cursor:pointer;">{{product.getDescription()}}</td>
+                <td data-title="'Status'" sortable="'status'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    <div class="btn-group">
+                        <button type="button" data-ng-if="product.getStatus()==1" class="btn btn-success fa">Active</button>
+                        <button type="button" data-ng-if="product.getStatus()==2" class="btn btn-default fa">Inactive</button>
+                    </div>
+                </td>
+                <td data-title="'Action'">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default fa fa-edit" data-ng-click="selectProduct(product)"></button>
+                        <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(product)"></button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Footer message toolbar -->
+        <script type="text/ng-template" id="custom/pager">
+            <div class="data-table-toolbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pull-right">
+                            <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
+                            <div class="btn-group">
+                                        <span ng-repeat="page in pages"
+                                              ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                              ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                                            <a ng-switch-when="next" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <!-- End Footer message toolbar -->
+    </div>
+    <div class="panel-body" >
+        <div data-ng-if="total.count==0">{{'No Products Available.' | translate}}</div>
+    </div>
+</panel>
+<box>
+
+
+
+
+
+</box>

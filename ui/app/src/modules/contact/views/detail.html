@@ -1,0 +1,64 @@
+<!-- Page header -->
+<div class="page-heading animated fadeInDownBig">
+    <h1>Contact Detail</h1>
+</div>
+<div class="row">
+    <div class="box-info">
+        <p class="text-right"><strong>{{contact.created | outputFormatDateTime }}</strong></p>
+        <div>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td colspan="2">
+                        <a class="btn btn-danger btn-sm" data-ng-click="removeContact(contact)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
+                        <a data-ng-click="$close()" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 100px;"><strong>First Name</strong></td>
+                    <td>{{contact.name}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Last Name</strong></td>
+                    <td>{{contact.last_name}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Phone</strong></td>
+                    <td>{{contact.phone}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email</strong></td>
+                    <td>{{contact.email}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Notes</strong></td>
+                    <td>{{contact.notes}}</td>
+                </tr>
+                <tr ng-show="contact.document">
+                    <td><strong>Photo</strong></td>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-6" >
+                                <div class="box-info">
+                                    <div class="inner">
+                                        <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
+                                            <div class="img-wrap" style="height: 232px; width: 307px;" ng-show="contact.document.id">
+                                                <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
+                                                     alt="" class="mfp-fade">
+                                            </div>
+                                            <div class="caption-static">
+                                                {{contact.document.name}}
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

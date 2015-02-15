@@ -1,0 +1,10 @@
+<div id="wizard-triggers-container" class="row" data-ng-if="wizards.available.length > 0">
+    <ul class="nav nav-pills">
+        <li data-ng-repeat="wizard in wizards.available" data-ng-class="{active: wizard.active}">
+            <button class="wizard-trigger btn btn-success" data-ng-click="toggle(wizard)">{{wizard.name}}</button>
+        </li>
+    </ul>
+</div>
+<div id="wizards-container" class="tab-content">
+    <div id="wizard-{{wizard.id}}" data-ng-repeat="wizard in wizards.loaded" data-ng-show="wizard.active" compile="wizard.directiveHtml"></div>
+</div>

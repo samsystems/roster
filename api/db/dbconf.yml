@@ -1,3 +1,0 @@
-development:
-    driver: mymysql
-    open: default_db/root/root

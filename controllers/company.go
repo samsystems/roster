@@ -6,13 +6,11 @@ import (
 
 	"encoding/json"
 
-	"io"
 	"io/ioutil"
 
 	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-	"log"
 
 	"appengine"
 )
@@ -77,7 +75,7 @@ func GetCountAll(c appengine.Context, w http.ResponseWriter, r *http.Request, v 
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := v("keyword"); keywordP != "" {
+	if keywordP := v["keyword"]; keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetCompanyByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {
@@ -95,9 +93,9 @@ func GetCountAll(c appengine.Context, w http.ResponseWriter, r *http.Request, v 
 // @router / [post]
 func Post(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
 
-	data, e := ioutil.ReadAll(r.Body)
-	if e != nil {
-		return nil, &handler.Error{e, "Could not read request", http.StatusBadRequest}
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
 
 	var company models.Company
@@ -110,13 +108,13 @@ func Post(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[str
 	valid := validation.Validation{}
 	b, err := valid.Valid(&company)
 	if err != nil {
-		return nil, &handler.Error{e, "Validation Errors", http.StatusBadRequest}
+		return nil, &handler.Error{err, "Validation Errors", http.StatusBadRequest}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			return nil, &handler.Error{e, err.Message, http.StatusBadRequest}
+			return nil, &handler.Error{nil, err.Message, http.StatusBadRequest}
 		}
-		return nil, &handler.Error{e, "Entity not found", http.StatusNoContent}
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.AddCompany(&company)
 	}
@@ -132,9 +130,9 @@ func Post(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[str
 // @router /:uid [put]
 func Put(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
 
-	data, e := ioutil.ReadAll(r.Body)
-	if e != nil {
-		return nil, &handler.Error{e, "Could not read request", http.StatusBadRequest}
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
 
 	var company models.Company
@@ -147,13 +145,13 @@ func Put(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[stri
 	valid := validation.Validation{}
 	b, err := valid.Valid(&company)
 	if err != nil {
-		return nil, &handler.Error{e, "Some errors on validation.", http.StatusBadRequest}
+		return nil, &handler.Error{err, "Some errors on validation.", http.StatusBadRequest}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			return nil, &handler.Error{e, err.Message, http.StatusBadRequest}
+			return nil, &handler.Error{nil, err.Message, http.StatusBadRequest}
 		}
-		return nil, &handler.Error{e, "Entity not found.", http.StatusNoContent}
+		return nil, &handler.Error{nil, "Entity not found.", http.StatusNoContent}
 	} else {
 		models.UpdateCompany(&company)
 	}
@@ -173,7 +171,7 @@ func Delete(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[s
 
 	company, err := models.GetCompany(uid)
 	if err != nil {
-		return nil, &handler.Error{e, "Entity not found.", http.StatusNoContent}
+		return nil, &handler.Error{err, "Entity not found.", http.StatusNoContent}
 	}
 
 	models.DeleteCompany(company)

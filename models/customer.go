@@ -2,6 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -29,6 +30,7 @@ type Customer struct {
 }
 
 func init() {
+	orm.RegisterModel(new(Customer))
 }
 
 func AddCustomer(customer *Customer) string {

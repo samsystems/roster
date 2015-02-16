@@ -1,6 +1,8 @@
 package models
 
 import (
+	"code.google.com/p/go-uuid/uuid"
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -34,6 +36,7 @@ type Invoice struct {
 }
 
 func init() {
+	orm.RegisterModel(new(Invoice))
 }
 
 func AddInvoice(invoice *Invoice) string {

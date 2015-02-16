@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"github.com/astaxie/beego/orm"
 )
 
 func UpdateSchema() string {

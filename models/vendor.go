@@ -2,14 +2,16 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
 const VENDOR_LIMIT int = 20
 
 type Vendor struct {
-	Id              string `orm:"pk"`
-	Country         string
+	Id      string `orm:"pk"`
+	Country string
+
 	State           string
 	Creator         *User `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater         *User `orm:"rel(one)" valid:"Entity(Updater)"`
@@ -30,7 +32,7 @@ type Vendor struct {
 }
 
 func init() {
-
+	orm.RegisterModel(new(Vendor))
 }
 
 func AddVendor(vendor *Vendor) string {

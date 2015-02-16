@@ -2,6 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -28,6 +29,7 @@ type Product struct {
 }
 
 func init() {
+	orm.RegisterModel(new(Product))
 }
 
 func AddProduct(g *Product) string {

@@ -2,8 +2,13 @@ package models
 
 import (
 	"errors"
+	"github.com/astaxie/beego/orm"
 	"time"
 )
+
+func init() {
+	orm.RegisterModel(new(User))
+}
 
 type User struct {
 	Id                     string `orm:"pk"`

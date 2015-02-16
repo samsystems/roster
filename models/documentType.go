@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -20,4 +21,5 @@ type DocumentType struct {
 }
 
 func init() {
+	orm.RegisterModel(new(DocumentType))
 }

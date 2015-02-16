@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -22,5 +23,5 @@ type UserGroup struct {
 }
 
 func init() {
-
+	orm.RegisterModel(new(UserGroup))
 }

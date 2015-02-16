@@ -2,12 +2,14 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
 const GROUP_LIMIT int = 20
 
 func init() {
+	orm.RegisterModel(new(Group))
 }
 
 type Group struct {

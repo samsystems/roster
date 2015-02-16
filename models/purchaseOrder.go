@@ -2,6 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"github.com/astaxie/beego/orm"
 	"log"
 	"time"
 )
@@ -44,6 +45,7 @@ type PurchaseOrder struct {
 }
 
 func init() {
+	orm.RegisterModel(new(PurchaseOrder))
 }
 
 func GetPurchaseOrder(uid string) (*PurchaseOrder, error) {

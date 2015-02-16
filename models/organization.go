@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -17,6 +18,7 @@ type Organization struct {
 }
 
 func init() {
+	orm.RegisterModel(new(Organization))
 }
 
 func OrganizationGet(uid string) (*Organization, error) {

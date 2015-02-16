@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -20,5 +21,5 @@ type QuestionSet struct {
 }
 
 func init() {
-
+	orm.RegisterModel(new(QuestionSet))
 }

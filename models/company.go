@@ -2,7 +2,10 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 const COMPANY_LIMIT int = 5
@@ -35,6 +38,7 @@ type Company struct {
 }
 
 func init() {
+	orm.RegisterModel(new(Company))
 }
 
 func GetCompany(uid string) (*Company, error) {

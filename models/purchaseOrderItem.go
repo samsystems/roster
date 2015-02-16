@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/orm"
 	"time"
 )
 
@@ -25,4 +26,5 @@ type PurchaseOrderItem struct {
 }
 
 func init() {
+	orm.RegisterModel(new(PurchaseOrderItem))
 }

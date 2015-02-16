@@ -1,17 +1,29 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/astaxie/beego"
+	"github.com/gorilla/mux"
+	"net/http"
 
+	"encoding/json"
+	"io/ioutil"
+
+	"appengine"
+
+	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-	"log"
 )
 
-// Operations about Users
 type ProductController struct {
-	beego.Controller
+}
+
+func (c *ProductController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/product/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/product", handler.New(c.GetAll)).Methods("GET")
+	r.Handle("/product", handler.New(c.Post)).Methods("POST")
+	r.Handle("/product", handler.New(c.Put)).Methods("PUT")
+	r.Handle("/product/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/product/count", handler.New(c.Count)).Methods("GET")
 }
 
 // @Title Get
@@ -20,26 +32,24 @@ type ProductController struct {
 // @Success 200 {object} models.Product
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (c *ProductController) Get() {
-	uid := c.GetString(":uid")
-	if uid != "" {
-		product, err := models.GetProduct(uid)
-		if err != nil {
-			c.Data["json"] = err
-		} else {
-			c.Data["json"] = product
-		}
+func (controller *ProductController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v[":uid"]
+
+	product, err := models.GetProduct(uid)
+	if err != nil {
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
-	c.ServeJson()
+
+	return product, nil
 }
 
 // @Title Get
 // @Description get all Products
 // @Success 200 {object} models.Product
 // @router / [get]
-func (c *ProductController) GetAll() {
+func (controller *ProductController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var products *[]models.Product
-	page, sort, keyword := ParseParamsOfGetRequest(c.Input())
+	page, sort, keyword := ParseParamsOfGetRequest(v)
 
 	if keyword != "" {
 		products, _ = models.GetProductByKeyword(keyword, page, sort, false, -1)
@@ -47,8 +57,8 @@ func (c *ProductController) GetAll() {
 	} else {
 		products, _ = models.GetAllProducts(page, sort, false, -1)
 	}
-	c.Data["json"] = products
-	c.ServeJson()
+
+	return products, nil
 }
 
 // @Title Get Count Products
@@ -56,18 +66,18 @@ func (c *ProductController) GetAll() {
 // @Param	keyword		string
 // @Success 200 {array} models.Product
 // @router /count [get]
-func (g *ProductController) GetCountAll() {
+func (controller *ProductController) Count(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := g.GetString("keyword"); keywordP != "" {
+	if keywordP := v["keyword"]; keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetProductByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {
 		_, total["total"] = models.GetAllProducts(1, "notSorting", true, -1)
 	}
-	g.Data["json"] = total
-	g.ServeJson()
+
+	return total, nil
 }
 
 // @Title updateProduct
@@ -76,9 +86,15 @@ func (g *ProductController) GetCountAll() {
 // @Success 200 {int} models.Product.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (g *ProductController) Post() {
+func (controller *ProductController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var product models.Product
-	json.Unmarshal(g.Ctx.Input.RequestBody, &product)
+	json.Unmarshal(data, &product)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	product.Creator = user
@@ -87,19 +103,18 @@ func (g *ProductController) Post() {
 	valid := validation.Validation{}
 	b, err := valid.Valid(&product)
 	if err != nil {
-		log.Print(err)
-		g.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Some errors on validation", http.StatusNoContent}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			g.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
-		g.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.AddProduct(&product)
 	}
-	g.Data["json"] = product
-	g.ServeJson()
+
+	return product, nil
 }
 
 // @Title updateProduct
@@ -108,9 +123,15 @@ func (g *ProductController) Post() {
 // @Success 200 {int} models.Product.Id
 // @Failure 403 body is empty
 // @router /:uid [put]
-func (g *ProductController) Put() {
+func (controller *ProductController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var product models.Product
-	json.Unmarshal(g.Ctx.Input.RequestBody, &product)
+	json.Unmarshal(data, &product)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	product.Creator = user
@@ -119,19 +140,18 @@ func (g *ProductController) Put() {
 	valid := validation.Validation{}
 	b, err := valid.Valid(&product)
 	if err != nil {
-		log.Print(err)
-		g.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Errors on validation", http.StatusNoContent}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			g.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
-		g.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdateProduct(&product)
 	}
-	g.Data["json"] = product
-	g.ServeJson()
+
+	return product, nil
 }
 
 // @Title delete
@@ -140,13 +160,14 @@ func (g *ProductController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (c *ProductController) Delete() {
-	uid := c.GetString(":uid")
+func (controller *ProductController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
 	product, err := models.GetProduct(uid)
 	if err != nil {
-		c.Abort("403")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	}
 	models.DeleteProduct(product)
-	c.Data["json"] = "delete success!"
-	c.ServeJson()
+
+	return nil, nil
 }

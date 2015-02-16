@@ -1,18 +1,31 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/astaxie/beego"
+	"github.com/gorilla/mux"
+	"net/http"
 
+	"encoding/json"
+	"io/ioutil"
+	"strconv"
+
+	"appengine"
+
+	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-	"log"
-	"strconv"
 )
 
-// Operations about Compnay
 type PurchaseOrderController struct {
-	beego.Controller
+}
+
+func (c *PurchaseOrderController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/purchase/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/purchase", handler.New(c.GetAll)).Methods("GET")
+	r.Handle("/purchase", handler.New(c.Post)).Methods("POST")
+	r.Handle("/purchase", handler.New(c.Put)).Methods("PUT")
+	r.Handle("/purchase/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/purchase/count", handler.New(c.Count)).Methods("GET")
+	r.Handle("/purchase/resume/{status}", handler.New(c.GetResumePurchases)).Methods("GET")
 }
 
 // @Title Get
@@ -21,17 +34,15 @@ type PurchaseOrderController struct {
 // @Success 200 {object} models.PurchaseOrder
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (c *PurchaseOrderController) Get() {
-	uid := c.GetString(":uid")
-	if uid != "" {
-		purchaseOrder, err := models.GetPurchaseOrder(uid)
-		if err != nil {
-			c.Data["json"] = err
-		} else {
-			c.Data["json"] = purchaseOrder
-		}
+func (c *PurchaseOrderController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
+	purchaseOrder, err := models.GetPurchaseOrder(uid)
+	if err != nil {
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
-	c.ServeJson()
+
+	return purchaseOrder, nil
 }
 
 // @Title Get
@@ -42,20 +53,21 @@ func (c *PurchaseOrderController) Get() {
 // @Param	status		string
 // @Success 200 {array} models.PurchaseOrder
 // @router / [get]
-func (c *PurchaseOrderController) GetAll() {
+func (c *PurchaseOrderController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	status := models.PURCHASE_ALL
-	if statusP := c.GetString("status"); statusP != "" {
+	if statusP := v["status"]; statusP != "" {
 		status, _ = strconv.Atoi(statusP)
 	}
+
 	var purchases *[]models.PurchaseOrder
-	page, sort, keyword := ParseParamsOfGetRequest(c.Input())
+	page, sort, keyword := ParseParamsOfGetRequest(v)
 	if keyword != "" {
 		purchases, _ = models.GetPurchaseOrderByKeyword(keyword, page, sort, false, -1)
 	} else {
 		purchases, _ = models.GetAllPurchaseOrder(status, page, sort, false, -1)
 	}
-	c.Data["json"] = purchases
-	c.ServeJson()
+
+	return purchases, nil
 }
 
 // @Title Get Count Companies
@@ -63,21 +75,23 @@ func (c *PurchaseOrderController) GetAll() {
 // @Param	keyword		string
 // @Success 200 {array} models.PurchaseOrder
 // @router /count [get]
-func (c *PurchaseOrderController) GetCountAll() {
+func (c *PurchaseOrderController) Count(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
+
 	status := models.PURCHASE_ALL
-	if statusP := c.GetString("status"); statusP != "" {
+	if statusP := v["status"]; statusP != "" {
 		status, _ = strconv.Atoi(statusP)
 	}
+
 	keyword := ""
-	if keywordP := c.GetString("keyword"); keywordP != "" {
+	if keywordP := v["keyword"]; keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetPurchaseOrderByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {
 		_, total["total"] = models.GetAllPurchaseOrder(status, 1, "notSorting", true, -1)
 	}
-	c.Data["json"] = total
-	c.ServeJson()
+
+	return total, nil
 }
 
 // @Title Get Resume from Purchases
@@ -85,12 +99,12 @@ func (c *PurchaseOrderController) GetCountAll() {
 // @Param	status	int
 // @Success int
 // @router /resume/:status [get]
-func (c *PurchaseOrderController) GetResumePurchases() {
-	status, _ := strconv.Atoi(c.GetString(":status"))
+func (c *PurchaseOrderController) GetResumePurchases(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	status, _ := strconv.Atoi(v["status"])
 	total := make(map[string]interface{})
 	total["amount"], total["cant"] = models.GetPurchaseResume(status)
-	c.Data["json"] = total
-	c.ServeJson()
+
+	return total, nil
 }
 
 // @Title createPurchaseOrder
@@ -99,9 +113,15 @@ func (c *PurchaseOrderController) GetResumePurchases() {
 // @Success 200 {int} models.User.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (c *PurchaseOrderController) Post() {
+func (c *PurchaseOrderController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var purchaseOrder models.PurchaseOrder
-	json.Unmarshal(c.Ctx.Input.RequestBody, &purchaseOrder)
+	json.Unmarshal(data, &purchaseOrder)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	purchaseOrder.Creator = user
@@ -110,19 +130,18 @@ func (c *PurchaseOrderController) Post() {
 	valid := validation.Validation{}
 	b, err := valid.Valid(&purchaseOrder)
 	if err != nil {
-		log.Print(err)
-		c.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Validation errors", http.StatusNoContent}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			c.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
-		c.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
-		models.AddPurchaseOrder(&purchaseOrder)
+		models.UpdatePurchaseOrder(&purchaseOrder)
 	}
-	c.Data["json"] = purchaseOrder
-	c.ServeJson()
+
+	return purchaseOrder, nil
 }
 
 // @Title updatePurchaseOrder
@@ -131,9 +150,15 @@ func (c *PurchaseOrderController) Post() {
 // @Success 200 {int} models.User.Id
 // @Failure 403 body is empty
 // @router /:uid [put]
-func (c *PurchaseOrderController) Put() {
+func (c *PurchaseOrderController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var purchaseOrder models.PurchaseOrder
-	json.Unmarshal(c.Ctx.Input.RequestBody, &purchaseOrder)
+	json.Unmarshal(data, &purchaseOrder)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	purchaseOrder.Creator = user
@@ -142,19 +167,18 @@ func (c *PurchaseOrderController) Put() {
 	valid := validation.Validation{}
 	b, err := valid.Valid(&purchaseOrder)
 	if err != nil {
-		log.Print(err)
-		c.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Validation errors", http.StatusNoContent}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			c.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
-		c.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdatePurchaseOrder(&purchaseOrder)
 	}
-	c.Data["json"] = purchaseOrder
-	c.ServeJson()
+
+	return purchaseOrder, nil
 
 }
 
@@ -164,13 +188,15 @@ func (c *PurchaseOrderController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (c *PurchaseOrderController) Delete() {
-	uid := c.GetString(":uid")
+func (controller *PurchaseOrderController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
 	purchaseOrder, err := models.GetPurchaseOrder(uid)
 	if err != nil {
-		c.Abort("403")
+		return nil, &handler.Error{err, "Entity not found", http.StatusNoContent}
 	}
+
 	models.DeletePurchaseOrder(purchaseOrder)
-	c.Data["json"] = "delete success!"
-	c.ServeJson()
+
+	return nil, nil
 }

@@ -8,8 +8,11 @@ handlers:
   static_files: ui/app/index.html
   upload: ui/app/(.*\.html)
 
-- url: /css
-  static_dir: ui/app/css
+- url: /styles
+  static_dir: ui/dist/fonts/
+
+- url: /src
+  static_dir: ui/dist/src/
 
 - url: /.*
   script: _go_app

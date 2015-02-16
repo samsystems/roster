@@ -2,16 +2,15 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/astaxie/beego"
 
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
+
 	"log"
 )
 
 // Operations about Users
 type InvoiceController struct {
-	beego.Controller
 }
 
 // @Title Get

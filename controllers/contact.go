@@ -1,17 +1,28 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/astaxie/beego"
+	"github.com/gorilla/mux"
+	"net/http"
 
+	"encoding/json"
+	"io/ioutil"
+
+	"appengine"
+
+	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-	"log"
 )
 
-// Operations about Users
 type ContactController struct {
-	beego.Controller
+}
+
+func (c *ContactController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/contact/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/contact", handler.New(c.GetAll)).Methods("GET")
+	r.Handle("/contact", handler.New(c.Put)).Methods("PUT")
+	r.Handle("/contact/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/contact/count", handler.New(c.Count)).Methods("GET")
 }
 
 // @Title Get
@@ -20,28 +31,26 @@ type ContactController struct {
 // @Success 200 {object} models.Contact
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (c *ContactController) Get() {
-	uid := c.GetString(":uid")
-	if uid != "" {
-		contact, err := models.GetContact(uid)
-		if err != nil {
-			c.Data["json"] = err
-		} else {
-			c.Data["json"] = contact
-		}
+func (controller *ContactController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v[":uid"]
+
+	contact, err := models.GetContact(uid)
+	if err != nil {
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
-	c.ServeJson()
+
+	return contact, nil
 }
 
 // @Title Get
 // @Description get all Contacts
 // @Success 200 {object} models.Contact
 // @router / [get]
-func (u *ContactController) GetAll() {
+func (u *ContactController) GetAll(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	// TODO: add filters
 	contacts := models.GetAllContacts()
-	u.Data["json"] = contacts
 
-	u.ServeJson()
+	return contacts, nil
 }
 
 // @Title Get Count Contacts
@@ -49,18 +58,18 @@ func (u *ContactController) GetAll() {
 // @Param	keyword		string
 // @Success 200 {array} models.Contact
 // @router /count [get]
-func (g *ContactController) GetCountAll() {
+func (g *ContactController) Count(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := g.GetString("keyword"); keywordP != "" {
+	if keywordP := v["keyword"]; keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetContactByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {
 		total["total"] = models.GetAllContacts()
 	}
-	g.Data["json"] = total
-	g.ServeJson()
+
+	return total, nil
 }
 
 // @Title updateContact
@@ -69,9 +78,15 @@ func (g *ContactController) GetCountAll() {
 // @Success 200 {int} models.Contact.Id
 // @Failure 403 body is empty
 // @router /:uid [put]
-func (g *ContactController) Put() {
+func (g *ContactController) Put(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var contact models.Contact
-	json.Unmarshal(g.Ctx.Input.RequestBody, &contact)
+	json.Unmarshal(data, &contact)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	contact.Creator = user
@@ -80,19 +95,18 @@ func (g *ContactController) Put() {
 	valid := validation.Validation{}
 	b, err := valid.Valid(&contact)
 	if err != nil {
-		log.Print(err)
-		g.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Some errors on validation", http.StatusBadRequest}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			g.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusBadRequest}
 		}
-		g.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{err, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdateContact(&contact)
 	}
-	g.Data["json"] = contact
-	g.ServeJson()
+
+	return contact, nil
 }
 
 // @Title delete
@@ -101,13 +115,15 @@ func (g *ContactController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (c *ContactController) Delete() {
-	uid := c.GetString(":uid")
+func (controller *ContactController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
 	contact, err := models.GetContact(uid)
 	if err != nil {
-		c.Abort("403")
+		return nil, &handler.Error{err, "Entity not found", http.StatusNoContent}
 	}
+
 	models.DeleteContact(contact)
-	c.Data["json"] = "delete success!"
-	c.ServeJson()
+
+	return nil, nil
 }

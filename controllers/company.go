@@ -18,14 +18,13 @@ import (
 type CompanyController struct {
 }
 
-func RegisterHandlers(r *mux.Router) {
-
-	r.Handle("/company/{uid}", handler.New(Get)).Methods("GET")
-	r.Handle("/company", handler.New(GetAll)).Methods("GET")
-	r.Handle("/company", handler.New(Post)).Methods("POST")
-	r.Handle("/company", handler.New(Put)).Methods("PUT")
-	r.Handle("/company/{uid}", handler.New(Delete)).Methods("DELETE")
-	r.Handle("/company/count", handler.New(GetCountAll)).Methods("GET")
+func (c *CompanyController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/company/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/company", handler.New(c.GetAll)).Methods("GET")
+	r.Handle("/company", handler.New(c.Post)).Methods("POST")
+	r.Handle("/company", handler.New(c.Put)).Methods("PUT")
+	r.Handle("/company/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/company/count", handler.New(c.GetCountAll)).Methods("GET")
 }
 
 // @Title Get
@@ -34,7 +33,7 @@ func RegisterHandlers(r *mux.Router) {
 // @Success 200 {object} models.Company
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func Get(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+func (controller *CompanyController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uid := v["uid"]
 
 	company, err := models.GetCompany(uid)
@@ -53,7 +52,7 @@ func Get(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[stri
 // @Param	keyword		string
 // @Success 200 {array} models.Company
 // @router / [get]
-func GetAll(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+func (controller *CompanyController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var companies *[]models.Company
 	page, sort, keyword := ParseParamsOfGetRequest(v)
 
@@ -71,7 +70,7 @@ func GetAll(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[s
 // @Param	keyword		string
 // @Success 200 {array} models.Company
 // @router /count [get]
-func GetCountAll(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+func (controller *CompanyController) GetCountAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
 
 	keyword := ""
@@ -91,9 +90,9 @@ func GetCountAll(c appengine.Context, w http.ResponseWriter, r *http.Request, v 
 // @Success 200 {int} models.User.Id
 // @Failure 403 body is empty
 // @router / [post]
-func Post(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+func (controller *CompanyController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 
-	data, err := ioutil.ReadAll(r.Body)
+	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
@@ -128,9 +127,9 @@ func Post(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[str
 // @Success 200 {int} models.User.Id
 // @Failure 403 body is empty
 // @router /:uid [put]
-func Put(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+func (controller *CompanyController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 
-	data, err := ioutil.ReadAll(r.Body)
+	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
@@ -166,7 +165,7 @@ func Put(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[stri
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func Delete(c appengine.Context, w http.ResponseWriter, r *http.Request, v map[string]string) (interface{}, *handler.Error) {
+func (controller *CompanyController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uid := v[":uid"]
 
 	company, err := models.GetCompany(uid)

@@ -11,19 +11,44 @@ func init() {
 
 	router := mux.NewRouter()
 
-	controllers.CompanyController.RegisterHandlers(router)
-	controllers.ContactController.RegisterHandlers(router)
-	controllers.CountryController.RegisterHandlers(router)
-	controllers.CustomerController.RegisterHandlers(router)
-	controllers.GroupController.RegisterHandlers(router)
-	controllers.InvoiceController.RegisterHandlers(router)
-	controllers.MagentoAccountController.RegisterHandlers(router)
-	controllers.NotificationController.RegisterHandlers(router)
-	controllers.ProductController.RegisterHandlers(router)
-	controllers.PurchaseOrderController.RegisterHandlers(router)
-	controllers.StateController.RegisterHandlers(router)
-	controllers.UserController.RegisterHandlers(router)
-	controllers.VendorController.RegisterHandlers(router)
+	companyController := controllers.CompanyController{}
+	companyController.RegisterHandlers(router)
 
-	http.Handle("/", r)
+	contactController := controllers.ContactController{}
+	contactController.RegisterHandlers(router)
+
+	countryController := controllers.CountryController{}
+	countryController.RegisterHandlers(router)
+
+	customerController := controllers.CustomerController{}
+	customerController.RegisterHandlers(router)
+
+	groupController := controllers.GroupController{}
+	groupController.RegisterHandlers(router)
+
+	invoiceController := controllers.InvoiceController{}
+	invoiceController.RegisterHandlers(router)
+
+	magentoAccountController := controllers.MagentoAccountController{}
+	magentoAccountController.RegisterHandlers(router)
+
+	notificationController := controllers.NotificationController{}
+	notificationController.RegisterHandlers(router)
+
+	productController := controllers.ProductController
+	productController.RegisterHandlers(router)
+
+	purchaseOrderController := controllers.PurchaseOrderController{}
+	purchaseOrderController.RegisterHandlers(router)
+
+	stateController := controllers.StateController{}
+	stateController.RegisterHandlers(router)
+
+	userController := controllers.UserController{}
+	userController.RegisterHandlers(router)
+
+	vendorController := controllers.VendorController{}
+	vendorController.RegisterHandlers(router)
+
+	http.Handle("/", router)
 }

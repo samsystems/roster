@@ -1,29 +1,38 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/astaxie/beego"
+	"github.com/gorilla/mux"
+	"net/http"
 
+	"encoding/json"
+	"io/ioutil"
+
+	"appengine"
+
+	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-	"log"
 )
 
-// Operations about Users
 type VendorController struct {
-	beego.Controller
+}
+
+func (controller *VendorController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/vendor/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/vendor", handler.New(controller.GetAll)).Methods("GET")
+	r.Handle("/vendor", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/vendor/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/vendor/count", handler.New(controller.Count)).Methods("GET")
 }
 
 // @Title Get
 // @Description get all Vendors
 // @Success 200 {object} models.Vendor
 // @router / [get]
-func (c *VendorController) GetAll() {
-
+func (controller *VendorController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	vendors := models.GetAllVendors()
-	c.Data["json"] = vendors
 
-	c.ServeJson()
+	return vendors, nil
 }
 
 // @Title Get
@@ -32,17 +41,15 @@ func (c *VendorController) GetAll() {
 // @Success 200 {object} models.Vendor
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (c *VendorController) Get() {
-	uid := c.GetString(":uid")
-	if uid != "" {
-		vendor, err := models.GetVendor(uid)
-		if err != nil {
-			c.Data["json"] = err
-		} else {
-			c.Data["json"] = vendor
-		}
+func (controller *VendorController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
+	vendor, err := models.GetVendor(uid)
+	if err != nil {
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
-	c.ServeJson()
+
+	return vendor, nil
 }
 
 // @Title Get Count Vendors
@@ -50,18 +57,18 @@ func (c *VendorController) Get() {
 // @Param	keyword		string
 // @Success 200 {array} models.Vendor
 // @router /count [get]
-func (g *VendorController) GetCountAll() {
+func (controller *VendorController) Count(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := g.GetString("keyword"); keywordP != "" {
+	if keywordP := v["keyword"]; keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetVendorByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {
 		total["total"] = models.GetAllVendors()
 	}
-	g.Data["json"] = total
-	g.ServeJson()
+
+	return total, nil
 }
 
 // @Title updateProduct
@@ -70,9 +77,15 @@ func (g *VendorController) GetCountAll() {
 // @Success 200 {int} models.Vendor.Id
 // @Failure 403 body is empty
 // @router /:uid [put]
-func (g *VendorController) Put() {
+func (controller *VendorController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var vendor models.Vendor
-	json.Unmarshal(g.Ctx.Input.RequestBody, &vendor)
+	json.Unmarshal(data, &vendor)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	vendor.Creator = user
@@ -81,19 +94,18 @@ func (g *VendorController) Put() {
 	valid := validation.Validation{}
 	b, err := valid.Valid(&vendor)
 	if err != nil {
-		log.Print(err)
-		g.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Validation Errors", http.StatusBadRequest}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			g.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
-		g.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdateVendor(&vendor)
 	}
-	g.Data["json"] = vendor
-	g.ServeJson()
+
+	return vendor, nil
 }
 
 // @Title delete
@@ -102,13 +114,15 @@ func (g *VendorController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (c *VendorController) Delete() {
-	uid := c.GetString(":uid")
+func (controller *VendorController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
 	vendor, err := models.GetVendor(uid)
 	if err != nil {
-		c.Abort("403")
+		return nil, &handler.Error{err, "Invalid vendor id", http.StatusBadRequest}
 	}
+
 	models.DeleteVendor(vendor)
-	c.Data["json"] = "delete success!"
-	c.ServeJson()
+
+	return nil, nil
 }

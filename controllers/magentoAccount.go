@@ -1,24 +1,29 @@
 package controllers
 
 import (
-	"github.com/sam/roster/models"
+	"github.com/gorilla/mux"
+	"net/http"
 
-	"github.com/astaxie/beego"
+	"appengine"
+
+	"github.com/sam/roster/handler"
+	"github.com/sam/roster/models"
 )
 
 // Operations about Users
 type MagentoAccountController struct {
-	beego.Controller
+}
+
+func (controller *MagentoAccountController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/magento/account", handler.New(controller.GetAll)).Methods("GET")
 }
 
 // @Title Get
 // @Description get all Magento Accounts
 // @Success 200 {object} models.MagentoAccount
 // @router / [get]
-func (c *MagentoAccountController) GetAll() {
-
+func (controller *MagentoAccountController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	accounts := models.GetAllUsers()
-	c.Data["json"] = accounts
 
-	c.ServeJson()
+	return accounts, nil
 }

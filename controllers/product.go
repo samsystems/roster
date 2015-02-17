@@ -17,13 +17,13 @@ import (
 type ProductController struct {
 }
 
-func (c *ProductController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/product/{uid}", handler.New(c.Get)).Methods("GET")
-	r.Handle("/product", handler.New(c.GetAll)).Methods("GET")
-	r.Handle("/product", handler.New(c.Post)).Methods("POST")
-	r.Handle("/product", handler.New(c.Put)).Methods("PUT")
-	r.Handle("/product/{uid}", handler.New(c.Delete)).Methods("DELETE")
-	r.Handle("/product/count", handler.New(c.Count)).Methods("GET")
+func (controller *ProductController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/product/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/product", handler.New(controller.GetAll)).Methods("GET")
+	r.Handle("/product", handler.New(controller.Post)).Methods("POST")
+	r.Handle("/product", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/product/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/product/count", handler.New(controller.Count)).Methods("GET")
 }
 
 // @Title Get

@@ -35,7 +35,7 @@ func init() {
 	notificationController := controllers.NotificationController{}
 	notificationController.RegisterHandlers(router)
 
-	productController := controllers.ProductController
+	productController := controllers.ProductController{}
 	productController.RegisterHandlers(router)
 
 	purchaseOrderController := controllers.PurchaseOrderController{}

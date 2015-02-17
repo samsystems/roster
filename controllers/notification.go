@@ -1,17 +1,27 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/astaxie/beego"
+	"github.com/gorilla/mux"
+	"net/http"
 
+	"encoding/json"
+	"io/ioutil"
+
+	"appengine"
+
+	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-	"log"
 )
 
-// Operations about Users
 type NotificationController struct {
-	beego.Controller
+}
+
+func (controller *NotificationController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/notification/{nid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/notification", handler.New(controller.GetAll)).Methods("GET")
+	r.Handle("/notification", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/notification/{uid}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
 // @Title Get
@@ -20,28 +30,26 @@ type NotificationController struct {
 // @Success 200 {object} models.Notification
 // @Failure 403 :notificationId is empty
 // @router /:nid [get]
-func (n *NotificationController) Get() {
-	notificationId := n.GetString(":nid")
+func (controller *NotificationController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	nid := v["nid"]
 
-	notification, err := models.GetNotification(notificationId)
+	notification, err := models.GetNotification(nid)
 	if err != nil {
-		n.Data["json"] = err
-	} else {
-		n.Data["json"] = notification
+		// TODO: improve error
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
 
-	n.ServeJson()
+	return notification, nil
 }
 
 // @Title Get
 // @Description get all Notifications
 // @Success 200 {object} models.Notification
 // @router / [get]
-func (n *NotificationController) GetAll() {
+func (controller *NotificationController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	notifications := models.GetAllNotifications()
-	n.Data["json"] = notifications
 
-	n.ServeJson()
+	return notifications, nil
 }
 
 // @Title Get Count Notifications
@@ -49,18 +57,18 @@ func (n *NotificationController) GetAll() {
 // @Param	keyword		string
 // @Success 200 {array} models.Notification
 // @router /count [get]
-func (g *NotificationController) GetCountAll() {
+func (controller *NotificationController) GetCountAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := g.GetString("keyword"); keywordP != "" {
+	if keywordP := v["keyword"]; keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetNotificationByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {
 		total["total"] = models.GetAllNotifications()
 	}
-	g.Data["json"] = total
-	g.ServeJson()
+
+	return total, nil
 }
 
 // @Title updateNotification
@@ -69,9 +77,15 @@ func (g *NotificationController) GetCountAll() {
 // @Success 200 {int} models.Notification.Id
 // @Failure 403 body is empty
 // @router /:uid [put]
-func (g *NotificationController) Put() {
+func (controller *NotificationController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var notification models.Notification
-	json.Unmarshal(g.Ctx.Input.RequestBody, &notification)
+	json.Unmarshal(data, &notification)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	notification.Creator = user
@@ -80,19 +94,18 @@ func (g *NotificationController) Put() {
 	valid := validation.Validation{}
 	b, err := valid.Valid(&notification)
 	if err != nil {
-		log.Print(err)
-		g.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Validation Errors", http.StatusBadRequest}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			g.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
-		g.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdateNotification(&notification)
 	}
-	g.Data["json"] = notification
-	g.ServeJson()
+
+	return notification, nil
 }
 
 // @Title delete
@@ -101,13 +114,16 @@ func (g *NotificationController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (c *NotificationController) Delete() {
-	uid := c.GetString(":uid")
+func (controller *NotificationController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
 	notification, err := models.GetNotification(uid)
 	if err != nil {
-		c.Abort("403")
+		// TODO: improve error
+		return nil, &handler.Error{err, "Invalid notification id", http.StatusBadRequest}
 	}
+
 	models.DeleteNotification(notification)
-	c.Data["json"] = "delete success!"
-	c.ServeJson()
+
+	return nil, nil
 }

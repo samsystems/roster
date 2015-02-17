@@ -151,3 +151,4 @@ _testmain.go
 # Google App Engine generated folder
 appengine-generated/
 
+config.json

@@ -1,14 +1,25 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/sam/roster/models"
+	"github.com/gorilla/mux"
+	"net/http"
+
+	"appengine"
+
 	"strconv"
+
+	"github.com/sam/roster/handler"
+	"github.com/sam/roster/models"
 )
 
-// Operations about Country
 type CountryController struct {
-	beego.Controller
+}
+
+func (controller *CountryController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/country/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/country", handler.New(controller.GetAll)).Methods("GET")
+	r.Handle("/country/find-count/{keyword}", handler.New(controller.GetCountByKeyWord)).Methods("GET")
+	r.Handle("/country/search/{keyword}/{page}/{order}", handler.New(controller.GetByKeyWord)).Methods("GET")
 }
 
 // @Title Get
@@ -17,46 +28,42 @@ type CountryController struct {
 // @Success 200 {object} models.Country
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (c *CountryController) Get() {
-	uid := c.GetString(":uid")
-	if uid != "" {
-		country, err := models.CountryGet(uid)
-		if err != nil {
-			c.Data["json"] = err
-		} else {
-			c.Data["json"] = country
-		}
+func (c *CountryController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
+	country, err := models.CountryGet(uid)
+	if err != nil {
+		// TODO: improve error
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
-	c.ServeJson()
+
+	return country, nil
 }
 
 // @Title Get
 // @Description get all Countries
 // @Success 200 {array} models.Country
 // @router / [get]
-func (c *CountryController) GetAll() {
+func (c *CountryController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	countries := models.GetAllCountries()
-	c.Data["json"] = countries
-	c.ServeJson()
+	return countries, nil
 }
 
 // @Title Get
 // @Description get all Companies
 // @Success 200 {array} models.Country
 // @router /search/:keyword/:page/:order [get]
-func (c *CountryController) GetByKeyWord() {
-	page, _ := strconv.Atoi(c.GetString(":page"))
-	countries, _ := models.CountryGetByKeyword(c.GetString(":keyword"), page, c.GetString(":order"), false, -1)
-	c.Data["json"] = countries
-	c.ServeJson()
+func (c *CountryController) GetByKeyWord(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	page, _ := strconv.Atoi(v["page"])
+	countries, _ := models.CountryGetByKeyword(v["keyword"], page, v["order"], false, -1)
+	return countries, nil
 }
 
 // @Title Get
 // @Description get all Companies
 // @Success 200 {int} int
 // @router /find-count/:keyword [get]
-func (c *CountryController) GetCountByKeyWord() {
-	_, total := models.CountryGetByKeyword(c.GetString(":keyword"), 1, "notSorting", true, -1)
-	c.Data["json"] = total
-	c.ServeJson()
+func (c *CountryController) GetCountByKeyWord(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	_, total := models.CountryGetByKeyword(v["keyword"], 1, "notSorting", true, -1)
+	return total, nil
 }

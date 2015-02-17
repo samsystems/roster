@@ -101,7 +101,7 @@ func UpdateUser(uid string, uu *User) (a *User, err error) {
 }
 
 func Login(username string, password string) (Token, error) {
-	token := Token{Token: "24234234", Expires: time.Now()}
+	token := Token{Token: "$1$dlPL2MqE$oQmn16q49SqdmhenQuNgs1", Expires: time.Now()}
 
 	return token, nil
 }

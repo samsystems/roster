@@ -4,8 +4,10 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 
+	"encoding/base64"
 	"encoding/json"
 	"io/ioutil"
+	"strings"
 
 	"appengine"
 
@@ -17,10 +19,11 @@ type UserController struct {
 }
 
 func (controller *UserController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/user/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/user/login", handler.New(controller.Login)).Methods("GET")
+	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/user", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/user", handler.New(controller.Put)).Methods("PUT")
-	r.Handle("/user/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
 // @Title createUser
@@ -142,7 +145,9 @@ func (controller *UserController) Delete(context appengine.Context, writer http.
 // @Failure 403 user not exist
 // @router /login [get]
 func (controller *UserController) Login(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	token, err := models.Login("", "")
+	user, password := getAuth(writer, request)
+
+	token, err := models.Login(user, password)
 	if err != nil {
 		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
@@ -169,4 +174,25 @@ func (controller *UserController) GetAllUserNotifications(context appengine.Cont
 	notifications := models.GetAllNotificationsByUserId(uid)
 
 	return notifications, nil
+}
+
+func getAuth(w http.ResponseWriter, r *http.Request) (string, string) {
+	s := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+
+	// TODO: return errors not empty strings
+	if len(s) != 2 {
+		return "", ""
+	}
+
+	b, err := base64.StdEncoding.DecodeString(s[1])
+	if err != nil {
+		return "", ""
+	}
+
+	pair := strings.SplitN(string(b), ":", 2)
+	if len(pair) != 2 {
+		return "", ""
+	}
+
+	return pair[0], pair[1]
 }

@@ -1,51 +1,63 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/sam/roster/models"
+	"github.com/gorilla/mux"
+	"net/http"
 
-	"github.com/astaxie/beego"
+	"encoding/json"
+	"io/ioutil"
+
+	"appengine"
+
+	"github.com/sam/roster/handler"
+	"github.com/sam/roster/models"
 )
 
-// Operations about Users
 type UserController struct {
-	beego.Controller
+}
+
+func (controller *UserController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/user/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/user", handler.New(controller.GetAll)).Methods("GET")
+	r.Handle("/user", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/user/{uid}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
 // @Title createUser
 // @Description create users
 // @Param	body		body 	models.User	true		"body for user content"
-// @Success 200 {int} models.User.Id
+// @Success 200 {object} models.User
 // @Failure 403 body is empty
 // @router / [post]
-func (u *UserController) Post() {
+func (controller *UserController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var user models.User
 
-	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-	uid := models.AddUser(user)
+	json.Unmarshal(data, &user)
+	models.AddUser(user)
 
-	u.Data["json"] = map[string]string{"uid": uid}
-	u.ServeJson()
+	return user, nil
 }
 
 // @Title Get
 // @Description get all Users
 // @Success 200 {object} models.User
 // @router / [get]
-func (u *UserController) GetAll() {
-	username := u.Ctx.Input.Query("username")
+func (controller *UserController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	username := v["username"]
 
 	if username != "" {
-		var users [1]models.User
 		user, _ := models.GetUserByUsername(username)
-		users[0] = *user
-		u.Data["json"] = users
+		return user, nil
 	} else {
 		users := models.GetAllUsers()
-		u.Data["json"] = users
+		return users, nil
 	}
-
-	u.ServeJson()
 }
 
 // @Title Get
@@ -54,17 +66,15 @@ func (u *UserController) GetAll() {
 // @Success 200 {object} models.User
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (u *UserController) Get() {
-	uid := u.GetString(":uid")
-	if uid != "" {
-		user, err := models.GetUser(uid)
-		if err != nil {
-			u.Data["json"] = err
-		} else {
-			u.Data["json"] = user
-		}
+func (controller *UserController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+	user, err := models.GetUser(uid)
+	if err != nil {
+		// TODO: adjust error
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
-	u.ServeJson()
+
+	return user, nil
 }
 
 // @Title Get by Username
@@ -73,17 +83,16 @@ func (u *UserController) Get() {
 // @Success 200 {object} models.User
 // @Failure 403 :username is empty
 // @router /find-by-username/:username [get]
-func (u *UserController) GetByUsername() {
-	username := u.GetString(":username")
-	if username != "" {
-		user, err := models.GetUserByUsername(username)
-		if err != nil {
-			u.Data["json"] = err
-		} else {
-			u.Data["json"] = user
-		}
+func (controller *UserController) GetByUsername(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	username := v["username"]
+
+	user, err := models.GetUserByUsername(username)
+	if err != nil {
+		// TODO: adjust error
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
-	u.ServeJson()
+
+	return user, nil
 }
 
 // @Title update
@@ -93,19 +102,24 @@ func (u *UserController) GetByUsername() {
 // @Success 200 {object} models.User
 // @Failure 403 :uid is not int
 // @router /:uid [put]
-func (u *UserController) Put() {
-	uid := u.GetString(":uid")
-	if uid != "" {
-		var user models.User
-		json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-		uu, err := models.UpdateUser(uid, &user)
-		if err != nil {
-			u.Data["json"] = err
-		} else {
-			u.Data["json"] = uu
-		}
+func (controller *UserController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
-	u.ServeJson()
+
+	var user models.User
+	json.Unmarshal(data, &user)
+
+	uu, err := models.UpdateUser(uid, &user)
+	if err != nil {
+		// TODO: adjust error
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
+	return uu, nil
 }
 
 // @Title delete
@@ -114,11 +128,12 @@ func (u *UserController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (u *UserController) Delete() {
-	uid := u.GetString(":uid")
+func (controller *UserController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
 	models.DeleteUser(uid)
-	u.Data["json"] = "delete success!"
-	u.ServeJson()
+
+	return nil, nil
 }
 
 // @Title login
@@ -126,36 +141,32 @@ func (u *UserController) Delete() {
 // @Success 200 {string} login success
 // @Failure 403 user not exist
 // @router /login [get]
-func (u *UserController) Login() {
+func (controller *UserController) Login(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	token, err := models.Login("", "")
 	if err != nil {
-		u.Data["json"] = err
-	} else {
-		u.Data["json"] = token
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
 
-	u.ServeJson()
+	return token, nil
 }
 
 // @Title logout
 // @Description Logs out current logged in user session
 // @Success 200 {string} logout success
 // @router /logout [get]
-func (u *UserController) Logout() {
-	u.Data["json"] = "logout success"
-	u.ServeJson()
+func (controller *UserController) Logout(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	return nil, nil
 }
 
 // @Title Get
 // @Description get all User Notifications
 // @Success 200 {object} models.Notification
 // @router /:id/notifications [get]
-func (u *UserController) GetAllUserNotifications() {
-	uid := u.GetString(":uid")
+func (controller *UserController) GetAllUserNotifications(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
 
 	// TODO: pass parameters page and read
 	notifications := models.GetAllNotificationsByUserId(uid)
-	u.Data["json"] = notifications
 
-	u.ServeJson()
+	return notifications, nil
 }

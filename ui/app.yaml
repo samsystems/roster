@@ -5,14 +5,23 @@ api_version: go1
 
 handlers:
 - url: /
-  static_files: ui/app/index.html
+  static_files: app/index.html
   upload: app/(.*\.html)
 
+- url: /fonts
+  static_dir: app/fonts/
+
 - url: /styles
-  static_dir: dist/fonts/
+  static_dir: app/styles/
+  
+- url: /images
+  static_dir: app/images/
 
 - url: /src
-  static_dir: dist/src/
+  static_dir: app/src/
+  
+- url: /bower_components
+  static_dir: bower_components/
 
 - url: /.*
   script: _go_app

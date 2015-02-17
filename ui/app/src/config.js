@@ -11,7 +11,7 @@ angular.module('config',[]).constant('config', {
         limitInPage: 20
     },
     api: {
-        baseUrl: 'http://127.0.0.1:8085/v1'
+        baseUrl: 'http://localhost:8085'
     },
     date: {
         outputFormatDateTime: 'MMM D, YYYY[separator]HH:mm z',

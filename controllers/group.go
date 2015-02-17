@@ -1,17 +1,28 @@
 package controllers
 
 import (
-	"encoding/json"
-	"github.com/astaxie/beego"
+	"github.com/gorilla/mux"
+	"net/http"
 
+	"encoding/json"
+	"io/ioutil"
+
+	"appengine"
+
+	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-	"log"
 )
 
-// Operations about Group
 type GroupController struct {
-	beego.Controller
+}
+
+func (controller *GroupController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/group/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/group", handler.New(controller.GetAll)).Methods("GET")
+	r.Handle("/group", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/group/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/group/count", handler.New(controller.Count)).Methods("GET")
 }
 
 // @Title Get
@@ -20,28 +31,25 @@ type GroupController struct {
 // @Success 200 {object} models.Group
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (c *GroupController) Get() {
-	uid := c.GetString(":uid")
-	if uid != "" {
-		group, err := models.GetGroup(uid)
-		if err != nil {
-			c.Data["json"] = err
-		} else {
-			c.Data["json"] = group
-		}
+func (controller *GroupController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
+	group, err := models.GetGroup(uid)
+	if err != nil {
+		// TODO: improve error
+		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
-	c.ServeJson()
+
+	return group, nil
 }
 
 // @Title Get
 // @Description get all Groups
 // @Success 200 {array} models.Group
 // @router / [get]
-func (g *GroupController) GetAll() {
-
+func (controller *GroupController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	groups := models.GetAllGroups()
-	g.Data["json"] = groups
-	g.ServeJson()
+	return groups, nil
 }
 
 // @Title Get Count Groups
@@ -49,18 +57,18 @@ func (g *GroupController) GetAll() {
 // @Param	keyword		string
 // @Success 200 {array} models.Group
 // @router /count [get]
-func (g *GroupController) GetCountAll() {
+func (controller *GroupController) Count(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := g.GetString("keyword"); keywordP != "" {
+	if keywordP := v["keyword"]; keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetGroupByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {
 		total["total"] = models.GetAllGroups()
 	}
-	g.Data["json"] = total
-	g.ServeJson()
+
+	return total, nil
 }
 
 // @Title updateGroup
@@ -69,30 +77,36 @@ func (g *GroupController) GetCountAll() {
 // @Success 200 {int} models.Group.Id
 // @Failure 403 body is empty
 // @router /:uid [put]
-func (g *GroupController) Put() {
+func (controller *GroupController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
 	var group models.Group
-	json.Unmarshal(g.Ctx.Input.RequestBody, &group)
+	json.Unmarshal(data, &group)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	group.Creator = user
 	group.Updater = user
 
+	// TODO: improve errors
 	valid := validation.Validation{}
 	b, err := valid.Valid(&group)
 	if err != nil {
-		log.Print(err)
-		g.CustomAbort(404, "Some errors on validation.")
+		return nil, &handler.Error{err, "Validation Errors", http.StatusBadRequest}
 	}
 	if !b {
 		for _, err := range valid.Errors {
-			g.CustomAbort(404, err.Message)
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
-		g.CustomAbort(404, "Entity not found.")
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdateGroup(&group)
 	}
-	g.Data["json"] = group
-	g.ServeJson()
+
+	return group, nil
 }
 
 // @Title delete
@@ -101,13 +115,16 @@ func (g *GroupController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (c *GroupController) Delete() {
-	uid := c.GetString(":uid")
+func (controller *GroupController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
 	group, err := models.GetGroup(uid)
 	if err != nil {
-		c.Abort("403")
+		// TODO: improve error
+		return nil, &handler.Error{err, "Invalid customer id", http.StatusBadRequest}
 	}
+
 	models.DeleteGroup(group)
-	c.Data["json"] = "delete success!"
-	c.ServeJson()
+
+	return nil, nil
 }

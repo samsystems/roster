@@ -19,11 +19,11 @@ type InvoiceController struct {
 }
 
 func (c *InvoiceController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/invoice/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/invoice", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/invoice", handler.New(c.Post)).Methods("POST")
 	r.Handle("/invoice", handler.New(c.Put)).Methods("PUT")
-	r.Handle("/invoice/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
 	r.Handle("/invoice/count", handler.New(c.Count)).Methods("GET")
 }
 

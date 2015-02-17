@@ -19,10 +19,10 @@ type CustomerController struct {
 }
 
 func (controller *CustomerController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/customer/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/customer", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/customer", handler.New(controller.Put)).Methods("PUT")
-	r.Handle("/customer/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 	r.Handle("/customer/count", handler.New(controller.Count)).Methods("GET")
 }
 

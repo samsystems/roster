@@ -18,12 +18,12 @@ type ProductController struct {
 }
 
 func (controller *ProductController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/product/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/product/count", handler.New(controller.Count)).Methods("GET")
+	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/product", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/product", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/product", handler.New(controller.Put)).Methods("PUT")
-	r.Handle("/product/{uid}", handler.New(controller.Delete)).Methods("DELETE")
-	r.Handle("/product/count", handler.New(controller.Count)).Methods("GET")
+	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
 // @Title Get

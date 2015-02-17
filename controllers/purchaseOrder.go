@@ -19,11 +19,11 @@ type PurchaseOrderController struct {
 }
 
 func (c *PurchaseOrderController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/purchase/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/purchase", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/purchase", handler.New(c.Post)).Methods("POST")
 	r.Handle("/purchase", handler.New(c.Put)).Methods("PUT")
-	r.Handle("/purchase/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
 	r.Handle("/purchase/count", handler.New(c.Count)).Methods("GET")
 	r.Handle("/purchase/resume/{status}", handler.New(c.GetResumePurchases)).Methods("GET")
 }

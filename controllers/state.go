@@ -16,7 +16,7 @@ type StateController struct {
 }
 
 func (controller *StateController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/state/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/state/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/state", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/state/find-count", handler.New(controller.Count)).Methods("GET")
 	r.Handle("/state/search/{keyword}/{page}/{order}", handler.New(controller.GetByKeyWord)).Methods("GET")

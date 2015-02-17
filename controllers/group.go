@@ -18,10 +18,10 @@ type GroupController struct {
 }
 
 func (controller *GroupController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/group/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/group/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/group", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/group", handler.New(controller.Put)).Methods("PUT")
-	r.Handle("/group/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/group/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 	r.Handle("/group/count", handler.New(controller.Count)).Methods("GET")
 }
 

@@ -19,11 +19,11 @@ type CompanyController struct {
 }
 
 func (c *CompanyController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/company/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/company", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/company", handler.New(c.Post)).Methods("POST")
 	r.Handle("/company", handler.New(c.Put)).Methods("PUT")
-	r.Handle("/company/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
 	r.Handle("/company/count", handler.New(c.GetCountAll)).Methods("GET")
 }
 

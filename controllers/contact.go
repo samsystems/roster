@@ -18,10 +18,10 @@ type ContactController struct {
 }
 
 func (c *ContactController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/contact/{uid}", handler.New(c.Get)).Methods("GET")
+	r.Handle("/contact/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/contact", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/contact", handler.New(c.Put)).Methods("PUT")
-	r.Handle("/contact/{uid}", handler.New(c.Delete)).Methods("DELETE")
+	r.Handle("/contact/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
 	r.Handle("/contact/count", handler.New(c.Count)).Methods("GET")
 }
 

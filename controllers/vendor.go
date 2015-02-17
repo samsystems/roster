@@ -18,10 +18,10 @@ type VendorController struct {
 }
 
 func (controller *VendorController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/vendor/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/vendor/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/vendor", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/vendor", handler.New(controller.Put)).Methods("PUT")
-	r.Handle("/vendor/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/vendor/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 	r.Handle("/vendor/count", handler.New(controller.Count)).Methods("GET")
 }
 

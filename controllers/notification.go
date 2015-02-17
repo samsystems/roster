@@ -21,7 +21,7 @@ func (controller *NotificationController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/notification/{nid}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/notification", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/notification", handler.New(controller.Put)).Methods("PUT")
-	r.Handle("/notification/{uid}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/notification/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
 // @Title Get

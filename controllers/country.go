@@ -16,7 +16,7 @@ type CountryController struct {
 }
 
 func (controller *CountryController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/country/{uid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/country/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/country", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/country/find-count/{keyword}", handler.New(controller.GetCountByKeyWord)).Methods("GET")
 	r.Handle("/country/search/{keyword}/{page}/{order}", handler.New(controller.GetByKeyWord)).Methods("GET")

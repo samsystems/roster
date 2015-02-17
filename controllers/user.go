@@ -24,6 +24,7 @@ func (controller *UserController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/user", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/user", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}/notifications", handler.New(controller.GetAllUserNotifications)).Methods("GET")
 }
 
 // @Title createUser

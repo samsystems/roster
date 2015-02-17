@@ -9,6 +9,13 @@ import (
 
 var router = new(mux.Router)
 
+func init() {
+	var application = &system.Application{}
+
+	application.Init("config.json")
+	application.ConnectToDatabase()
+}
+
 func RegisterHandlers(r *mux.Router) {
 	router = r
 
@@ -50,12 +57,4 @@ func RegisterHandlers(r *mux.Router) {
 
 	vendorController := controllers.VendorController{}
 	vendorController.RegisterHandlers(router)
-}
-
-func main() {
-	var application = &system.Application{}
-
-	application.Init("config.json")
-	application.ConnectToDatabase()
-
 }

@@ -18,13 +18,14 @@ import (
 type InvoiceController struct {
 }
 
-func (c *InvoiceController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
-	r.Handle("/invoice", handler.New(c.GetAll)).Methods("GET")
-	r.Handle("/invoice", handler.New(c.Post)).Methods("POST")
-	r.Handle("/invoice", handler.New(c.Put)).Methods("PUT")
-	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
-	r.Handle("/invoice/count", handler.New(c.Count)).Methods("GET")
+func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/invoice/count", handler.New(controller.Count)).Methods("GET")
+	r.Handle("/invoice/resume/{status:all}", handler.New(controller.GetInvoiceResume)).Methods("GET")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/invoice", handler.New(controller.GetAll)).Methods("GET")
+	r.Handle("/invoice", handler.New(controller.Post)).Methods("POST")
+	r.Handle("/invoice", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
 // @Title Get

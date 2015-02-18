@@ -32,7 +32,7 @@ func (c *ContactController) RegisterHandlers(r *mux.Router) {
 // @Failure 403 :uid is empty
 // @router /:uid [get]
 func (controller *ContactController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	uid := v[":uid"]
+	uid := v["uid"]
 
 	contact, err := models.GetContact(uid)
 	if err != nil {

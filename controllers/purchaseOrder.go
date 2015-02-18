@@ -19,6 +19,7 @@ type PurchaseOrderController struct {
 }
 
 func (c *PurchaseOrderController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/purchase/count", handler.New(c.Count)).Methods("GET")
 	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/purchase", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/purchase", handler.New(c.Post)).Methods("POST")
@@ -79,7 +80,7 @@ func (c *PurchaseOrderController) Count(context appengine.Context, writer http.R
 	total := make(map[string]interface{})
 
 	status := models.PURCHASE_ALL
-	if statusP := v["status"]; statusP != "" {
+	if statusP := request.URL.Query().Get("status"); statusP != "" {
 		status, _ = strconv.Atoi(statusP)
 	}
 

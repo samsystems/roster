@@ -23,7 +23,7 @@ func (controller *ProductController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/product", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/product", handler.New(controller.Post)).Methods("POST")
-	r.Handle("/product", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
@@ -34,7 +34,7 @@ func (controller *ProductController) RegisterHandlers(r *mux.Router) {
 // @Failure 403 :uid is empty
 // @router /:uid [get]
 func (controller *ProductController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	uid := v[":uid"]
+	uid := v["uid"]
 
 	product, err := models.GetProduct(uid)
 	if err != nil {

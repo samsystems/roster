@@ -1,13 +1,10 @@
 package handler
 
 import (
-	"github.com/gorilla/mux"
-
-	"net/http"
-
-	"encoding/json"
-
 	"appengine"
+	"encoding/json"
+	"github.com/gorilla/mux"
+	"net/http"
 )
 
 type Error struct {

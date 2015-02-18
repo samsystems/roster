@@ -8,11 +8,11 @@ import (
 
 	"io/ioutil"
 
+	"appengine"
 	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
-
-	"appengine"
+	"log"
 )
 
 type CompanyController struct {
@@ -23,7 +23,7 @@ func (c *CompanyController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/company", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/company", handler.New(c.Post)).Methods("POST")
-	r.Handle("/company", handler.New(c.Put)).Methods("PUT")
+	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Put)).Methods("PUT")
 	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
 }
 
@@ -166,8 +166,9 @@ func (controller *CompanyController) Put(context appengine.Context, writer http.
 // @Failure 403 uid is empty
 // @router /:uid [delete]
 func (controller *CompanyController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	uid := v[":uid"]
-
+	log.Print(v)
+	uid := v["uid"]
+	log.Print(v)
 	company, err := models.GetCompany(uid)
 	if err != nil {
 		return nil, &handler.Error{err, "Entity not found.", http.StatusNoContent}

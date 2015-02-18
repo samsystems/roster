@@ -17,7 +17,6 @@ angular.module('company').controller('CompanyFormController', ['$scope', '$rootS
                 $scope.company.$save().$asPromise().then(function(response) {
                     $rootScope.$broadcast('company::updated');
                     toaster.pop('success', 'Company Updated ', 'You have been successfully updated a company.')
-                    $scope.$goTo($scope.step.list);
                 }, function() {
                     toaster.pop('error', 'Error', 'Something went wrong a new Company could not be created');
                 });

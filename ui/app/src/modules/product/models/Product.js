@@ -16,7 +16,7 @@ angular.module('product').factory('Product', ['restmod','$http','config', functi
                     return this.Description;
                 },
                 getManufacturer: function () {
-                    return this.Manufacturer();
+                    return this.Manufacturer;
                 },
                 getStatus: function () {
                     return this.Status;

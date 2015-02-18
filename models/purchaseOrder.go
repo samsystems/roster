@@ -3,7 +3,6 @@ package models
 import (
 	"code.google.com/p/go-uuid/uuid"
 	"github.com/astaxie/beego/orm"
-	"log"
 	"time"
 )
 
@@ -66,7 +65,6 @@ func GetAllPurchaseOrder(status int, page int, order string, count bool, limit i
 	querySetter = querySetter.Filter("deleted__isnull", true)
 
 	if status != PURCHASE_ALL {
-		log.Print(status)
 		querySetter = querySetter.Filter("status", status).Filter("deleted__isnull", true)
 	} else {
 		querySetter = querySetter.Filter("deleted__isnull", true)

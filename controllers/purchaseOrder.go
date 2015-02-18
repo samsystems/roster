@@ -56,7 +56,7 @@ func (c *PurchaseOrderController) Get(context appengine.Context, writer http.Res
 // @router / [get]
 func (c *PurchaseOrderController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	status := models.PURCHASE_ALL
-	if statusP := v["status"]; statusP != "" {
+	if statusP := request.URL.Query().Get("status"); statusP != "" {
 		status, _ = strconv.Atoi(statusP)
 	}
 

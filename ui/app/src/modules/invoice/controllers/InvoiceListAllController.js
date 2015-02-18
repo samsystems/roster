@@ -29,7 +29,7 @@ angular.module('invoice').controller('InvoiceListAllController', ['$scope', '$ro
     }, {
         total: 0, // length of data
         getData: function($defer, params) {
-            var invoices = Invoice.$search({status:'all',keyword: $scope.search.product, page: params.page(), sort: params.orderBy()});
+            var invoices = Invoice.$search({status:'all',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
             $scope.total = Invoice.count("all",$scope.search.invoice);
 
             $q.all([invoices.$asPromise(), $scope.total]).then(function (data) {

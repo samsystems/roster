@@ -21,18 +21,11 @@ angular.module('invoice').controller('InvoiceListDraftController', ['$scope', '$
     }, {
         total: 0, // length of data
         getData: function($defer, params) {
-            var sort = params.orderBy() != false ? params.orderBy() : 'notSorting';
-            var invoices = null;
-            if( !_.isUndefined($scope.searchInvoice) && $scope.searchInvoice != '') {
-                invoices        = Invoice.$search({status: 'draft',keyword: $scope.searchInvoice, page: params.page(), order: sort});
-                $scope.total    = Invoice.$search({status: 'draft',keyword: $scope.searchInvoice}).count();
-            }
-            else {
-                invoices     = Invoice.$search({status: 'draft',page: params.page(), order: sort});
-                $scope.total = Invoice.$search({status: 'draft'}).count();
-            }
-            $q.all([invoices.$promise,$scope.total.$promise]).then(function(data){
-                params.total($scope.total.count);
+            var invoices = Invoice.$search({status:'draft',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
+            $scope.total = Invoice.count("draft",$scope.search.invoice);
+
+            $q.all([invoices.$asPromise(), $scope.total]).then(function (data) {
+                params.total(data[1].data.total);
                 $defer.resolve(data[0]);
             })
         }

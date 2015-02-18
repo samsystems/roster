@@ -4,7 +4,7 @@
 </div>
 <div class="row">
     <div class="box-info">
-        <p class="text-right"><strong>{{invoice.created | outputFormatDateTime }}</strong></p>
+        <p class="text-right"><strong>{{invoice.Created | outputFormatDateTime }}</strong></p>
 
         <div>
             <table class="table">
@@ -13,21 +13,21 @@
                     <td colspan="4">
                         <a class="btn btn-danger btn-sm" ng-show="invoice.Status=='draft'" data-ng-click="removeInvoice(invoice)"><i
                                 class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
-                        <a href="#/sale/index" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                        <a href="#/sales/index" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="10px"><strong>Bill to:</strong></td>
                     <td>
-                        <p><strong>{{invoice.customer.Name}}</strong>
+                        <p><strong>{{invoice.Customer.Name}}</strong>
                             <br/>
-                            {{invoice.customer.Address}}
+                            {{invoice.Customer.Address}}
                             <br/>
-                            {{invoice.customer.city}}, {{invoice.customer.Zipcode}}
+                            {{invoice.Customer.City}}, {{invoice.Customer.Zipcode}}
                             <br/>
-                            P: {{invoice.customer.Phone}}
+                            P: {{invoice.Customer.Phone}}
                             <br/>
-                            Email: {{invoice.customer.Email}}
+                            Email: {{invoice.Customer.Email}}
                         </p></td>
 
                     <td width="10px"><strong>Ship to:</strong></td>
@@ -36,11 +36,11 @@
                             <br/>
                             {{invoice.CustomerShipping.Address}}
                             <br/>
-                            {{invoice.CustomerShipping.city}}, {{invoice.CustomerShipping.Zipcode}}
+                            {{invoice.CustomerShipping.City}}, {{invoice.CustomerShipping.Zipcode}}
                             <br/>
                             P: {{invoice.CustomerShipping.Phone}}
                             <br/>
-                            Email: {{invoice.customer.Email}}
+                            Email: {{invoice.CustomerShipping.Email}}
                         </p></td>
                 </tr>
                 <tr>
@@ -78,22 +78,22 @@
                                 <tbody>
                                 <tr data-ng-repeat="item in invoice.items">
                                     <td style="cursor:pointer;">
-                                        {{item.product.name}}
+                                        {{item.Product.Name}}
                                     </td>
                                     <td style="cursor:pointer;">
-                                        {{item.product.description}}
+                                        {{item.Product.Description}}
                                     </td>
                                     <td style="cursor:pointer;">
-                                        {{item.quantity}}
+                                        {{item.Quantity}}
                                     </td>
                                     <td style="cursor:pointer;">
-                                        {{item.price}}
+                                        {{item.Product.Price}}
                                     </td>
                                     <td style="cursor:pointer;">
-                                        {{item.name}}
+                                        {{item.Name}}
                                     </td>
                                     <td style="cursor:pointer;">
-                                        {{item.quantity*item.price | currency: 'USD'}}
+                                        {{item.Product.Quantity*item.Product.Price | currency: 'USD'}}
                                     </td>
                                 </tr>
                                 <tr>

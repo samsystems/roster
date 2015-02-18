@@ -39,7 +39,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     });
 
     $scope.createInvoice = function () {
-        deshabilitar(false);
+        disable(false);
         $scope.visible = true;
         $scope.item_input = "";
         $scope.invoice = {
@@ -69,17 +69,17 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     };
 
     // TODO: no spanish!
-    $scope.requerido = function () {
-        $scope.requerido = "required";
+    $scope.required = function () {
+        $scope.required = "required";
     };
 
     // TODO: no spanish!
     $scope.selectInvoice = function (invoice) {
         $scope.invoice = Invoice.$find(invoice.Id).$then(function () {
             if ($scope.invoice.Status != 'draft') {
-                deshabilitar(true);
+                disable(true);
             } else
-                deshabilitar(false);
+                disable(false);
         });
 
         $scope.$goTo($scope.step.form);
@@ -103,17 +103,18 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                     }
                 }
             });
+
         if (count_check == 1) {
             $scope.invoice = Invoice.$find(marcado).$then(function () {
-                var invoiceNumber = Invoice.maxOrderNumber(function () {
-                    $scope.invoice.OrderNumber = invoiceNumber.maxOrder;
+                var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
+                    $scope.invoice.OrderNumber = response.max;
                     $scope.invoice.Status = 'draft';
                     $scope.invoice.Id = null;
                     for (var i = 0; i < $scope.invoice.items.length; i++) {
                         $scope.invoice.items[i].Id = null;
                         $scope.invoice.items[i].QuantitySave = 0;
                     }
-                    deshabilitar(false);
+                    disable(false);
                 });
             });
 
@@ -278,7 +279,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
         }
     };
 
-    function deshabilitar(valor) {
+    function disable(valor) {
         angular.forEach(
             angular.element('#form_invoice .form-control'),
             function (inputElem) {
@@ -293,7 +294,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     }
 
     $scope.viewInvoice = function (invoice) {
-        $location.path("/invoice/view/" + invoice.id);
+        $location.path("/invoice/view/" + invoice.Id);
     };
 
     $scope.$close = function () {

@@ -167,7 +167,7 @@
                 <div class="row">
                     <div class="form-group">
 
-                        <input data-ng-model="item.quantity"
+                        <input data-ng-model="item.Quantity"
                                data-ng-if="invoice.Status=='paid' || invoice.Status=='void' || invoice.Status=='completed'"
                                disabled="disabled"
                                type="text"
@@ -187,7 +187,7 @@
                 {{item.Name}}
             </td>
             <td style="cursor:pointer;">
-                {{itemProduct.Quantity*item.Product.Price | currency: 'USD'}}
+                {{item.Quantity * item.Product.Price | currency: 'USD'}}
             </td>
             <td>
                 <button type="button"

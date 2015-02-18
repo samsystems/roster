@@ -12,6 +12,7 @@ import (
 	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
+	"log"
 )
 
 type ProductController struct {
@@ -49,8 +50,8 @@ func (controller *ProductController) Get(context appengine.Context, writer http.
 // @router / [get]
 func (controller *ProductController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var products *[]models.Product
-	page, sort, keyword := ParseParamsOfGetRequest(v)
-
+	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
+	log.Print(request.URL.Query())
 	if keyword != "" {
 		products, _ = models.GetProductByKeyword(keyword, page, sort, false, -1)
 
@@ -70,7 +71,7 @@ func (controller *ProductController) Count(context appengine.Context, writer htt
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := v["keyword"]; keywordP != "" {
+	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetProductByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {

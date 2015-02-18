@@ -1,24 +1,25 @@
 package controllers
 
 import (
+	"net/url"
 	"strconv"
 )
 
 // @Description Parse Query Params
 // @Param url.Values values of url
 
-func ParseParamsOfGetRequest(params map[string]string) (int, string, string) {
+func ParseParamsOfGetRequest(params url.Values) (int, string, string) {
 	page := 1
 	if pageP, ok := params["page"]; ok {
-		page, _ = strconv.Atoi(pageP)
+		page, _ = strconv.Atoi(pageP[0])
 	}
 	sort := "notSorting"
 	if sortP, ok := params["sort"]; ok {
-		sort = sortP
+		sort = sortP[0]
 	}
 	keyword := ""
 	if keywordP, ok := params["keyword"]; ok {
-		keyword = keywordP
+		keyword = keywordP[0]
 	}
 	return page, sort, keyword
 }

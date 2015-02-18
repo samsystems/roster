@@ -60,7 +60,7 @@ func (c *PurchaseOrderController) GetAll(context appengine.Context, writer http.
 	}
 
 	var purchases *[]models.PurchaseOrder
-	page, sort, keyword := ParseParamsOfGetRequest(v)
+	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 	if keyword != "" {
 		purchases, _ = models.GetPurchaseOrderByKeyword(keyword, page, sort, false, -1)
 	} else {
@@ -84,7 +84,7 @@ func (c *PurchaseOrderController) Count(context appengine.Context, writer http.R
 	}
 
 	keyword := ""
-	if keywordP := v["keyword"]; keywordP != "" {
+	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetPurchaseOrderByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {

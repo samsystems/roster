@@ -36,7 +36,7 @@ func (controller *InvoiceController) GetAll(context appengine.Context, writer ht
 	var invoices *[]models.Invoice
 
 	status := v["status"]
-	page, sort, keyword := ParseParamsOfGetRequest(v)
+	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 
 	if keyword != "" {
 		invoices, _ = models.GetInvoiceByKeyword(status, keyword, page, sort, false, -1)
@@ -72,9 +72,9 @@ func (controller *InvoiceController) Get(context appengine.Context, writer http.
 // @router /count [get]
 func (controller *InvoiceController) Count(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
-	status := v["status"]
+	status := request.URL.Query().Get("status")
 	keyword := ""
-	if keywordP := v["keyword"]; keywordP != "" {
+	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetInvoiceByKeyword(status, keyword, 1, "notSorting", true, -1)
 	} else {

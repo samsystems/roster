@@ -19,12 +19,12 @@ type CompanyController struct {
 }
 
 func (c *CompanyController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/company/count", handler.New(c.GetCountAll)).Methods("GET")
 	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/company", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/company", handler.New(c.Post)).Methods("POST")
 	r.Handle("/company", handler.New(c.Put)).Methods("PUT")
 	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
-	r.Handle("/company/count", handler.New(c.GetCountAll)).Methods("GET")
 }
 
 // @Title Get
@@ -54,7 +54,7 @@ func (controller *CompanyController) Get(context appengine.Context, writer http.
 // @router / [get]
 func (controller *CompanyController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var companies *[]models.Company
-	page, sort, keyword := ParseParamsOfGetRequest(v)
+	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 
 	if keyword != "" {
 		companies, _ = models.GetCompanyByKeyword(keyword, page, sort, false, -1)
@@ -74,7 +74,7 @@ func (controller *CompanyController) GetCountAll(context appengine.Context, writ
 	total := make(map[string]interface{})
 
 	keyword := ""
-	if keywordP := v["keyword"]; keywordP != "" {
+	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
 		_, total["total"] = models.GetCompanyByKeyword(keyword, 1, "notSorting", true, -1)
 	} else {

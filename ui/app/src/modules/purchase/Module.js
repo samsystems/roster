@@ -15,19 +15,24 @@ angular.module('purchase', [
 ])
 .config(['$stateProvider', function ($stateProvider) {
     $stateProvider
-        .state('app.purchase', {
+        .state('app.purchaseOrder', {
             url: 'purchases',
             templateUrl: 'src/modules/purchase/views/index.html',
             controller: 'PurchaseController'
         })
-        .state('app.purchase/view', {
+        .state('app.purchaseOrder-view', {
             url: 'purchases/view/:id',
             templateUrl: 'src/modules/purchase/views/detail.html',
             controller: 'ReviewPurchaseController'
         })
-        .state('app.purchase/new', {
-            url: 'purchases/new',
-            templateUrl: 'src/modules/purchase/views/new.html',
+        .state('app.purchaseOrder-create', {
+            url: 'purchase/create',
+            templateUrl: 'src/modules/purchase/views/form.html',
+            controller: 'PurchaseFormController'
+        })
+        .state('app.purchaseOrder-update', {
+            url: 'purchase/update/:id',
+            templateUrl: 'src/modules/purchase/views/form.html',
             controller: 'PurchaseFormController'
         })
     ;

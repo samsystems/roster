@@ -1,9 +1,8 @@
 'use strict';
 
-angular.module('purchase').factory('PurchaseOrder', ['restmod','$http','config', function(restmod, $http, config) {
+angular.module('purchase').factory('PurchaseOrderItem', ['restmod','$http','config', function(restmod, $http, config) {
 
     return restmod.model('/purchase').mix({
-        products: { hasMany: 'PurchaseOrderItem'},
         $config: { primaryKey: 'Id' },
         $extend: {
             Record: {
@@ -16,12 +15,6 @@ angular.module('purchase').factory('PurchaseOrder', ['restmod','$http','config',
                         method: 'GET',
                         url: config.api.baseUrl + '/purchase/count',
                         params: { keyword: keyword, status: search.status }
-                    });
-                },
-                getResume: function(status) {
-                    return $http({
-                        method: 'GET',
-                        url: config.api.baseUrl + '/purchase/resume/'+status
                     });
                 }
             }

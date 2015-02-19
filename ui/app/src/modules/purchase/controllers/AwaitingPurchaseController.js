@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'User','ngTableParams', 'PurchaseOrder','$q',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, User, ngTableParams, PurchaseOrder, $q) {
+angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'User','ngTableParams', 'PurchaseOrder','$q','$state',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, User, ngTableParams, PurchaseOrder, $q,$state) {
 
         $scope.page = 1;
         $scope.search = {purchaseOrder: ""};
@@ -32,10 +32,10 @@ angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '
             }
         });
 
-        $scope.viewProduct = function(purchaseOrder){
+        $scope.viewPurchase = function(purchaseOrder){
             $state.go('app.purchaseOrder-view',{id : purchaseOrder.Id});
         }
-        $scope.selectProduct = function(purchaseOrder){
+        $scope.selectPurchase = function(purchaseOrder){
             $state.go('app.purchaseOrder-update',{id : purchaseOrder.Id});
         }
 

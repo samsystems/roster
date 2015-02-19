@@ -20,27 +20,27 @@
                         <col width="15%"/>
 
                         <tr  class="items" data-ng-repeat="purchase in $data">
-                            <td data-title="'Number'" sortable="'name'"style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                            <td data-title="'Number'" sortable="'orderNumber'"style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.OrderNumber}}
                             </td>
-                            <td data-title="'Reference'" sortable="'price'" style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                            <td data-title="'Reference'" sortable="'reference'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Reference}}
                             </td>
-                            <td data-title="'Supplier'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                            <td data-title="'Supplier'" sortable="'supplier'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Supplier}}
                             </td>
-                            <td data-title="'Date'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(purchase)">
+                            <td data-title="'Date'" sortable="'date'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Date | outputFormatDate}}
                             </td>
-                            <td  data-title="'Delivery Date'" sortable="'description'" style="cursor:pointer;">
+                            <td  data-title="'Delivery Date'" sortable="'dateRaised'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.DateRaised | outputFormatDate}}
                             </td>
-                            <td  data-title="'Amount'" sortable="'description'" style="cursor:pointer;">
+                            <td  data-title="'Amount'" sortable="'amount'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Amount | currency: 'USD'}}
                             </td>
                             <td data-title="'Action'">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default fa fa-edit" data-ng-click="selectProduct(purchase)"></button>
+                                    <button type="button" class="btn btn-default fa fa-edit" data-ng-click="selectPurchase(purchase)"></button>
                                     <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(purchase)"></button>
                                 </div>
                             </td>

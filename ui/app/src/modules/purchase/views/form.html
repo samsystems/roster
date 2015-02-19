@@ -1,8 +1,5 @@
-<div class="box-info">
-    <div class="moduleContainer wizard" data-ng-controller="PurchaseFormController">
-        <div class="page-heading animated fadeInDownBig">
-            <h1>{{'Create or Update Purchase'}}</h1>
-        </div>
+<page-content-title title="Create/Update Purchase"></page-content-title>
+<panel type="plain">
         <form role="form">
             <div class="row">
                 <div class="col-md-6">
@@ -17,7 +14,7 @@
                     <div class="form-group">
                         <label class="col-md-12 control-label" for="date">{{'Date' | translate}}:</label>
                         <div class="col-md-12">
-                            <date-time-picker class="col-md-12" data-ng-model="purchase.date" data-format="date" ></date-time-picker>
+                            <date-time-picker class="col-md-12" data-ng-model="purchase.Date" data-format="date" ></date-time-picker>
                         </div>
                     </div>
                 </div>
@@ -25,7 +22,7 @@
                     <div class="form-group">
                         <label class="col-md-12 control-label" for="deliveryDate">{{'Date Delivery' | translate}}:</label>
                         <div class="col-md-12">
-                            <date-time-picker class="col-md-12" data-ng-model="purchase.deliveryDate" data-format="date" ></date-time-picker>
+                            <date-time-picker class="col-md-12" data-ng-model="purchase.DeliveryDate" data-format="date" ></date-time-picker>
                         </div>
                     </div>
                 </div>
@@ -35,7 +32,7 @@
                     <div class="form-group">
                         <label class="col-md-12 control-label" for="orderNumber">{{'Order Number' | translate}}:</label>
                         <div class="col-md-12">
-                            <input data-ng-model="purchase.orderNumber" type="text" class="form-control" validator="required,number" >
+                            <input data-ng-model="purchase.OrderNumber" type="text" class="form-control" validator="required,number" >
                         </div>
                     </div>
                 </div>
@@ -43,7 +40,7 @@
                     <div class="form-group">
                         <label class="col-md-12 control-label" for="referenceNumber">{{'Reference' | translate}}:</label>
                         <div class="col-md-12">
-                            <input data-ng-model="purchase.referenceNumber" type="text" class="form-control" validator="required,number" >
+                            <input data-ng-model="Purchase.Reference" type="text" class="form-control" validator="required,number" >
                         </div>
                     </div>
                 </div>
@@ -51,7 +48,7 @@
                     <div class="form-group">
                         <label class="col-md-12 control-label" for="currency">{{'Currency' | translate}}:</label>
                         <div class="col-md-12">
-                            <select class="form-control" data-ng-model="purchase.currency" data-ng-options ="currency.value as currency.description for currency in currencies" validator="required"></select>
+                            <select class="form-control" data-ng-model="purchase.Currency" data-ng-options ="currency.value as currency.description for currency in currencies" validator="required"></select>
                         </div>
                     </div>
                 </div>
@@ -126,10 +123,10 @@
 
             <div class="row modal-footer" style="border-top:0px;">
                 <div class="row col-md-4 pull-right">
-                    <button class="btn btn-primary ng-binding" data-ng-click="cancel()">{{'Cancel' | translate}}</button>
+                    <a class="btn btn-primary" href="#/purchases">{{'Cancel' | translate}}</a>
                     <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
                 </div>
             </div>
         </form>
     </div>
-</div>
+</panel>

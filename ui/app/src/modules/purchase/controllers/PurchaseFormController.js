@@ -1,12 +1,16 @@
 'use strict';
 
-angular.module('purchase').controller('PurchaseFormController', ['$scope', '$rootScope', '$stateParams', '$location', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product', function ($scope, $rootScope, $stateParams, $location, config, $modal, dialogs, DateTimeService, toaster, $validation, Product) {
-
-    var productResource = Product.resource;
+angular.module('purchase').controller('PurchaseFormController', ['$scope', '$rootScope', '$stateParams', '$location', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product', 'PurchaseOrder', 'PurchaseOrderItem',
+    function ($scope, $rootScope, $stateParams, $location, config, $modal, dialogs, DateTimeService, toaster, $validation, Product, PurchaseOrder, PurchaseOrderItem ) {
 
     $scope.currencies = [
         {"value": "USD", "description": "USD United State"},
     ];
+
+    $scope.purchase = {};
+    if(!_.isUndefined($stateParams.id)){
+        $scope.purchase = PurchaseOrder.$find($stateParams.id);
+    }
 
     $scope.save = function() {
         $validation.validate($scope, 'purchase').success(function() {

@@ -1,10 +1,7 @@
 'use strict';
 
-angular.module('purchase').controller('ReviewPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', 'DateTimeService', 'Note', 'ProjectService', '$validation', 'toaster', '$upload', 'DocumentService', function ($scope, $rootScope, $stateParams, config, DateTimeService, Note, ProjectService, $validation, toaster, $upload, DocumentService) {
-
-    var ProjectResource = ProjectService.resource;
-    var NoteResource = Note.resource;
-    var DocumentResource            = DocumentService.resource;
+angular.module('purchase').controller('ReviewPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', '$validation', 'toaster', '$upload',
+function ($scope, $rootScope, $stateParams, config, $validation, toaster, $upload) {
 
     var id = (!_.isUndefined($stateParams.id)) ? $stateParams.id : null;
     if(id != null){

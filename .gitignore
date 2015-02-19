@@ -143,3 +143,4 @@ appengine-generated/
 
 config.json
 *.project
+/.settings/

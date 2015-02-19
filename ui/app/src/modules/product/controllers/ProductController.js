@@ -18,7 +18,7 @@ angular.module('product').controller('ProductController', ['$scope', '$rootScope
 
     $scope.productTable = new ngTableParams({
         page: 1,            // show first page
-        count: 5           // count per page
+        count: 20           // count per page
     }, {
         total: 0, // length of data
         getData: function($defer, params) {

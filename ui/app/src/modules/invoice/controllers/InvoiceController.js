@@ -43,7 +43,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
         $scope.visible = true;
         $scope.item_input = "";
         $scope.invoice = {
-            OrderNumber: 2,
+            OrderNumber: '',
             Status: 'draft',
             ReferenceNumber: '',
             Date: DateTimeService.nowIsoFormat(),
@@ -81,7 +81,14 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             } else
                 disable(false);
         });
+        $scope.invoice.invoiceProducts.$fetch().$asPromise().then(function (response) {
+            for (var i = 0; i < response.length; i++) {
+                response[i].Product.Price = parseFloat(response[i].Product.Price);
+                response[i].Quantity = parseInt(response[i].Quantity);
+            }
 
+            $scope.invoice.items =  response;
+        })
         $scope.$goTo($scope.step.form);
     };
 
@@ -106,16 +113,22 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
 
         if (count_check == 1) {
             $scope.invoice = Invoice.$find(marcado).$then(function () {
-                var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
+                Invoice.maxOrderNumber().success(function (response) {
                     $scope.invoice.OrderNumber = response.max;
-                    $scope.invoice.Status = 'draft';
-                    $scope.invoice.Id = null;
-                    for (var i = 0; i < $scope.invoice.items.length; i++) {
-                        $scope.invoice.items[i].Id = null;
-                        $scope.invoice.items[i].QuantitySave = 0;
+                });
+                $scope.invoice.Status = 'draft';
+                $scope.invoice.Id = null;
+                $scope.invoice.invoiceProducts.$fetch().$asPromise().then(function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        response[i].Id = null;
+                        response[i].QuantitySave = 0;
+                        response[i].Product.Price = parseFloat(response[i].Product.Price);
+                        response[i].Quantity = parseInt(response[i].Quantity);
                     }
                     disable(false);
-                });
+                    $scope.invoice.items =  response;
+                })
+
             });
 
             $scope.$goTo($scope.step.form);
@@ -143,7 +156,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 }
             });
         if (count_check == 1) {
-            $scope.invoicePdf = Invoice.find({id: marcado}, function () {
+            $scope.invoicePdf = Invoice.$find(marcado).$then(function () {
                 $timeout(function () {
                     var html = document.getElementById('pdf').innerHTML;
                     invoiceResource.sendMailPdf({html: html, id: marcado}, function () {
@@ -234,10 +247,11 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 }
                 for (var i = 0; i < marcado.length; i++) {
                     if (status[i] == 'draft') {
-                        $scope.invoice = invoiceResource.get({id: marcado[i]}, function (responseDelete) {
-                            $scope.invoice.$delete({id: responseDelete.id}, function (response) {
-                                $rootScope.$broadcast('invoice::deleted', responseDelete);
-                                $rootScope.$broadcast('invoice::totalTab', responseDelete);
+                           Invoice.$find(marcado[i]).$then(function (responseDelete) {
+                                responseDelete.$destroy().$asPromise().then(function (response) {
+                            //$scope.invoice.$delete({id: responseDelete.id}, function (response) {
+                                $rootScope.$broadcast('invoice::deleted');
+                                $rootScope.$broadcast('invoice::totalTab');
                             });
                         });
                     } else {

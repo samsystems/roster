@@ -3,6 +3,7 @@
 angular.module('invoice').factory('Invoice', ['restmod', 'config','$http', function (restmod, config, $http) {
 
     return restmod.model('/invoice').mix('BaseModel', {
+        invoiceProducts: { hasMany: 'InvoiceProduct'},
         $extend: {
             Record: {
                 getId: function() {

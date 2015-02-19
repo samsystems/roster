@@ -122,10 +122,10 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                     invoice.Status = status;
 
                     invoice.$save().$then(function (response) {
-                    //    $rootScope.$broadcast('invoice::updated');
-                     //   $rootScope.$broadcast('invoice::totalTab');
+                        $rootScope.$broadcast('invoice::updated');
+                        $rootScope.$broadcast('invoice::totalTab');
                         toaster.pop('success', 'Invoice Created', 'You have successfully created a new invoice.');
-                      //  $scope.$goTo($scope.step.list);
+                        $scope.$goTo($scope.step.list);
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
                     });

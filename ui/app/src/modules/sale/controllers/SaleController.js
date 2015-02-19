@@ -25,7 +25,7 @@ angular.module('sale').controller('SaleController', ['$scope', '$rootScope', '$s
             $scope.invoices = invoices;
         });
         updateSummaryData();
-
+        $scope.invoices = Invoice.$search({status: 'lastWeek'});
         function updateSummaryData() {
             Invoice.getResume('draft').success(function (response) {
                 $rootScope.qty_draft = response.cant;

@@ -53,7 +53,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                         return;
                     }
                 }
-                var item = {Product: item_input, Price: item_input.Price, Quantity: 1};
+                var item = {Product: item_input, Price: item_input.Price, Quantity: '1'};
                 $scope.invoice.items[$scope.invoice.items.length] = item;
                 $scope.item_input = '';
             } else

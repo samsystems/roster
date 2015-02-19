@@ -10,7 +10,7 @@ const TRANSACTION_LIMIT int = 20
 
 type Transaction struct {
 	Id                  string    `orm:"pk"`
-	Invoice             *Invoice  `orm:"rel(one)"  valid:"Entity(Invoice)"`
+	Invoice             *Invoice  `orm:"rel(one)" valid:"Entity(Invoice)"`
 	Product             *Product  `orm:"rel(one)" valid:"Entity(Product)"` 
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`

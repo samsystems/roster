@@ -12,6 +12,7 @@ import (
 	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
+	"log"
 )
 
 // Operations about Users
@@ -20,11 +21,12 @@ type InvoiceController struct {
 
 func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/invoice/count", handler.New(controller.Count)).Methods("GET")
-	r.Handle("/invoice/resume/{status:all}", handler.New(controller.GetInvoiceResume)).Methods("GET")
+	r.Handle("/invoice/max-ordernumber", handler.New(controller.GetMaxOrderNumber)).Methods("GET")
+	r.Handle("/invoice/resume/{status:[a-zA-Z\\-]+}", handler.New(controller.GetInvoiceResume)).Methods("GET")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/invoice", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/invoice", handler.New(controller.Post)).Methods("POST")
-	r.Handle("/invoice", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
@@ -35,7 +37,8 @@ func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 func (controller *InvoiceController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var invoices *[]models.Invoice
 
-	status := v["status"]
+	status := request.URL.Query().Get("status")
+
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 
 	if keyword != "" {
@@ -171,7 +174,7 @@ func (c *InvoiceController) Delete(context appengine.Context, writer http.Respon
 // @Success 200 {int} models.Invoice.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (g *InvoiceController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+func (controller *InvoiceController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
@@ -180,12 +183,22 @@ func (g *InvoiceController) Post(context appengine.Context, writer http.Response
 
 	var invoice models.Invoice
 	json.Unmarshal(data, &invoice)
-
+	log.Print("aqui")
+	log.Println(string(data))
+	
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	invoice.Creator = user
 	invoice.Updater = user
 	invoice.OrderNumber = models.GetMaxOrderNumber()
-
+	
+	for i := 0; i < len(invoice.InvoiceProducts); i++ {
+			//var invoiceProduct = invoice.InvoiceProducts[i]
+			invoice.InvoiceProducts[i].Creator= user
+     		invoice.InvoiceProducts[i].Updater= user
+			invoice.InvoiceProducts[i].Invoice= &invoice
+			//models.AddInvoiceProduct(invoiceProduct)
+	    }
+	
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {
@@ -198,6 +211,10 @@ func (g *InvoiceController) Post(context appengine.Context, writer http.Response
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	} else {
 		models.AddInvoice(&invoice)
+		
+		
+		//models.CreateFromInvoice(&invoice)
+	
 	}
 
 	return invoice, nil

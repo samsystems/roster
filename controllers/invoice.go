@@ -192,11 +192,11 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.OrderNumber = models.GetMaxOrderNumber()
 	
 	for i := 0; i < len(invoice.InvoiceProducts); i++ {
-			//var invoiceProduct = invoice.InvoiceProducts[i]
-			invoice.InvoiceProducts[i].Creator= user
-     		invoice.InvoiceProducts[i].Updater= user
-			invoice.InvoiceProducts[i].Invoice= &invoice
-			//models.AddInvoiceProduct(invoiceProduct)
+			var invoiceProduct = invoice.InvoiceProducts[i]
+			invoiceProduct.Creator= user
+     		invoiceProduct.Updater= user
+			invoiceProduct.Invoice= &invoice
+			models.AddInvoiceProduct(invoiceProduct)
 	    }
 	
 	valid := validation.Validation{}

@@ -110,22 +110,22 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 } else {
 
                     var invoice = Invoice.$build();
-                    invoice.Customer = $scope.invoice.Customer;
-                    invoice.CustomerShipping = $scope.invoice.CustomerShipping;
-                    invoice.Date = $scope.invoice.Date;
-                    invoice.DeliveryDate = $scope.invoice.DeliveryDate;
-                    // invoice.orderNumber = $scope.invoice.orderNumber;
-                    invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
-                    invoice.Currency = $scope.invoice.Currency;
+                    invoice.Customer = {'Id':$scope.invoice.Customer.Id};
+                    invoice.CustomerShipping = {'Id':$scope.invoice.CustomerShipping.Id};
+                   // invoice.Date = $scope.invoice.Date;
                     invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
-                    invoice.items = $scope.invoice.items;
+                  //  invoice.DeliveryDate = $scope.invoice.DeliveryDate;
+
+                    invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
+                    invoice.Currency = $scope.invoice.Currency.value;
+                    invoice.InvoiceProducts = $scope.invoice.items;
                     invoice.Status = status;
 
                     invoice.$save().$then(function (response) {
-                        $rootScope.$broadcast('invoice::updated');
-                        $rootScope.$broadcast('invoice::totalTab');
+                    //    $rootScope.$broadcast('invoice::updated');
+                     //   $rootScope.$broadcast('invoice::totalTab');
                         toaster.pop('success', 'Invoice Created', 'You have successfully created a new invoice.');
-                        $scope.$goTo($scope.step.list);
+                      //  $scope.$goTo($scope.step.list);
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
                     });

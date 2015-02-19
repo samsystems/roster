@@ -190,15 +190,8 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.Creator = user
 	invoice.Updater = user
 	invoice.OrderNumber = models.GetMaxOrderNumber()
-	
-	for i := 0; i < len(invoice.InvoiceProducts); i++ {
-			var invoiceProduct = invoice.InvoiceProducts[i]
-			invoiceProduct.Creator= user
-     		invoiceProduct.Updater= user
-			invoiceProduct.Invoice= &invoice
-			models.AddInvoiceProduct(invoiceProduct)
-	    }
-	
+	invoiceProducts := invoice.InvoiceProducts
+	invoice.InvoiceProducts=nil
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {
@@ -212,6 +205,14 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	} else {
 		models.AddInvoice(&invoice)
 		
+	for i := 0; i < len(invoiceProducts); i++ {
+			var invoiceProduct = invoiceProducts[i]
+			invoiceProduct.Creator= user
+     		invoiceProduct.Updater= user
+			invoiceProduct.Invoice= &invoice
+			models.AddInvoiceProduct(invoiceProduct)
+	    }
+	
 		
 		//models.CreateFromInvoice(&invoice)
 	

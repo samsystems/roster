@@ -6,9 +6,7 @@ import (
 	"time"
 )
 
-const (
-	INVOICE_LIMIT int = 20
-)
+const INVOICE_LIMIT int = 20
 
 type Invoice struct {
 	Id                  string    `orm:"pk"`
@@ -17,10 +15,10 @@ type Invoice struct {
 	CustomerShipping    *Customer `orm:"rel(one)"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
-	OrderNumber         int
-	ReferenceNumber     int64
-	Date                time.Time `orm:"auto_now_add;type(datetime)"`
-	DeliveryDate        time.Time `orm:"auto_now_add;type(datetime)"`
+	OrderNumber         int         
+	ReferenceNumber     int64     `json:",string"`
+	Date                time.Time `orm:"auto_now_add;type(datetime)" json:",string"`
+	DeliveryDate        time.Time `orm:"auto_now_add;type(datetime)" json:",string"`
 	Currency            string
 	DeliveryInstruction string
 	Status              string
@@ -28,6 +26,7 @@ type Invoice struct {
 	TotalTax            float64
 	Amount              float64
 	Tax                 float64
+	InvoiceProducts     []*InvoiceProduct `orm:"reverse(many)"`
 	Deleted             time.Time `orm:"type(datetime)"`
 	Created             time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone     int
@@ -71,7 +70,7 @@ func GetAllInvoices(status string, page int, order string, count bool, limit int
 	} else if status != "all" {
 		querySetter = querySetter.Filter("status", status).Filter("deleted__isnull", true)
 	} else {
-		querySetter.Filter("deleted__isnull", true)
+		querySetter = querySetter.Filter("deleted__isnull", true)
 	}
 
 	if count == true {

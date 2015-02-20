@@ -186,8 +186,6 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 
 	var invoice models.Invoice
 	json.Unmarshal(data, &invoice)
-	log.Print("aqui")
-	
 	
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	log.Println(user.Company.Id)
@@ -245,9 +243,8 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 // @Success 200 {object} models.Invoice
 // @router /:id/invoiceProducts [get]
 func (controller *InvoiceController) GetAllInvoiceProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	var invoices *[]models.InvoiceProduct    
     uidInvoice := v["uid"]
-	invoices= models.GetAllInvoiceProducts(uidInvoice)
+	var invoices []models.InvoiceProduct = models.GetAllInvoiceProducts(uidInvoice)
 	return invoices, nil
 }
 

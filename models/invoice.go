@@ -4,6 +4,7 @@ import (
 	"code.google.com/p/go-uuid/uuid"
 	"github.com/astaxie/beego/orm"
 	"time"
+	"log"
 )
 
 const INVOICE_LIMIT int = 20
@@ -153,6 +154,15 @@ func DeleteInvoice(invoice *Invoice) {
 	o := orm.NewOrm()
 	invoice.Deleted = time.Now()
 	o.Update(invoice)
+	if(invoice.Status == "draft"){
+		invoiceProducts := GetAllInvoiceProducts(invoice.Id)
+		for _, v := range invoiceProducts {
+			log.Println(v.Quantity)
+			product := v.Product
+			product.Stock =product.Stock+v.Quantity
+			o.Update(product)
+		} 
+	}
 }
 
 func GetMaxOrderNumber() int {

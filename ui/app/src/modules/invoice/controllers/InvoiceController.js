@@ -85,6 +85,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             for (var i = 0; i < response.length; i++) {
                 response[i].Product.Price = parseFloat(response[i].Product.Price);
                 response[i].Quantity = parseInt(response[i].Quantity);
+                response[i].QuantitySave = parseInt(response[i].Quantity);
             }
 
             $scope.invoice.items =  response;
@@ -250,8 +251,6 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                            Invoice.$find(marcado[i]).$then(function (responseDelete) {
                                 responseDelete.$destroy().$asPromise().then(function (response) {
                             //$scope.invoice.$delete({id: responseDelete.id}, function (response) {
-                                $rootScope.$broadcast('invoice::deleted');
-                                $rootScope.$broadcast('invoice::totalTab');
                             });
                         });
                     } else {
@@ -259,7 +258,11 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                         return;
                     }
                 }
+                $timeout(function () {
+                    $rootScope.$broadcast('invoice::deleted');
+                    $rootScope.$broadcast('invoice::totalTab');
                 toaster.pop('success', 'Invoice Deleted', 'You have successfully deleted the invoices.');
+                });
             });
         }
     };

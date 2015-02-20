@@ -14,7 +14,8 @@ type PurchaseOrderItem struct {
 	PurchaseOrder     *PurchaseOrder `orm:"rel(one)" valid:"Entity(PurchaseOrder)"`
 	Product           *Product       `orm:"rel(one)" valid:"Entity(Product)"`
 	CustomProductName string
-	quantitySolicited int       `json:",string"`
+	Description       string
+	QuantitySolicited int       `json:",string"`
 	QuantityReceived  int       `json:",string"`
 	DiscountPrice     float32   `json:",string"`
 	Price             float32   `json:",string"`

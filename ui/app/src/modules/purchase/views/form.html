@@ -57,43 +57,44 @@
             <br/>
 
             <div class="table-responsive">
-
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th style="width: 5%%">No.</th>
                         <th style="width: 20%">Item</th>
                         <th style="width: 30%">Description</th>
                         <th style="width: 5%">Qty</th>
                         <th style="width: 15%">Unit Price</th>
-                        <th style="width: 15%">Disc %</th>
-                        <th style="width: 15%">Amount USD</th>
+                        <th style="width: 10%">Disc %</th>
+                        <th style="width: 10%">Amount USD</th>
                         <th style="width: 5%"></th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Text CL</td>
-                            <td>Description for this Item</td>
-                            <td>9</td>
-                            <td>100</td>
-                            <td></td>
-                            <td>900.00</td>
-                            <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeItem(item)"></button></td>
+                        <tr data-ng-repeat="product in purchase.products">
+                            <td>{{$last ? '*' : $index + 1}}</td>
+                            <td><input type="text" data-ng-model="product.CustomProductName" data-ng-click="addProduct($index)"/></td>
+                            <td><input type="text" data-ng-model="product.Description" data-ng-click="addProduct($index)"/></td>
+                            <td><input type="text" data-ng-model="product.QuantitySolicited" data-ng-click="addProduct($index)"/></td>
+                            <td><input type="text" data-ng-model="product.Price" data-ng-click="addProduct($index)"/></td>
+                            <td><input type="text" data-ng-model="product.DiscountPrice" data-ng-click="addProduct($index)"/></td>
+                            <td>{{getAmount(product) | currency: 'USD'}}</td>
+                            <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(product)" data-ng-show="!$last"></button></td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="no-border"></td>
+                            <td colspan="5" class="no-border"></td>
                             <td>Subtoal</td>
-                            <td colspan="2">900</td>
+                            <td colspan="2">{{total | currency: 'USD'}}</td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="no-border"></td>
+                            <td colspan="5" class="no-border"></td>
                             <td>Tax (%)</td>
-                            <td colspan="2">79.00</td>
+                            <td colspan="2"><input type="text" data-ng-model="purchase.TotalTax"/></td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="no-border"></td>
+                            <td colspan="5" class="no-border"></td>
                             <td><b>Total</b></td>
-                            <td colspan="2">1190.00</td>
+                            <td colspan="2">{{getTotal() | currency: 'USD'}}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -1408,6 +1408,7 @@ CREATE TABLE `purchase_order_item` (
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `custom_product_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `quantity_solicited` int(11) DEFAULT NULL,
   `quantity_received` int(11) DEFAULT NULL,
   `discount_price` double DEFAULT NULL,

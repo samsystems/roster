@@ -87,7 +87,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 response[i].Quantity = parseInt(response[i].Quantity);
                 response[i].QuantitySave = parseInt(response[i].Quantity);
             }
-
+console.log('asas');
             $scope.invoice.items =  response;
         })
         $scope.$goTo($scope.step.form);

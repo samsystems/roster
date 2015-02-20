@@ -94,7 +94,7 @@
         <div class="form-group">
             <label class="col-md-12 control-label" for="Currency">{{'Currency' | translate}}</label>
             <div class="col-md-12">
-                <select class="form-control" id="Currency" data-ng-model="invoice.Currency.value"
+                <select class="form-control" id="Currency" data-ng-model="invoice.Currency"
                         data-ng-options="currency.value as currency.description for currency in currencies"
                         validator="required"></select>
             </div>

@@ -56,7 +56,7 @@ angular.module('invoice').controller('InvoiceListDraftController', ['$scope', '$
 
     $scope.removeInvoice = function (invoice) {
         dialogs.confirm('Remove a Invoice', 'Are you sure you want to remove a Invoice?').result.then(function (btn) {
-            invoice.$delete({id: invoice.id}, function (response) {
+            invoice.$destroy().$asPromise().then(function (response) {
                 $rootScope.$broadcast('invoice::deleted');
                 $rootScope.$broadcast('invoice::totalTab');
                 toaster.pop('success', 'Invoice Deleted', 'You have successfully deleted a invoice.')

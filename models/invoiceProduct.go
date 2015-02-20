@@ -36,3 +36,13 @@ func AddInvoiceProduct(invoiceProduct *InvoiceProduct) string {
 	}
 	return invoiceProduct.Id
 }
+
+func GetAllInvoiceProducts(uidInvoice string) (*[]InvoiceProduct) {
+	o := orm.NewOrm()
+	var invoiceProduct []InvoiceProduct
+	querySetter := o.QueryTable("invoice_product")
+	querySetter.RelatedSel("Product").Filter("invoice_id", uidInvoice).All(&invoiceProduct)
+	
+	return &invoiceProduct
+	
+}

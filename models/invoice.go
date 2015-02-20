@@ -25,7 +25,7 @@ type Invoice struct {
 	SubTotal            float64
 	TotalTax            float64
 	Amount              float64
-	Tax                 float64
+	Tax                 float32
 	InvoiceProducts     []*InvoiceProduct `orm:"reverse(many)"`
 	Deleted             time.Time `orm:"type(datetime)"`
 	Created             time.Time `orm:"auto_now_add;type(datetime)"`
@@ -52,6 +52,12 @@ func GetInvoice(uid string) (*Invoice, error) {
 	invoice := Invoice{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&invoice)
+	if invoice.Customer != nil {
+	    o.Read(invoice.Customer)
+	}
+	if invoice.CustomerShipping != nil {
+   		o.Read(invoice.CustomerShipping)
+	}
 
 	return &invoice, err
 }

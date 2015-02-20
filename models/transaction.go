@@ -15,7 +15,7 @@ type Transaction struct {
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	SubTotal            float64
-	Tax                 float64
+	Tax                 float32
 	Amount              float64
 	Deleted             time.Time `orm:"type(datetime)"`
 	Created             time.Time `orm:"auto_now_add;type(datetime)"`

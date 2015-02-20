@@ -8,11 +8,13 @@ import (
 	"io/ioutil"
 
 	"appengine"
-
+	
 	"github.com/sam/roster/handler"
 	"github.com/sam/roster/models"
 	"github.com/sam/roster/validation"
 	"log"
+	
+	"math"
 )
 
 // Operations about Users
@@ -28,6 +30,7 @@ func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/invoice", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}/invoice-products", handler.New(controller.GetAllInvoiceProducts)).Methods("GET")
 }
 
 // @Title Get
@@ -184,14 +187,31 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	var invoice models.Invoice
 	json.Unmarshal(data, &invoice)
 	log.Print("aqui")
-	log.Println(string(data))
+	
 	
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	log.Println(user.Company.Id)
+	company, _ := models.GetCompany(user.Company.Id)
 	invoice.Creator = user
 	invoice.Updater = user
+	invoice.Tax=company.Tax
 	invoice.OrderNumber = models.GetMaxOrderNumber()
 	invoiceProducts := invoice.InvoiceProducts
 	invoice.InvoiceProducts=nil
+	var subTotal float64 =0
+	for i := 0; i < len(invoiceProducts); i++ {
+		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
+		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
+		if(product.Stock<invoiceProducts[i].Quantity){
+			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
+		}
+		product.Stock = product.Stock - invoiceProducts[i].Quantity
+		invoiceProducts[i].Product= product
+	}
+	invoice.SubTotal=subTotal
+	invoice.TotalTax=RoundPlus((subTotal * float64(invoice.Tax))/100,2)
+	invoice.Amount=invoice.TotalTax+subTotal
+	
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {
@@ -211,12 +231,31 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
      		invoiceProduct.Updater= user
 			invoiceProduct.Invoice= &invoice
 			models.AddInvoiceProduct(invoiceProduct)
-	    }
-	
-		
-		//models.CreateFromInvoice(&invoice)
+			models.UpdateProduct(invoiceProduct.Product)
+	    }	
+		//models.CreateFromInvoice(invoice)
 	
 	}
 
 	return invoice, nil
+}
+
+// @Title Get
+// @Description get all Invoices
+// @Success 200 {object} models.Invoice
+// @router /:id/invoiceProducts [get]
+func (controller *InvoiceController) GetAllInvoiceProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	var invoices *[]models.InvoiceProduct    
+    uidInvoice := v["uid"]
+	invoices= models.GetAllInvoiceProducts(uidInvoice)
+	return invoices, nil
+}
+
+func Round(f float64) float64 {
+	return math.Floor(f + .5)
+}
+ 
+func RoundPlus(f float64, places int) (float64) {
+	shift := math.Pow(10, float64(places))
+	return Round(f * shift) / shift;	
 }

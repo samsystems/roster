@@ -56,5 +56,5 @@ angular.module('invoice').controller('InvoiceListPaidController', ['$scope', '$r
     function deleteInvoicePaid(invoice) {
         $scope.invoiceTable.reload();
     }
-    $scope.checkboxes = { items: {} };
+    $scope.checkboxes = { InvoiceProducts: {} };
 }]);

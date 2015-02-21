@@ -31,7 +31,7 @@ type Invoice struct {
 	Deleted             time.Time `orm:"type(datetime)"`
 	Created             time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone     int
-	Updated             time.Time `orm:"auto_now_add;type(datetime)"`
+    Updated             time.Time `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone     int
 }
 

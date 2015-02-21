@@ -5,7 +5,7 @@
         <div class="form-group">
             <label for="customer" class="col-md-12 control-label">{{'To' | translate}}</label>
             <div class="col-md-12">
-                <input id="customer" data-ng-model="invoice.Customer"
+                <input id="customer" data-ng-model="invoice.Customer" autocomplete="off"
                        data-typeahead="customer as customer.Name for customer in searchCustomers($viewValue)"
                        data-typeahead-min-length="3" type="text" class="form-control"
                        >
@@ -16,7 +16,7 @@
         <div class="form-group">
             <label for="CustomerShipping" class="col-md-12 control-label">{{'Ship To' | translate}}</label>
             <div class="col-md-12">
-                <input id="CustomerShipping" data-ng-model="invoice.CustomerShipping"
+                <input id="CustomerShipping" data-ng-model="invoice.CustomerShipping" autocomplete="off"
                        data-typeahead="customer as customer.Name for customer in searchCustomers($viewValue)"
                        data-typeahead-min-length="3" type="text" class="form-control "
                        validator="required">
@@ -126,6 +126,7 @@
     <div class="col-md-  col-xs-6 col-xs-offset-3">
             <div class="input-group">
                 <input id="item" data-ng-model="item_input"
+                       autocomplete="off"
                        data-typeahead="product as product.Name for product in searchProducts($viewValue)"
                        data-typeahead-min-length="3"
                        data-typeahead-on-select="addItem($item)"
@@ -141,7 +142,7 @@
 <br/>
 <br/>
 
-<div class="table-responsive" ng-show="invoice.items.length > 0" ng-load="updateSubTotal()">
+<div class="table-responsive" ng-show="invoice.InvoiceProducts.length > 0" ng-load="updateSubTotal()">
 
     <table class="table table-hover">
         <thead>
@@ -156,7 +157,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="item in invoice.items">
+        <tr data-ng-repeat="item in invoice.InvoiceProducts">
             <td style="cursor:pointer;">
                 {{item.Product.Name}}
             </td>

@@ -30,7 +30,7 @@ func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/invoice", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
-	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}/invoice-products", handler.New(controller.GetAllInvoiceProducts)).Methods("GET")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}/products", handler.New(controller.GetAllProducts)).Methods("GET")
 }
 
 // @Title Get
@@ -129,12 +129,15 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	}
 
 	var invoice models.Invoice
-	json.Unmarshal(data, &invoice)
-
+	err1 := json.Unmarshal(data, &invoice)
+	if err1 != nil {
+		log.Println("error:", err1)
+	}
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	invoice.Creator = user
 	invoice.Updater = user
-
+    invoice.Status="draft"
+    
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {
@@ -185,7 +188,10 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	}
 
 	var invoice models.Invoice
-	json.Unmarshal(data, &invoice)
+	err1 := json.Unmarshal(data, &invoice)
+	if err1 != nil {
+		log.Println("error:", err1)
+	}
 	
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	log.Println(user.Company.Id)
@@ -241,8 +247,8 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 // @Title Get
 // @Description get all Invoices
 // @Success 200 {object} models.Invoice
-// @router /:id/invoiceProducts [get]
-func (controller *InvoiceController) GetAllInvoiceProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+// @router /:id/products [get]
+func (controller *InvoiceController) GetAllProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
     uidInvoice := v["uid"]
 	var invoices []models.InvoiceProduct = models.GetAllInvoiceProducts(uidInvoice)
 	return invoices, nil

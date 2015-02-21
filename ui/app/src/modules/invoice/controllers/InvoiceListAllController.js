@@ -87,5 +87,5 @@ angular.module('invoice').controller('InvoiceListAllController', ['$scope', '$ro
             });
         });
     };
-    $scope.checkboxes = { items: {} };
+    $scope.checkboxes = { InvoiceProducts: {} };
 }]);

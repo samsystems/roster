@@ -7,12 +7,12 @@ angular.module('invoice').controller('InvoiceViewController', ['$scope', '$rootS
 
     if(id != null){
         $scope.invoice = Invoice.$find(id);
-        $scope.invoice.invoiceProducts.$fetch().$asPromise().then(function (response) {
+        $scope.invoice.products.$fetch().$asPromise().then(function (response) {
             for (var i = 0; i < response.length; i++) {
                 response[i].Product.Price = parseFloat(response[i].Product.Price);
                 response[i].Quantity = parseInt(response[i].Quantity);
             }
-            $scope.invoice.items =  response;
+            $scope.invoice.InvoiceProducts =  response;
         })
     }
 

@@ -4,10 +4,10 @@
             <div class="box-info">
                 <div class="row" data-ng-controller="InvoiceListPaidController">
                     <div class="col-md-12">
-                        <button class="btn btn-success" data-ng-click="copyto(checkboxes.items)"><i class="fa fa-copy"></i> COPY TO</button>
-                        <button class="btn btn-warning" data-ng-click="sendMailPdf(checkboxes.items)"><i class="fa fa-send"></i> EMAIL</button>
-                        <button class="btn btn-default" data-ng-click="print(checkboxes.items)"><i class="fa fa-print"></i> PRINT</button>
-                        <button class="btn btn-dropbox" data-ng-click="pdf(checkboxes.items)"><i class="fa fa-file-pdf-o"></i> PDF</button>
+                        <button class="btn btn-success" data-ng-click="copyto(checkboxes.InvoiceProducts)"><i class="fa fa-copy"></i> COPY TO</button>
+                        <button class="btn btn-warning" data-ng-click="sendMailPdf(checkboxes.InvoiceProducts)"><i class="fa fa-send"></i> EMAIL</button>
+                        <button class="btn btn-default" data-ng-click="print(checkboxes.InvoiceProducts)"><i class="fa fa-print"></i> PRINT</button>
+                        <button class="btn btn-dropbox" data-ng-click="pdf(checkboxes.InvoiceProducts)"><i class="fa fa-file-pdf-o"></i> PDF</button>
                     </div>
                     <div style="margin-top: 65px" >
                         <div>
@@ -57,7 +57,7 @@
                                         <col width="15%"/>
                                         <tr class="items" data-ng-repeat="invoice in $data">
                                             <td>
-                                                <input data-status="{{ checkboxes.items[invoice.Id]['status']=invoice.Status}}" type="checkbox" ng-model="checkboxes.items[invoice.Id]['checked']" />
+                                                <input data-status="{{ checkboxes.InvoiceProducts[invoice.Id]['status']=invoice.Status}}" type="checkbox" ng-model="checkboxes.InvoiceProducts[invoice.Id]['checked']" />
                                             </td>
                                             <td data-title="'Order Number'" sortable="'orderNumber'" style="cursor:pointer;"
                                                 data-ng-click="viewInvoice(invoice)">

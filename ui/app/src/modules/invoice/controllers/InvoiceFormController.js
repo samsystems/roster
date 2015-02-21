@@ -47,14 +47,14 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             if (!_.isEmpty(item_input) && !_.isEmpty(item_input.Id)) {
                 $scope.subtotal = 0;
                 // item_input.quantity = 1;
-                for (var i = 0; i < $scope.invoice.items.length; i++) {
-                    if ($scope.invoice.items[i].Product.Id == item_input.Id) {
+                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
+                    if ($scope.invoice.InvoiceProducts[i].Product.Id == item_input.Id) {
                         toaster.pop('error', 'Error', 'The product has already been added');
                         return;
                     }
                 }
                 var item = {Product: item_input, Price: item_input.Price, Quantity: '1'};
-                $scope.invoice.items[$scope.invoice.items.length] = item;
+                $scope.invoice.InvoiceProducts[$scope.invoice.InvoiceProducts.length] = item;
                 $scope.item_input = '';
             } else
                 toaster.pop('error', 'Error', 'Select an item');
@@ -68,9 +68,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
          */
         $scope.removeItem = function (item) {
             if (!_.isEmpty(item)) {
-                for (var i = 0; i < $scope.invoice.items.length; i++) {
-                    if ($scope.invoice.items[i].id == item.id) {
-                        $scope.invoice.items.splice(i, 1);
+                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
+                    if ($scope.invoice.InvoiceProducts[i].id == item.id) {
+                        $scope.invoice.InvoiceProducts.splice(i, 1);
                     }
                 }
             }
@@ -79,9 +79,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         $scope.updateSubTotal = function () {
             $scope.subtotal = 0;
             $scope.total_amount = 0;
-            if ($scope.invoice && $scope.invoice.items) {
-                for (var i = 0; i < $scope.invoice.items.length; i++) {
-                    $scope.subtotal += $scope.invoice.items[i].Quantity * $scope.invoice.items[i].Price;
+            if ($scope.invoice && $scope.invoice.InvoiceProducts) {
+                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
+                    $scope.subtotal += $scope.invoice.InvoiceProducts[i].Quantity * $scope.invoice.InvoiceProducts[i].Price;
                 }
                 $scope.total_tax = $scope.subtotal * $scope.tax / 100;
                 $scope.total_amount = $scope.total_tax + $scope.subtotal;
@@ -95,11 +95,18 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         }
         $scope.save = function (status) {
             //  $validation.validate($scope, 'invoice').success(function () {
-            if ($scope.invoice.items.length > 0) {
+            if ($scope.invoice.InvoiceProducts.length > 0) {
+                console.log('ok');
+                console.log($scope.invoice.Id);
                 if (!_.isUndefined($scope.invoice.Id) && $scope.invoice.Id) {
-                    $scope.invoice.status = status;
+                    $scope.invoice.Status = status;
 
-                    $scope.invoice.$update({id: $scope.invoice.Id}, function (response) {
+                    /*Temporal hasta averiguar la fecha*/
+                     $scope.invoice.Date = null;
+                     $scope.invoice.Deleted = null;
+                     $scope.invoice.DeliveryDate = null;
+
+                    $scope.invoice.$save().$then(function(response) {
                         $rootScope.$broadcast('invoice::updated');
                         $rootScope.$broadcast('invoice::totalTab');
                         toaster.pop('success', 'Invoice Updated ', 'You have been successfully updated a invoice.')
@@ -118,7 +125,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency.value;
-                    invoice.InvoiceProducts = $scope.invoice.items;
+                    invoice.InvoiceProducts = $scope.invoice.InvoiceProducts;
                     invoice.Status = status;
 
                     invoice.$save().$then(function (response) {

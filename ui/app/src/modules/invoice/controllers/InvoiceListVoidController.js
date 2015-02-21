@@ -58,5 +58,5 @@ angular.module('invoice').controller('InvoiceListVoidController', ['$scope', '$r
         });
     };
 
-    $scope.checkboxes = { items: {} };
+    $scope.checkboxes = { InvoiceProducts: {} };
 }]);

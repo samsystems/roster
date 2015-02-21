@@ -48,12 +48,12 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             ReferenceNumber: '',
             Date: DateTimeService.nowIsoFormat(),
             DeliveryDate: DateTimeService.nowIsoFormat(),
-            Currency: {"value": "USD", "description": "USD United State"},
+            Currency: "USD",
             DeliveryInstruction: '',
             Vendor: '',
             Customer: null,
             CustomerShipping: null,
-            items: []
+            InvoiceProducts: []
         };
 
 
@@ -80,16 +80,16 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 disable(true);
             } else
                 disable(false);
+
+            $scope.invoice.products.$fetch().$asPromise().then(function (response) {
+                for (var i = 0; i < response.length; i++) {
+                    response[i].Product.Price = parseFloat(response[i].Product.Price);
+                    response[i].Quantity = parseInt(response[i].Quantity);
+                    response[i].QuantitySave = parseInt(response[i].Quantity);
+                }
+                $scope.invoice.InvoiceProducts =  response;
+            })
         });
-        $scope.invoice.invoiceProducts.$fetch().$asPromise().then(function (response) {
-            for (var i = 0; i < response.length; i++) {
-                response[i].Product.Price = parseFloat(response[i].Product.Price);
-                response[i].Quantity = parseInt(response[i].Quantity);
-                response[i].QuantitySave = parseInt(response[i].Quantity);
-            }
-console.log('asas');
-            $scope.invoice.items =  response;
-        })
         $scope.$goTo($scope.step.form);
     };
 
@@ -119,7 +119,7 @@ console.log('asas');
                 });
                 $scope.invoice.Status = 'draft';
                 $scope.invoice.Id = null;
-                $scope.invoice.invoiceProducts.$fetch().$asPromise().then(function (response) {
+                $scope.invoice.products.$fetch().$asPromise().then(function (response) {
                     for (var i = 0; i < response.length; i++) {
                         response[i].Id = null;
                         response[i].QuantitySave = 0;
@@ -127,7 +127,7 @@ console.log('asas');
                         response[i].Quantity = parseInt(response[i].Quantity);
                     }
                     disable(false);
-                    $scope.invoice.items =  response;
+                    $scope.invoice.InvoiceProducts =  response;
                 })
 
             });

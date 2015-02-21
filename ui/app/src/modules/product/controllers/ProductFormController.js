@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('product').controller('ProductFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Product) {
+angular.module('product').controller('ProductFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product','$state',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Product, $state) {
 
     $scope.statuses = [
         {"value": 2, "description": "Inactive"},
@@ -10,6 +10,8 @@ angular.module('product').controller('ProductFormController', ['$scope', '$rootS
     $scope.product = {};
     if(!_.isUndefined($stateParams.id)){
         $scope.product = Product.$find($stateParams.id);
+    }else{
+        $scope.product =  Product.$build();
     }
     $scope.save = function() {
         //$validation.validate($scope, 'product').success(function() {
@@ -18,22 +20,13 @@ angular.module('product').controller('ProductFormController', ['$scope', '$rootS
                 $scope.product.$save().$then(function(response) {
                     $rootScope.$broadcast('product::updated');
                     toaster.pop('success', 'Product Updated ', 'You have been successfully updated a product.')
+                    $state.go("app.product");
                 });
             }else{
-                var product         = Product.$build();
-                product.Name        = $scope.product.Name;
-                product.Status      = $scope.product.Status;
-                product.Description = $scope.product.Description;
-                product.Manufacturer = $scope.product.Manufacturer;
-                product.Size        = $scope.product.Size;
-                product.Sku        = $scope.product.Sku;
-                product.Serial        = $scope.product.Serial;
-                product.Price       = $scope.product.Price;
-                product.Stock       = $scope.product.Stock;
-
-                product.$save().$then( function(response) {
+                $scope.product.$save().$then( function(response) {
                     $rootScope.$broadcast('product::created');
                     toaster.pop('success', 'Product Created', 'You have successfully created a new product.');
+                    $state.go("app.product");
                 }, function() {
                     toaster.pop('error', 'Error', 'Something went wrong a new Product could not be created');
                 });

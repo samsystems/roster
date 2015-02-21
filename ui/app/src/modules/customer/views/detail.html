@@ -1,60 +1,59 @@
-<!-- Page header -->
-<div class="page-heading animated fadeInDownBig">
-    <h1>Customer Detail</h1>
-</div>
+<page-content-title title="Company Detail">
+    <a title="Add" class="btn btn-default" href="#/customers"><i class="fa fa-plus"> Back to list</i></a>
+</page-content-title>
+<panel type="plain">
 <div class="row">
     <div class="box-info">
-        <p class="text-right"><strong>{{customer.created | outputFormatDateTime }}</strong></p>
+        <p class="text-right"><strong>{{customer.Created | outputFormatDateTime }}</strong></p>
 
         <div>
             <table class="table">
                 <tbody>
                 <tr>
                     <td colspan="2">
-                        <a class="btn btn-danger btn-sm" data-ng-click="removeCustomer(customer)"><i
-                                class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
-                        <a href="#/customer" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                        <a class="btn btn-danger btn-sm" data-ng-click="removeCustomer(customer)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
+                        <a href="#/customers" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
                     </td>
                 </tr>
                 <tr>
                     <td style="width: 100px;"><strong>Name</strong></td>
-                    <td>{{customer.name}}</td>
+                    <td>{{customer.Name}}</td>
                 </tr>
                 <tr>
                     <td><strong>Phone</strong></td>
-                    <td>{{customer.phone}}</td>
+                    <td>{{customer.Phone}}</td>
                 </tr>
                 <tr>
                     <td><strong>Mobile</strong></td>
-                    <td>{{customer.mobile}}</td>
+                    <td>{{customer.Mobile}}</td>
                 </tr>
                 <tr>
                     <td><strong>Fax</strong></td>
-                    <td>{{customer.fax}}</td>
+                    <td>{{customer.Fax}}</td>
                 </tr>
                 <tr>
                     <td><strong>Email</strong></td>
-                    <td>{{customer.email}}</td>
+                    <td>{{customer.Email}}</td>
                 </tr>
                 <tr>
                     <td><strong>Address</strong></td>
-                    <td>{{customer.address}}</td>
+                    <td>{{customer.Address}}</td>
                 </tr>
                 <tr>
                     <td><strong>City</strong></td>
-                    <td>{{customer.city}}</td>
+                    <td>{{customer.City}}</td>
                 </tr>
                 <tr>
                     <td><strong>Zip Code</strong></td>
-                    <td>{{customer.zipcode}}</td>
+                    <td>{{customer.Zipcode}}</td>
                 </tr>
                 <tr>
                     <td><strong>State</strong></td>
-                    <td>{{customer.state.name}}</td>
+                    <td>{{customer.State.Name}}</td>
                 </tr>
                 <tr>
                     <td><strong>Country</strong></td>
-                    <td>{{customer.country.name}}</td>
+                    <td>{{customer.Country.Name}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -108,3 +107,4 @@
         </div>
     </div>
 </div>
+</panel>

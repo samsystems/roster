@@ -1,24 +1,23 @@
 'use strict';
 
-angular.module('customer').controller('CustomerViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'DateTimeService', 'Customer', 'Contact', function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, DateTimeService, Customer, Contact) {
+angular.module('customer').controller('CustomerViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'Customer','Country','State',
+    function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, Customer, Country, State) {
 
-    var CustomerResource         = Customer.resource;
-    var contactResource         = Contact.resource;
-
-    $scope.page = 1;
     var id = (!_.isUndefined($stateParams.id)) ? $stateParams.id : null;
     $scope.customer = {};
 
     if(id != null){
-        $scope.contacts = contactResource.findAll({owner : 'customer',idowner : id,page : $scope.page, order: 'notSorting'});
-        $scope.customer = CustomerResource.get({id: id});
+        $scope.customer = Customer.$find(id).$then(function(){
+            $scope.customer.Country = Country.$find($scope.customer.Country.Iso);
+            $scope.customer.State = State.$find($scope.customer.State.Id);
+        });
     }
 
 
     $scope.removeCustomer = function(customer) {
         dialogs.confirm('Remove a Customer', 'Are you sure you want to remove a Customer?').result.then(function(btn){
-            customer.$delete({id: customer.id}, function (response) {
-                $rootScope.$broadcast('customer::deleted', response);
+            customer.$destroy().$asPromise().then(function (response) {
+                $rootScope.$broadcast('customer::deleted');
                 toaster.pop('success', 'Customer Deleted', 'You have successfully deleted a customer.')
             });
             $state.go("app.customer");

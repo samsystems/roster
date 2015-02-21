@@ -2,21 +2,35 @@
 
 /**
  * @ngdoc overview
- * @name Customer
+ * @name Dashboard
  * @description
- * The Customer module aims to provide a CRUD for customers.
+ * The Dashboard module provides users with a dashboard that groups relevant graphs and information for the ship.
  *
- * Customer module.
+ * Dashboard module.
  */
-angular.module('customer', [])
+angular.module('customer', [
+    'ngRoute',
+    'ngSanitize',
+    'pascalprecht.translate'
+])
 .config(['$stateProvider', function ($stateProvider) {
     $stateProvider
         .state('app.customer', {
             url: 'customers',
-            templateUrl: 'src/modules/customer/views/index.html',
+            templateUrl: 'src/modules/customer/views/list.html',
             controller: 'CustomerController'
         })
-        .state('app.customer/view', {
+        .state('app.customer-create', {
+            url: 'customers/create',
+            templateUrl: 'src/modules/customer/views/form.html',
+            controller: 'CustomerFormController'
+        })
+        .state('app.customer-update', {
+            url: 'customers/update/:id',
+            templateUrl: 'src/modules/customer/views/form.html',
+            controller: 'CustomerFormController'
+        })
+        .state('app.customer-view', {
             url: 'customers/view/:id',
             templateUrl: 'src/modules/customer/views/detail.html',
             controller: 'CustomerViewController'

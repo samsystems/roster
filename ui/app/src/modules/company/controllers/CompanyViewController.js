@@ -20,8 +20,8 @@ angular.module('company').controller('CompanyViewController', ['$scope', '$rootS
                 $rootScope.$broadcast('company::deleted');
                 toaster.pop('success', 'Company Deleted', 'You have successfully deleted a company.')
             });
-            $state.go("app.company");
         });
+        $state.go("app.company");
     };
 
 }]);

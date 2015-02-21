@@ -434,8 +434,8 @@ DROP TABLE IF EXISTS `customer`;
 
 CREATE TABLE `customer` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `country` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `state` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country_id` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -452,17 +452,20 @@ CREATE TABLE `customer` (
   `updated` datetime NOT NULL,
   `updated_time_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_81398E095373C966` (`country`),
-  KEY `IDX_81398E09A393D2FB` (`state`),
+  KEY `IDX_81398E095373C966` (`country_id`),
+  KEY `IDX_81398E09A393D2FB` (`state_id`),
   KEY `IDX_81398E0961220EA6` (`creator_id`),
   KEY `IDX_81398E09E37ECFB0` (`updater_id`),
-  CONSTRAINT `FK_81398E095373C966` FOREIGN KEY (`country`) REFERENCES `country` (`iso`),
+  CONSTRAINT `FK_81398E095373C966` FOREIGN KEY (`country_id`) REFERENCES `country` (`iso`),
   CONSTRAINT `FK_81398E0961220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FK_81398E09A393D2FB` FOREIGN KEY (`state`) REFERENCES `state` (`id`),
+  CONSTRAINT `FK_81398E09A393D2FB` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_81398E09E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
+INSERT INTO `customer` (`id`,`country_id`,`state_id`,`creator_id`,`updater_id`,`name`,`phone`,`mobile`,`fax`,`email`,`address`,`city`,`zipcode`,`deleted`,`created`,`created_time_zone`,`updated`,`updated_time_zone`)
+	VALUES ('652dc9ba-5000-44b6-878c-09531038354e','AI','6d76fc5b-80e8-11e4-9884-b8ac6f58483b','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','Alberto','23432','234324','23423','alberto@gmail.com','324 nw 34 st','miami','33405',NULL,'2015-02-21 16:19:04',0,'2015-02-21 16:19:04',0),
+           ('cabed239-219d-4d6f-8c4b-e8f1bdae4995','AE','6d76fc5b-80e8-11e4-9884-b8ac6f58483b','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','Orlando','1458','4583688','3187781','orlando@a.com','1455 sw 48 st','miami','33157',NULL,'2015-02-21 21:11:52',0,'2015-02-21 16:15:51',0),
+		   ('ebddd294-4f56-46a1-abe5-f18ec560e6e9','AD','6d76fc5b-80e8-11e4-9884-b8ac6f58483b','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','Raul','457245635','35843843','3843734151','raul@gamil.com','324 sw 23 st','Boca Raton','33402',NULL,'2015-02-21 21:16:58',0,'2015-02-21 16:18:13',0);
 
 DROP TABLE IF EXISTS `document`;
 

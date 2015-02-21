@@ -9,11 +9,11 @@ import (
 const CUSTOMER_LIMIT int = 20
 
 type Customer struct {
-	Id              string `orm:"pk"`
-	Country         string
-	State           string
-	Creator         *User `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User `orm:"rel(one)" valid:"Entity(Updater)"`
+	Id              string   `orm:"pk"`
+	Country         *Country `orm:"rel(one)" valid:"Entity(Country)"`
+	State           *State   `orm:"rel(one)" valid:"Entity(State)"`
+	Creator         *User    `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater         *User    `orm:"rel(one)" valid:"Entity(Updater)"`
 	Name            string
 	Phone           string
 	Mobile          string
@@ -25,7 +25,7 @@ type Customer struct {
 	Deleted         time.Time `orm:"type(datetime)"`
 	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
-	Updated         time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated         time.Time `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone int
 }
 
@@ -50,15 +50,23 @@ func GetCustomer(uid string) (*Customer, error) {
 
 	return &customer, err
 }
-
-func GetAllCustomers() []*Customer {
+func GetAllCustomers(page int, order string, count bool, limit int) (*[]Customer, interface{}) {
+	page -= 1
+	if limit < 0 {
+		limit = COMPANY_LIMIT
+	}
 	o := orm.NewOrm()
-
-	var customers []*Customer
+	var customers []Customer
 	qs := o.QueryTable("customer")
-	qs.Filter("deleted__isnull", true).All(&customers)
-
-	return customers
+	qs = qs.Filter("deleted__isnull", true)
+	if count == true {
+		cnt, _ := qs.Count()
+		return &customers, cnt
+	} else {
+		qs = ParseQuerySetterOrder(qs, order)
+		qs.Offset(page * limit).Limit(limit).All(&customers)
+		return &customers, nil
+	}
 }
 
 func GetCustomerByKeyword(keyword string, page int, order string, count bool, limit int) (*[]Customer, interface{}) {

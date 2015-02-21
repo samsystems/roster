@@ -1,52 +1,51 @@
 'use strict';
 
-angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'WizardHandler', 'Customer', '$location', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, WizardHandler, Customer, $location, Contact) {
+angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Customer', 'ngTableParams', '$filter', '$q','$state',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, ngTableParams, $filter, $q, $state) {
 
-    var customerResource         = Customer.resource;
+    $scope.page = 1;
+    $scope.search = {customer : ""};
 
-    $scope.step = {
-        list:          'list',
-        form:          'form'
+    $scope.limitInPage = config.application.limitInPage;
+
+    $scope.search = function(term) {
+        $scope.customerTable.reload();
     };
 
-
-    $scope.$goTo = function(step) {
-        WizardHandler.wizard().goTo(step);
+    $scope.refresh = function() {
+        $scope.searchCustomer = '';
     };
 
-    $scope.createCustomer = function() {
-        $scope.customer = {
-            name: null,
-            phone: null,
-            mobile: null,
-            fax: '',
-            email: '',
-            address: '',
-            city: '',
-            zipcode: '',
-            state: '',
-            country: {"id":"US","name":"United States"}
-        };
-        $scope.$goTo($scope.step.form);
-    };
+    $scope.customerTable = new ngTableParams({
+        page: 1,            // show first page
+        count: 20           // count per page
+    }, {
+        total: 0, // length of data
+        getData: function ($defer, params) {
+            var customers = Customer.$search({page: params.page(), sort: params.orderBy(), keyword: $scope.search.customer});
+            $scope.total = Customer.count($scope.search.customer);
+            $q.all([customers.$asPromise(), $scope.total]).then(function (data) {
+                params.total(data[1].data.total);
+                $defer.resolve(data[0]);
+            })
+        }
+    });
+    $scope.viewCustomer = function(customer){
+        $state.go('app.customer-view',{id : customer.Id});
+    }
+    $scope.editCustomer = function(customer){
+        $state.go('app.customer-update',{id : customer.Id});
+    }
+    $rootScope.$on('customer::deleted', function ($event) {
+        $scope.customerTable.reload();
+    });
 
-    $scope.getList = function() {
-        $scope.$goTo($scope.step.list);
-    };
-
-    $scope.selectCustomer = function(customer) {
-        $scope.customer = customerResource.get({id: customer.id});
-
-        $rootScope.contactOwner = 'customer';
-        $rootScope.contactIdOwner = customer.id;
-        $scope.$goTo($scope.step.form);
-    };
-
-    $scope.viewCustomer = function(customer) {
-        $location.path( "/customer/view/"+customer.id);
-    };
-
-    $scope.$close = function() {
-        $scope.$goTo($scope.step.list);
+    $scope.removeCustomer = function (customer) {
+        dialogs.confirm('Remove a Customer', 'Are you sure you want to remove a Customer?').result.then(function(btn){
+            customer.$destroy().$asPromise().then(function (response) {
+                $rootScope.$broadcast('customer::deleted');
+                toaster.pop('success', 'Customer Deleted', 'You have successfully deleted a customer.')
+            });
+        });
     };
 }]);

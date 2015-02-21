@@ -39,7 +39,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     });
 
     $scope.createInvoice = function () {
-        disable(false);
+
         $scope.visible = true;
         $scope.item_input = "";
         $scope.invoice = {
@@ -56,7 +56,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             InvoiceProducts: []
         };
 
-
+        disable(false,$scope.invoice);
         var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
             $scope.invoice.OrderNumber = response.max;
         });
@@ -126,7 +126,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                         response[i].Product.Price = parseFloat(response[i].Product.Price);
                         response[i].Quantity = parseInt(response[i].Quantity);
                     }
-                    disable(false);
+                    disable(false, $scope.invoice);
                     $scope.invoice.InvoiceProducts =  response;
                 })
 
@@ -308,11 +308,10 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 angular.element(inputElem).attr('readonly', valor);
             });
         $scope.visible = !valor;
-        if(invoice.CustomerShipping.Id)
+        if(invoice.CustomerShipping)
         {
-            console.log('id');
             angular.element('#CustomerShipping').attr('readonly', true);
-            angular.element('#CheckboxShipping').checked('checked');
+            $scope.invoice.BillShip = true;
         }
     }
 

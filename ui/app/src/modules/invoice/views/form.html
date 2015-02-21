@@ -30,7 +30,7 @@
     </div>
     <div class="col-md-6">
         <div style="margin-left: 13px" ng-if="visible">
-            <input type="checkbox" ng-change="BillShip()" data-ng-model="invoice.BillShip" name="locked" value="1">
+            <input id="CheckboxShipping" type="checkbox" ng-change="BillShip()" data-ng-model="invoice.BillShip" name="locked" value="1">
             <label for="customer" style="margin-left: 10px" class="control-label">{{'Same As Billing Address' | translate}}</label>
         </div>
     </div>

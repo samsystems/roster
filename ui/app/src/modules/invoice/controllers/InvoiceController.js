@@ -77,9 +77,9 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     $scope.selectInvoice = function (invoice) {
         $scope.invoice = Invoice.$find(invoice.Id).$then(function () {
             if ($scope.invoice.Status != 'draft') {
-                disable(true);
+                disable(true,invoice);
             } else
-                disable(false);
+                disable(false,invoice);
 
             $scope.invoice.products.$fetch().$asPromise().then(function (response) {
                 for (var i = 0; i < response.length; i++) {
@@ -296,7 +296,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
         }
     };
 
-    function disable(valor) {
+    function disable(valor,invoice) {
         angular.forEach(
             angular.element('#form_invoice .form-control'),
             function (inputElem) {
@@ -308,6 +308,12 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 angular.element(inputElem).attr('readonly', valor);
             });
         $scope.visible = !valor;
+        if(invoice.CustomerShipping.Id)
+        {
+            console.log('id');
+            angular.element('#CustomerShipping').attr('readonly', true);
+            angular.element('#CheckboxShipping').checked('checked');
+        }
     }
 
     $scope.viewInvoice = function (invoice) {

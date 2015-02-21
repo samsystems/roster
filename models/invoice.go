@@ -17,7 +17,6 @@ type Invoice struct {
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	OrderNumber         int         
-	ReferenceNumber     int64     `json:",string"`
 	Date                time.Time `orm:"auto_now_add;type(datetime)" json:",string"`
 	DeliveryDate        time.Time `orm:"auto_now_add;type(datetime)" json:",string"`
 	Currency            string
@@ -26,6 +25,7 @@ type Invoice struct {
 	SubTotal            float64
 	TotalTax            float64
 	Amount              float64
+	ReferenceNumber     int32     `json:",string"`
 	Tax                 float32
 	InvoiceProducts     []*InvoiceProduct `orm:"reverse(many)"`
 	Deleted             time.Time `orm:"type(datetime)"`

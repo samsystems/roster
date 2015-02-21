@@ -132,8 +132,11 @@ func (controller *ProductController) Put(context appengine.Context, writer http.
 	}
 
 	var product models.Product
-	json.Unmarshal(data, &product)
-
+	//json.Unmarshal(data, &product)
+err1 := json.Unmarshal(data, &product)
+	if err1 != nil {
+		log.Println("error:", err1)
+	}
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	product.Creator = user
 	product.Updater = user

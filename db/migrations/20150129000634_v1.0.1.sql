@@ -1337,8 +1337,8 @@ DROP TABLE IF EXISTS `vendor`;
 
 CREATE TABLE `vendor` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `country` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `state` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country_id` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1356,15 +1356,19 @@ CREATE TABLE `vendor` (
   `updated` datetime NOT NULL,
   `updated_time_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_F52233F65373C966` (`country`),
-  KEY `IDX_F52233F6A393D2FB` (`state`),
+  KEY `IDX_F52233F65373C966` (`country_id`),
+  KEY `IDX_F52233F6A393D2FB` (`state_id`),
   KEY `IDX_F52233F661220EA6` (`creator_id`),
   KEY `IDX_F52233F6E37ECFB0` (`updater_id`),
-  CONSTRAINT `FK_F52233F65373C966` FOREIGN KEY (`country`) REFERENCES `country` (`iso`),
+  CONSTRAINT `FK_F52233F65373C966` FOREIGN KEY (`country_id`) REFERENCES `country` (`iso`),
   CONSTRAINT `FK_F52233F661220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FK_F52233F6A393D2FB` FOREIGN KEY (`state`) REFERENCES `state` (`id`),
+  CONSTRAINT `FK_F52233F6A393D2FB` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_F52233F6E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `vendor` (`id`,`country_id`,`state_id`,`creator_id`,`updater_id`,`name`,`category`,`phone`,`fax`,`email`,`address`,`city`,`zipcode`,`notes`,`deleted`,`created`,`created_time_zone`,`updated`,`updated_time_zone`)
+	VALUES ('81c2fb0a-2aee-45e8-b61b-cc103b58f239','AD','6d76fc5b-80e8-11e4-9884-b8ac6f58483b','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','Antonio','Category 1','135878','1438784','antonio@gmail.com','234 nw 23 st','miami','33157','some notes',NULL,'2015-02-22 11:05:27',0,'2015-02-22 11:05:27',0),
+		   ('95c146f9-2b87-43fa-9166-45f884a0a45f','AD','6d76fc5b-80e8-11e4-9884-b8ac6f58483b','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','Jose','Catergory 2','13587','1387318','jose@gmail.com','345 nw 34 st','miami','23554','some notes',NULL,'2015-02-22 01:03:17',0,'2015-02-22 01:03:17',0);
 
 CREATE TABLE `purchase_order` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,

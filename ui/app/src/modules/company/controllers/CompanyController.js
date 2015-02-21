@@ -4,6 +4,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$rootScope
     function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Company, ngTableParams, $filter, $q, $state) {
 
     $scope.page = 1;
+    $scope.total = 0;
     $scope.search = {company : ""};
 
     $scope.limitInPage = config.application.limitInPage;
@@ -23,8 +24,9 @@ angular.module('company').controller('CompanyController', ['$scope', '$rootScope
         total: 0, // length of data
         getData: function ($defer, params) {
             var companies = Company.$search({page: params.page(), sort: params.orderBy(), keyword: $scope.search.company});
-            $scope.total = Company.count($scope.search.company);
-            $q.all([companies.$asPromise(), $scope.total]).then(function (data) {
+            var total = Company.count($scope.search.company);
+            $q.all([companies.$asPromise(), total]).then(function (data) {
+                $scope.total = data[1].data.total;
                 params.total(data[1].data.total);
                 $defer.resolve(data[0]);
             })

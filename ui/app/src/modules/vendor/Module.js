@@ -26,7 +26,7 @@ angular.module('vendor', [
           controller: 'VendorFormController'
         })
         .state('app.vendor-update', {
-          url: 'vendors/update',
+          url: 'vendors/update/:id',
           templateUrl: 'src/modules/vendor/views/form.html',
           controller: 'VendorFormController'
         })

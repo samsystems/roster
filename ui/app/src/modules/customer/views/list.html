@@ -11,7 +11,7 @@
         </div>
     </div><!-- End div .row -->
     <br />
-    <div class="table-responsive table-hover">
+    <div class="table-responsive table-hover" data-ng-show="total > 0">
         <table ng-table="customerTable" class="table table-hover table-message" template-pagination="custom/pager">
             <col width="20%"/>
             <col width="10%"/>
@@ -77,6 +77,6 @@
         <!-- End Footer message toolbar -->
     </div>
     <div class="panel-body" >
-        <div data-ng-if="total.count==0">{{'No Customer Available.' | translate}}</div>
+        <div data-ng-show="total == 0" class="well well-sm">{{'No Customers Available.' | translate}}</div>
     </div>
 </panel>

@@ -4,6 +4,7 @@ angular.module('product').controller('ProductController', ['$scope', '$rootScope
     function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Product, ngTableParams,$filter, $q, $state) {
 
     $scope.page = 1;
+    $scope.total = 0;
     $scope.search = {product: ""};
 
     $scope.limitInPage = config.application.limitInPage;
@@ -23,9 +24,10 @@ angular.module('product').controller('ProductController', ['$scope', '$rootScope
         total: 0, // length of data
         getData: function($defer, params) {
             var products = Product.$search({keyword: $scope.search.product, page: params.page(), sort: params.orderBy()});
-            $scope.total = Product.count($scope.search.product);
+            var total = Product.count($scope.search.product);
 
-            $q.all([products.$asPromise(), $scope.total]).then(function (data) {
+            $q.all([products.$asPromise(), total]).then(function (data) {
+                $scope.total = data[1].data.total;
                 params.total(data[1].data.total);
                 $defer.resolve(data[0]);
             })

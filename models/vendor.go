@@ -9,12 +9,11 @@ import (
 const VENDOR_LIMIT int = 20
 
 type Vendor struct {
-	Id      string `orm:"pk"`
-	Country string
-
-	State           string
-	Creator         *User `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User `orm:"rel(one)" valid:"Entity(Updater)"`
+	Id              string   `orm:"pk"`
+	Country         *Country `orm:"rel(one)" valid:"Entity(Country)"`
+	State           *State   `orm:"rel(one)" valid:"Entity(State)"`
+	Creator         *User    `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater         *User    `orm:"rel(one)" valid:"Entity(Updater)"`
 	Name            string
 	Category        string
 	Phone           string
@@ -27,7 +26,7 @@ type Vendor struct {
 	Deleted         time.Time `orm:"type(datetime)"`
 	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
-	Updated         time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated         time.Time `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone int
 }
 
@@ -53,14 +52,23 @@ func GetVendor(uid string) (*Vendor, error) {
 	return &vendor, err
 }
 
-func GetAllVendors() []*Vendor {
+func GetAllVendors(page int, order string, count bool, limit int) (*[]Vendor, interface{}) {
+	page -= 1
+	if limit < 0 {
+		limit = COMPANY_LIMIT
+	}
 	o := orm.NewOrm()
-
-	var vendors []*Vendor
+	var vendors []Vendor
 	qs := o.QueryTable("vendor")
-	qs.Filter("deleted__isnull", true).All(&vendors)
-
-	return vendors
+	qs = qs.Filter("deleted__isnull", true)
+	if count == true {
+		cnt, _ := qs.Count()
+		return &vendors, cnt
+	} else {
+		qs = ParseQuerySetterOrder(qs, order)
+		qs.Offset(page * limit).Limit(limit).All(&vendors)
+		return &vendors, nil
+	}
 }
 
 func GetVendorByKeyword(keyword string, page int, order string, count bool, limit int) (*[]Vendor, interface{}) {

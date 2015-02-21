@@ -1,9 +1,6 @@
-<div class="moduleContainer">
-    <div class="page-heading animated fadeInDownBig">
-        <h1>{{'Create/Update Vendor'}}</h1>
-    </div>
+<page-content-title title="Create/Update Vendor"></page-content-title>
 
-
+<panel type="plain">
     <tabset>
         <tab heading="{{'Summary' | translate }}">
             <div class="animated active fadeInRight">
@@ -17,7 +14,7 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="name" data-ng-model="vendor.name" type="text"
+                                            <input id="name" data-ng-model="vendor.Name" type="text"
                                                    class="form-control" validator="required">
                                         </div>
                                     </div>
@@ -28,7 +25,7 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="category" data-ng-model="vendor.category" type="text"
+                                            <input id="category" data-ng-model="vendor.Category" type="text"
                                                    class="form-control" validator="required">
                                         </div>
                                     </div>
@@ -41,8 +38,8 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="phone" data-ng-model="vendor.phone" type="text"
-                                                   class="form-control" validator="required,phone">
+                                            <input id="phone" data-ng-model="vendor.Phone" type="text"
+                                                   class="form-control" validator="required">
                                         </div>
                                     </div>
                                 </div>
@@ -51,7 +48,7 @@
                                         <label class="col-md-12 control-label" for="fax">{{'Fax' | translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="fax" data-ng-model="vendor.fax" type="text" class="form-control"
+                                            <input id="fax" data-ng-model="vendor.Fax" type="text" class="form-control"
                                                    >
                                         </div>
                                     </div>
@@ -64,7 +61,7 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="email" data-ng-model="vendor.email" type="text"
+                                            <input id="email" data-ng-model="vendor.Email" type="text"
                                                    class="form-control" validator="required,email">
                                         </div>
                                     </div>
@@ -75,7 +72,7 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="address" data-ng-model="vendor.address" type="text"
+                                            <input id="address" data-ng-model="vendor.Address" type="text"
                                                    class="form-control" >
                                         </div>
                                     </div>
@@ -88,7 +85,7 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="city" data-ng-model="vendor.city" type="text"
+                                            <input id="city" data-ng-model="vendor.City" type="text"
                                                    class="form-control" >
                                         </div>
                                     </div>
@@ -99,7 +96,7 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <input id="zipcode" data-ng-model="vendor.zipcode" type="text"
+                                            <input id="zipcode" data-ng-model="vendor.Zipcode" type="text"
                                                    class="form-control" >
                                         </div>
                                     </div>
@@ -112,8 +109,8 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <select id="state" class="form-control" data-ng-model="vendor.state.id"
-                                                    data-ng-options="state.id as state.name for state in states"
+                                            <select id="state" class="form-control" data-ng-model="vendor.State.Id"
+                                                    data-ng-options="state.Id as state.Name for state in states"
                                                     ></select>
 
                                         </div>
@@ -125,8 +122,8 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <select id="country" class="form-control" data-ng-model="vendor.country.id"
-                                                    data-ng-options="country.id as country.name for country in countries"
+                                            <select id="country" class="form-control" data-ng-model="vendor.Country.Iso"
+                                                    data-ng-options="country.Iso as country.Name for country in countries"
                                                     ></select>
 
                                         </div>
@@ -140,7 +137,7 @@
                                             translate}}:</label>
 
                                         <div class="col-md-12">
-                                            <textarea id="notes" data-ng-model="vendor.notes"
+                                            <textarea id="notes" data-ng-model="vendor.Notes"
                                                       class="form-control"></textarea>
                                         </div>
                                     </div>
@@ -148,9 +145,7 @@
                             </div>
                             <div class="row modal-footer" style="border-top:0px;">
                                 <div class="row col-md-4 pull-right">
-                                    <button class="btn btn-primary ng-binding" data-ng-click="$close()">{{'Cancel' |
-                                        translate}}
-                                    </button>
+                                    <a class="btn btn-primary" href="#/vendors">{{'Cancel' | translate}}</a>
                                     <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' |
                                         translate}}
                                     </button>
@@ -170,8 +165,7 @@
                     <div class="col-md-12">
                         <div class="box-info">
                             <div class="row">
-                                <ng-include data-ng-if="vendor.id"
-                                            src="'/src/modules/contact/views/index.html'"></ng-include>
+                                <ng-include data-ng-if="vendor.id" src="'/src/modules/contact/views/index.html'"></ng-include>
                             </div>
                         </div>
                     </div>
@@ -180,5 +174,4 @@
         </tab>
 
     </tabset>
-
-</div>
+</panel>

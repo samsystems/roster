@@ -4,6 +4,7 @@ angular.module('customer').controller('CustomerController', ['$scope', '$rootSco
     function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, ngTableParams, $filter, $q, $state) {
 
     $scope.page = 1;
+    $scope.total =0;
     $scope.search = {customer : ""};
 
     $scope.limitInPage = config.application.limitInPage;
@@ -18,13 +19,14 @@ angular.module('customer').controller('CustomerController', ['$scope', '$rootSco
 
     $scope.customerTable = new ngTableParams({
         page: 1,            // show first page
-        count: 20           // count per page
+        count: 5           // count per page
     }, {
         total: 0, // length of data
         getData: function ($defer, params) {
             var customers = Customer.$search({page: params.page(), sort: params.orderBy(), keyword: $scope.search.customer});
-            $scope.total = Customer.count($scope.search.customer);
-            $q.all([customers.$asPromise(), $scope.total]).then(function (data) {
+            var total = Customer.count($scope.search.customer);
+            $q.all([customers.$asPromise(), total]).then(function (data) {
+                $scope.total = data[1].data.total;
                 params.total(data[1].data.total);
                 $defer.resolve(data[0]);
             })

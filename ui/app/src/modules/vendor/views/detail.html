@@ -1,8 +1,8 @@
-<!-- Page header -->
-<div class="page-heading animated fadeInDownBig">
-    <h1>Vendor Detail</h1>
-</div>
-<div class="row">
+<page-content-title title="Company Detail">
+    <a title="Add" class="btn btn-default" href="#/vendors"><i class="fa fa-plus"> Back to list</i></a>
+</page-content-title>
+<panel type="plain">
+    <div class="row">
     <div class="box-info">
         <p class="text-right"><strong>{{vendor.created | outputFormatDateTime }}</strong></p>
         <div>
@@ -11,52 +11,52 @@
                 <tr>
                     <td colspan="2">
                         <a class="btn btn-danger btn-sm" data-ng-click="removeVendor(vendor)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
-                        <a href="#/vendor" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                        <a href="#/vendors" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
                     </td>
                 </tr>
                 <tr>
                     <td style="width: 100px;"><strong>Name</strong></td>
-                    <td>{{vendor.name}}</td>
+                    <td>{{vendor.Name}}</td>
                 </tr>
                 <tr>
                     <td><strong>Category</strong></td>
-                    <td>{{vendor.category}}</td>
+                    <td>{{vendor.Category}}</td>
                 </tr>
                 <tr>
                     <td><strong>Phone</strong></td>
-                    <td>{{vendor.phone}}</td>
+                    <td>{{vendor.Phone}}</td>
                 </tr>
                 <tr>
                     <td><strong>Fax</strong></td>
-                    <td>{{vendor.fax}}</td>
+                    <td>{{vendor.Fax}}</td>
                 </tr>
                 <tr>
                     <td><strong>Email</strong></td>
-                    <td>{{vendor.email}}</td>
+                    <td>{{vendor.Email}}</td>
                 </tr>
                 <tr>
                     <td><strong>Address</strong></td>
-                    <td>{{vendor.address}}</td>
+                    <td>{{vendor.Address}}</td>
                 </tr>
                 <tr>
                     <td><strong>City</strong></td>
-                    <td>{{vendor.city}}</td>
+                    <td>{{vendor.City}}</td>
                 </tr>
                 <tr>
                     <td><strong>Zip Code</strong></td>
-                    <td>{{vendor.zipcode}}</td>
+                    <td>{{vendor.Zipcode}}</td>
                 </tr>
                 <tr>
                     <td><strong>State</strong></td>
-                    <td>{{vendor.state.name}}</td>
+                    <td>{{vendor.State.Name}}</td>
                 </tr>
                 <tr>
                     <td><strong>Country</strong></td>
-                    <td>{{vendor.country.name}}</td>
+                    <td>{{vendor.Country.Name}}</td>
                 </tr>
                 <tr>
                     <td><strong>Notes</strong></td>
-                    <td>{{vendor.notes}}</td>
+                    <td>{{vendor.Notes}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -109,3 +109,4 @@
         </div>
     </div>
 </div>
+</panel>

@@ -105,6 +105,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                      $scope.invoice.Date = null;
                      $scope.invoice.Deleted = null;
                      $scope.invoice.DeliveryDate = null;
+                     $scope.invoice.InvoiceProducts = null;
 
                     $scope.invoice.$save().$then(function(response) {
                         $rootScope.$broadcast('invoice::updated');

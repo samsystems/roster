@@ -15,6 +15,7 @@ import (
 	"log"
 	
 	"math"
+	"time"
 )
 
 // Operations about Users
@@ -136,8 +137,27 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	invoice.Creator = user
 	invoice.Updater = user
-    invoice.Status="draft"
-    
+	invoiceProducts := invoice.InvoiceProducts
+	invoice.InvoiceProducts=nil
+	
+    // TODO: temporal 
+	invoice.Date=time.Now()
+	invoice.DeliveryDate=time.Now()
+	
+	var subTotal float64 =0
+	for i := 0; i < len(invoiceProducts); i++ {
+		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
+		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
+		if(product.Stock<invoiceProducts[i].Quantity){
+			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
+		}
+		product.Stock = product.Stock - invoiceProducts[i].Quantity
+		invoiceProducts[i].Product= product
+	}
+	invoice.SubTotal=subTotal
+	invoice.TotalTax=RoundPlus((subTotal * float64(invoice.Tax))/100,2)
+	invoice.Amount=invoice.TotalTax+subTotal
+	
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {
@@ -150,6 +170,18 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	} else {
 		models.UpdateInvoice(&invoice)
+			
+	for i := 0; i < len(invoiceProducts); i++ {
+			var invoiceProduct = invoiceProducts[i]
+     		invoiceProduct.Updater= user
+			invoiceProduct.Invoice= &invoice
+			if(invoiceProduct.Id != ""){
+			 	models.UpdateInvoiceProduct(invoiceProduct)
+			}else{
+			 	models.AddInvoiceProduct(invoiceProduct)
+		 	}
+			models.UpdateProduct(invoiceProduct.Product)
+	    }	
 	}
 
 	return invoice, nil
@@ -202,6 +234,11 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.OrderNumber = models.GetMaxOrderNumber()
 	invoiceProducts := invoice.InvoiceProducts
 	invoice.InvoiceProducts=nil
+	
+	// TODO: temporal 
+	invoice.Date=time.Now()
+	invoice.DeliveryDate=time.Now()
+	 
 	var subTotal float64 =0
 	for i := 0; i < len(invoiceProducts); i++ {
 		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
@@ -250,6 +287,7 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 // @router /:id/products [get]
 func (controller *InvoiceController) GetAllProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
     uidInvoice := v["uid"]
+    log.Print(uidInvoice)
 	var invoices []models.InvoiceProduct = models.GetAllInvoiceProducts(uidInvoice)
 	return invoices, nil
 }

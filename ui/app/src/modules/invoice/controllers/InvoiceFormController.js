@@ -33,6 +33,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         //   $scope.invoiceNumber = 500;
         $scope.searchCustomers = function (val) {
             return Customer.$search({keyword: val, page: 1, order: 'notSorting'}).$asPromise().then(function (customers) {
+                if(customers == null)
+                return {};
+                else
                 return customers;
             });
         };

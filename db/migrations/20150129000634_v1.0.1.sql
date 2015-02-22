@@ -80,7 +80,7 @@ LOCK TABLES `company` WRITE;
 
 INSERT INTO `company` (`id`, `organization_id`, `creator_id`, `updater_id`, `name`, `int_id`, `tax_id`, `address1`, `address2`, `city`, `state_id`, `zip_code`, `phone`, `deleted`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `country_id`, `tax`, `mobile`, `fax`, `email`, `order_number`)
 VALUES
-	('242495b7-69f4-4107-a4d8-850540e6b834','11111111-1111-1111-1111-111111111111',NULL,NULL,'DVS',NULL,'98-0081645','1050 Caribbean Way',NULL,NULL,NULL,'33132',NULL,NULL,'2012-06-25 20:01:07',414,'2012-06-25 20:01:07',414,NULL,NULL,NULL,NULL,NULL,NULL);
+	('242495b7-69f4-4107-a4d8-850540e6b834','11111111-1111-1111-1111-111111111111',NULL,NULL,'DVS',NULL,'98-0081645','1050 Caribbean Way',NULL,NULL,NULL,'33132',NULL,NULL,'2012-06-25 20:01:07',414,'2012-06-25 20:01:07',414,NULL,7,NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `company` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -712,7 +712,7 @@ CREATE TABLE `invoice_product` (
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `quantity` int(11) NOT NULL,
   `price` double NOT NULL,
-  `deleted` tinyint(1) NOT NULL,
+  `deleted` datetime NULL,
   `created` datetime NOT NULL,
   `created_time_zone` int(11) DEFAULT NULL,
   `updated` datetime NOT NULL,

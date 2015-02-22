@@ -15,6 +15,7 @@ type InvoiceProduct struct {
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Quantity            int       `json:",string"`
+	QuantitySave        int       `orm:"-" json:",string"`
 	Price               float32   `json:",string"`
 	Deleted             time.Time `orm:"type(datetime)"`
 	Created             time.Time `orm:"auto_now_add;type(datetime)"`

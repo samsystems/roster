@@ -17,9 +17,9 @@ type Invoice struct {
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	OrderNumber         int
-	ReferenceNumber     int32     `json:",string"`
-	Date                time.Time `orm:"auto_now_add;type(datetime)" json:",string"`
-	DeliveryDate        time.Time `orm:"auto_now_add;type(datetime)" json:",string"`
+	ReferenceNumber     int32     `json:"ReferenceNumber,string"`
+	Date                time.Time `orm:"type(datetime)" json:"Date"`
+	DeliveryDate        time.Time `orm:"type(datetime)" json:"DeliveryDate"`
 	Currency            string
 	DeliveryInstruction string
 	Status              string

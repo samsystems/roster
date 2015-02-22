@@ -83,11 +83,24 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
 
             $scope.invoice.products.$fetch().$asPromise().then(function (response) {
                 for (var i = 0; i < response.length; i++) {
-                    response[i].Product.Price = parseFloat(response[i].Product.Price);
-                    response[i].Quantity = parseInt(response[i].Quantity);
+                    response[i].Product.Price = response[i].Product.Price;
+                    response[i].Quantity = response[i].Quantity;
                     response[i].QuantitySave = parseInt(response[i].Quantity);
+                    delete response[i].Product.Updater ;
+                    delete response[i].Product.Deleted;
+                    delete response[i].Product.Updated;
+
+                    delete response[i].Updater;
+                    delete response[i].Deleted;
+                    delete response[i].Updated;
+
                 }
                 $scope.invoice.InvoiceProducts =  response;
+
+                delete $scope.invoice.Updater;
+                delete $scope.invoice.SubTotal;
+                delete $scope.invoice.TotalTax;
+                delete $scope.invoice.Amount;
             })
         });
         $scope.$goTo($scope.step.form);
@@ -124,7 +137,8 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                         response[i].Id = null;
                         response[i].QuantitySave = 0;
                         response[i].Product.Price = parseFloat(response[i].Product.Price);
-                        response[i].Quantity = parseInt(response[i].Quantity);
+                        response[i].Quantity = response[i].Quantity;
+                        delete response[i].Updater;
                     }
                     disable(false, $scope.invoice);
                     $scope.invoice.InvoiceProducts =  response;

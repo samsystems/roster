@@ -70,13 +70,14 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
          };
          */
         $scope.removeItem = function (item) {
-            if (!_.isEmpty(item)) {
+            alert(item.id);
+            /*if (!_.isEmpty(item)) {
                 for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
                     if ($scope.invoice.InvoiceProducts[i].id == item.id) {
                         $scope.invoice.InvoiceProducts.splice(i, 1);
                     }
                 }
-            }
+            }*/
         };
 
         $scope.updateSubTotal = function () {

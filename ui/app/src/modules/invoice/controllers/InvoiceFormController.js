@@ -107,10 +107,6 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                     /*Temporal hasta averiguar la fecha*/
                      $scope.invoice.Date = '0001-01-01T00:00:00Z';
                      $scope.invoice.DeliveryDate = '0001-01-01T00:00:00Z';
-                    for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
-                        delete $scope.invoice.InvoiceProducts[i].QuantitySave
-
-                    }
 
                     $scope.invoice.$save().$then(function(response) {
                         $rootScope.$broadcast('invoice::updated');

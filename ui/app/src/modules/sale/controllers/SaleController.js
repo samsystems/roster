@@ -31,7 +31,7 @@ angular.module('sale').controller('SaleController', ['$scope', '$rootScope', '$s
                 $rootScope.qty_draft = response.cant;
                 $scope.amountInvoicesDraft = response.amount;
             });
-            Invoice.getResume('complete').success(function (response) {
+            Invoice.getResume('completed').success(function (response) {
                 $rootScope.qty_completed = response.cant;
                 $scope.amountInvoicesCompleted = response.amount;
             });

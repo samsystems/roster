@@ -21,8 +21,8 @@ angular.module('invoice').controller('InvoiceListCompletedController', ['$scope'
     }, {
         total: 0, // length of data
         getData: function($defer, params) {
-            var invoices = Invoice.$search({status:'complete',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
-            $scope.total = Invoice.count("complete",$scope.search.invoice);
+            var invoices = Invoice.$search({status:'completed',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
+            $scope.total = Invoice.count("completed",$scope.search.invoice);
 
             $q.all([invoices.$asPromise(), $scope.total]).then(function (data) {
                 params.total(data[1].data.total);

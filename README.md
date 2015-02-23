@@ -5,11 +5,11 @@ Provides api for SAM Inventory System.
 
 It consists of 1 core component:
 
-- Beego - A web framework for Golang - https://github.com/astaxie/beego/
+- Gorilla web toolkit - mux - http://www.gorillatoolkit.org/pkg/mux
 
 # Dependencies
 
-Inventory API requires `Go`, `Beego` and few other tools installed.
+Inventory API requires `Go`, `Gorilla mux` and few other tools installed.
 
 ## Installation
 

@@ -30,28 +30,13 @@ angular.module('invoice').controller('InvoiceListAllController', ['$scope', '$ro
         total: 0, // length of data
         getData: function ($defer, params) {
             var invoices = Invoice.$search({status: 'all', keyword: $scope.searchInvoice, page: params.page(), sort: params.orderBy()});
-            $scope.total = Invoice.count("all", $scope.search.invoice);
+            var total = Invoice.count("all", $scope.searchInvoice);
 
-            $q.all([invoices.$asPromise(), $scope.total]).then(function (data) {
+            $q.all([invoices.$asPromise(), total]).then(function (data) {
+                $scope.total = data[1].data.total;
                 params.total(data[1].data.total);
                 $defer.resolve(data[0]);
             })
-
-
-            /*  var sort = params.orderBy() != false ? params.orderBy() : 'notSorting';
-             var invoices = null;
-             if( !_.isUndefined($scope.searchInvoice) && $scope.searchInvoice != '') {
-             invoices = Invoice.$search({status: 'all', keyword: $scope.searchInvoice, page: params.page(), order: sort});
-             $scope.total = Invoice.$search({status: 'all', keyword: $scope.searchInvoice}).count();
-             }
-             else {
-             invoices = Invoice.$search({status: 'all', page: params.page(), order: sort});
-             $scope.total = Invoice.$search({status: 'all'}).count();
-             }
-             $q.all([invoices.$promise,$scope.total.$promise]).then(function(data){
-             params.total($scope.total.count);
-             $defer.resolve(data[0]);
-             })*/
         }
     });
 

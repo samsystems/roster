@@ -43,12 +43,28 @@ func UpdateInvoiceProduct(invoiceProduct *InvoiceProduct) {
 	o.Update(invoiceProduct)
 }
 
+func DeleteInvoiceProduct(invoiceProduct *InvoiceProduct) {
+	o := orm.NewOrm()
+	invoiceProduct.Deleted = time.Now()
+	o.Update(invoiceProduct)
+}
+
 func GetAllInvoiceProducts(uidInvoice string) ([]InvoiceProduct) {
 	o := orm.NewOrm()
 	var invoiceProduct []InvoiceProduct
 	querySetter := o.QueryTable("invoice_product")
-	querySetter.RelatedSel("Product").Filter("invoice_id", uidInvoice).All(&invoiceProduct)
+	querySetter.RelatedSel("Product").Filter("deleted__isnull", true).Filter("invoice_id", uidInvoice).All(&invoiceProduct)
 	
 	return invoiceProduct
 	
 }
+func GetAllInvoiceProductsByIds(uidInvoice string, idsInvoiceProduct []string) ([]InvoiceProduct) {
+	o := orm.NewOrm()
+	var invoiceProduct []InvoiceProduct
+	querySetter := o.QueryTable("invoice_product")
+	querySetter.RelatedSel("Product").Filter("invoice_id", uidInvoice).Filter("deleted__isnull", true).Exclude("id__in",idsInvoiceProduct).All(&invoiceProduct)
+	
+	return invoiceProduct
+}
+
+

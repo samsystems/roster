@@ -119,8 +119,7 @@ func GetInvoiceByKeyword(status string, keyword string, page int, order string, 
 		qb.Select("count(inv.id)")
 	}
 
-	qb.From("invoice inv").
-		Where("inv.name LIKE ?")
+	qb.From("invoice inv").	Where("inv.order_number LIKE ?").And("inv.reference_number LIKE ?")
 
 	if count == true {
 		sql := qb.String()

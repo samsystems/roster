@@ -48,7 +48,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             ReferenceNumber: '',
             Date: DateTimeService.nowIsoFormat(),
             DeliveryDate: DateTimeService.nowIsoFormat(),
-            Currency: {"value": "USD", "description": "USD United States Dollar"},
+            Currency: "USD",
             DeliveryInstruction: '',
             Vendor: '',
             Customer: null,

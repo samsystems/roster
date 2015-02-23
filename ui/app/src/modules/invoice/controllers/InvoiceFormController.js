@@ -70,14 +70,13 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
          };
          */
         $scope.removeItem = function (item) {
-            alert(item.id);
-            /*if (!_.isEmpty(item)) {
+            if (!_.isEmpty(item)) {
                 for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
-                    if ($scope.invoice.InvoiceProducts[i].id == item.id) {
+                    if ($scope.invoice.InvoiceProducts[i].Product.Id == item.Product.Id) {
                         $scope.invoice.InvoiceProducts.splice(i, 1);
                     }
                 }
-            }*/
+            }
         };
 
         $scope.updateSubTotal = function () {
@@ -127,7 +126,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                   //  invoice.DeliveryDate = $scope.invoice.DeliveryDate;
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
-                    invoice.Currency = $scope.invoice.Currency.value;
+                    invoice.Currency = $scope.invoice.Currency;
                     invoice.InvoiceProducts = $scope.invoice.InvoiceProducts;
                     invoice.Status = status;
 

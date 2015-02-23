@@ -6,8 +6,8 @@ import (
 
 	"appengine"
 
-	"github.com/sam/roster/handler"
-	"github.com/sam/roster/models"
+	"github.com/samsystems/roster/handler"
+	"github.com/samsystems/roster/models"
 )
 
 // Operations about Users

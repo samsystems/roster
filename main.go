@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gorilla/mux"
 
-	"github.com/sam/roster/controllers"
-	"github.com/sam/roster/system"
+	"github.com/samsystems/roster/controllers"
+	"github.com/samsystems/roster/system"
 )
 
 var router = new(mux.Router)

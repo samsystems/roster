@@ -9,9 +9,9 @@ import (
 
 	"appengine"
 
-	"github.com/sam/roster/handler"
-	"github.com/sam/roster/models"
-	"github.com/sam/roster/validation"
+	"github.com/samsystems/roster/handler"
+	"github.com/samsystems/roster/models"
+	"github.com/samsystems/roster/validation"
 	"log"
 )
 
@@ -133,7 +133,7 @@ func (controller *ProductController) Put(context appengine.Context, writer http.
 
 	var product models.Product
 	//json.Unmarshal(data, &product)
-err1 := json.Unmarshal(data, &product)
+	err1 := json.Unmarshal(data, &product)
 	if err1 != nil {
 		log.Println("error:", err1)
 	}

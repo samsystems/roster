@@ -8,12 +8,12 @@ import (
 	"io/ioutil"
 
 	"appengine"
-	
-	"github.com/sam/roster/handler"
-	"github.com/sam/roster/models"
-	"github.com/sam/roster/validation"
+
+	"github.com/samsystems/roster/handler"
+	"github.com/samsystems/roster/models"
+	"github.com/samsystems/roster/validation"
 	"log"
-	
+
 	"math"
 	"time"
 )
@@ -138,26 +138,26 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	invoice.Creator = user
 	invoice.Updater = user
 	invoiceProducts := invoice.InvoiceProducts
-	invoice.InvoiceProducts=nil
-	
-    // TODO: temporal 
-	invoice.Date=time.Now()
-	invoice.DeliveryDate=time.Now()
-	
-	var subTotal float64 =0
+	invoice.InvoiceProducts = nil
+
+	// TODO: temporal
+	invoice.Date = time.Now()
+	invoice.DeliveryDate = time.Now()
+
+	var subTotal float64 = 0
 	for i := 0; i < len(invoiceProducts); i++ {
-		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
+		subTotal += float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
 		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
-		if(product.Stock<invoiceProducts[i].Quantity){
+		if product.Stock < invoiceProducts[i].Quantity {
 			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
 		}
 		product.Stock = product.Stock - invoiceProducts[i].Quantity
-		invoiceProducts[i].Product= product
+		invoiceProducts[i].Product = product
 	}
-	invoice.SubTotal=subTotal
-	invoice.TotalTax=RoundPlus((subTotal * float64(invoice.Tax))/100,2)
-	invoice.Amount=invoice.TotalTax+subTotal
-	
+	invoice.SubTotal = subTotal
+	invoice.TotalTax = RoundPlus((subTotal*float64(invoice.Tax))/100, 2)
+	invoice.Amount = invoice.TotalTax + subTotal
+
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {
@@ -170,18 +170,18 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	} else {
 		models.UpdateInvoice(&invoice)
-			
-	for i := 0; i < len(invoiceProducts); i++ {
+
+		for i := 0; i < len(invoiceProducts); i++ {
 			var invoiceProduct = invoiceProducts[i]
-     		invoiceProduct.Updater= user
-			invoiceProduct.Invoice= &invoice
-			if(invoiceProduct.Id != ""){
-			 	models.UpdateInvoiceProduct(invoiceProduct)
-			}else{
-			 	models.AddInvoiceProduct(invoiceProduct)
-		 	}
+			invoiceProduct.Updater = user
+			invoiceProduct.Invoice = &invoice
+			if invoiceProduct.Id != "" {
+				models.UpdateInvoiceProduct(invoiceProduct)
+			} else {
+				models.AddInvoiceProduct(invoiceProduct)
+			}
 			models.UpdateProduct(invoiceProduct.Product)
-	    }	
+		}
 	}
 
 	return invoice, nil
@@ -224,35 +224,35 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	if err1 != nil {
 		log.Println("error:", err1)
 	}
-	
+
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	log.Println(user.Company.Id)
 	company, _ := models.GetCompany(user.Company.Id)
 	invoice.Creator = user
 	invoice.Updater = user
-	invoice.Tax=company.Tax
+	invoice.Tax = company.Tax
 	invoice.OrderNumber = models.GetMaxOrderNumber()
 	invoiceProducts := invoice.InvoiceProducts
-	invoice.InvoiceProducts=nil
-	
-	// TODO: temporal 
-	invoice.Date=time.Now()
-	invoice.DeliveryDate=time.Now()
-	 
-	var subTotal float64 =0
+	invoice.InvoiceProducts = nil
+
+	// TODO: temporal
+	invoice.Date = time.Now()
+	invoice.DeliveryDate = time.Now()
+
+	var subTotal float64 = 0
 	for i := 0; i < len(invoiceProducts); i++ {
-		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
+		subTotal += float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
 		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
-		if(product.Stock<invoiceProducts[i].Quantity){
+		if product.Stock < invoiceProducts[i].Quantity {
 			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
 		}
 		product.Stock = product.Stock - invoiceProducts[i].Quantity
-		invoiceProducts[i].Product= product
+		invoiceProducts[i].Product = product
 	}
-	invoice.SubTotal=subTotal
-	invoice.TotalTax=RoundPlus((subTotal * float64(invoice.Tax))/100,2)
-	invoice.Amount=invoice.TotalTax+subTotal
-	
+	invoice.SubTotal = subTotal
+	invoice.TotalTax = RoundPlus((subTotal*float64(invoice.Tax))/100, 2)
+	invoice.Amount = invoice.TotalTax + subTotal
+
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {
@@ -265,17 +265,17 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	} else {
 		models.AddInvoice(&invoice)
-		
-	for i := 0; i < len(invoiceProducts); i++ {
+
+		for i := 0; i < len(invoiceProducts); i++ {
 			var invoiceProduct = invoiceProducts[i]
-			invoiceProduct.Creator= user
-     		invoiceProduct.Updater= user
-			invoiceProduct.Invoice= &invoice
+			invoiceProduct.Creator = user
+			invoiceProduct.Updater = user
+			invoiceProduct.Invoice = &invoice
 			models.AddInvoiceProduct(invoiceProduct)
 			models.UpdateProduct(invoiceProduct.Product)
-	    }	
+		}
 		//models.CreateFromInvoice(invoice)
-	
+
 	}
 
 	return invoice, nil
@@ -286,8 +286,8 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 // @Success 200 {object} models.Invoice
 // @router /:id/products [get]
 func (controller *InvoiceController) GetAllProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-    uidInvoice := v["uid"]
-    log.Print(uidInvoice)
+	uidInvoice := v["uid"]
+	log.Print(uidInvoice)
 	var invoices []models.InvoiceProduct = models.GetAllInvoiceProducts(uidInvoice)
 	return invoices, nil
 }
@@ -295,8 +295,8 @@ func (controller *InvoiceController) GetAllProducts(context appengine.Context, w
 func Round(f float64) float64 {
 	return math.Floor(f + .5)
 }
- 
-func RoundPlus(f float64, places int) (float64) {
+
+func RoundPlus(f float64, places int) float64 {
 	shift := math.Pow(10, float64(places))
-	return Round(f * shift) / shift;	
+	return Round(f*shift) / shift
 }

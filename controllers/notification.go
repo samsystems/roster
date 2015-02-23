@@ -9,9 +9,9 @@ import (
 
 	"appengine"
 
-	"github.com/sam/roster/handler"
-	"github.com/sam/roster/models"
-	"github.com/sam/roster/validation"
+	"github.com/samsystems/roster/handler"
+	"github.com/samsystems/roster/models"
+	"github.com/samsystems/roster/validation"
 )
 
 type NotificationController struct {

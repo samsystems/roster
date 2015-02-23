@@ -1,7 +1,7 @@
 package ui
 
 import (
-	app "github.com/sam/roster"
+	app "github.com/samsystems/roster"
 
 	"github.com/gorilla/mux"
 	"net/http"

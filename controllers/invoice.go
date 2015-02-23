@@ -146,13 +146,23 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 
 	var subTotal float64 = 0
 	for i := 0; i < len(invoiceProducts); i++ {
-		subTotal += float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
+		var restStock int
+		if(invoiceProducts[i].Id != ""){
+			restStock = invoiceProducts[i].Quantity - invoiceProducts[i].QuantitySave
+		}else{
+			invoiceProducts[i].Creator= user
+			restStock = invoiceProducts[i].Quantity
+		}
+		
+		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
 		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
-		if product.Stock < invoiceProducts[i].Quantity {
+		if((product.Stock - restStock) < 0){
 			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
 		}
-		product.Stock = product.Stock - invoiceProducts[i].Quantity
-		invoiceProducts[i].Product = product
+		invoiceProducts[i].Updater= user
+	    
+	    product.Stock = product.Stock - restStock
+		invoiceProducts[i].Product= product
 	}
 	invoice.SubTotal = subTotal
 	invoice.TotalTax = RoundPlus((subTotal*float64(invoice.Tax))/100, 2)
@@ -170,16 +180,16 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	} else {
 		models.UpdateInvoice(&invoice)
-
-		for i := 0; i < len(invoiceProducts); i++ {
-			var invoiceProduct = invoiceProducts[i]
-			invoiceProduct.Updater = user
-			invoiceProduct.Invoice = &invoice
-			if invoiceProduct.Id != "" {
-				models.UpdateInvoiceProduct(invoiceProduct)
-			} else {
-				models.AddInvoiceProduct(invoiceProduct)
-			}
+			
+	for i := 0; i < len(invoiceProducts); i++ {
+			var invoiceProduct = invoiceProducts[i]     		
+     		
+			invoiceProduct.Invoice= &invoice
+			if(invoiceProduct.Id != ""){
+			 	models.UpdateInvoiceProduct(invoiceProduct)
+			}else{
+			 	models.AddInvoiceProduct(invoiceProduct)
+		 	}
 			models.UpdateProduct(invoiceProduct.Product)
 		}
 	}

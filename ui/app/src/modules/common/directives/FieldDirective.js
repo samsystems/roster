@@ -1,17 +1,18 @@
 'use strict';
 
-angular.module('common').directive('field', [function(){
+angular.module('common').directive('rosField', [function(){
 
 
     return {
-        require: '^fieldSet',
+        require: '^rosFieldSet',
         restrict: 'E',
         templateUrl: 'src/modules/common/views/field-directive.html',
         transclude: true,
         replace: true,
         scope: {
-            size: '@size',
-            title: '@title'
+            size:  '@size',
+            title: '@title',
+            type:  '@type'
         },
         controller: function() {
             //Empty controller so other directives can require being 'under' a field

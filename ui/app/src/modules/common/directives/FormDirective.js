@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('common').directive('form', [function(){
+angular.module('common').directive('rosForm', [function(){
 
 
     return {

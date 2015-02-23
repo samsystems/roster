@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('common').directive('fieldSet', [function(){
+angular.module('common').directive('rosFieldSet', [function(){
 
 
     return {
-        require: '^form',
+        require: '^rosForm',
         restrict: 'E',
         templateUrl: 'src/modules/common/views/field-set-directive.html',
         transclude: true,

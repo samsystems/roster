@@ -53,6 +53,32 @@ angular.module('invoice').controller('InvoiceListCompletedController', ['$scope'
         $scope.invoiceTable.reload();
     });
 
-
+    $scope.paid = function (invoices) {
+        invoices = Object.keys(invoices).map(function (key) {
+            if (invoices[key]['checked']) return key
+        });
+        var count = 0;
+        var marcado = [];
+        angular.forEach(
+            invoices,
+            function (invoice) {
+                if (invoice) {
+                    marcado[count] = invoice;
+                    count++;
+                }
+            });
+        if (marcado.length > 0) {
+            for (var i = 0; i < marcado.length; i++) {
+                $scope.invoice = Invoice.$find(marcado[i]).$then(function (response) {
+                    $scope.invoice.Status = 'paid';
+                    $scope.invoice.$update({id: $scope.invoice.Id}, function (response) {
+                        $rootScope.$broadcast('invoice::updated');
+                        $rootScope.$broadcast('invoice::totalTab');
+                    });
+                });
+            }
+            toaster.pop('success', 'Invoice Update');
+        }
+    };
     $scope.checkboxes = { InvoiceProducts: {} };
 }]);

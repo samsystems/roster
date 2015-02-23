@@ -22,9 +22,10 @@ angular.module('invoice').controller('InvoiceListDraftController', ['$scope', '$
         total: 0, // length of data
         getData: function($defer, params) {
             var invoices = Invoice.$search({status:'draft',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
-            $scope.total = Invoice.count("draft",$scope.search.invoice);
+            var total = Invoice.count("draft",$scope.search.invoice);
 
-            $q.all([invoices.$asPromise(), $scope.total]).then(function (data) {
+            $q.all([invoices.$asPromise(), total]).then(function (data) {
+                $scope.total = data[1].data.total;
                 params.total(data[1].data.total);
                 $defer.resolve(data[0]);
             })
@@ -56,9 +57,9 @@ angular.module('invoice').controller('InvoiceListDraftController', ['$scope', '$
 
     $scope.removeInvoice = function (invoice) {
         dialogs.confirm('Remove a Invoice', 'Are you sure you want to remove a Invoice?').result.then(function (btn) {
-            invoice.$destroy().$asPromise().then(function (response) {
-                $rootScope.$broadcast('invoice::deleted');
-                $rootScope.$broadcast('invoice::totalTab');
+            invoice.$destroy().$then(function () {
+               $rootScope.$broadcast('invoice::deleted');
+               $rootScope.$broadcast('invoice::totalTab');
                 toaster.pop('success', 'Invoice Deleted', 'You have successfully deleted a invoice.')
             });
         });

@@ -26,19 +26,6 @@
                                         <a data-toggle="tooltip" title="Refresh" class="btn btn-default" data-ng-click="refresh()"><i
                                                 class="fa fa-refresh"></i></a>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="pull-right" data-ng-if="invoices.length > 0">
-                                            <span class="paging-status">{{1+((page-1)*limitInPage)}} - {{(invoices.length < limitInPage) ? total.count : (((page-1)*limitInPage)+limitInPage) }} of {{total.count}}</span>
-
-                                            <div class="btn-group">
-                                                <a class="btn btn-default" data-ng-click="setPage(page-1)"
-                                                   data-ng-class="{disabled: page == 1}"><i class="fa fa-chevron-left"></i></a>
-                                                <a class="btn btn-default" data-ng-click="setPage(page+1)"
-                                                   data-ng-class="{disabled: page >= (total.count/limitInPage)}"><i
-                                                        class="fa fa-chevron-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <!-- End div .col-sm-3 -->
                                 </div>
                                 <!-- End div .row -->
@@ -64,7 +51,7 @@
                                         <col width="15%"/>
                                         <tr class="items" data-ng-repeat="invoice in $data">
                                             <td>
-                                                <input data-status="{{ checkboxes.InvoiceProducts[invoice.Id]['status']=invoice.Status}}" type="checkbox" ng-model="checkboxes.InvoiceProducts[invoice.Id]['checked']" />
+                                                <input data-status="{{ checkboxes.InvoiceProducts[invoice.Id]['Status']=invoice.Status}}" type="checkbox" ng-model="checkboxes.InvoiceProducts[invoice.Id]['checked']" />
                                             </td>
                                             <td data-title="'Order Number'" sortable="'orderNumber'" style="cursor:pointer;"
                                                 data-ng-click="viewInvoice(invoice)">
@@ -97,7 +84,7 @@
                                                             data-ng-class="(invoice.Status=='draft' || invoice.Status=='completed' || invoice.Status=='paid') ? '' : 'disabled'"
                                                             class="btn btn-default fa fa-edit"
                                                             data-ng-click="selectInvoice(invoice)"></button>
-                                                    <button type="button" data-ng-class="(invoice.status=='draft') ? '' : 'disabled'"
+                                                    <button type="button" data-ng-class="(invoice.Status=='draft') ? '' : 'disabled'"
                                                             class="btn btn-danger fa fa-trash-o"
                                                             data-ng-click="removeInvoice(invoice)"></button>
                                                 </div>

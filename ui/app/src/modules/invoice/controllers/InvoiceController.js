@@ -56,7 +56,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             InvoiceProducts: []
         };
 
-        disable(false,$scope.invoice);
+        disable(false, $scope.invoice);
         var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
             $scope.invoice.OrderNumber = response.max;
         });
@@ -77,16 +77,16 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     $scope.selectInvoice = function (invoice) {
         $scope.invoice = Invoice.$find(invoice.Id).$then(function () {
             if ($scope.invoice.Status != 'draft') {
-                disable(true,invoice);
+                disable(true, invoice);
             } else
-                disable(false,invoice);
+                disable(false, invoice);
 
             $scope.invoice.products.$fetch().$asPromise().then(function (response) {
                 for (var i = 0; i < response.length; i++) {
                     response[i].Product.Price = response[i].Product.Price;
                     response[i].Quantity = response[i].Quantity;
                     response[i].QuantitySave = parseInt(response[i].Quantity);
-                    delete response[i].Product.Updater ;
+                    delete response[i].Product.Updater;
                     delete response[i].Product.Deleted;
                     delete response[i].Product.Updated;
 
@@ -95,7 +95,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                     delete response[i].Updated;
 
                 }
-                $scope.invoice.InvoiceProducts =  response;
+                $scope.invoice.InvoiceProducts = response;
 
                 delete $scope.invoice.Updater;
                 delete $scope.invoice.SubTotal;
@@ -141,7 +141,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                         delete response[i].Updater;
                     }
                     disable(false, $scope.invoice);
-                    $scope.invoice.InvoiceProducts =  response;
+                    $scope.invoice.InvoiceProducts = response;
                 })
 
             });
@@ -237,8 +237,9 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     };
 
     $scope.removeGeneral = function (invoices) {
+
         invoices = Object.keys(invoices).map(function (key) {
-            if (invoices[key]['checked']) return {id: key, 'status': invoices[key]['status']}
+            if (invoices[key]['checked']) return {Id: key, 'Status': invoices[key]['Status']}
         });
         var count = 0;
         var marcado = [];
@@ -247,8 +248,8 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             invoices,
             function (invoice) {
                 if (invoice) {
-                    marcado[count] = invoice.id;
-                    status[count] = invoice.status;
+                    marcado[count] = invoice.Id;
+                    status[count] = invoice.Status;
                     count++;
                 }
             });
@@ -262,9 +263,10 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 }
                 for (var i = 0; i < marcado.length; i++) {
                     if (status[i] == 'draft') {
-                           Invoice.$find(marcado[i]).$then(function (responseDelete) {
-                                responseDelete.$destroy().$asPromise().then(function (response) {
-                            //$scope.invoice.$delete({id: responseDelete.id}, function (response) {
+                        Invoice.$find(marcado[i]).$asPromise().then(function (responseDelete) {
+                            responseDelete.$destroy().$then(function () {
+                                $rootScope.$broadcast('invoice::deleted');
+                                $rootScope.$broadcast('invoice::totalTab');
                             });
                         });
                     } else {
@@ -273,44 +275,14 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                     }
                 }
                 $timeout(function () {
-                    $rootScope.$broadcast('invoice::deleted');
-                    $rootScope.$broadcast('invoice::totalTab');
-                toaster.pop('success', 'Invoice Deleted', 'You have successfully deleted the invoices.');
+                    toaster.pop('success', 'Invoice Deleted', 'You have successfully deleted the invoices.');
                 });
             });
         }
     };
 
-    $scope.paid = function (invoices) {
-        invoices = Object.keys(invoices).map(function (key) {
-            if (invoices[key]['checked']) return key
-        });
-        var count = 0;
-        var marcado = [];
-        angular.forEach(
-            invoices,
-            function (invoice) {
-                if (invoice) {
-                    marcado[count] = invoice;
-                    count++;
-                }
-            });
-        console.log(count);
-        if (marcado.length > 0) {
-            for (var i = 0; i < marcado.length; i++) {
-                $scope.invoice = Invoice.$find(marcado[i]).$then(function (response) {
-                    $scope.invoice.status = 'paid';
-                    $scope.invoice.$update({id: $scope.invoice.id}, function (response) {
-                        $rootScope.$broadcast('invoice::updated');
-                        $rootScope.$broadcast('invoice::totalTab');
-                    });
-                });
-            }
-            toaster.pop('success', 'Invoice Update');
-        }
-    };
 
-    function disable(valor,invoice) {
+    function disable(valor, invoice) {
         angular.forEach(
             angular.element('#form_invoice .form-control'),
             function (inputElem) {
@@ -322,8 +294,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 angular.element(inputElem).attr('readonly', valor);
             });
         $scope.visible = !valor;
-        if(invoice.CustomerShipping)
-        {
+        if (invoice.CustomerShipping) {
             angular.element('#CustomerShipping').attr('readonly', true);
             $scope.invoice.BillShip = true;
         }

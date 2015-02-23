@@ -1,0 +1,10 @@
+{
+  "debug": false,
+  "database": {
+    "host":    "cloudsql(sam-roster:alpha)",
+    "user":     "root",
+    "password": "",
+    "name":     "roster",
+    "debug":    false
+  }
+}

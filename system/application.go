@@ -32,8 +32,14 @@ func (application *Application) ConnectToDatabase() {
 	if application.Configuration.Database.Password != "" {
 		password = ":" + application.Configuration.Database.Password
 	}
-	dsn := []string{application.Configuration.Database.User, password, "@", application.Configuration.Database.Host, "/", application.Configuration.Database.Name, "?charset=utf8"}
-	orm.RegisterDataBase("default", "mysql", strings.Join(dsn, ""), 30)
+
+	host := application.Configuration.Database.Host
+	if host == "127.0.0.1" || host == "localhost" {
+		host = ""
+	}
+
+	dsn := []string{application.Configuration.Database.User, password, "@", host, "/", application.Configuration.Database.Name}
+	err = orm.RegisterDataBase("default", "mysql", strings.Join(dsn, ""), 30)
 
 	if err != nil {
 		glog.Fatalf("Can't connect to the database: %v", err)

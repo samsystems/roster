@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gorilla/mux"
 
+	"appengine"
+
 	"github.com/samsystems/roster/controllers"
 	"github.com/samsystems/roster/system"
 )
@@ -12,7 +14,11 @@ var router = new(mux.Router)
 func init() {
 	var application = &system.Application{}
 
-	application.Init("config.json")
+	if appengine.IsDevAppServer() {
+		application.Init("config.json")
+	} else {
+		application.Init("config.appengine.json")
+	}
 	application.ConnectToDatabase()
 }
 

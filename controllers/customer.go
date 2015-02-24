@@ -54,7 +54,7 @@ func (controller *CustomerController) Get(context appengine.Context, writer http
 // @Success 200 {array} models.Customer
 // @router / [get]
 func (controller *CustomerController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	var customers *[]models.Customer
+	var customers []models.Customer
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 
 	if keyword != "" {
@@ -62,7 +62,9 @@ func (controller *CustomerController) GetAll(context appengine.Context, writer h
 	} else {
 		customers, _ = models.GetAllCustomers(page, sort, false, -1)
 	}
-
+    if(len(customers)== 0){
+ 		return make([]models.Customer,0), nil
+ 	}
 	return customers, nil
 }
 

@@ -50,7 +50,7 @@ func GetCustomer(uid string) (*Customer, error) {
 
 	return &customer, err
 }
-func GetAllCustomers(page int, order string, count bool, limit int) (*[]Customer, interface{}) {
+func GetAllCustomers(page int, order string, count bool, limit int) ([]Customer, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = COMPANY_LIMIT
@@ -61,15 +61,15 @@ func GetAllCustomers(page int, order string, count bool, limit int) (*[]Customer
 	qs = qs.Filter("deleted__isnull", true)
 	if count == true {
 		cnt, _ := qs.Count()
-		return &customers, cnt
+		return customers, cnt
 	} else {
 		qs = ParseQuerySetterOrder(qs, order)
 		qs.Offset(page * limit).Limit(limit).All(&customers)
-		return &customers, nil
+		return customers, nil
 	}
 }
 
-func GetCustomerByKeyword(keyword string, page int, order string, count bool, limit int) (*[]Customer, interface{}) {
+func GetCustomerByKeyword(keyword string, page int, order string, count bool, limit int) ([]Customer, interface{}) {
 	var customers []Customer
 	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
@@ -92,7 +92,7 @@ func GetCustomerByKeyword(keyword string, page int, order string, count bool, li
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
-		return &customers, total
+		return customers, total
 
 	} else {
 		ParseQueryBuilderOrder(qb, order, "customer")
@@ -104,7 +104,7 @@ func GetCustomerByKeyword(keyword string, page int, order string, count bool, li
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%").QueryRows(&customers)
-		return &customers, nil
+		return customers, nil
 	}
 
 }

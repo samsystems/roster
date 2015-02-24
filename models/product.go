@@ -50,7 +50,7 @@ func GetProduct(uid string) (*Product, error) {
 	return &g, err
 }
 
-func GetAllProducts(page int, order string, count bool, limit int) (*[]Product, interface{}) {
+func GetAllProducts(page int, order string, count bool, limit int) ([]Product, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = PRODUCT_LIMIT
@@ -61,15 +61,15 @@ func GetAllProducts(page int, order string, count bool, limit int) (*[]Product, 
 	querySetter = querySetter.Filter("deleted__isnull", true)
 	if count == true {
 		cnt, _ := querySetter.Count()
-		return &products, cnt
+		return products, cnt
 	} else {
 		querySetter = ParseQuerySetterOrder(querySetter, order)
 		querySetter.Offset(page * limit).Limit(limit).All(&products)
-		return &products, nil
+		return products, nil
 	}
 }
 
-func GetProductByKeyword(keyword string, page int, order string, count bool, limit int) (*[]Product, interface{}) {
+func GetProductByKeyword(keyword string, page int, order string, count bool, limit int) ([]Product, interface{}) {
 	var products []Product
 	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
@@ -92,7 +92,7 @@ func GetProductByKeyword(keyword string, page int, order string, count bool, lim
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
-		return &products, total
+		return products, total
 
 	} else {
 		ParseQueryBuilderOrder(qb, order, "p")
@@ -104,7 +104,7 @@ func GetProductByKeyword(keyword string, page int, order string, count bool, lim
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%").QueryRows(&products)
-		return &products, nil
+		return products, nil
 	}
 
 }

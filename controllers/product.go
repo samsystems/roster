@@ -49,7 +49,7 @@ func (controller *ProductController) Get(context appengine.Context, writer http.
 // @Success 200 {object} models.Product
 // @router / [get]
 func (controller *ProductController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	var products *[]models.Product
+	var products []models.Product
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 	log.Print(request.URL.Query())
 	if keyword != "" {
@@ -58,7 +58,9 @@ func (controller *ProductController) GetAll(context appengine.Context, writer ht
 	} else {
 		products, _ = models.GetAllProducts(page, sort, false, -1)
 	}
-
+   if(len(products)== 0){
+ 		return make([]models.Product,0), nil
+ 	}
 	return products, nil
 }
 

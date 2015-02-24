@@ -1,6 +1,6 @@
 <div id="header" class="page-navbar">
     <!-- .navbar-brand -->
-    <a href="#/" class="navbar-brand hidden-xs hidden-sm">
+    <a href="#/" class="navbar-brand" ng-class="{'collapse-sidebar': ui.collapsed}">
         <img src="/images/roster_blk_stacked.png" width="130px" class="logo hidden-xs" alt="Rooster logo">
         <img src="/images/roster_blk.png" class="logo-sm hidden-lg hidden-md" alt="Dynamic logo">
     </a>
@@ -10,10 +10,7 @@
         <!-- top left nav -->
         <ul class="nav navbar-nav">
             <li class="toggle-sidebar">
-                <a href="#">
-                    <i class="fa fa-reorder"></i>
-                    <span class="sr-only">Collapse sidebar</span>
-                </a>
+                <left-sidebar-toggle></left-sidebar-toggle>
             </li>
             <li>
                 <a href="#" class="reset-layout tipB" title="Reset panel position for this page"><i class="fa fa-history"></i></a>

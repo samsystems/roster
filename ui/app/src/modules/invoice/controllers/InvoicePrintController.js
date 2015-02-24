@@ -12,7 +12,7 @@ angular.module('invoice').controller('InvoicePrintController', ['$scope', '$root
                 response[i].Product.Price = parseFloat(response[i].Product.Price);
                 response[i].Quantity = parseInt(response[i].Quantity);
             }
-            $scope.invoice.InvoiceProducts =  response;
+            $scope.InvoiceProducts =  response;
         })
     }
     $scope.printInvoice = function (printHTML) {

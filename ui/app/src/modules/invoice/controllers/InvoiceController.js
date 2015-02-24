@@ -83,7 +83,13 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
 
             $scope.invoice.products.$fetch().$asPromise().then(function (response) {
                 for (var i = 0; i < response.length; i++) {
-                    response[i] = {Id:response[i].Id,Product:  response[i].Product, Price:  response[i].Product.Price, Quantity: '1'};
+                    response[i] = {
+                        Id:response[i].Id,
+                        Product:  response[i].Product,
+                        Price:  response[i].Product.Price,
+                        Quantity: response[i].Quantity,
+                        QuantitySave: response[i].Quantity
+                    };
 
                 }
                 $scope.invoice.InvoiceProducts = response;

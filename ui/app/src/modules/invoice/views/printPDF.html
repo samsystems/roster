@@ -9,13 +9,13 @@
                 <p style="font-size: 30px">INVOICE</p>
             </div>
             <div style="float: right">
-                <p>{{invoicePdf.customer.Name}}
+                <p>{{invoicePdf.Customer.Name}}
                     <br/>
-                    {{invoicePdf.customer.Address}}
+                    {{invoicePdf.Customer.Address}}
                     <br/>
-                    {{invoicePdf.customer.city}}, {{invoicePdf.customer.Zipcode}}
+                    {{invoicePdf.Customer.City}}, {{invoicePdf.Customer.Zipcode}}
                     <br/>
-                    {{invoicePdf.customer.country.Name}}
+                    {{invoicePdf.Customer.Country.Name}}
                 </p>
             </div>
         </div>
@@ -28,23 +28,23 @@
                         <p><strong>Invoice To</strong></p>
 
                         <p>
-                            {{invoicePdf.customer.Name}}
+                            {{invoicePdf.Customer.Name}}
                             <br/>
-                            {{invoicePdf.customer.Address}}
+                            {{invoicePdf.Customer.Address}}
                             <br/>
-                            {{invoicePdf.customer.city}}, {{invoicePdf.customer.Zipcode}}
+                            {{invoicePdf.Customer.City}}, {{invoicePdf.Customer.Zipcode}}
                             <br/>
-                            {{invoicePdf.customer.country.Name}}
+                            {{invoicePdfCustomer.Country.Name}}
                         </p>
                     </td>
                     <td style="text-align: right;width: 16.66666667%;">
                         <p><strong>Details:</strong></p>
                         <p>
-                            <strong>Date:</strong> {{invoicePdf.date | date:'MMM d, yyyy'}}
+                            <strong>Date:</strong> {{invoicePdf.Date | date:'MMM d, yyyy'}}
                             <br/>
-                            <strong>ID:</strong> {{invoicePdf.orderNumber}}
+                            <strong>ID:</strong> {{invoicePdf.OrderNumber}}
                             <br/>
-                            <strong>Amount Due:</strong> {{invoicePdf.amount}}
+                            <strong>Amount Due:</strong> {{invoicePdf.Amount}}
                             <br/>
                         </p>
                     </td>
@@ -62,21 +62,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="(key,item) in invoicePdf.InvoiceProducts">
+                        <tr data-ng-repeat="(key,item) in invoice.InvoiceProducts">
                             <td style="cursor:pointer; text-align: center">
                                 {{key +1 }}
                             </td>
                             <td style="cursor:pointer">
-                                {{item.product.name}}
+                                {{item.Product.Name}}
                             </td>
                             <td style="cursor:pointer; text-align: center">
-                                {{item.price}}
+                                {{item.Product.Price}}
                             </td>
                             <td style="cursor:pointer; text-align: center">
-                                {{item.quantity}}
+                                {{item.Quantity}}
                             </td>
                             <td style="cursor:pointer; text-align: center">
-                                {{item.quantity*item.price}}
+                                {{item.Quantity * item.Product.Price | currency: 'USD'}}
                             </td>
                         </tr>
                         </tbody>
@@ -96,16 +96,16 @@
             <div style="float: right">
                 <table style="border-collapse: separate; border-spacing: 4px; text-align: right; line-height: 2.2;width: 300px">
                     <tr style="background-color: #f4f4f4">
-                        <td>Sub - Total amount: $ {{invoicePdf.subTotal}}</td>
+                        <td>Sub - Total amount: $ {{invoicePdf.SubTotal}}</td>
                     </tr>
                     <tr style="background-color: #f4f4f4">
                         <td>Discount: ----</td>
                     </tr>
                     <tr style="background-color: #f4f4f4">
-                        <td>Tax({{invoicePdf.tax}}%): $ {{invoicePdf.totalTax}}</td>
+                        <td>Tax({{invoicePdf.Tax}}%): $ {{invoicePdf.TotalTax}}</td>
                     </tr>
                     <tr style="background-color: #f4f4f4">
-                        <td><strong>Grand Total: $ {{invoicePdf.amount}}</strong></td>
+                        <td><strong>Grand Total: $ {{invoicePdf.Amount}}</strong></td>
                     </tr>
                 </table>
             </div>

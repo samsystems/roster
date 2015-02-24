@@ -7,6 +7,13 @@ angular.module('invoice').controller('InvoicePrintController', ['$scope', '$root
 
     if (id != null) {
         $scope.invoice = Invoice.$find(id);
+        $scope.invoice.products.$fetch().$asPromise().then(function (response) {
+            for (var i = 0; i < response.length; i++) {
+                response[i].Product.Price = parseFloat(response[i].Product.Price);
+                response[i].Quantity = parseInt(response[i].Quantity);
+            }
+            $scope.invoice.InvoiceProducts =  response;
+        })
     }
     $scope.printInvoice = function (printHTML) {
         var html=document.getElementById(printHTML).innerHTML;

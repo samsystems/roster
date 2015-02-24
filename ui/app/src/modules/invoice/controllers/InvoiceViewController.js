@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('invoice').controller('InvoiceViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'DateTimeService', 'Invoice', function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, DateTimeService, Invoice) {
+angular.module('invoice').controller('InvoiceViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'DateTimeService', 'Invoice', '$timeout', function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, DateTimeService, Invoice, $timeout) {
 
     var id = (!_.isUndefined($stateParams.id)) ? $stateParams.id : null;
     $scope.invoice = {};
@@ -12,7 +12,7 @@ angular.module('invoice').controller('InvoiceViewController', ['$scope', '$rootS
                 response[i].Product.Price = parseFloat(response[i].Product.Price);
                 response[i].Quantity = parseInt(response[i].Quantity);
             }
-            $scope.invoice.InvoiceProducts =  response;
+            $scope.InvoiceProducts =  response;
         })
     }
 

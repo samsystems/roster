@@ -1,10 +1,10 @@
-<div class="panel {{panel.type}} panelClose panelRefresh" ng-class="{'plain': panel.isPlain, 'tile': !panel.isPlain}">
+<div class="panel {{panel.type}} panelClose panelRefresh" ng-class="{'plain': panel.isPlain, 'tile': !panel.isPlain}" ng-show="panel.visible">
     <!-- Start .panel -->
     <div class="panel-heading">
         <h4 class="panel-title"><i ng-if="panel.iconClass" class="{{panel.iconClass}}"></i> {{panel.title}}</h4>
         <div class="panel-controls panel-controls-right">
-            <a href="#" class="panel-refresh"><i class="fa fa-refresh"></i></a>
-            <a href="#" class="panel-close"><i class="fa fa-times"></i></a>
+            <a class="panel-refresh" ng-if="hasRefreshFunction()" ng-click="refresh()"><i class="fa fa-refresh"></i></a>
+            <a class="panel-close" ng-click="close()"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="panel-body pt0">

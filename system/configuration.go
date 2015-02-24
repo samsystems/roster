@@ -21,12 +21,12 @@ func (configuration *Configuration) Load(filename string) (err error) {
 	data, err := ioutil.ReadFile(filename)
 
 	if err != nil {
-		return
+		panic(filename + " was not found")
 	}
 
 	err = configuration.Parse(data)
 
-	return
+	return err
 }
 
 func (configuration *Configuration) Parse(data []byte) (err error) {

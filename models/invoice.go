@@ -4,7 +4,6 @@ import (
 	"code.google.com/p/go-uuid/uuid"
 	"github.com/astaxie/beego/orm"
 	"time"
-	"log"
 )
 
 const INVOICE_LIMIT int = 20
@@ -63,7 +62,7 @@ func GetInvoice(uid string) (*Invoice, error) {
 	return &invoice, err
 }
 
-func GetAllInvoices(status string, page int, order string, count bool, limit int) (*[]Invoice, interface{}) {
+func GetAllInvoices(status string, page int, order string, count bool, limit int) ([]Invoice, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = INVOICE_LIMIT
@@ -82,11 +81,11 @@ func GetAllInvoices(status string, page int, order string, count bool, limit int
 
 	if count == true {
 		cnt, _ := querySetter.Count()
-		return &invoices, cnt
+		return invoices, cnt
 	} else {
 		querySetter = ParseQuerySetterOrder(querySetter.RelatedSel("Customer"), order)
 		querySetter.Offset(page * limit).Limit(limit).All(&invoices)
-		return &invoices, nil
+		return invoices, nil
 	}
 	/*
 		o := orm.NewOrm()
@@ -105,7 +104,7 @@ func GetAllInvoices(status string, page int, order string, count bool, limit int
 		return invoices*/
 }
 
-func GetInvoiceByKeyword(status string, keyword string, page int, order string, count bool, limit int) (*[]Invoice, interface{}) {
+func GetInvoiceByKeyword(status string, keyword string, page int, order string, count bool, limit int) ([]Invoice, interface{}) {
 	var invoices []Invoice
 	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
@@ -119,29 +118,36 @@ func GetInvoiceByKeyword(status string, keyword string, page int, order string, 
 		qb.Select("count(inv.id)")
 	}
 
-	qb.From("invoice inv").	Where("inv.order_number LIKE ?").And("inv.reference_number LIKE ?")
-
-	if count == true {
-		sql := qb.String()
-		var total int
-		// execute the raw query string
+	qb.From("invoice inv").	Where("inv.reference_number LIKE ?").And("inv.deleted is null")
+	// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
-		return &invoices, total
+	if count == true {
+		var total int
+		if status != "all" {
+			qb.And("status = ?")
+			sql := qb.String()
+			o.Raw(sql, "%"+keyword+"%",status).QueryRow(&total)
+			return invoices, total
+		} else {
+			sql := qb.String()
+			o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
+			return invoices, total
+		}
 
 	} else {
-		ParseQueryBuilderOrder(qb, order, "invoice")
-		qb.Limit(limit).Offset(page * INVOICE_LIMIT)
-
-		// export raw query string from QueryBuilder object
-		sql := qb.String()
-
-		// execute the raw query string
-		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRows(&invoices)
-		return &invoices, nil
+		if status != "all" {
+			qb.And("status = ?")
+			ParseQueryBuilderOrder(qb, order, "invoice")
+		    qb.Limit(limit).Offset(page * INVOICE_LIMIT)
+			sql := qb.String()
+			o.Raw(sql, "%"+keyword+"%",status).QueryRows(&invoices)
+			return invoices, nil
+		}else{
+			sql := qb.String()
+			o.Raw(sql, "%"+keyword+"%").QueryRows(&invoices)
+			return invoices, nil
+		}
 	}
-
 }
 
 func UpdateInvoice(invoice *Invoice) {
@@ -156,7 +162,6 @@ func DeleteInvoice(invoice *Invoice) {
 	if(invoice.Status == "draft"){
 		invoiceProducts := GetAllInvoiceProducts(invoice.Id)
 		for _, v := range invoiceProducts {
-			log.Println(v.Quantity)
 			product := v.Product
 			product.Stock =product.Stock+v.Quantity
 			o.Update(product)
@@ -182,7 +187,7 @@ func GetInvoiceResume(status string) (amount float64, cant int) {
 	o := orm.NewOrm()
 	var result Resume
 	qb, _ := orm.NewQueryBuilder("mysql")
-	qb.Select("ROUND( SUM(amount) ,2 ) AS amount, count(*) AS cant").From("invoice inv").Where("deleted is null")
+	qb.Select("ROUND( SUM(amount) ,2 ) AS amount, count(*) AS cant").From("invoice inv").Where("inv.deleted is null")
 	if status != "all" {
 		qb.And("status = ?")
 		sql := qb.String()

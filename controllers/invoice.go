@@ -12,6 +12,7 @@ import (
 	"github.com/samsystems/roster/handler"
 	"github.com/samsystems/roster/models"
 	"github.com/samsystems/roster/validation"
+
 	"log"
 
 	"math"
@@ -39,8 +40,7 @@ func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 // @Success 200 {object} models.Invoice
 // @router / [get]
 func (controller *InvoiceController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	var invoices *[]models.Invoice
-
+	var invoices []models.Invoice
 	status := request.URL.Query().Get("status")
 
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
@@ -51,7 +51,9 @@ func (controller *InvoiceController) GetAll(context appengine.Context, writer ht
 	} else {
 		invoices, _ = models.GetAllInvoices(status, page, sort, false, -1)
 	}
-
+	if(len(invoices)== 0){
+ 		return make([]models.Invoice,0), nil
+ 	}
 	return invoices, nil
 }
 
@@ -136,7 +138,6 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	}
 	invoiceSave,_ := models.GetInvoice(invoice.Id)
 	if(invoiceSave.Status != "draft"){
-		log.Println(invoice.Status)
 		invoiceSave.Status=invoice.Status
 		models.UpdateInvoice(invoiceSave)	
 		return invoiceSave, nil
@@ -261,7 +262,6 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	}
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
-	log.Println(user.Company.Id)
 	company, _ := models.GetCompany(user.Company.Id)
 	invoice.Creator = user
 	invoice.Updater = user
@@ -322,7 +322,6 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 // @router /:id/products [get]
 func (controller *InvoiceController) GetAllProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uidInvoice := v["uid"]
-	log.Print(uidInvoice)
 	var invoices []models.InvoiceProduct = models.GetAllInvoiceProducts(uidInvoice)
 	return invoices, nil
 }

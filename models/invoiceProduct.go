@@ -28,6 +28,15 @@ func init() {
 	orm.RegisterModel(new(InvoiceProduct))
 }
 
+
+func GetInvoiceProduct(uid string) (*InvoiceProduct, error) {
+	invoiceProduct := InvoiceProduct{Id: uid}
+	o := orm.NewOrm()
+	err := o.Read(&invoiceProduct)
+
+	return &invoiceProduct, err
+}
+
 func AddInvoiceProduct(invoiceProduct *InvoiceProduct) string {
 	o := orm.NewOrm()
 	invoiceProduct.Id = uuid.New()
@@ -40,7 +49,10 @@ func AddInvoiceProduct(invoiceProduct *InvoiceProduct) string {
 
 func UpdateInvoiceProduct(invoiceProduct *InvoiceProduct) {
 	o := orm.NewOrm()
-	o.Update(invoiceProduct)
+	_, err :=o.Update(invoiceProduct)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func DeleteInvoiceProduct(invoiceProduct *InvoiceProduct) {

@@ -158,6 +158,10 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	for i := 0; i < len(invoiceProducts); i++ {
 		var restStock int
 		if(invoiceProducts[i].Id != ""){
+			invoiceProducTmp,_ := models.GetInvoiceProduct(invoiceProducts[i].Id)
+			invoiceProducTmp.Quantity=invoiceProducts[i].Quantity
+			invoiceProducTmp.QuantitySave=invoiceProducts[i].QuantitySave
+			invoiceProducts[i]=invoiceProducTmp;
 			restStock = invoiceProducts[i].Quantity - invoiceProducts[i].QuantitySave
 		}else{
 			invoiceProducts[i].Creator= user
@@ -165,14 +169,14 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 		}
 		
 		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
-		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
-		if((product.Stock - restStock) < 0){
+		invoiceProducts[i].Product, _ = models.GetProduct(invoiceProducts[i].Product.Id)
+		if((invoiceProducts[i].Product.Stock - restStock) < 0){
 			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
 		}
 		invoiceProducts[i].Updater= user
 	    
-	    product.Stock = product.Stock - restStock
-		invoiceProducts[i].Product= product
+	    invoiceProducts[i].Product.Stock = invoiceProducts[i].Product.Stock - restStock
+		//invoiceProducts[i].Product= product
 	}
 	invoice.SubTotal = subTotal
 	invoice.TotalTax = RoundPlus((subTotal*float64(invoice.Tax))/100, 2)
@@ -209,7 +213,6 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	    	product.Stock = product.Stock + invoiceDelete[i].Quantity
 	    	models.UpdateProduct(product)
 	    	models.DeleteInvoiceProduct(&invoiceDelete[i])
-	    	
 	    }
 	    
 	}

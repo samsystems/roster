@@ -5,10 +5,12 @@ angular.module('dashboard').controller('DashboardController', ['$scope', '$http'
     $scope.date = DateTimeService.now();
 
     $scope.dashboard = {
-        totalCustomers: Customer.$search().count(),
         totalProducts:  Product.count(),
         totalOrders: 20
     };
+    Customer.count().success(function (response) {
+        $scope.dashboard.totalCustomers = response.total;
+    });
     Invoice.getResume('all').success(function (response) {
         $scope.dashboard.totalInvoices = response.amount;
     });

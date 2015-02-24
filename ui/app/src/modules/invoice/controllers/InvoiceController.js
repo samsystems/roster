@@ -88,7 +88,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                         Product:  response[i].Product,
                         Price:  response[i].Product.Price,
                         Quantity: response[i].Quantity,
-                        QuantitySave: response[i].Quantity
+                        QuantitySave: parseInt(response[i].Quantity)
                     };
 
                 }

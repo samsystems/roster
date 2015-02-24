@@ -43,6 +43,12 @@ angular.module('invoice').factory('Invoice', ['restmod', 'config','$http', funct
                         url: config.api.baseUrl + '/invoice/count',
                         params: { status:status,keyword: keyword }
                     });
+                },
+                items: function(idInvoice) {
+                    return $http({
+                        method: 'GET',
+                        url: config.api.baseUrl + '/invoice/'+idInvoice+'/products'
+                    });
                 }
             }
          }

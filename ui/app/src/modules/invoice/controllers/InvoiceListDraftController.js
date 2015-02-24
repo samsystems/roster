@@ -3,11 +3,11 @@
 angular.module('invoice').controller('InvoiceListDraftController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice','ngTableParams','$filter','$q', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams,$filter, $q) {
 
     $scope.page = 1;
-    $scope.searchInvoice = '';
+    $scope.search = {invoice: ""};
 
     $scope.limitInPage = config.application.limitInPage;
 
-    $scope.search = function (term) {
+    $scope.search = function () {
         $scope.invoiceTable.reload()
     };
 
@@ -21,8 +21,8 @@ angular.module('invoice').controller('InvoiceListDraftController', ['$scope', '$
     }, {
         total: 0, // length of data
         getData: function($defer, params) {
-            var invoices = Invoice.$search({status:'draft',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
-            var total = Invoice.count("draft",$scope.search.invoice);
+            var invoices = Invoice.$search({status:'draft',keyword: $scope.searchInvoice, page: params.page(), sort: params.orderBy()});
+            var total = Invoice.count("draft",$scope.searchInvoice);
 
             $q.all([invoices.$asPromise(), total]).then(function (data) {
                 $scope.total = data[1].data.total;
@@ -57,7 +57,7 @@ angular.module('invoice').controller('InvoiceListDraftController', ['$scope', '$
 
     $scope.removeInvoice = function (invoice) {
         dialogs.confirm('Remove a Invoice', 'Are you sure you want to remove a Invoice?').result.then(function (btn) {
-            invoice.$destroy().$then(function () {
+            invoice.$destroy().$asPromise().then(function (response) {
                $rootScope.$broadcast('invoice::deleted');
                $rootScope.$broadcast('invoice::totalTab');
                 toaster.pop('success', 'Invoice Deleted', 'You have successfully deleted a invoice.')

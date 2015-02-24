@@ -161,7 +161,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             $scope.invoicePdf = Invoice.$find(marcado).$then(function () {
                 $timeout(function () {
                     var html = document.getElementById('pdf').innerHTML;
-                    invoiceResource.sendMailPdf({html: html, id: marcado}, function () {
+                    Invoice.sendMailPdf({html: html, id: marcado}, function () {
                         toaster.pop('success', 'Invoice Mail', 'You have successfully send mail the invoices.');
                     });
                 });
@@ -182,6 +182,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 if (invoice) {
                     marcado = invoice;
                     count_check++;
+                    console.log(count_check);
                     if (count_check > 1) {
                         toaster.pop('error', 'Error', 'Select only one invoice');
                         return;
@@ -215,7 +216,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             $scope.invoicePdf = Invoice.$find(marcado).$then(function () {
                 $timeout(function () {
                     var html = document.getElementById('pdf').innerHTML;
-                    $scope.base64 = invoiceResource.pdf({html: html, id: marcado}, function () {
+                    $scope.base64 = Invoice.pdf({html: html, id: marcado}, function () {
                         $window.open("data:pdf;base64, " + $scope.base64.pdf, marcado);
                     });
                 });

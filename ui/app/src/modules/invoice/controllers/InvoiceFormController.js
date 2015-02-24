@@ -98,9 +98,8 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         }
         $scope.save = function (status) {
             //  $validation.validate($scope, 'invoice').success(function () {
+            console.log(status);
             if ($scope.invoice.InvoiceProducts.length > 0) {
-                console.log('ok');
-                console.log($scope.invoice.Id);
                 if (!_.isUndefined($scope.invoice.Id) && $scope.invoice.Id) {
                     $scope.invoice.Status = status;
 

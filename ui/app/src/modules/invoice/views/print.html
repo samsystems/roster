@@ -1,7 +1,7 @@
 <!-- Page header -->
 <div class="page-heading animated fadeInDownBig" data-ng-controller="InvoicePrintController">
     <h1>Invoice Detail Print</h1>
-    <a href="#/sale/index" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+    <a href="#/sales/index" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
     <button class="btn btn-default" data-ng-click="printInvoice('printHTML')"><i class="fa fa-print"></i> PRINT</button>
 </div>
 <div class="row" id="printHTML">
@@ -11,13 +11,13 @@
                 <p style="font-size: 30px">INVOICE</p>
             </div>
             <div class="pull-right">
-                <p>{{invoice.customer.Name}}
+                <p>{{invoice.Customer.Name}}
                     <br/>
-                    {{invoice.customer.Address}}
+                    {{invoice.Customer.Address}}
                     <br/>
-                    {{invoice.customer.city}}, {{invoice.customer.Zipcode}}
+                    {{invoice.Customer.city}}, {{invoice.customer.Zipcode}}
                     <br/>
-                    {{invoice.customer.country.Name}}
+                    {{invoice.Customer.Country.Name}}
                 </p>
             </div>
         </div>
@@ -30,13 +30,13 @@
                         <p><strong>Invoice To</strong></p>
 
                         <p>
-                            {{invoice.customer.Name}}
+                            {{invoice.Customer.Name}}
                             <br/>
-                            {{invoice.customer.Address}}
+                            {{invoice.Customer.Address}}
                             <br/>
-                            {{invoice.customer.city}}, {{invoice.customer.Zipcode}}
+                            {{invoice.Customer.City}}, {{invoice.Customer.Zipcode}}
                             <br/>
-                            {{invoice.customer.country.Name}}
+                            {{invoice.Customer.Country.Name}}
                         </p>
                     </td>
                     <td class="col-lg-2" style="text-align: right">
@@ -69,16 +69,16 @@
                                 {{key +1 }}
                             </td>
                             <td style="cursor:pointer">
-                                {{item.product.name}}
+                                {{item.Product.Name}}
                             </td>
                             <td style="cursor:pointer; text-align: center">
-                                {{item.price}}
+                                {{item.Product.Price}}
                             </td>
                             <td style="cursor:pointer; text-align: center">
-                                {{item.quantity}}
+                                {{item.Quantity}}
                             </td>
                             <td style="cursor:pointer; text-align: center">
-                                {{item.quantity*item.price}}
+                                {{item.Quantity * item.Product.Price | currency: 'USD'}}
                             </td>
                         </tr>
                         </tbody>
@@ -98,16 +98,16 @@
             <div class="pull-right">
                 <table style="border-collapse: separate; border-spacing: 4px; text-align: right; line-height: 2.2;width: 300px">
                     <tr style="background-color: #f4f4f4">
-                        <td>Sub - Total amount: $ {{invoice.subTotal}}</td>
+                        <td>Sub - Total amount: $ {{invoice.SubTotal}}</td>
                     </tr>
                     <tr style="background-color: #f4f4f4">
                         <td>Discount: ----</td>
                     </tr>
                     <tr style="background-color: #f4f4f4">
-                        <td>Tax({{invoice.tax}}%): $ {{invoice.totalTax}}</td>
+                        <td>Tax({{invoice.Tax}}%): $ {{invoice.TotalTax}}</td>
                     </tr>
                     <tr style="background-color: #f4f4f4">
-                        <td><strong>Grand Total: $ {{invoice.amount}}</strong></td>
+                        <td><strong>Grand Total: $ {{invoice.Amount}}</strong></td>
                     </tr>
                 </table>
             </div>

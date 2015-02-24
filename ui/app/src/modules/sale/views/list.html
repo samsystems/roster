@@ -129,7 +129,7 @@
                                                 </div>
                                             </td>
                                             <td>INV-{{invoice.OrderNumber}}</td>
-                                            <td><a href="{{'#/customer/view/' + invoice.Customer.Id}}">{{invoice.Customer.Name}}</a></td>
+                                            <td><a href="{{'#/customers/view/' + invoice.Customer.Id}}">{{invoice.Customer.Name}}</a></td>
                                             <td><span class="label label-{{class[invoice.Status]}}">{{invoice.Status}}</span></td>
                                             <td>{{invoice.Customer.City}}</td>
                                             <td><strong class="text-primary">{{invoice.Amount | currency: currency}}</strong></td>

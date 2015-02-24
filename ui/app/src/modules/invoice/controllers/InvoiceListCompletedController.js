@@ -3,11 +3,11 @@
 angular.module('invoice').controller('InvoiceListCompletedController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice','ngTableParams','$filter','$q', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams,$filter, $q) {
 
     $scope.page = 1;
-    $scope.searchInvoice = '';
+    $scope.search = {invoice: ""};
 
     $scope.limitInPage = config.application.limitInPage;
 
-    $scope.search = function (term) {
+    $scope.search = function () {
         $scope.invoiceTable.reload()
     };
 
@@ -21,8 +21,8 @@ angular.module('invoice').controller('InvoiceListCompletedController', ['$scope'
     }, {
         total: 0, // length of data
         getData: function($defer, params) {
-            var invoices = Invoice.$search({status:'completed',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
-            $scope.total = Invoice.count("completed",$scope.search.invoice);
+            var invoices = Invoice.$search({status:'completed',keyword: $scope.searchInvoice, page: params.page(), sort: params.orderBy()});
+            $scope.total = Invoice.count("completed",$scope.searchInvoice);
 
             $q.all([invoices.$asPromise(), $scope.total]).then(function (data) {
                 params.total(data[1].data.total);
@@ -67,11 +67,12 @@ angular.module('invoice').controller('InvoiceListCompletedController', ['$scope'
                     count++;
                 }
             });
+        console.log(marcado[0])
         if (marcado.length > 0) {
             for (var i = 0; i < marcado.length; i++) {
                 $scope.invoice = Invoice.$find(marcado[i]).$then(function (response) {
                     $scope.invoice.Status = 'paid';
-                    $scope.invoice.$update({id: $scope.invoice.Id}, function (response) {
+                    $scope.invoice.$save().$then(function (response) {
                         $rootScope.$broadcast('invoice::updated');
                         $rootScope.$broadcast('invoice::totalTab');
                     });

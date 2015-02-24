@@ -16,24 +16,14 @@
                             <div class="data-table-toolbar">
                                 <div class="row">
                                     <div class="col-sm-5">
-                                        <input type="text" data-ng-model="$parent.searchInvoice" class="form-control" placeholder="Search ..."/>
+                                        <form role="form" ng-submit="search(searchInvoice)">
+                                            <input type="text" data-ng-model="searchInvoice" class="form-control"
+                                                   placeholder="Search ..."/>
+                                        </form>
                                     </div>
                                     <div class="col-sm-4">
-                                        <a data-toggle="tooltip" title="Refresh" class="btn btn-default" data-ng-click="$parent.refresh()"><i
+                                        <a data-toggle="tooltip" title="Refresh" class="btn btn-default" data-ng-click="refresh()"><i
                                                 class="fa fa-refresh"></i></a>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="pull-right" data-ng-if="invoices.length > 0">
-                                            <span class="paging-status">{{1+((page-1)*limitInPage)}} - {{(invoices.length < limitInPage) ? total.count : (((page-1)*limitInPage)+limitInPage) }} of {{total.count}}</span>
-
-                                            <div class="btn-group">
-                                                <a class="btn btn-default" data-ng-click="setPage(page-1)"
-                                                   data-ng-class="{disabled: page == 1}"><i class="fa fa-chevron-left"></i></a>
-                                                <a class="btn btn-default" data-ng-click="setPage(page+1)"
-                                                   data-ng-class="{disabled: page >= (total.count/limitInPage)}"><i
-                                                        class="fa fa-chevron-right"></i></a>
-                                            </div>
-                                        </div>
                                     </div>
                                     <!-- End div .col-sm-3 -->
                                 </div>

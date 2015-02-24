@@ -3,11 +3,11 @@
 angular.module('invoice').controller('InvoiceListPaidController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice','ngTableParams','$filter','$q', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams,$filter, $q) {
 
     $scope.page = 1;
-    $scope.searchInvoice = '';
+    $scope.search = {invoice: ""};
 
     $scope.limitInPage = config.application.limitInPage;
 
-    $scope.search = function (term) {
+    $scope.search = function () {
         $scope.invoiceTable.reload()
     };
 
@@ -21,8 +21,8 @@ angular.module('invoice').controller('InvoiceListPaidController', ['$scope', '$r
     }, {
         total: 0, // length of data
         getData: function($defer, params) {
-            var invoices = Invoice.$search({status:'paid',keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
-            $scope.total = Invoice.count("paid",$scope.search.invoice);
+            var invoices = Invoice.$search({status:'paid',keyword: $scope.searchInvoice, page: params.page(), sort: params.orderBy()});
+            $scope.total = Invoice.count("paid",$scope.searchInvoice);
 
             $q.all([invoices.$asPromise(), $scope.total]).then(function (data) {
                 params.total(data[1].data.total);

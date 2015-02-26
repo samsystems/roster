@@ -63,4 +63,8 @@ func RegisterHandlers(r *mux.Router) {
 
 	vendorController := controllers.VendorController{}
 	vendorController.RegisterHandlers(router)
+	
+	industryController := controllers.IndustryController{}
+	industryController.RegisterHandlers(router)
+
 }

@@ -1,12 +1,24 @@
 'use strict';
 
-angular.module('common').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'toaster',
-    function ($scope, $window, $state, AuthenticationService, User, toaster) {
+angular.module('common').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Industry', 'toaster', 'WizardHandler',
+    function ($scope, $window, $state, AuthenticationService, User, Industry, toaster, WizardHandler) {
 
     $scope.credentials = {};
     var userResource = User.resource;
 
-    $scope.login = function (credentials) {
+        $scope.step = {
+            register1: 'register1',
+            register2: 'register2'
+        };
+
+        $scope.industries         = Industry.$search();
+
+        $scope.$goTo = function (step) {
+            WizardHandler.wizard().goTo(step);
+        };
+
+
+        $scope.login = function (credentials) {
 
         if (credentials.username !== undefined && credentials.password !== undefined) {
 
@@ -55,4 +67,49 @@ angular.module('common').controller('RegisterController', ['$scope', '$window', 
         }
     };
 
+        $scope.toStepTwo = function () {
+            $scope.$goTo($scope.step.register2);
+        };
+
+        $scope.toStepOne = function () {
+            $scope.$goTo($scope.step.register1);
+        };
+
+
+        $scope.save = function () {
+                if (!_.isUndefined($scope.user.Id) && $scope.user.Id) {
+
+                    $scope.user.$save().$then(function(response) {
+                        $rootScope.$broadcast('user::updated');
+                        toaster.pop('success', 'User Updated ', 'You have been successfully updated a user.')
+                        $scope.$goTo($scope.step.list);
+                    }, function () {
+                        toaster.pop('error', 'Error', 'Something went wrong a new User could not be created');
+                    });
+                } else {
+
+                    var user = User.$build();
+                   /* invoice.Customer = {'Id':$scope.invoice.Customer.Id};
+                    invoice.CustomerShipping = {'Id':$scope.invoice.CustomerShipping.Id};
+                    // invoice.Date = $scope.invoice.Date;
+                    invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
+                    //  invoice.DeliveryDate = $scope.invoice.DeliveryDate;
+
+                    invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
+                    invoice.Currency = $scope.invoice.Currency;
+                    invoice.InvoiceProducts = $scope.invoice.InvoiceProducts;
+                    invoice.Status = status;
+*/
+                    user.$save().$then(function (response) {
+                        $rootScope.$broadcast('user::updated');
+                        toaster.pop('success', 'User Created', 'You have successfully created a new user.');
+                        $scope.$goTo($scope.step.list);
+                    }, function () {
+                        toaster.pop('error', 'Error', 'Something went wrong a new User could not be created');
+                    });
+                }
+            //   }).error(function () {
+            //       toaster.pop('error', 'Error', 'Complete the required entry fields.');
+            //    });
+        };
 }]);

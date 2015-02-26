@@ -1,39 +1,260 @@
-<div class="container">
-    <!-- Begin Register Page -->
+<div class="container" data-ng-controller="RegisterController">
+<div id="RegisterWizardContainer" class="wizard">
+<wizard data-hide-indicators="true">
+<wz-step data-title="{{step.register1}}">
     <div class="full-content-center animated fadeInDownBig">
         <a href="#fakelink"><img src="images/logo.png" class="logo" alt="Logo"></a>
+
         <div class="login-wrap">
             <div class="box-info">
-                <h2 class="text-center"><strong>Resgiter</strong> new account</h2>
+                <h2 class="text-center"><strong>Lets get started</strong></h2>
+
+                <p style="text-align: center">Signing up for Roster is fast and free - no commitments or
+                    long term contracts. </p>
 
                 <form role="form">
-                    <div class="form-group login-input">
-                        <i class="fa fa-user overlay"></i>
-                        <input type="text" class="form-control text-input" placeholder="Your name">
-                    </div>
-                    <div class="form-group login-input">
-                        <i class="fa fa-envelope overlay"></i>
-                        <input type="email" class="form-control text-input" placeholder="Your email">
-                    </div>
-                    <div class="form-group login-input">
-                        <i class="fa fa-sign-in overlay"></i>
-                        <input type="text" class="form-control text-input" placeholder="Username">
-                    </div>
-                    <div class="form-group login-input">
-                        <i class="fa fa-key overlay"></i>
-                        <input type="password" class="form-control text-input" placeholder="Password">
-                    </div>
-                    <div class="form-group login-input">
-                        <i class="fa fa-eye overlay"></i>
-                        <input type="password" class="form-control text-input" placeholder="Re-Password">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'First Name' | translate}}</label>
+                                    <input type="text" data-ng-model="user.FirstName" class="form-control text-input"
+                                           placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Last Name' | translate}}</label>
+                                    <input type="text" data-ng-model="user.LastName" class="form-control text-input"
+                                           placeholder="Last Name">
+                                </div>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-success btn-block"><i class="fa fa-rocket"></i> Register</button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Enter your email' |
+                                    translate}}</label>
+
+                                    <input type="email" data-ng-model="user.Email" class="form-control text-input"
+                                           placeholder="me@example.com">
+                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Confirm your email' |
+                                    translate}}</label>
+                                    <input type="email" data-ng-model="user.ConfirmEmail"
+                                           class="form-control text-input"
+                                           placeholder="me@example.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Create a password' |
+                                    translate}}</label>
+                                    <input type="password" data-ng-model="user.Password"
+                                           class="form-control text-input"
+                                           placeholder="Password">
+                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Confirm your password' |
+                                    translate}}</label>
+                                    <input type="password" data-ng-model="user.ConfirmPassword"
+                                           class="form-control text-input"
+                                           placeholder="Re-Password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                         style="border-top: 1px solid #000; border-bottom: thin solid #000; padding: 20px 0 20px 0;">
+                        <div class="col-md-2  pull-left">
+                            <button class="btn btn-default" data-ng-click="toStepOne()"><i class="fa fa-plus"></i>
+                                {{'Back to
+                                login' | translate}}
+                            </button>
+
+                        </div>
+                        <div class="col-md-2  pull-right">
+                            <button class="btn btn-default" data-ng-click="toStepTwo()"><i class="fa fa-plus"></i>
+                                {{'Continue' |
+                                translate}}
+                            </button>
+                        </div>
+                    </div>
                 </form>
-
             </div>
-            <p class="text-center"><a href="#/login"><i class="fa fa-sign-in"></i> Back to login</a></p>
+
         </div>
     </div>
-    <!-- End Register Page -->
+</wz-step>
+<wz-step data-title="{{step.register2}}">
+    <div class="full-content-center animated fadeInDownBig">
+        <a href="#fakelink"><img src="images/logo.png" class="logo" alt="Logo"></a>
+
+        <div class="login-wrap">
+            <div class="box-info">
+                <h2 class="text-center"><strong>Tell us about your business</strong></h2>
+
+                <p style="text-align: center">Signing up for Roster is fast and free - no commitments or
+                    long term contracts. </p>
+
+                <form role="form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Business Name' | translate}}</label>
+                                    <input type="text" data-ng-model="user.BusinessName"
+                                           class="form-control text-input"
+                                           placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Employer Identification Number' |
+                                    translate}}</label>
+                                    <input type="text" data-ng-model="user.EmployerIdNum"
+                                           class="form-control text-input"
+                                           placeholder="Last Name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Industry' |
+                                    translate}}</label>
+                                <select class="form-control" data-ng-model="user.Industry.Id" data-ng-options ="industry.Id as industry.Description for industry in industries"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'How do you plan to use Roster?' |
+                                    translate}}</label>
+                                    <input type="email" data-ng-model="user.ConfirmEmail"
+                                           class="form-control text-input"
+                                           placeholder="me@example.com">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'First Name' | translate}}</label>
+                                    <input type="text" data-ng-model="user.FirstName" class="form-control text-input"
+                                           placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Last Name' | translate}}</label>
+                                    <input type="text" data-ng-model="user.LastName" class="form-control text-input"
+                                           placeholder="Last Name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group login-input">
+                                <label class="col-md-16 control-label">{{'Address' |
+                                    translate}}</label>
+                                <input type="text" data-ng-model="user.StreetAddress" class="form-control text-input"
+                                       placeholder="Street Address">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group login-input">
+                                <input type="text" data-ng-model="user.AptUnit" class="form-control text-input"
+                                       placeholder="Apt/Unit">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'City' | translate}}</label>
+                                    <input type="text" data-ng-model="user.City" class="form-control text-input"
+                                           placeholder="City">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'State' | translate}}</label>
+                                    <input type="text" data-ng-model="user.State" class="form-control text-input"
+                                           placeholder="State">
+                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Zipcode' | translate}}</label>
+                                    <input type="text" data-ng-model="user.ZipCode" class="form-control text-input"
+                                           placeholder="Zipcode">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'DOB' | translate}}</label>
+                                    <input type="text" data-ng-model="user.Dob" class="form-control text-input"
+                                           placeholder="DOB">
+                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Last 4 digit of SSN' | translate}}</label>
+                                    <input type="text" data-ng-model="user.DigitSsn" class="form-control text-input"
+                                           placeholder="SSN">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group login-input">
+                                <label class="control-label">{{'Phone' | translate}}</label>
+                                    <input type="text" data-ng-model="user.Phone" class="form-control text-input"
+                                           placeholder="Phone">
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                         style="border-top: 1px solid #000; border-bottom: thin solid #000; padding: 20px 0 20px 0;">
+
+                        <div class="col-md-2 pull-left">
+                            <button class="btn btn-default" data-ng-click="toStepOne()"><i class="fa fa-plus"></i>
+                                {{'Back to
+                                step 1' | translate}}
+                            </button>
+
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <button class="btn btn-default" data-ng-click="save()"><i class="fa fa-plus"></i>
+                                {{'Finish' |
+                                translate}}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</wz-step>
+</wizard>
 </div>
+</div>
+
+
+<!-- Begin Register Page -->

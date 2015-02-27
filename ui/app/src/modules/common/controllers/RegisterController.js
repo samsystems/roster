@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('common').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Industry', 'toaster', 'WizardHandler',
-    function ($scope, $window, $state, AuthenticationService, User, Industry, toaster, WizardHandler) {
-
+angular.module('common').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Industry', 'State', 'toaster', 'WizardHandler',
+    function ($scope, $window, $state, AuthenticationService, User, Industry, State, toaster, WizardHandler) {
+        $scope.user = {};
     $scope.credentials = {};
-    var userResource = User.resource;
+
+        $scope.states    = State.$search();
 
         $scope.step = {
             register1: 'register1',
@@ -77,7 +78,7 @@ angular.module('common').controller('RegisterController', ['$scope', '$window', 
 
 
         $scope.save = function () {
-                if (!_.isUndefined($scope.user.Id) && $scope.user.Id) {
+                if (!_.isUndefined($scope.user) && $scope.user.Id) {
 
                     $scope.user.$save().$then(function(response) {
                         $rootScope.$broadcast('user::updated');
@@ -89,21 +90,26 @@ angular.module('common').controller('RegisterController', ['$scope', '$window', 
                 } else {
 
                     var user = User.$build();
-                   /* invoice.Customer = {'Id':$scope.invoice.Customer.Id};
-                    invoice.CustomerShipping = {'Id':$scope.invoice.CustomerShipping.Id};
-                    // invoice.Date = $scope.invoice.Date;
-                    invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
-                    //  invoice.DeliveryDate = $scope.invoice.DeliveryDate;
+                    user.FirstName = $scope.user.FirstName;
+                    user.LastName = $scope.user.LastName;
+                    user.Email = $scope.user.Email;
+                    user.Password = $scope.user.Password;
+                    user.Business = $scope.user.BusinessName;
+                    user.EmployerNumber = $scope.user.EmployerNumber;
+                    user.Industry = $scope.user.Industry;
+                    user.Address = $scope.user.StreetAddress;
+                    user.Apto = $scope.user.AptUnit;
+                    user.City = $scope.user.City;
+                    user.State = $scope.user.State;
+                    user.Zipcode = $scope.user.Zipcode;
+                  //  user.DOB = $scope.user.DOB;
+                    user.SSN = $scope.user.SSN;
+                    user.Phone = $scope.user.Phone;
 
-                    invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
-                    invoice.Currency = $scope.invoice.Currency;
-                    invoice.InvoiceProducts = $scope.invoice.InvoiceProducts;
-                    invoice.Status = status;
-*/
+
                     user.$save().$then(function (response) {
-                        $rootScope.$broadcast('user::updated');
                         toaster.pop('success', 'User Created', 'You have successfully created a new user.');
-                        $scope.$goTo($scope.step.list);
+                        $state.go("login");
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new User could not be created');
                     });

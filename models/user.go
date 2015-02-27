@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"code.google.com/p/go-uuid/uuid"
 	"github.com/astaxie/beego/orm"
 	"time"
 )
@@ -11,8 +12,8 @@ func init() {
 }
 
 type User struct {
-	Id                     string `orm:"pk"`
-	Country                string
+	Id                     string        `orm:"pk"`
+	Country                *Country      `orm:"rel(one)"`
 	Organization           *Organization `orm:"rel(one)"`
 	Creator                *User         `orm:"rel(one)"`
 	Updater                *User         `orm:"rel(one)"`
@@ -22,37 +23,41 @@ type User struct {
 	DateOfBirth            string
 	Gender                 string
 	Race                   string
-	SSN                    string `orm:"column(ssn)"`
+	SSN                    string 		 `orm:"column(ssn)"`
 	DriverLicense          string
-	Address1               string
+	Address1               string 		 `json:"Address"`
 	Address2               string
 	Address3               string
+	Apto                   string
 	City                   string
-	State                  string
-	Postal                 string
-	BirthPlace             string
-	Phone1                 string
+	State                  *State  		 `orm:"rel(one)"`
+	Postal                 string  		 `json:"Zipcode"`
+	BirthPlace             string 		 `json:"DOB"`
+	Phone1                 string  		 `json:"Phone"`
 	Phone2                 string
 	Username               string
 	Password               string
 	Email                  string
+	Business               string
+	EmployerNumber         string
 	Status                 bool
 	Locked                 bool
 	LockedReason           string
 	LockedBy               string
-	LockedDate             time.Time `orm:"auto_now_add;type(datetime)"`
+	LockedDate             time.Time     `orm:"auto_now_add;type(datetime)"`
 	LockedTimeZone         int
-	PasswordExpirationDate time.Time `orm:"auto_now_add;type(datetime)"`
+	PasswordExpirationDate time.Time     `orm:"auto_now_add;type(datetime)"`
 	Token                  string
-	TokenExpirationDate    time.Time `orm:"auto_now_add;type(datetime)"`
-	Created                time.Time `orm:"auto_now_add;type(datetime)"`
+	TokenExpirationDate    time.Time     `orm:"auto_now_add;type(datetime)"`
+	Created                time.Time     `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone        int
-	Updated                time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated                time.Time 	 `orm:"auto_now_add;type(datetime)"`
 	UpdatedTimeZone        int
 	isActive               bool
 	Deleted                bool
-	Group                  *UserGroup `orm:"rel(one)"`
-	Company                *Company   `orm:"rel(one)"`
+	Group                  *Group 		 `orm:"rel(one)"`
+	Company                *Company      `orm:"rel(one)"`
+	Industry               *Industry     `orm:"rel(one)"`
 }
 
 type Token struct {
@@ -62,8 +67,11 @@ type Token struct {
 
 func AddUser(u User) string {
 	o := orm.NewOrm()
-	o.Insert(&u)
-
+	u.Id = uuid.New()
+	_, err :=o.Insert(&u)
+	if err != nil {
+		panic(err)
+	}
 	return u.Id
 }
 

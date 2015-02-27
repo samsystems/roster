@@ -21,7 +21,7 @@ func init() {
 	orm.RegisterModel(new(Organization))
 }
 
-func OrganizationGet(uid string) (*Organization, error) {
+func GetOrganization(uid string) (*Organization, error) {
 	or := Organization{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&or)

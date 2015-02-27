@@ -25,7 +25,7 @@ func init() {
 	orm.RegisterModel(new(Country))
 }
 
-func CountryGet(uid string) (*Country, error) {
+func GetCountry(uid string) (*Country, error) {
 	c := Country{Iso: uid}
 	o := orm.NewOrm()
 	err := o.Read(&c)
@@ -42,7 +42,7 @@ func GetAllCountries() []*Country {
 	return countries
 }
 
-func CountryGetByKeyword(keyword string, page int, order string, count bool, limit int) ([]Country, interface{}) {
+func GetCountryByKeyword(keyword string, page int, order string, count bool, limit int) ([]Country, interface{}) {
 	if limit < 0 {
 		limit = COUNTRY_LIMIT
 	}

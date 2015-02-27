@@ -13,6 +13,7 @@ import (
 
 	"github.com/samsystems/roster/handler"
 	"github.com/samsystems/roster/models"
+	"log"
 )
 
 type UserController struct {
@@ -23,6 +24,7 @@ func (controller *UserController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/user", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/user", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/user", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}/notifications", handler.New(controller.GetAllUserNotifications)).Methods("GET")
 }
@@ -42,7 +44,35 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 
 	var user models.User
 
-	json.Unmarshal(data, &user)
+	err1:= json.Unmarshal(data, &user)
+	if err1 != nil {
+		log.Println("error:", err1)
+	}
+	userSession, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user.Creator = userSession
+	user.Updater = userSession
+	if(user.State== nil){
+		state, _ := models.GetState("6d76fc5b-80e8-11e4-9884-b8ac6f58483b")
+		user.State = state
+	}
+	if(user.Organization== nil){
+		organization, _ := models.GetOrganization("11111111-1111-1111-1111-111111111111") 
+		user.Organization = organization
+	}
+	if(user.Company== nil){
+		company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
+		user.Company = company
+	}
+	if(user.Group== nil){
+		group, _ := models.GetGroup("3a12ec14-24df-4926-8b5a-bbd5ff8f2a97") 
+		user.Group = group
+	}
+	
+	if(user.Country== nil){
+		country, _ := models.GetCountry("US") 
+		user.Country = country
+	}
+
 	models.AddUser(user)
 
 	return user, nil

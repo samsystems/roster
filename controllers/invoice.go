@@ -150,8 +150,8 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	invoice.InvoiceProducts = nil
 
 	// TODO: temporal
-	invoice.Date = time.Now()
-	invoice.DeliveryDate = time.Now()
+	//invoice.Date = time.Now()
+	//invoice.DeliveryDate = time.Now()
 
 	var subTotal float64 = 0
 	
@@ -274,8 +274,8 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.InvoiceProducts = nil
 
 	// TODO: temporal
-	invoice.Date = time.Now()
-	invoice.DeliveryDate = time.Now()
+//	invoice.Date = time.Now()
+//	invoice.DeliveryDate = time.Now()
 
 	var subTotal float64 = 0
 	for i := 0; i < len(invoiceProducts); i++ {

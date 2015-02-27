@@ -23,7 +23,7 @@ func init() {
 	orm.RegisterModel(new(State))
 }
 
-func StateGet(uid string) (*State, error) {
+func GetState(uid string) (*State, error) {
 	c := State{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&c)
@@ -40,7 +40,7 @@ func GetAllStates() []*State {
 	return states
 }
 
-func StateGetByKeyword(keyword string, page int, order string, count bool, limit int) ([]State, interface{}) {
+func GetStateByKeyword(keyword string, page int, order string, count bool, limit int) ([]State, interface{}) {
 	if limit < 0 {
 		limit = STATE_LIMIT
 	}

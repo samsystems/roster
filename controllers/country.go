@@ -31,7 +31,7 @@ func (controller *CountryController) RegisterHandlers(r *mux.Router) {
 func (c *CountryController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uid := v["uid"]
 
-	country, err := models.CountryGet(uid)
+	country, err := models.GetCountry(uid)
 	if err != nil {
 		// TODO: improve error
 		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
@@ -55,7 +55,7 @@ func (c *CountryController) GetAll(context appengine.Context, writer http.Respon
 // @router /search/:keyword/:page/:order [get]
 func (c *CountryController) GetByKeyWord(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	page, _ := strconv.Atoi(v["page"])
-	countries, _ := models.CountryGetByKeyword(v["keyword"], page, v["order"], false, -1)
+	countries, _ := models.GetCountryByKeyword(v["keyword"], page, v["order"], false, -1)
 	return countries, nil
 }
 
@@ -64,6 +64,6 @@ func (c *CountryController) GetByKeyWord(context appengine.Context, writer http.
 // @Success 200 {int} int
 // @router /find-count/:keyword [get]
 func (c *CountryController) GetCountByKeyWord(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	_, total := models.CountryGetByKeyword(v["keyword"], 1, "notSorting", true, -1)
+	_, total := models.GetCountryByKeyword(v["keyword"], 1, "notSorting", true, -1)
 	return total, nil
 }

@@ -31,7 +31,7 @@ func (controller *IndustryController) RegisterHandlers(r *mux.Router) {
 func (c *IndustryController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uid := v["uid"]
 
-	industry, err := models.CountryGet(uid)
+	industry, err := models.GetCountry(uid)
 	if err != nil {
 		// TODO: improve error
 		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}

@@ -31,7 +31,7 @@ func (controller *StateController) RegisterHandlers(r *mux.Router) {
 func (c *StateController) Get(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uid := v["uid"]
 
-	state, err := models.StateGet(uid)
+	state, err := models.GetState(uid)
 	if err != nil {
 		// TODO: improve error
 		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
@@ -55,7 +55,7 @@ func (c *StateController) GetAll(context appengine.Context, writer http.Response
 // @router /search/:keyword/:page/:order [get]
 func (c *StateController) GetByKeyWord(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	page, _ := strconv.Atoi(v["page"])
-	states, _ := models.StateGetByKeyword(v["keyword"], page, v["order"], false, -1)
+	states, _ := models.GetStateByKeyword(v["keyword"], page, v["order"], false, -1)
 
 	return states, nil
 }
@@ -65,7 +65,7 @@ func (c *StateController) GetByKeyWord(context appengine.Context, writer http.Re
 // @Success 200 {int} int
 // @router /find-count/:keyword [get]
 func (c *StateController) Count(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	_, total := models.StateGetByKeyword(v["keyword"], 1, "notSorting", true, -1)
+	_, total := models.GetStateByKeyword(v["keyword"], 1, "notSorting", true, -1)
 
 	return total, nil
 }

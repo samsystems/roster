@@ -18,7 +18,7 @@ angular.module('config',[]).constant('config', {
         outputFormatDate: 'MMM D, YYYY',
         inputFormatDateTime: 'MMM D, YYYY HH:mm',
         inputFormatDate: 'MMM D, YYYY',
-        isoFormat: 'YYYY-MM-DDTHH:mm:ssZZ'
+        isoFormat: 'YYYY-MM-DDTHH:mm:ss\Z'
     },
     menu: [
         {

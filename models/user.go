@@ -20,7 +20,7 @@ type User struct {
 	FirstName              string
 	LastName               string
 	MiddleName             string
-	DateOfBirth            string
+	Dob                    time.Time     `orm:"type(datetime)" json:"DOB"`
 	Gender                 string
 	Race                   string
 	SSN                    string 		 `orm:"column(ssn)"`
@@ -32,7 +32,7 @@ type User struct {
 	City                   string
 	State                  *State  		 `orm:"rel(one)"`
 	Postal                 string  		 `json:"Zipcode"`
-	BirthPlace             string 		 `json:"DOB"`
+	BirthPlace             string 		 
 	Phone1                 string  		 `json:"Phone"`
 	Phone2                 string
 	Username               string
@@ -67,6 +67,7 @@ type Token struct {
 
 func AddUser(u User) string {
 	o := orm.NewOrm()
+	
 	u.Id = uuid.New()
 	_, err :=o.Insert(&u)
 	if err != nil {

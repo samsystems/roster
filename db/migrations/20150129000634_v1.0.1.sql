@@ -1210,7 +1210,7 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `country` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country_id` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
   `avatar_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `organization_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1218,7 +1218,7 @@ CREATE TABLE `user` (
   `first_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `last_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `middle_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date_of_birth` date NOT NULL,
+  `dob` datetime DEFAULT NULL,
   `gender` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
   `race` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ssn` varchar(11) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1258,7 +1258,7 @@ CREATE TABLE `user` (
   `industry_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_8D93D649F85E0677` (`username`),
-  KEY `IDX_8D93D6495373C966` (`country`),
+  KEY `IDX_8D93D6495373C966` (`country_id`),
   KEY `IDX_8D93D64986383B10` (`avatar_id`),
   KEY `IDX_8D93D64932C8A3DE` (`organization_id`),
   KEY `IDX_8D93D64961220EA6` (`creator_id`),
@@ -1267,28 +1267,28 @@ CREATE TABLE `user` (
   KEY `IDX_8D93D649FE54D947` (`group_id`),
   KEY `IDX_8D93D649979B1AD6` (`company_id`),
   KEY `IDX_8D93D649979B1AD4` (`state_id`),
-  KEY `industry_id` (`industry_id`)
-  CONSTRAINT `FK_8D93D649979B1AD7` FOREIGN KEY (`industry_id`) REFERENCES `industry` (`id`),
+  KEY `industry_id` (`industry_id`),
   CONSTRAINT `FK_8D93D64932C8A3DE` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
-  CONSTRAINT `FK_8D93D6495373C966` FOREIGN KEY (`country`) REFERENCES `country` (`iso`),
+  CONSTRAINT `FK_8D93D6495373C966` FOREIGN KEY (`country_id`) REFERENCES `country` (`iso`),
   CONSTRAINT `FK_8D93D64961220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_8D93D64986383B10` FOREIGN KEY (`avatar_id`) REFERENCES `document` (`id`),
   CONSTRAINT `FK_8D93D649979B1AD6` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
+  CONSTRAINT `FK_8D93D649979B1AD7` FOREIGN KEY (`industry_id`) REFERENCES `industry` (`id`),
   CONSTRAINT `FK_8D93D649E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_8D93D649E37ECFB9` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
-  CONSTRAINT `FK_8D93D649FE54D947` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`);
+  CONSTRAINT `FK_8D93D649FE54D947` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 
-INSERT INTO `user` (`id`, `country`, `avatar_id`, `organization_id`, `creator_id`, `updater_id`, `first_name`, `last_name`, `middle_name`, `date_of_birth`, `gender`, `race`, `ssn`, `driver_license`, `address1`, `address2`, `address3`, `apto`, `city`, `state_id`, `postal`, `birth_place`, `phone1`, `phone2`, `username`, `password`, `email`, `business`, `employer_number`, `status`, `locked`, `locked_reason`, `locked_by`, `locked_date`, `locked_time_zone`, `password_expiration_date`, `token`, `token_expiration_date`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `is_active`, `deleted`, `group_id`, `company_id`, `industry_id`) 
+INSERT INTO `user` (`id`, `country_id`, `avatar_id`, `organization_id`, `creator_id`, `updater_id`, `first_name`, `last_name`, `middle_name`, `dob`, `gender`, `race`, `ssn`, `driver_license`, `address1`, `address2`, `address3`, `apto`, `city`, `state_id`, `postal`, `birth_place`, `phone1`, `phone2`, `username`, `password`, `email`, `business`, `employer_number`, `status`, `locked`, `locked_reason`, `locked_by`, `locked_date`, `locked_time_zone`, `password_expiration_date`, `token`, `token_expiration_date`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `is_active`, `deleted`, `group_id`, `company_id`, `industry_id`)
 VALUES
-	('5fbec591-acc8-49fe-a44e-46c59cae99f9', 'US', NULL, NULL, NULL, NULL, 'Rolian', 'Ruiz', NULL, '1985-12-08', 'M', NULL, NULL, 'R2345', '1000 Parkview Dr', 'Apt #824', NULL, '', 'Hallandale Beach', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '33009', NULL, '7863200059', NULL, 'rruiz', '465b5f5f02f24eaf0147605dd5c836f59ebc5270', 'rolian85@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-12-07', '2d676d397bd250dcc7e0ed8f4bfdc527', '2014-12-16 06:16:07', '2013-06-17 21:23:41', 70, '2014-12-15 22:16:07', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
-	('d4af5216-9c72-11e4-a966-24be4c436c53', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Magento', 'User', NULL, '2008-11-29', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'system', '90457667694c7a464a0399f8df962c943c81579c', 'test@samsystems.io', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', 'b60f158e2cdc20cd53e4be254b403acd', '2040-01-15 11:12:45', '2014-10-06 19:43:05', 151, '2015-01-15 03:12:45', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
-('fde7b2da-4d90-11e4-9918-98407aa1b8b7', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Mario', 'Cardenas', NULL, '2008-11-29', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'mario', '90457667694c7a464a0399f8df962c943c81579c', 'rolian85@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', '16652a8661ff1f032cfdcecb4d979b32', '2014-11-10 08:33:40', '2014-10-06 19:43:05', 151, '2014-11-10 00:33:40', NULL, 1, 0, '3a12ec14-24df-4926-8b5a-bbd5ff8f2a97', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
-('fec7c94c-9638-11e4-96b1-6ed3d8c13ef2', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Richard', 'Gonzalez', NULL, '2008-11-29', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'richard', '90457667694c7a464a0399f8df962c943c81579c', 'damnpoet@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', '7a4913d564eda8cf1b1266fec9ef0d25', '2015-01-15 22:35:54', '2014-10-06 19:43:05', 151, '2015-01-15 14:35:54', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
-('fec7c94c-9638-11e4-96b1-6ed3d8c13ef3', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Joe', 'Borrero', NULL, '2008-11-29', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'joe', '51f836aa96db69b491ace1a154bb2fa591ec8537', 'jlborrero@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', '7a4913d564eda8cf1b1266fec9ef0d25', '2015-01-15 22:35:54', '2014-10-06 19:43:05', 151, '2015-01-15 14:35:54', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL);
+('5fbec591-acc8-49fe-a44e-46c59cae99f9', 'US', NULL, NULL, NULL, NULL, 'Rolian', 'Ruiz', NULL, '1985-12-08 00:00:00', 'M', NULL, NULL, 'R2345', '1000 Parkview Dr', 'Apt #824', NULL, '', 'Hallandale Beach', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '33009', NULL, '7863200059', NULL, 'rruiz', '465b5f5f02f24eaf0147605dd5c836f59ebc5270', 'rolian85@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-12-07', '2d676d397bd250dcc7e0ed8f4bfdc527', '2014-12-16 06:16:07', '2013-06-17 21:23:41', 70, '2014-12-15 22:16:07', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
+('d4af5216-9c72-11e4-a966-24be4c436c53', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Magento', 'User', NULL, '2008-11-29 00:00:00', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'system', '90457667694c7a464a0399f8df962c943c81579c', 'test@samsystems.io', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', 'b60f158e2cdc20cd53e4be254b403acd', '2040-01-15 11:12:45', '2014-10-06 19:43:05', 151, '2015-01-15 03:12:45', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
+('fde7b2da-4d90-11e4-9918-98407aa1b8b7', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Mario', 'Cardenas', NULL, '2008-11-29 00:00:00', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'mario', '90457667694c7a464a0399f8df962c943c81579c', 'rolian85@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', '16652a8661ff1f032cfdcecb4d979b32', '2014-11-10 08:33:40', '2014-10-06 19:43:05', 151, '2014-11-10 00:33:40', NULL, 1, 0, '3a12ec14-24df-4926-8b5a-bbd5ff8f2a97', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
+('fec7c94c-9638-11e4-96b1-6ed3d8c13ef2', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Richard', 'Gonzalez', NULL, '2008-11-29 00:00:00', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'richard', '90457667694c7a464a0399f8df962c943c81579c', 'damnpoet@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', '7a4913d564eda8cf1b1266fec9ef0d25', '2015-01-15 22:35:54', '2014-10-06 19:43:05', 151, '2015-01-15 14:35:54', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
+('fec7c94c-9638-11e4-96b1-6ed3d8c13ef3', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Joe', 'Borrero', NULL, '2008-11-29 00:00:00', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'joe', '51f836aa96db69b491ace1a154bb2fa591ec8537', 'jlborrero@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', '7a4913d564eda8cf1b1266fec9ef0d25', '2015-01-15 22:35:54', '2014-10-06 19:43:05', 151, '2015-01-15 14:35:54', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL);
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;

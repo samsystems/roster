@@ -51,10 +51,7 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	userSession, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	user.Creator = userSession
 	user.Updater = userSession
-	if(user.State== nil){
-		state, _ := models.GetState("6d76fc5b-80e8-11e4-9884-b8ac6f58483b")
-		user.State = state
-	}
+	
 	if(user.Organization== nil){
 		organization, _ := models.GetOrganization("11111111-1111-1111-1111-111111111111") 
 		user.Organization = organization
@@ -71,6 +68,9 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	if(user.Country== nil){
 		country, _ := models.GetCountry("US") 
 		user.Country = country
+	}
+	if(user.Username== ""){
+		user.Username = user.Email 
 	}
 
 	models.AddUser(user)

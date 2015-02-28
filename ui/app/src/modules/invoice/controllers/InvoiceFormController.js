@@ -123,7 +123,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                     invoice.Date = $scope.invoice.Date;
                    // invoice.Date ='2015-02-25T00:19:09Z';
                     invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
-                    invoice.DeliveryDate =$scope.invoice.DeliveryDate;;
+                    invoice.DeliveryDate =$scope.invoice.DeliveryDate;
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency;

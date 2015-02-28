@@ -208,8 +208,8 @@
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'DOB' | translate}}</label>
-                                    <input type="text" data-ng-model="user.DOB" class="form-control text-input"
-                                           placeholder="DOB">
+                                <date-time-picker class="col-md-12" data-ng-model="user.DOB"
+                                                  data-format="date" data-max-date="now"></date-time-picker>
                                 </div>
                         </div>
                         <div class="col-md-4">

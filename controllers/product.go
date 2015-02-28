@@ -58,9 +58,9 @@ func (controller *ProductController) GetAll(context appengine.Context, writer ht
 	} else {
 		products, _ = models.GetAllProducts(page, sort, false, -1)
 	}
-   if(len(products)== 0){
- 		return make([]models.Product,0), nil
- 	}
+	if len(products) == 0 {
+		return make([]models.Product, 0), nil
+	}
 	return products, nil
 }
 

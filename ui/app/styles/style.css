@@ -916,7 +916,6 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
 .page-navbar .navbar-brand.collapse-sidebar .logo-sm {
   display: block !important;
   float: left;
-  margin-left: 6px;
 }
 .page-navbar .navbar-brand.hide-logo {
   display: none;

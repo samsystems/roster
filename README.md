@@ -1,6 +1,8 @@
 Roster
 ===============
 
+[![wercker status](https://app.wercker.com/status/fe7fa70bc9471fdaff6bafc0eda3d74d/m "wercker status")](https://app.wercker.com/project/bykey/fe7fa70bc9471fdaff6bafc0eda3d74d)
+
 Provides api for SAM Inventory System.
 
 It consists of 1 core component:

@@ -9,6 +9,5 @@ build:
 
     # Deploy
     - pjvds/go-appengine-deploy:
-            cwd: ui/
             email: damnpoet@gmail.com
             password: $APP_ENGINE_PASS

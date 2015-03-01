@@ -7,6 +7,11 @@ build:
     # at the right place in the workspace tree
     - setup-go-workspace
 
+    - script:
+        name: Get dependencies
+        code: |-
+            go get github.com/gorilla/mux
+
     # Deploy
     - pjvds/go-appengine-deploy:
             email: damnpoet@gmail.com

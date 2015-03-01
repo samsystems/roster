@@ -8,7 +8,7 @@ build:
         code: |-
             go get github.com/gorilla/mux
 
-    - bower-install
+    - bower-install:
         cwd: ui/
 
 deploy:

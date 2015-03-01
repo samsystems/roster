@@ -15,10 +15,17 @@ Inventory API requires `Go`, `Gorilla mux` and few other tools installed.
 
 If you don't have `Go` installed, follow installation instructions described here: http://golang.org/doc/install
 
-Now go to your GOPATH location and run:
-
+Install dependencies
 ```
-go get github.com/rolian85/inventory
+go get github.com/gorilla/mux
+go get github.com/astaxie/beego/orm
+go get github.com/go-sql-driver/mysql
+go get code.google.com/p/go-uuid/uuid
+go get github.com/golang/glog
+go get golang.org/x/net/context
+go get golang.org/x/oauth2
+go get google.golang.org/cloud/compute/metadata
+go get google.golang.org/api/storage/v1
 ```
 
 Create a local config, and adjust to your environment

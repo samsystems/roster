@@ -7,22 +7,7 @@ build:
     # at the right place in the workspace tree
     - setup-go-workspace
 
-    # Gets the dependencies
-    - script:
-        name: go get
-        code: |
-          cd $WERCKER_SOURCE_DIR
-          go version
-          go get -t ./...
-
-    # Build the project
-    - script:
-        name: go build
-        code: |
-          go build ./...
-
-    # Test the project
-    - script:
-        name: go test
-        code: |
-          go test ./...
+    # Deploy
+    - pjvds/go-appengine-deploy:
+            email: damnpoet@gmail.com
+            password: $APP_ENGINE_PASS

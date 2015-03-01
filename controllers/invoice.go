@@ -9,9 +9,9 @@ import (
 
 	"appengine"
 
-	"github.com/samsystems/roster/handler"
-	"github.com/samsystems/roster/models"
-	"github.com/samsystems/roster/validation"
+	"handler"
+	"models"
+	"validation"
 
 	"log"
 
@@ -50,9 +50,9 @@ func (controller *InvoiceController) GetAll(context appengine.Context, writer ht
 	} else {
 		invoices, _ = models.GetAllInvoices(status, page, sort, false, -1)
 	}
-	if(len(invoices)== 0){
- 		return make([]models.Invoice,0), nil
- 	}
+	if len(invoices) == 0 {
+		return make([]models.Invoice, 0), nil
+	}
 	return invoices, nil
 }
 
@@ -135,13 +135,13 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	if err1 != nil {
 		log.Println("error:", err1)
 	}
-	invoiceSave,_ := models.GetInvoice(invoice.Id)
-	if(invoiceSave.Status != "draft"){
-		invoiceSave.Status=invoice.Status
-		models.UpdateInvoice(invoiceSave)	
+	invoiceSave, _ := models.GetInvoice(invoice.Id)
+	if invoiceSave.Status != "draft" {
+		invoiceSave.Status = invoice.Status
+		models.UpdateInvoice(invoiceSave)
 		return invoiceSave, nil
 	}
-	
+
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	invoice.Creator = user
 	invoice.Updater = user
@@ -153,28 +153,28 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	//invoice.DeliveryDate = time.Now()
 
 	var subTotal float64 = 0
-	
+
 	for i := 0; i < len(invoiceProducts); i++ {
 		var restStock int
-		if(invoiceProducts[i].Id != ""){
-			invoiceProducTmp,_ := models.GetInvoiceProduct(invoiceProducts[i].Id)
-			invoiceProducTmp.Quantity=invoiceProducts[i].Quantity
-			invoiceProducTmp.QuantitySave=invoiceProducts[i].QuantitySave
-			invoiceProducts[i]=invoiceProducTmp;
+		if invoiceProducts[i].Id != "" {
+			invoiceProducTmp, _ := models.GetInvoiceProduct(invoiceProducts[i].Id)
+			invoiceProducTmp.Quantity = invoiceProducts[i].Quantity
+			invoiceProducTmp.QuantitySave = invoiceProducts[i].QuantitySave
+			invoiceProducts[i] = invoiceProducTmp
 			restStock = invoiceProducts[i].Quantity - invoiceProducts[i].QuantitySave
-		}else{
-			invoiceProducts[i].Creator= user
+		} else {
+			invoiceProducts[i].Creator = user
 			restStock = invoiceProducts[i].Quantity
 		}
-		
-		subTotal+= float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
+
+		subTotal += float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
 		invoiceProducts[i].Product, _ = models.GetProduct(invoiceProducts[i].Product.Id)
-		if((invoiceProducts[i].Product.Stock - restStock) < 0){
+		if (invoiceProducts[i].Product.Stock - restStock) < 0 {
 			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
 		}
-		invoiceProducts[i].Updater= user
-	    
-	    invoiceProducts[i].Product.Stock = invoiceProducts[i].Product.Stock - restStock
+		invoiceProducts[i].Updater = user
+
+		invoiceProducts[i].Product.Stock = invoiceProducts[i].Product.Stock - restStock
 		//invoiceProducts[i].Product= product
 	}
 	invoice.SubTotal = subTotal
@@ -193,30 +193,29 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	} else {
 		idsInvoiceProduct := make([]string, len(invoiceProducts))
-		models.UpdateInvoice(&invoice)	
-	    for i := 0; i < len(invoiceProducts); i++ {
-			var invoiceProduct = invoiceProducts[i]     		
-     		
-			invoiceProduct.Invoice= &invoice
-			if(invoiceProduct.Id != ""){
-			 	models.UpdateInvoiceProduct(invoiceProduct)
-			}else{
-			 	models.AddInvoiceProduct(invoiceProduct)
-		 	}
+		models.UpdateInvoice(&invoice)
+		for i := 0; i < len(invoiceProducts); i++ {
+			var invoiceProduct = invoiceProducts[i]
+
+			invoiceProduct.Invoice = &invoice
+			if invoiceProduct.Id != "" {
+				models.UpdateInvoiceProduct(invoiceProduct)
+			} else {
+				models.AddInvoiceProduct(invoiceProduct)
+			}
 			models.UpdateProduct(invoiceProduct.Product)
 			idsInvoiceProduct[i] = invoiceProduct.Id
 		}
-	    invoiceDelete := models.GetAllInvoiceProductsByIds(invoice.Id,idsInvoiceProduct)
-	    for i := 0; i < len(invoiceDelete); i++ {
-	    	product, _ := models.GetProduct(invoiceDelete[i].Product.Id)
-	    	product.Stock = product.Stock + invoiceDelete[i].Quantity
-	    	models.UpdateProduct(product)
-	    	models.DeleteInvoiceProduct(&invoiceDelete[i])
-	    }
-	    
+		invoiceDelete := models.GetAllInvoiceProductsByIds(invoice.Id, idsInvoiceProduct)
+		for i := 0; i < len(invoiceDelete); i++ {
+			product, _ := models.GetProduct(invoiceDelete[i].Product.Id)
+			product.Stock = product.Stock + invoiceDelete[i].Quantity
+			models.UpdateProduct(product)
+			models.DeleteInvoiceProduct(&invoiceDelete[i])
+		}
+
 	}
 	//delete productInvoice
-	
 
 	return invoice, nil
 }
@@ -234,8 +233,8 @@ func (c *InvoiceController) Delete(context appengine.Context, writer http.Respon
 	if err != nil {
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	}
-	
-	if(invoice.Status != "draft"){
+
+	if invoice.Status != "draft" {
 		return nil, &handler.Error{err, "You can only delete invoice with draft status", http.StatusNoContent}
 	}
 
@@ -273,8 +272,8 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.InvoiceProducts = nil
 
 	// TODO: temporal
-//	invoice.Date = time.Now()
-//	invoice.DeliveryDate = time.Now()
+	//	invoice.Date = time.Now()
+	//	invoice.DeliveryDate = time.Now()
 
 	var subTotal float64 = 0
 	for i := 0; i < len(invoiceProducts); i++ {

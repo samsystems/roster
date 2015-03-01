@@ -8,8 +8,8 @@ import (
 
 	"appengine"
 
-	"github.com/samsystems/roster/handler"
-	"github.com/samsystems/roster/models"
+	"handler"
+	"models"
 
 	"appengine/urlfetch"
 	"encoding/base64"

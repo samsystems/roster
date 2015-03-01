@@ -9,10 +9,10 @@ import (
 
 	"appengine"
 
-	"github.com/samsystems/roster/handler"
-	"github.com/samsystems/roster/models"
-	"github.com/samsystems/roster/validation"
+	"handler"
 	"log"
+	"models"
+	"validation"
 )
 
 // Operations about Customers
@@ -62,9 +62,9 @@ func (controller *CustomerController) GetAll(context appengine.Context, writer h
 	} else {
 		customers, _ = models.GetAllCustomers(page, sort, false, -1)
 	}
-    if(len(customers)== 0){
- 		return make([]models.Customer,0), nil
- 	}
+	if len(customers) == 0 {
+		return make([]models.Customer, 0), nil
+	}
 	return customers, nil
 }
 

@@ -10,9 +10,9 @@ import (
 
 	"appengine"
 
-	"github.com/samsystems/roster/handler"
-	"github.com/samsystems/roster/models"
-	"github.com/samsystems/roster/validation"
+	"handler"
+	"models"
+	"validation"
 )
 
 type PurchaseOrderController struct {

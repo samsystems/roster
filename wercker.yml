@@ -6,7 +6,7 @@ build:
     - script:
         name: Get dependencies
         code: |-
-            go get github.com/gorilla/mux
+            go get
 
     - script:
         name: Build

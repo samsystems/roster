@@ -8,8 +8,8 @@ import (
 
 	"strconv"
 
-	"github.com/samsystems/roster/handler"
-	"github.com/samsystems/roster/models"
+	"handler"
+	"models"
 )
 
 type IndustryController struct {

@@ -2,11 +2,12 @@ package main
 
 import (
 	"github.com/gorilla/mux"
+	"net/http"
 
 	"appengine"
 
-	"github.com/samsystems/roster/controllers"
-	"github.com/samsystems/roster/system"
+	"controllers"
+	"system"
 )
 
 var router = new(mux.Router)
@@ -19,7 +20,12 @@ func init() {
 	} else {
 		application.Init("config.appengine.json")
 	}
+
 	application.ConnectToDatabase()
+
+	router := mux.NewRouter()
+	RegisterHandlers(router)
+	http.Handle("/", router)
 }
 
 func RegisterHandlers(r *mux.Router) {
@@ -69,5 +75,4 @@ func RegisterHandlers(r *mux.Router) {
 
 	industryController := controllers.IndustryController{}
 	industryController.RegisterHandlers(router)
-
 }

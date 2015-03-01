@@ -19,6 +19,11 @@ deploy:
   steps:
     - setup-go-workspace
 
+    - script:
+        name: Update time
+        code: |
+          ntpdate pool.ntp.org
+
     - pjvds/go-appengine-deploy:
         email: damnpoet@gmail.com
         password: $APP_ENGINE_PASS

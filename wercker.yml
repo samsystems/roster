@@ -8,8 +8,12 @@ build:
         code: |-
             go get github.com/gorilla/mux
 
-    - bower-install:
+    - script:
         cwd: ui/
+        name: Install bower
+        code: |
+          sudo npm install -g bower
+          bower install
 
 deploy:
   steps:

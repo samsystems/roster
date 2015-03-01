@@ -6,8 +6,9 @@ build:
     # Sets the go workspace and places you package
     # at the right place in the workspace tree
     - setup-go-workspace
-        cwd: ui/
+
     # Deploy
     - pjvds/go-appengine-deploy:
+            cwd: ui/
             email: damnpoet@gmail.com
             password: $APP_ENGINE_PASS

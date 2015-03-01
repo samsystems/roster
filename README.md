@@ -14,6 +14,7 @@ Inventory API requires `Go`, `Gorilla mux` and few other tools installed.
 ## Installation
 
 If you don't have `Go` installed, follow installation instructions described here: http://golang.org/doc/install
+If you don't have `GoAppEngine` installed, follow installation instructions described here: https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment
 
 Install dependencies
 ```
@@ -34,18 +35,13 @@ Create a local config, and adjust to your environment
 cp github.com/rolian85/inventory/config.json.default github.com/rolian85/inventory/config.json
 ```
 
-And then:
+And then run:
 
 ```
-go install github.com/rolian85/inventory
-```
-Finally, you can run:
-
-```
-./bin/inventory
+goapp serve
 ```
 
-And it means you can now direct your browser to `localhost:8085`
+This means you can now direct your browser to `localhost:8085`
 
 # Project structure
 
@@ -61,10 +57,6 @@ Helper functions.
 
 You database models.
 
-`/routes`
-
-Contains routes definitions.
-
-`main.go`
+`app.go`
 
 This file starts your web application.

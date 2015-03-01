@@ -1,18 +1,27 @@
 box: wercker/golang
-# Build definition
 build:
-  # The steps that will be executed on build
   steps:
-    # Sets the go workspace and places you package
-    # at the right place in the workspace tree
     - setup-go-workspace
 
     - script:
         name: Get dependencies
         code: |-
-            go get github.com/gorilla/mux
+            go get
 
-    # Deploy
+    - script:
+        name: Build
+        code: |
+            go build
+
+    - script:
+        name: Test
+        code: |-
+            go test
+
+deploy:
+  steps:
+    - setup-go-workspace
+
     - pjvds/go-appengine-deploy:
-            email: damnpoet@gmail.com
-            password: $APP_ENGINE_PASS
+        email: damnpoet@gmail.com
+        password: $APP_ENGINE_PASS

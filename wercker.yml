@@ -8,16 +8,6 @@ build:
         code: |-
             go get github.com/gorilla/mux
 
-    - script:
-        name: Build
-        code: |
-            go build
-
-    - script:
-        name: Test
-        code: |-
-            go test
-
 deploy:
   steps:
     - setup-go-workspace

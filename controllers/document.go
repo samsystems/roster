@@ -94,7 +94,7 @@ func (controller *DocumentController) Upload(context appengine.Context, writer h
 	}
 	documentType, err := models.GetDocumentTypeByNameId(nameId)
 	if err != nil {
-		return nil, &handler.Error{err, "Wrong Document Type", http.StatusInternalServerError}
+		return nil, &handler.Error{err, "Wrong Document Type - " + nameId, http.StatusInternalServerError}
 	}
 	//get the *fileheaders
 	files := dataForm.File["fileUpload"]

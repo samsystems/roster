@@ -14,6 +14,7 @@ deploy:
             go get github.com/astaxie/beego/orm
             go get github.com/go-sql-driver/mysql
             go get code.google.com/p/go-uuid/uuid
+            go get github.com/golang/glog
 
     - script:
         cwd: ui/

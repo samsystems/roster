@@ -14,9 +14,7 @@
     <div class="table-responsive table-hover" data-ng-show="total > 0">
         <table ng-table="customerTable" class="table table-hover table-message" template-pagination="custom/pager">
             <col width="20%"/>
-            <col width="10%"/>
-            <col width="10%"/>
-            <col width="10%"/>
+            <col width="30%"/>
             <col width="10%"/>
             <col width="10%"/>
             <col width="15%"/>
@@ -26,24 +24,15 @@
                     {{customer.Name}}
                 </td>
                 <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
-                    {{customer.Phone}}
-                </td>
-                <td data-title="'Mobile'" sortable="'mobile'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
-                    {{customer.Mobile}}
-                </td>
-                <td data-title="'Fax'" sortable="'fax'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
-                    {{customer.Fax}}
+                    {{customer.Phone}} - {{customer.Mobile}}
                 </td>
                 <td data-title="'Email'" sortable="'email'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
                     {{customer.Email}}
                 </td>
-                <td data-title="'Address'" sortable="'address'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
-                    {{customer.Address}}
+                <td data-title="'Balance'" sortable="'email'">
                 </td>
-                <td data-title="'City'" sortable="'city'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
-                    {{customer.City}}
+                <td data-title="'Overdue'" sortable="'email'">
                 </td>
-
 
                 <td data-title="'Action'">
                     <div class="btn-group">

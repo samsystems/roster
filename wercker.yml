@@ -6,8 +6,7 @@ build:
     # Sets the go workspace and places you package
     # at the right place in the workspace tree
     - setup-go-workspace
-            source_dir: ui/
-
+            cwd: ui/
     # Deploy
     - pjvds/go-appengine-deploy:
             email: damnpoet@gmail.com

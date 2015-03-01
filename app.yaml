@@ -1,5 +1,5 @@
 application: sam-roster
-version: 1
+version: alpha-001
 runtime: go
 api_version: go1
 

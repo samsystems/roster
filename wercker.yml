@@ -18,7 +18,7 @@ deploy:
         name: Install bower
         code: |
           sudo npm install -g bower
-          bower install --no-interactive
+          bower install --config.interactive=false
 
     - pjvds/go-appengine-deploy:
         email: damnpoet@gmail.com

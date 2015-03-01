@@ -8,6 +8,9 @@ build:
         code: |-
             go get github.com/gorilla/mux
 
+    - bower-install
+        cwd: ui/
+
 deploy:
   steps:
     - setup-go-workspace

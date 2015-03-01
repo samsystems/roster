@@ -12,6 +12,8 @@ deploy:
         code: |-
             go get github.com/gorilla/mux
             go get github.com/astaxie/beego/orm
+            go get github.com/go-sql-driver/mysql
+            go get code.google.com/p/go-uuid/uuid
 
     - script:
         cwd: ui/

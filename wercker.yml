@@ -3,10 +3,15 @@ build:
   steps:
     - setup-go-workspace
 
+deploy:
+  steps:
+    - setup-go-workspace
+
     - script:
         name: Get dependencies
         code: |-
             go get github.com/gorilla/mux
+            go get github.com/astaxie/beego/orm
 
     - script:
         cwd: ui/
@@ -14,10 +19,6 @@ build:
         code: |
           sudo npm install -g bower
           bower install
-
-deploy:
-  steps:
-    - setup-go-workspace
 
     - pjvds/go-appengine-deploy:
         email: damnpoet@gmail.com

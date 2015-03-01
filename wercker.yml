@@ -16,6 +16,7 @@ deploy:
             go get code.google.com/p/go-uuid/uuid
             go get github.com/golang/glog
             go get golang.org/x/net/context
+            go get golang.org/x/oauth2
 
     - script:
         cwd: ui/

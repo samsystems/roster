@@ -18,7 +18,6 @@ import (
 	"golang.org/x/oauth2/google"
 	"google.golang.org/cloud"
 	"google.golang.org/cloud/storage"
-	"log"
 	"mime/multipart"
 	"time"
 )
@@ -85,7 +84,6 @@ func (controller *DocumentController) Upload(context appengine.Context, writer h
 
 	//get a ref to the parsed multipart form
 	dataForm := request.MultipartForm
-	log.Print(dataForm.Value["other"])
 	nameId := ""
 	if nameIdP, ok := dataForm.Value["type"]; ok {
 		nameId = nameIdP[0]
@@ -114,7 +112,6 @@ func (controller *DocumentController) Upload(context appengine.Context, writer h
 // @router /:uid [delete]
 func (controller *DocumentController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uid := v["uid"]
-	log.Print(uid)
 	document, err := models.GetDocument(uid)
 	if err != nil {
 		return nil, &handler.Error{err, "Entity not found.", http.StatusNoContent}
@@ -122,7 +119,6 @@ func (controller *DocumentController) Delete(context appengine.Context, writer h
 
 	models.DeleteDocument(document)
 	dm := GetDocumentManager(context)
-	log.Print(document.Id)
 	dm.deleteFile(document.FilePath + document.Id)
 
 	return nil, nil
@@ -177,7 +173,6 @@ func SaveDocumentsUploads(files []*multipart.FileHeader, context appengine.Conte
 			Organization: &organization,
 		}
 		models.AddDocument(&document)
-		log.Print("asdfasdf")
 		documents = append(documents, &document)
 
 		dm.createFile(fileContents, document.FilePath+document.Id, document.MimeType)

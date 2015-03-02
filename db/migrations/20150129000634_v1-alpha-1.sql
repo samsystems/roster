@@ -622,7 +622,7 @@ LOCK TABLES `document_type` WRITE;
 
 INSERT INTO `document_type` (`id`, `creator_id`, `updater_id`, `name`, `name_id`, `description`, `deleted`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `question_set_id`)
 VALUES
-	('19191426-eb9c-11e1-bf95-386077cf6cc5',NULL,NULL,'General','GENERAL','General',0,'2012-08-21 14:25:46',151,'2012-08-21 14:25:46',151,NULL);
+	('19191426-eb9c-11e1-bf95-386077cf6cc5',NULL,NULL,'General','GENERAL','General',NULL,'2012-08-21 14:25:46',151,'2012-08-21 14:25:46',151,NULL);
 
 /*!40000 ALTER TABLE `document_type` ENABLE KEYS */;
 UNLOCK TABLES;

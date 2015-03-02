@@ -1,4 +1,7 @@
 <div class="form-group col-md-{{size || 12}}">
     <label for="">{{title}}</label>
+
     <input ng-if="type == 'text'" type="text" class="form-control" />
+
+    <date-time-picker ng-if="type == 'datetimepicker'" class="form-control" data-format="date" ></date-time-picker>
 </div>

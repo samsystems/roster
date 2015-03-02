@@ -8852,22 +8852,27 @@ fieldset[disabled] .btn-danger.btn-alt.active {
 .form-inline .form-control.input-rounded {
   border-radius: 50px;
 }
-.form-horizontal.group-border .form-group,
-.form-inline.group-border .form-group {
+.form-horizontal.group-border fieldset,
+.form-inline.group-border fieldset {
   border-bottom: 1px solid #e3e3e3;
   padding-bottom: 15px;
   padding-top: 15px;
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: 0;
+  margin-right: 0;
   margin-bottom: 0;
 }
-.form-horizontal.group-border .form-group:last-child,
-.form-inline.group-border .form-group:last-child {
+.form-horizontal.group-border fieldset .form-group,
+.form-inline.group-border fieldset .form-group{
+  margin-left: 0;
+  margin-right: 0;
+}
+.form-horizontal.group-border fieldset:last-child,
+.form-inline.group-border fieldset:last-child {
   border-bottom: none;
   margin-bottom: 0;
 }
-.form-horizontal.stripped .form-group:nth-child(even),
-.form-inline.stripped .form-group:nth-child(even) {
+.form-horizontal.stripped fieldset:nth-child(even),
+.form-inline.stripped fieldset:nth-child(even) {
   background: #f9f9f9;
 }
 .form-horizontal.hover-stripped .form-group:hover,

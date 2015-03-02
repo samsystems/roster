@@ -1,6 +1,4 @@
-<fieldset>
+<fieldset ng-transclude>
     <legend ng-if="title">{{title}}</legend>
-    <div class="col-md-{{field.size || 12}}" ng-repeat="field in fields" field-content-transclude="field">
-
-    </div>
+    <div ng-repeat="field in fields" field-content-transclude="field"></div>
 </fieldset>

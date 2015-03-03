@@ -20,7 +20,7 @@ CREATE TABLE `account` (
   CONSTRAINT `FK_D48A2F7C61220AA4` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `db_default`.`account` (`id`, `name`, `creator_id`, `updater_id`, `created`, `created_time_zone`, `updated`, `updated_time_zone`)
+INSERT INTO `account` (`id`, `name`, `creator_id`, `updater_id`, `created`, `created_time_zone`, `updated`, `updated_time_zone`)
 VALUES ('69b07036-c159-11e4-898f-10c37b247796', 'Some Account', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-02 20:10:10', '151', '2015-03-02 20:10:10', '151');
 
 DROP TABLE IF EXISTS `location`;
@@ -43,7 +43,7 @@ CREATE TABLE `location` (
   CONSTRAINT `FK_D34A04AD61220AA1` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_D34A04AD61220AA2` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-INSERT INTO `db_default`.`location` (`id`, `name`, `address`, `creator_id`, `updater_id`, `created`, `updated`)
+INSERT INTO `location` (`id`, `name`, `address`, `creator_id`, `updater_id`, `created`, `updated`)
 VALUES ('05284899-c15a-11e4-898f-10c37b247796', 'Some Address', '1124 sw 145 st miami, fl 33145', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-02 20:20:03', '2015-03-02 20:20:03');
 
 DROP TABLE IF EXISTS `product`;
@@ -81,7 +81,7 @@ CREATE TABLE `product` (
   CONSTRAINT `FK_D34A04ADE37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `db_default`.`product` (`id`, `name`, `category`, `purchasable`, `cost`, `purchase_account_id`, `purchase_description`, `salable`, `price`, `sale_account_id`, `sale_description`, `is_taxable`, `updater_id`, `creator_id`, `updated`,`created`)
+INSERT INTO `product` (`id`, `name`, `category`, `purchasable`, `cost`, `purchase_account_id`, `purchase_description`, `salable`, `price`, `sale_account_id`, `sale_description`, `is_taxable`, `updater_id`, `creator_id`, `updated`,`created`)
 VALUES ('2fe51519-c15e-11e4-898f-10c37b247796', 'Michelin', '1', '1', '45.26', '69b07036-c159-11e4-898f-10c37b247796', 'some description', '1', '54.78', '69b07036-c159-11e4-898f-10c37b247796', 'some description', '1', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-02 20:10:10', '2015-03-02 20:10:10');
 
 DROP TABLE IF EXISTS `product_variation`;
@@ -115,7 +115,7 @@ CREATE TABLE `product_variation` (
   CONSTRAINT `fk_product_variation_3` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `db_default`.`product_variation` (`id`, `variation`, `sku`, `serial`, `stock`, `alert_at`, `alert`, `product_id`, `location_id`, `creator_id`, `updater_id`, `created`, `updated`, `updated_time_zone`)
+INSERT INTO `product_variation` (`id`, `variation`, `sku`, `serial`, `stock`, `alert_at`, `alert`, `product_id`, `location_id`, `creator_id`, `updater_id`, `created`, `updated`, `updated_time_zone`)
 VALUES ('75da7feb-c15f-11e4-898f-10c37b247796', '175/80/15 Radius', '45775', '4578AA', '50', '5', '1', '2fe51519-c15e-11e4-898f-10c37b247796', '05284899-c15a-11e4-898f-10c37b247796', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-02 20:20:03', '2015-03-02 20:20:03', null),
        ('d823ee4a-c15f-11e4-898f-10c37b247796', '155/60/14 Radius', '45775', '4578AA', '40', '10', '0', '2fe51519-c15e-11e4-898f-10c37b247796', '05284899-c15a-11e4-898f-10c37b247796', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-02 20:20:03', '2015-03-02 20:20:03', null);
 
@@ -154,9 +154,10 @@ ALTER TABLE `company_scope`
 ALTER TABLE `user` ADD `company_scope_id` VARCHAR(36) NULL , ADD INDEX (`company_scope_id`);
 ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649979B1AD8` FOREIGN KEY (`company_scope_id`) REFERENCES `inventory`.`company_scope` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
---ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
-
-
+ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
+ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D64932C8A3DE` ;
+ALTER TABLE `user` DROP `organization_id`;
+DROP TABLE IF EXISTS `organization`;
 
 
 -- +goose Down

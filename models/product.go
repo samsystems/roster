@@ -9,23 +9,27 @@ import (
 const PRODUCT_LIMIT int = 10
 
 type Product struct {
-	Id              string `orm:"pk"`
-	Creator         *User  `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User  `orm:"rel(one)" valid:"Entity(Updater)"`
-	Name            string
-	Description     string
-	Manufacturer    string
-	Status          int
-	Stock           int     `json:",string"`
-	Price           float32 `json:",string"`
-	Size            string
-	Sku             string
-	Serial          string
-	Deleted         time.Time `orm:"type(datetime)"`
-	Created         time.Time `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone int
-	Updated         time.Time `orm:"auto_now_add;type(datetime)"`
-	UpdatedTimeZone int
+	Id                  string `orm:"pk"`
+	Name                string
+	Description         string
+	Manufacturer        string
+	Status              int
+	Purchasable         bool
+	Cost                float32  `json:",string"`
+	PurchaseAccount     *Account `orm:"rel(one)" valid:"Entity(Account)"`
+	PurchaseDescription string
+	Salable             bool
+	Price               float32 `json:",string"`
+	SaleDescription     string
+	SaleAccount         *Account `orm:"rel(one)" valid:"Entity(Account)"`
+	IsTaxable           bool
+	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
+	Deleted             time.Time `orm:"type(datetime)"`
+	Created             time.Time `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone     int
+	Updated             time.Time `orm:"auto_now;type(datetime)"`
+	UpdatedTimeZone     int
 }
 
 func init() {

@@ -27,10 +27,10 @@ type Invoice struct {
 	Amount              float64
 	Tax                 float32
 	InvoiceProducts     []*InvoiceProduct `orm:"reverse(many)"`
-	Deleted             time.Time `orm:"type(datetime)"`
-	Created             time.Time `orm:"auto_now_add;type(datetime)"`
+	Deleted             time.Time         `orm:"type(datetime)"`
+	Created             time.Time         `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone     int
-    Updated             time.Time `orm:"auto_now;type(datetime)"`
+	Updated             time.Time `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone     int
 }
 
@@ -53,10 +53,10 @@ func GetInvoice(uid string) (*Invoice, error) {
 	o := orm.NewOrm()
 	err := o.Read(&invoice)
 	if invoice.Customer != nil {
-	    o.Read(invoice.Customer)
+		o.Read(invoice.Customer)
 	}
 	if invoice.CustomerShipping != nil {
-   		o.Read(invoice.CustomerShipping)
+		o.Read(invoice.CustomerShipping)
 	}
 
 	return &invoice, err
@@ -118,15 +118,15 @@ func GetInvoiceByKeyword(status string, keyword string, page int, order string, 
 		qb.Select("count(inv.id)")
 	}
 
-	qb.From("invoice inv").	Where("inv.reference_number LIKE ?").And("inv.deleted is null")
+	qb.From("invoice inv").Where("inv.reference_number LIKE ?").And("inv.deleted is null")
 	// execute the raw query string
-		o := orm.NewOrm()
+	o := orm.NewOrm()
 	if count == true {
 		var total int
 		if status != "all" {
 			qb.And("status = ?")
 			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%",status).QueryRow(&total)
+			o.Raw(sql, "%"+keyword+"%", status).QueryRow(&total)
 			return invoices, total
 		} else {
 			sql := qb.String()
@@ -138,11 +138,11 @@ func GetInvoiceByKeyword(status string, keyword string, page int, order string, 
 		if status != "all" {
 			qb.And("status = ?")
 			ParseQueryBuilderOrder(qb, order, "invoice")
-		    qb.Limit(limit).Offset(page * INVOICE_LIMIT)
+			qb.Limit(limit).Offset(page * INVOICE_LIMIT)
 			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%",status).QueryRows(&invoices)
+			o.Raw(sql, "%"+keyword+"%", status).QueryRows(&invoices)
 			return invoices, nil
-		}else{
+		} else {
 			sql := qb.String()
 			o.Raw(sql, "%"+keyword+"%").QueryRows(&invoices)
 			return invoices, nil
@@ -159,13 +159,13 @@ func DeleteInvoice(invoice *Invoice) {
 	o := orm.NewOrm()
 	invoice.Deleted = time.Now()
 	o.Update(invoice)
-	if(invoice.Status == "draft"){
+	if invoice.Status == "draft" {
 		invoiceProducts := GetAllInvoiceProducts(invoice.Id)
 		for _, v := range invoiceProducts {
 			product := v.Product
-			product.Stock =product.Stock+v.Quantity
+			//product.Stock =product.Stock+v.Quantity //to change now a product have a variation
 			o.Update(product)
-		} 
+		}
 	}
 }
 

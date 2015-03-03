@@ -1,11 +1,13 @@
 'use strict';
 
-angular.module('common').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Industry', 'State', 'toaster', 'WizardHandler',
-    function ($scope, $window, $state, AuthenticationService, User, Industry, State, toaster, WizardHandler) {
+angular.module('common').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Company', 'CompanyScope', 'Industry', 'State', 'toaster', 'WizardHandler',
+    function ($scope, $window, $state, AuthenticationService, User, Company, CompanyScope, Industry, State, toaster, WizardHandler) {
         $scope.user = {};
     $scope.credentials = {};
 
         $scope.states    = State.$search();
+        $scope.companies         = Company.$search({page: 0, order:'name'});
+        $scope.companyScopes         = CompanyScope.$search();
 
         $scope.step = {
             register1: 'register1',

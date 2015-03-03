@@ -75,10 +75,8 @@
                     <div class="row"
                          style="border-top: 1px solid #000; border-bottom: thin solid #000; padding: 20px 0 20px 0;">
                         <div class="col-md-2  pull-left">
-                            <button class="btn btn-default" data-ng-click="toStepOne()"><i class="fa fa-plus"></i>
-                                {{'Back to
-                                login' | translate}}
-                            </button>
+                                <a class="btn btn-default" href="#/login" > {{'Back to
+                                    login' | translate}}</a>
 
                         </div>
                         <div class="col-md-2  pull-right">
@@ -110,9 +108,7 @@
                         <div class="col-md-6">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Business Name' | translate}}</label>
-                                    <input type="text" data-ng-model="user.BusinessName"
-                                           class="form-control text-input"
-                                           placeholder="Name">
+                                <select id="company" class="form-control" data-ng-model="user.Company.Id" data-ng-options ="company.Id as company.Name for company in companies"></select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -138,25 +134,7 @@
                             <div class="form-group login-input">
                                 <label class="control-label">{{'How do you plan to use Roster?' |
                                     translate}}</label>
-                                    <input type="email" data-ng-model="user.ConfirmEmail"
-                                           class="form-control text-input"
-                                           placeholder="me@example.com">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group login-input">
-                                <label class="control-label">{{'First Name' | translate}}</label>
-                                    <input type="text" data-ng-model="user.FirstName" class="form-control text-input"
-                                           placeholder="Name">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group login-input">
-                                <label class="control-label">{{'Last Name' | translate}}</label>
-                                    <input type="text" data-ng-model="user.LastName" class="form-control text-input"
-                                           placeholder="Last Name">
+                                <select id="company" class="form-control" data-ng-model="user.CompanyScope.Id" data-ng-options ="companyScope.Id as companyScope.Name for companyScope in companyScopes"></select>
                             </div>
                         </div>
                     </div>

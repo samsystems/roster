@@ -25,6 +25,7 @@ func (controller *ProductController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/product", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}/product-variation", handler.New(controller.GetAllProductVariations)).Methods("GET")
 }
 
 // @Title Get
@@ -81,6 +82,17 @@ func (controller *ProductController) Count(context appengine.Context, writer htt
 	}
 
 	return total, nil
+}
+
+// @Title Get
+// @Description get all Products Variations by Product
+// @Success 200 {object} models.Product
+//@Param  uid		string
+// @router / [get]
+func (controller *ProductController) GetAllProductVariations(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uidProduct := v["uid"]
+	variations, _ := models.GetAllProductVariationsByProduct(uidProduct)
+	return variations, nil
 }
 
 // @Title updateProduct

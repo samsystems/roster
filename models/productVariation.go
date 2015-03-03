@@ -68,6 +68,16 @@ func GetAllProductVariations(page int, order string, count bool, limit int) ([]P
 	}
 }
 
+func GetAllProductVariationsByProduct(uidProduct string) ([]ProductVariation, interface{}) {
+
+	o := orm.NewOrm()
+	var productVariations []ProductVariation
+	querySetter := o.QueryTable("product_variation")
+	querySetter = querySetter.Filter("deleted__isnull", true).Filter("product_id", uidProduct)
+	querySetter.All(&productVariations)
+	return productVariations, nil
+}
+
 func GetProductVariationByKeyword(keyword string, page int, order string, count bool, limit int) ([]ProductVariation, interface{}) {
 	var productVariations []ProductVariation
 	qb, _ := orm.NewQueryBuilder("mysql")

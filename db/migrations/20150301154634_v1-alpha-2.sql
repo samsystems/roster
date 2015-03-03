@@ -120,6 +120,45 @@ VALUES ('75da7feb-c15f-11e4-898f-10c37b247796', '175/80/15 Radius', '45775', '45
        ('d823ee4a-c15f-11e4-898f-10c37b247796', '155/60/14 Radius', '45775', '4578AA', '40', '10', '0', '2fe51519-c15e-11e4-898f-10c37b247796', '05284899-c15a-11e4-898f-10c37b247796', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-02 20:20:03', '2015-03-02 20:20:03', null);
 
 
+DROP TABLE IF EXISTS `company_scope`;
+
+CREATE TABLE IF NOT EXISTS `company_scope` (
+  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
+  `name_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `created_time_zone` int(11) DEFAULT NULL,
+  `updated` datetime NOT NULL,
+  `updated_time_zone` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_5373C96661220EA1` (`creator_id`),
+  KEY `IDX_5373C966E37ECFB2` (`updater_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `company_scope` (`id`, `name`, `name_key`, `deleted`, `creator_id`, `updater_id`, `created`, `created_time_zone`, `updated`, `updated_time_zone`) VALUES
+('8b16c42e-c1ea-11e4-b9a6-a088694cea32', 'Entire business', 'Entire business', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea33', 'Some of my locations', 'Some of my locations', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea34', 'All of my credit transactions', 'All of my credit transactions', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea35', 'Some of my card transactions', 'Some of my card transactions', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea36', 'As a backup processor', 'As a backup processor', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea37', 'For events only', 'For events only', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL);
+
+
+ALTER TABLE `company_scope`
+  ADD CONSTRAINT `FK_8D93D6495373C967` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `FK_8D93D6495373C968` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `user` ADD `company_scope_id` VARCHAR(36) NULL , ADD INDEX (`company_scope_id`);
+ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649979B1AD8` FOREIGN KEY (`company_scope_id`) REFERENCES `inventory`.`company_scope` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
+
+
+
+
 -- +goose Down
 -- SQL section 'Down' is executed when this migration is rolled back
 

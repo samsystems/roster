@@ -12,7 +12,7 @@ type Industry struct {
 	Code            int
 	Group           string
 	Description     string
-	Deleted         bool
+	Deleted             time.Time         `orm:"type(datetime)"`
 	Creator         *User  `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater         *User  `orm:"rel(one)" valid:"Entity(Updater)"`
 	Created         time.Time `orm:"auto_now_add;type(datetime)"`

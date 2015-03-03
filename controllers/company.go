@@ -20,6 +20,7 @@ type CompanyController struct {
 
 func (c *CompanyController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/company/count", handler.New(c.GetCountAll)).Methods("GET")
+	r.Handle("/company/scope", handler.New(c.GetCompanyScopeAll)).Methods("GET")
 	r.Handle("/company/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/company", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/company", handler.New(c.Post)).Methods("POST")
@@ -177,4 +178,16 @@ func (controller *CompanyController) Delete(context appengine.Context, writer ht
 	models.DeleteCompany(company)
 
 	return nil, nil
+}
+
+// @Title Get
+// @Description get all Companies
+// @Param	page	    int
+// @Param	sort		string
+// @Param	keyword		string
+// @Success 200 {array} models.CompanyScope
+// @router /scope [get]
+func (controller *CompanyController) GetCompanyScopeAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	companiesScope := models.GetAllCompanyScope()
+	return companiesScope, nil
 }

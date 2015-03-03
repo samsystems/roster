@@ -170,7 +170,7 @@ func SaveDocumentsUploads(files []*multipart.FileHeader, context appengine.Conte
 			FileName:     files[i].Filename,
 			MimeType:     files[i].Header["Content-Type"][0],
 			Date:         time.Now(),
-			Company: &company,
+			Company:      company,
 		}
 		models.AddDocument(&document)
 		documents = append(documents, &document)

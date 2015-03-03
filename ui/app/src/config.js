@@ -4,7 +4,6 @@ angular.module('config',[]).constant('config', {
     application: {
         name:           'Inventory',
         id:             'Inventory',
-        organizationId: '11111111-1111-1111-1111-111111111111',
         companyId:      '242495b7-69f4-4107-a4d8-850540e6b834',
         currency:       'USD',
         defaultTimezone:'America/New_York',

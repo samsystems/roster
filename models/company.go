@@ -12,7 +12,6 @@ const COMPANY_LIMIT int = 5
 
 type Company struct {
 	Id              string        `orm:"pk"`
-	Organization    *Organization `orm:"rel(one)" valid:"Entity(Organization)"`
 	Creator         *User         `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater         *User         `orm:"rel(one)" valid:"Entity(Updater)"`
 	Name            string

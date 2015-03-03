@@ -10,7 +10,6 @@ angular.module('company').controller('CompanyFormController', ['$scope', '$rootS
         $scope.company = Company.$find($stateParams.id);
     }else{
         $scope.company =  Company.$build();
-        $scope.company.Organization = {Id: config.application.organizationId}
     }
     //
     $scope.save = function() {

@@ -7,7 +7,6 @@ import (
 
 type DocumentFolder struct {
 	Id              string          `orm:"pk"`
-	Organization    *Organization   `orm:"rel(one)"`
 	Company         *Company        `orm:"rel(one)"`
 	Parent          *DocumentFolder `orm:"rel(one)"`
 	Creator         *User           `orm:"rel(one)"`

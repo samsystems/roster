@@ -14,7 +14,6 @@ func init() {
 type User struct {
 	Id                     string        `orm:"pk"`
 	Country                *Country      `orm:"rel(one)"`
-	Organization           *Organization `orm:"rel(one)"`
 	Creator                *User         `orm:"rel(one)"`
 	Updater                *User         `orm:"rel(one)"`
 	FirstName              string

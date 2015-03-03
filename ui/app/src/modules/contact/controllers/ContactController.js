@@ -83,7 +83,6 @@ angular.module('contact').controller('ContactController', ['$scope', '$rootScope
             $scope.upload = $upload.upload({
                 url: config.api.baseUrl + '/documents',
                 data: {
-                    organization: {id: config.application.organizationId},
                     documentType: 'GENERAL'
                 },
                 file: file
@@ -148,7 +147,7 @@ angular.module('contact').controller('ContactController', ['$scope', '$rootScope
     $scope.downloadDocument = function (document) {
         $http({
             method: 'GET',
-            url: config.api.baseUrl + '/documents/base64/' + document.id + '/' + config.application.organizationId
+            url: config.api.baseUrl + '/documents/base64/' + document.id + '/' + document.Company.Id
         }).success(function (response) {
             $window.open("data:" + response.type + ";base64, " + response.base64, document.name);
         });

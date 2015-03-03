@@ -20,7 +20,7 @@ type Document struct {
 	DateTimeZone    int
 	Authority       *User `orm:"rel(one)"`
 	Hash            string
-	Organization    *Organization `orm:"rel(one)"`
+	Company         *Company `orm:"rel(one)"`
 	Deleted         time.Time     `orm:"type(datetime)"`
 	Created         time.Time     `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int

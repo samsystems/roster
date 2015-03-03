@@ -144,7 +144,7 @@ func SaveDocumentsUploads(files []*multipart.FileHeader, context appengine.Conte
 	var documents []*models.Document
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
-	organization := models.Organization{Id: "11111111-1111-1111-1111-111111111111"}
+	company := user.Company
 
 	for i, _ := range files {
 		//for each fileheader, get a handle to the actual file
@@ -166,11 +166,11 @@ func SaveDocumentsUploads(files []*multipart.FileHeader, context appengine.Conte
 			Authority:    user,
 			Name:         files[i].Filename,
 			Description:  "",
-			FilePath:     organization.Id + "/" + docType.NameId + "/",
+			FilePath:     company.Id + "/" + docType.NameId + "/",
 			FileName:     files[i].Filename,
 			MimeType:     files[i].Header["Content-Type"][0],
 			Date:         time.Now(),
-			Organization: &organization,
+			Company: &company,
 		}
 		models.AddDocument(&document)
 		documents = append(documents, &document)

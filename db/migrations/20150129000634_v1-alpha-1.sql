@@ -38,7 +38,6 @@ DROP TABLE IF EXISTS `company`;
 
 CREATE TABLE `company` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `organization_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -62,12 +61,10 @@ CREATE TABLE `company` (
   `email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `order_number` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_4FBF094F32C8A3DE` (`organization_id`),
   KEY `IDX_4FBF094F61220EA6` (`creator_id`),
   KEY `IDX_4FBF094FE37ECFB0` (`updater_id`),
   KEY `IDX_4FBF094F5373C966` (`country_id`),
   KEY `IDX_4FBF094FA393D2FB` (`state_id`),
-  CONSTRAINT `FK_4FBF094F32C8A3DE` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
   CONSTRAINT `FK_4FBF094F5373C966` FOREIGN KEY (`country_id`) REFERENCES `country` (`iso`),
   CONSTRAINT `FK_4FBF094F61220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_4FBF094FA393D2FB` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
@@ -78,9 +75,9 @@ LOCK TABLES `company` WRITE;
 /*!40000 ALTER TABLE `company` DISABLE KEYS */;
 
 
-INSERT INTO `company` (`id`, `organization_id`, `creator_id`, `updater_id`, `name`, `int_id`, `tax_id`, `address1`, `address2`, `city`, `state_id`, `zip_code`, `phone`, `deleted`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `country_id`, `tax`, `mobile`, `fax`, `email`, `order_number`)
+INSERT INTO `company` (`id`, `creator_id`, `updater_id`, `name`, `int_id`, `tax_id`, `address1`, `address2`, `city`, `state_id`, `zip_code`, `phone`, `deleted`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `country_id`, `tax`, `mobile`, `fax`, `email`, `order_number`)
 VALUES
-	('242495b7-69f4-4107-a4d8-850540e6b834','11111111-1111-1111-1111-111111111111',NULL,NULL,'DVS',NULL,'98-0081645','1050 Caribbean Way',NULL,NULL,NULL,'33132',NULL,NULL,'2012-06-25 20:01:07',414,'2012-06-25 20:01:07',414,NULL,7,NULL,NULL,NULL,NULL);
+	('242495b7-69f4-4107-a4d8-850540e6b834',NULL,NULL,'DVS',NULL,'98-0081645','1050 Caribbean Way',NULL,NULL,NULL,'33132',NULL,NULL,'2012-06-25 20:01:07',414,'2012-06-25 20:01:07',414,NULL,7,NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `company` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -488,13 +485,13 @@ CREATE TABLE `document` (
   `created_time_zone` int(11) DEFAULT NULL,
   `updated` datetime NOT NULL,
   `updated_time_zone` int(11) DEFAULT NULL,
-  `organization_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_D8698A76C54C8C93` (`type_id`),
   KEY `IDX_D8698A7661220EA6` (`creator_id`),
   KEY `IDX_D8698A76E37ECFB0` (`updater_id`),
-  KEY `IDX_D8698A7632C8A3DE` (`organization_id`),
-  CONSTRAINT `FK_D8698A7632C8A3DE` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
+  KEY `IDX_D8698A7632C8A3DE` (`company_id`),
+  CONSTRAINT `FK_D8698A7632C8A3DE` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
   CONSTRAINT `FK_D8698A7661220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_D8698A76C54C8C93` FOREIGN KEY (`type_id`) REFERENCES `document_type` (`id`),
   CONSTRAINT `FK_D8698A76E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
@@ -506,7 +503,7 @@ DROP TABLE IF EXISTS `document_category`;
 
 CREATE TABLE `document_category` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `organization_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -517,11 +514,11 @@ CREATE TABLE `document_category` (
   `updated` datetime NOT NULL,
   `updated_time_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_898DE89832C8A3DE` (`organization_id`),
+  KEY `IDX_898DE89832C8A3DE` (`company_id`),
   KEY `IDX_898DE898727ACA70` (`parent_id`),
   KEY `IDX_898DE89861220EA6` (`creator_id`),
   KEY `IDX_898DE898E37ECFB0` (`updater_id`),
-  CONSTRAINT `FK_898DE89832C8A3DE` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
+  CONSTRAINT `FK_898DE89832C8A3DE` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
   CONSTRAINT `FK_898DE89861220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_898DE898727ACA70` FOREIGN KEY (`parent_id`) REFERENCES `document_category` (`id`),
   CONSTRAINT `FK_898DE898E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
@@ -533,7 +530,6 @@ DROP TABLE IF EXISTS `document_folder`;
 
 CREATE TABLE `document_folder` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `organization_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -547,12 +543,10 @@ CREATE TABLE `document_folder` (
   `updated` datetime NOT NULL,
   `updated_time_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_52C0B8AB32C8A3DE` (`organization_id`),
   KEY `IDX_52C0B8AB979B1AD6` (`company_id`),
   KEY `IDX_52C0B8AB727ACA70` (`parent_id`),
   KEY `IDX_52C0B8AB61220EA6` (`creator_id`),
   KEY `IDX_52C0B8ABE37ECFB0` (`updater_id`),
-  CONSTRAINT `FK_52C0B8AB32C8A3DE` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
   CONSTRAINT `FK_52C0B8AB61220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_52C0B8AB727ACA70` FOREIGN KEY (`parent_id`) REFERENCES `document_folder` (`id`),
   CONSTRAINT `FK_52C0B8AB979B1AD6` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
@@ -632,7 +626,6 @@ DROP TABLE IF EXISTS `document_type_folder`;
 CREATE TABLE `document_type_folder` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `organization_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL,
@@ -645,12 +638,10 @@ CREATE TABLE `document_type_folder` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `document_type` (`company_id`,`documentType_id`),
   KEY `IDX_4DDC559F979B1AD6` (`company_id`),
-  KEY `IDX_4DDC559F32C8A3DE` (`organization_id`),
   KEY `IDX_4DDC559F4DA0E3EA` (`documentType_id`),
   KEY `IDX_4DDC559F35DC8FD8` (`documentFolder_id`),
   KEY `IDX_4DDC559F61220EA6` (`creator_id`),
   KEY `IDX_4DDC559FE37ECFB0` (`updater_id`),
-  CONSTRAINT `FK_4DDC559F32C8A3DE` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
   CONSTRAINT `FK_4DDC559F35DC8FD8` FOREIGN KEY (`documentFolder_id`) REFERENCES `document_folder` (`id`),
   CONSTRAINT `FK_4DDC559F4DA0E3EA` FOREIGN KEY (`documentType_id`) REFERENCES `document_type` (`id`),
   CONSTRAINT `FK_4DDC559F61220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
@@ -904,38 +895,6 @@ CREATE TABLE `order` (
   CONSTRAINT `FK_F529939861220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_F5299398E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-
-DROP TABLE IF EXISTS `organization`;
-
-CREATE TABLE `organization` (
-  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `deleted` tinyint(1) NOT NULL,
-  `created` datetime NOT NULL,
-  `created_time_zone` int(11) DEFAULT NULL,
-  `updated` datetime NOT NULL,
-  `updated_time_zone` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_C1EE637C61220EA6` (`creator_id`),
-  KEY `IDX_C1EE637CE37ECFB0` (`updater_id`),
-  CONSTRAINT `FK_C1EE637C61220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FK_C1EE637CE37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-LOCK TABLES `organization` WRITE;
-/*!40000 ALTER TABLE `organization` DISABLE KEYS */;
-
-INSERT INTO `organization` (`id`, `creator_id`, `updater_id`, `name`, `deleted`, `created`, `created_time_zone`, `updated`, `updated_time_zone`)
-VALUES
-	('11111111-1111-1111-1111-111111111111',NULL,NULL,'DVS',0,'2014-07-24 15:18:14',151,'2014-07-24 15:18:14',151);
-
-/*!40000 ALTER TABLE `organization` ENABLE KEYS */;
-UNLOCK TABLES;
-
 
 DROP TABLE IF EXISTS `product`;
 
@@ -1208,7 +1167,6 @@ CREATE TABLE `user` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `country_id` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
   `avatar_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `organization_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `first_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -1256,7 +1214,6 @@ CREATE TABLE `user` (
   UNIQUE KEY `UNIQ_8D93D649F85E0677` (`username`),
   KEY `IDX_8D93D6495373C966` (`country_id`),
   KEY `IDX_8D93D64986383B10` (`avatar_id`),
-  KEY `IDX_8D93D64932C8A3DE` (`organization_id`),
   KEY `IDX_8D93D64961220EA6` (`creator_id`),
   KEY `IDX_8D93D649E37ECFB0` (`updater_id`),
   KEY `token_idx` (`token`),
@@ -1264,7 +1221,6 @@ CREATE TABLE `user` (
   KEY `IDX_8D93D649979B1AD6` (`company_id`),
   KEY `IDX_8D93D649979B1AD4` (`state_id`),
   KEY `industry_id` (`industry_id`),
-  CONSTRAINT `FK_8D93D64932C8A3DE` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
   CONSTRAINT `FK_8D93D6495373C966` FOREIGN KEY (`country_id`) REFERENCES `country` (`iso`),
   CONSTRAINT `FK_8D93D64961220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_8D93D64986383B10` FOREIGN KEY (`avatar_id`) REFERENCES `document` (`id`),
@@ -1278,7 +1234,7 @@ CREATE TABLE `user` (
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 
-INSERT INTO `user` (`id`, `country_id`, `avatar_id`, `organization_id`, `creator_id`, `updater_id`, `first_name`, `last_name`, `middle_name`, `dob`, `gender`, `race`, `ssn`, `driver_license`, `address1`, `address2`, `address3`, `apto`, `city`, `state_id`, `postal`, `birth_place`, `phone1`, `phone2`, `username`, `password`, `email`, `business`, `employer_number`, `status`, `locked`, `locked_reason`, `locked_by`, `locked_date`, `locked_time_zone`, `password_expiration_date`, `token`, `token_expiration_date`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `is_active`, `deleted`, `group_id`, `company_id`, `industry_id`)
+INSERT INTO `user` (`id`, `country_id`, `avatar_id`,  `creator_id`, `updater_id`, `first_name`, `last_name`, `middle_name`, `dob`, `gender`, `race`, `ssn`, `driver_license`, `address1`, `address2`, `address3`, `apto`, `city`, `state_id`, `postal`, `birth_place`, `phone1`, `phone2`, `username`, `password`, `email`, `business`, `employer_number`, `status`, `locked`, `locked_reason`, `locked_by`, `locked_date`, `locked_time_zone`, `password_expiration_date`, `token`, `token_expiration_date`, `created`, `created_time_zone`, `updated`, `updated_time_zone`, `is_active`, `deleted`, `group_id`, `company_id`, `industry_id`)
 VALUES
 ('5fbec591-acc8-49fe-a44e-46c59cae99f9', 'US', NULL, NULL, NULL, NULL, 'Rolian', 'Ruiz', NULL, '1985-12-08 00:00:00', 'M', NULL, NULL, 'R2345', '1000 Parkview Dr', 'Apt #824', NULL, '', 'Hallandale Beach', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '33009', NULL, '7863200059', NULL, 'rruiz', '465b5f5f02f24eaf0147605dd5c836f59ebc5270', 'rolian85@gmail.com', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-12-07', '2d676d397bd250dcc7e0ed8f4bfdc527', '2014-12-16 06:16:07', '2013-06-17 21:23:41', 70, '2014-12-15 22:16:07', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),
 ('d4af5216-9c72-11e4-a966-24be4c436c53', 'US', NULL, NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', NULL, 'Magento', 'User', NULL, '2008-11-29 00:00:00', NULL, NULL, NULL, NULL, 'Address1', 'Address2', NULL, '', 'Miami', '6d76fc5b-80e8-11e4-9884-b8ac6f58483b', '330012', NULL, '7863200059', NULL, 'system', '90457667694c7a464a0399f8df962c943c81579c', 'test@samsystems.io', '', '', 0, 0, NULL, NULL, NULL, 151, '2015-10-16', 'b60f158e2cdc20cd53e4be254b403acd', '2040-01-15 11:12:45', '2014-10-06 19:43:05', 151, '2015-01-15 03:12:45', NULL, 1, 0, '2a1e8ff1-c134-413b-bbc1-0f41da9a1613', '242495b7-69f4-4107-a4d8-850540e6b834', NULL),

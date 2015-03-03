@@ -52,10 +52,6 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	user.Creator = userSession
 	user.Updater = userSession
 
-	if user.Organization == nil {
-		organization, _ := models.GetOrganization("11111111-1111-1111-1111-111111111111")
-		user.Organization = organization
-	}
 	if user.Company == nil {
 		company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
 		user.Company = company

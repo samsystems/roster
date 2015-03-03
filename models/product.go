@@ -13,7 +13,7 @@ type Product struct {
 	Name                string
 	Description         string
 	Manufacturer        string
-	Status              int
+	Category            int
 	Purchasable         bool
 	Cost                float32  `json:",string"`
 	PurchaseAccount     *Account `orm:"rel(one)" valid:"Entity(Account)"`

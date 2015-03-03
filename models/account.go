@@ -9,10 +9,8 @@ import (
 const ACCOUNT_LIMIT int = 10
 
 type Account struct {
-	Id          string `orm:"pk"`
-	Name        string
-	Description string
-
+	Id              string `orm:"pk"`
+	Name            string
 	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Deleted         time.Time `orm:"type(datetime)"`

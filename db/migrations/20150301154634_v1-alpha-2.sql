@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS `location`;
 CREATE TABLE `location` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
   `address` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `city` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `zipcode` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -70,7 +70,7 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `manufacturer` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `category` int(11) NOT NULL,
   `purchasable` tinyint(1) DEFAULT NULL,

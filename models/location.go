@@ -9,8 +9,7 @@ import (
 const LOCATION_LIMIT int = 10
 
 type Location struct {
-	Id string `orm:"pk"`
-
+	Id              string `orm:"pk"`
 	Name            string
 	Description     string
 	Address         string

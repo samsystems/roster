@@ -144,3 +144,4 @@ appengine-generated/
 config.json
 *.project
 /.settings/
+db/dbconf.yml

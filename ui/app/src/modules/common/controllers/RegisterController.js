@@ -96,9 +96,10 @@ angular.module('common').controller('RegisterController', ['$scope', '$window', 
                     user.LastName = $scope.user.LastName;
                     user.Email = $scope.user.Email;
                     user.Password = $scope.user.Password;
-                    user.Business = $scope.user.BusinessName;
+                    user.Company = $scope.user.Company;
                     user.EmployerNumber = $scope.user.EmployerNumber;
                     user.Industry = $scope.user.Industry;
+                    user.CompanyScope = $scope.user.CompanyScope;
                     user.Address = $scope.user.StreetAddress;
                     user.Apto = $scope.user.AptUnit;
                     user.City = $scope.user.City;

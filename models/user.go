@@ -57,6 +57,7 @@ type User struct {
 	Group                  *Group 		 `orm:"rel(one)"`
 	Company                *Company      `orm:"rel(one)"`
 	Industry               *Industry     `orm:"rel(one)"`
+	CompanyScope           *CompanyScope `orm:"rel(one)"`
 }
 
 type Token struct {

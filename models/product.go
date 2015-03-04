@@ -23,6 +23,7 @@ type Product struct {
 	SaleDescription     string
 	SaleAccount         *Account `orm:"rel(one)" valid:"Entity(Account)"`
 	IsTaxable           bool
+	Company             *Company  `orm:"rel(one)" valid:"Entity(Company)"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Deleted             time.Time `orm:"type(datetime)"`

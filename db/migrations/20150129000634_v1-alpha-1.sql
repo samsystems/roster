@@ -1363,6 +1363,8 @@ INSERT INTO `vendor` (`id`,`country_id`,`state_id`,`creator_id`,`updater_id`,`na
 	VALUES ('81c2fb0a-2aee-45e8-b61b-cc103b58f239','AD','6d76fc5b-80e8-11e4-9884-b8ac6f58483b','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','Antonio','Category 1','135878','1438784','antonio@gmail.com','234 nw 23 st','miami','33157','some notes',NULL,'2015-02-22 11:05:27',0,'2015-02-22 11:05:27',0),
 		   ('95c146f9-2b87-43fa-9166-45f884a0a45f','AD','6d76fc5b-80e8-11e4-9884-b8ac6f58483b','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','Jose','Catergory 2','13587','1387318','jose@gmail.com','345 nw 34 st','miami','23554','some notes',NULL,'2015-02-22 01:03:17',0,'2015-02-22 01:03:17',0);
 
+DROP TABLE IF EXISTS `purchase_order`;
+
 CREATE TABLE `purchase_order` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `supplier_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1402,6 +1404,8 @@ INSERT INTO `purchase_order` (`id`,`supplier_id`,`creator_id`,`updater_id`,`orde
 INSERT INTO `purchase_order` (`id`,`supplier_id`,`creator_id`,`updater_id`,`order_number`,`reference`,`date`,`expected_arrival`,`date_raised`,`sent`,`currency`,`delivery_instruction`,`delivery_address`,`delivery_attention`,`delivery_phone`,`status`,`sub_total`,`total_tax`,`amount`,`tax`,`deleted`,`created`,`created_time_zone`,`updated`,`updated_time_zone`) VALUES ('13',NULL,'fec7c94c-9638-11e4-96b1-6ed3d8c13ef2','fec7c94c-9638-11e4-96b1-6ed3d8c13ef2',12,12,'2014-10-02 00:00:00','2014-10-02 00:00:00','2014-10-02 00:00:00',0,'USD','a','a','a','1248763',2,20,548,50,10,NULL,'2014-10-02 00:00:00',NULL,'2014-10-02 00:00:00',NULL);
 INSERT INTO `purchase_order` (`id`,`supplier_id`,`creator_id`,`updater_id`,`order_number`,`reference`,`date`,`expected_arrival`,`date_raised`,`sent`,`currency`,`delivery_instruction`,`delivery_address`,`delivery_attention`,`delivery_phone`,`status`,`sub_total`,`total_tax`,`amount`,`tax`,`deleted`,`created`,`created_time_zone`,`updated`,`updated_time_zone`) VALUES ('14',NULL,'fec7c94c-9638-11e4-96b1-6ed3d8c13ef2','fec7c94c-9638-11e4-96b1-6ed3d8c13ef2',12,12,'2014-10-02 00:00:00','2014-10-02 00:00:00','2014-10-02 00:00:00',0,'USD','a','a','a','1248763',3,16,548,60,10,NULL,'2014-10-02 00:00:00',NULL,'2014-10-02 00:00:00',NULL);
 INSERT INTO `purchase_order` (`id`,`supplier_id`,`creator_id`,`updater_id`,`order_number`,`reference`,`date`,`expected_arrival`,`date_raised`,`sent`,`currency`,`delivery_instruction`,`delivery_address`,`delivery_attention`,`delivery_phone`,`status`,`sub_total`,`total_tax`,`amount`,`tax`,`deleted`,`created`,`created_time_zone`,`updated`,`updated_time_zone`) VALUES ('15',NULL,'fec7c94c-9638-11e4-96b1-6ed3d8c13ef2','fec7c94c-9638-11e4-96b1-6ed3d8c13ef2',12,12,'2014-10-02 00:00:00','2014-10-02 00:00:00','2014-10-02 00:00:00',0,'USD','a','a','a','1248763',4,18,548,70,10,NULL,'2014-10-02 00:00:00',NULL,'2014-10-02 00:00:00',NULL);
+
+DROP TABLE IF EXISTS `purchase_order_item`;
 
 CREATE TABLE `purchase_order_item` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,

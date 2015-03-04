@@ -14,6 +14,11 @@ type Location struct {
 	Name            string
 	Description     string
 	Address         string
+	City            string
+	Zipcode         string
+	State           *Company  `orm:"rel(one)" valid:"Entity(State)"`
+	Country         *Company  `orm:"rel(one)" valid:"Entity(Country)"`
+	Company         *Company  `orm:"rel(one)" valid:"Entity(Company)"`
 	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Deleted         time.Time `orm:"type(datetime)"`

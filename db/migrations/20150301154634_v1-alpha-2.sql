@@ -1,11 +1,21 @@
 
 -- +goose Up
 -- SQL in section 'Up' is executed when this migration is applied
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
 DROP TABLE IF EXISTS `account`;
 
 CREATE TABLE `account` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `deleted` datetime DEFAULT NULL,
@@ -14,8 +24,10 @@ CREATE TABLE `account` (
   `updated` datetime NOT NULL,
   `updated_time_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_D48A2F7C61220AA3` (`updater_id`),
-  KEY `FK_D48A2F7C61220AA4` (`creator_id`),
+  KEY `FK_D48A8F7C61220AA3` (`updater_id`),
+  KEY `FK_D48A2F7C61220AA3` (`creator_id`),
+  KEY `FK_D48A2F7C61220AA4` (`company_id`),
+  CONSTRAINT `FK_D48A8F7C61220AA3` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
   CONSTRAINT `FK_D48A2F7C61220AA3` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_D48A2F7C61220AA4` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -29,7 +41,12 @@ CREATE TABLE `location` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
-  `address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zipcode` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country_id` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `deleted` datetime DEFAULT NULL,
@@ -38,8 +55,10 @@ CREATE TABLE `location` (
   `updated` datetime NOT NULL,
   `updated_time_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `FK_D34AX4AD61220AA1` (`company_id`),
   KEY `FK_D34A04AD61220AA1` (`creator_id`),
   KEY `FK_D34A04AD61220AA2` (`updater_id`),
+  CONSTRAINT `FK_D34AX4AD61220AA1` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
   CONSTRAINT `FK_D34A04AD61220AA1` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_D34A04AD61220AA2` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -64,6 +83,7 @@ CREATE TABLE `product` (
   `sale_description` text COLLATE utf8_unicode_ci,
   `is_taxable` tinyint(1) DEFAULT NULL,
   `deleted` datetime DEFAULT NULL,
+  `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updated` datetime NOT NULL,
@@ -71,10 +91,12 @@ CREATE TABLE `product` (
   `created` datetime NOT NULL,
   `created_time_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `IDX_D34A04AD61228EA6` (`company_id`),
   KEY `IDX_D34A04AD61220EA6` (`creator_id`),
   KEY `IDX_D34A04ADE37ECFB0` (`updater_id`),
   KEY `FK_D34A04AD61220EA7` (`purchase_account_id`),
   KEY `FK_D34A04AD61220EA8` (`sale_account_id`),
+  CONSTRAINT `FK_D34A04AD61228EA6` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
   CONSTRAINT `FK_D34A04AD61220EA7` FOREIGN KEY (`purchase_account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `FK_D34A04AD61220EA8` FOREIGN KEY (`sale_account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `FK_D34A04AD61220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
@@ -158,6 +180,13 @@ ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D64932C8A3DE` ;
 ALTER TABLE `user` DROP `organization_id`;
 DROP TABLE IF EXISTS `organization`;
+
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 
 -- +goose Down

@@ -41,7 +41,8 @@ CREATE TABLE `location` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address1` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
   `city` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `zipcode` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `state_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -161,12 +162,12 @@ CREATE TABLE IF NOT EXISTS `company_scope` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `company_scope` (`id`, `name`, `name_key`, `deleted`, `creator_id`, `updater_id`, `created`, `created_time_zone`, `updated`, `updated_time_zone`) VALUES
-('8b16c42e-c1ea-11e4-b9a6-a088694cea32', 'Entire business', 'Entire business', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
-('8b16c42e-c1ea-11e4-b9a6-a088694cea33', 'Some of my locations', 'Some of my locations', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
-('8b16c42e-c1ea-11e4-b9a6-a088694cea34', 'All of my credit transactions', 'All of my credit transactions', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
-('8b16c42e-c1ea-11e4-b9a6-a088694cea35', 'Some of my card transactions', 'Some of my card transactions', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
-('8b16c42e-c1ea-11e4-b9a6-a088694cea36', 'As a backup processor', 'As a backup processor', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
-('8b16c42e-c1ea-11e4-b9a6-a088694cea37', 'For events only', 'For events only', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL);
+('8b16c42e-c1ea-11e4-b9a6-a088694cea32', 'Entire business', 'ENTIRE_BUSINESS', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea33', 'Some of my locations', 'SOME_LOCATIONS', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea34', 'All of my credit transactions', 'ALL_CREDIT', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea35', 'Some of my card transactions', 'SOME_CREDIT', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea36', 'As a backup processor', 'BACKUP', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL),
+('8b16c42e-c1ea-11e4-b9a6-a088694cea37', 'For events only', 'EVENTS', NULL, '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '2015-03-03 00:00:00', NULL, '2015-03-03 00:00:00', NULL);
 
 
 ALTER TABLE `company_scope`

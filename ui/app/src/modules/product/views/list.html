@@ -1,7 +1,7 @@
 <page-content-title title="Products / Services">
     <a title="Add" class="btn btn-primary" href="#/products/create"><i class="fa fa-plus"> New Product / Service</i></a>
 </page-content-title>
-<panel title="Products / Services List" type="plain">
+<panel type="plain">
     <!-- Toolbar message -->
     <div class="data-table-toolbar">
         <div class="row">
@@ -27,24 +27,18 @@
             <tbody>
                 <tr  class="items" data-ng-repeat="product in $data">
                     <td data-title="'Name'" sortable="'name'"style="cursor:pointer;" data-ng-click="viewProduct(product)">
-                        {{product.getName()}}
+                        {{product.getName()}} <span href="#" tooltip="{{product.getDescription()}}">(...)</span>
                     </td>
-                    <td data-title="'Price'" sortable="'price'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    <td data-title="'Cost Price'" sortable="'price'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
                         {{product.getPrice() | currency: 'USD'}}
                     </td>
-                    <td data-title="'Stock'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    <td data-title="'Sale Price'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                        {{product.getCost()}}
+                    </td>
+                    <td data-title="'In Stock'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
                         {{product.getStock()}}
                     </td>
-                    <td data-title="'Size'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
-                        {{product.getSize()}}
-                    </td>
-                    <td  data-title="'Description'" sortable="'description'" style="cursor:pointer;">{{product.getDescription()}}</td>
-                    <td data-title="'Status'" sortable="'status'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
-                        <div class="btn-group">
-                            <button type="button" data-ng-if="product.getStatus()==1" class="btn btn-success fa btn-sm mr5 mb10">Active</button>
-                            <button type="button" data-ng-if="product.getStatus()==2" class="btn btn-default fa btn-sm mr5 mb10">Inactive</button>
-                        </div>
-                    </td>
+                    <td  data-title="'Category'" sortable="'description'" style="cursor:pointer;">{{product.getStringCategory()}}</td>
                     <td data-title="'Action'">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default fa fa-edit btn-sm mr5 mb10" data-ng-click="selectProduct(product)"></button>

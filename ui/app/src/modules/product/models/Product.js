@@ -18,8 +18,11 @@ angular.module('product').factory('Product', ['restmod','$http','config', functi
                 getManufacturer: function () {
                     return this.Manufacturer;
                 },
-                getStatus: function () {
-                    return this.Status;
+                getCategory: function () {
+                    return this.Category;
+                },
+                getStringCategory: function () {
+                    return (this.Category == 1) ? "Product" : "Service";
                 },
                 getStock: function () {
                     return this.Stock;
@@ -27,15 +30,9 @@ angular.module('product').factory('Product', ['restmod','$http','config', functi
                 getPrice: function () {
                     return this.Price;
                 },
-                getSize: function () {
-                    return this.Size;
+                getCost: function () {
+                    return this.Cost;
                 },
-                getSku: function () {
-                    return this.Sku;
-                },
-                getSerial: function () {
-                    return this.Serial;
-                }
             },
             Model: {
                 count: function(search) {

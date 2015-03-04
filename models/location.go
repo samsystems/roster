@@ -14,6 +14,7 @@ type Location struct {
 	Name            string
 	Description     string
 	Address         string
+	Address1        string
 	City            string
 	Zipcode         string
 	State           *Company  `orm:"rel(one)" valid:"Entity(State)"`

@@ -19,6 +19,7 @@ deploy:
             go get golang.org/x/oauth2
             go get google.golang.org/cloud/compute/metadata
             go get google.golang.org/api/storage/v1
+            go get google.golang.org/appengine/urlfetch
 
     - script:
         cwd: ui/

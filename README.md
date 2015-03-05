@@ -27,6 +27,7 @@ go get golang.org/x/net/context
 go get golang.org/x/oauth2
 go get google.golang.org/cloud/compute/metadata
 go get google.golang.org/api/storage/v1
+go get google.golang.org/appengine/urlfetch
 ```
 
 Create a local config, and adjust to your environment

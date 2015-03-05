@@ -176,10 +176,11 @@ ALTER TABLE `company_scope`
 
 ALTER TABLE `user` ADD `company_scope_id` VARCHAR(36) NULL , ADD INDEX (`company_scope_id`);
 ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649979B1AD8` FOREIGN KEY (`company_scope_id`) REFERENCES `inventory`.`company_scope` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
+ALTER TABLE `user` CHANGE `business` `business_name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D64932C8A3DE` ;
 ALTER TABLE `user` DROP `organization_id`;
+
+ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
 DROP TABLE IF EXISTS `organization`;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

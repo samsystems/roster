@@ -37,7 +37,7 @@ type User struct {
 	Username               string
 	Password               string
 	Email                  string
-	Business               string
+	BusinessName           string
 	EmployerNumber         string
 	Status                 bool
 	Locked                 bool
@@ -100,8 +100,10 @@ func GetAllUsers() []*User {
 
 	var users []*User
 	qs := o.QueryTable("user")
-	qs.Filter("deleted", false).All(&users)
-
+	_,err:=qs.Filter("deleted", false).All(&users)
+if err != nil {
+		panic(err)
+	}
 	return users
 }
 

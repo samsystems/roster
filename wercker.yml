@@ -20,7 +20,6 @@ deploy:
             go get google.golang.org/cloud/compute/metadata
             go get google.golang.org/api/storage/v1
             go get google.golang.org/appengine/urlfetch
-            go get golang.org/x/net/context
 
     - script:
         cwd: ui/

@@ -1,11 +1,13 @@
 'use strict';
 
-angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Customer', 'ngTableParams', '$filter', '$q','$state',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, ngTableParams, $filter, $q, $state) {
+angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Customer', 'State', 'ngTableParams', '$filter', '$q','$state',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, State, ngTableParams, $filter, $q, $state) {
 
     $scope.page = 1;
     $scope.total =0;
     $scope.search = {customer : ""};
+
+        $scope.states    = State.$search();
 
     $scope.limitInPage = config.application.limitInPage;
 

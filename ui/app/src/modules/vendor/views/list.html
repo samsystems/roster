@@ -1,82 +1,80 @@
 <page-content-title title="Vendors">
+    <a title="Add" class="btn btn-primary" href="#/vendors/create"><i class="fa fa-plus"> Import / Export</i></a>
+    <a title="Add" class="btn btn-primary" href="#/vendors/create"><i class="fa fa-plus"> New</i></a>
+</page-content-title>
 
-  <div class="btn-group mr10 mb10">
-    <a title="Add" class="btn btn-primary" href="#/vendors/create"><i class="fa fa-plus"> New vendor</i></a>
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      <span class="caret"></span>
-      <span class="sr-only">Toggle Dropdown</span>
-    </button>
-    <ul class="dropdown-menu" role="menu" style="margin-left: -32.5px;">
-      <li>
-        <a href="#">Import vendors</a>
-      </li>
-    </ul>
-  </div>
 
 </page-content-title>
 
 <panel type="plain">
-  <div class="row">
-    <div class="col-sm-5">
-      <form role="form" ng-submit="search(search.vendor)">
-        <input type="text" data-ng-model="search.vendor" class="form-control" placeholder="Search ..."/>
-      </form>
+    <div class="row">
+        <div class="col-sm-5">
+            <form role="form" ng-submit="search(search.vendor)">
+                <input type="text" data-ng-model="search.vendor" class="form-control" placeholder="Search ..."/>
+            </form>
+        </div>
     </div>
-  </div>
-  <div class="table-responsive table-hover" data-ng-show="total > 0">
-    <table ng-table="vendorTable" class="table table-hover table-message" template-pagination="custom/pager">
-      <col width="20%"/>
-      <col width="10%"/>
-      <col width="10%"/>
-      <col width="10%"/>
-      <col width="15%"/>
+    <div class="table-responsive table-hover" data-ng-show="total > 0">
+        <table ng-table="vendorTable" class="table table-hover table-message" template-pagination="custom/pager">
+            <col width="20%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="10%"/>
+            <col width="10%"/>
 
-      <tr  class="items" data-ng-repeat="vendor in $data">
-        <td data-title="'Name'" sortable="'name'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
-          {{vendor.Name}}
-        </td>
-        <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
-          {{vendor.Phone}}
-        </td>
-        <td data-title="'Email'" sortable="'email'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
-          {{vendor.Email}}
-        </td>
-        <td data-title="'Open Balance'" sortable="'openBalance'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
-          {{vendor.Address}}
-        </td>
-        <td data-title="'Action'">
-          <div class="btn-group">
-            <button type="button" class="btn btn-default fa fa-edit" data-ng-click="editVendor(vendor)"></button>
-            <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeVendor(vendor)"></button>
-          </div>
-        </td>
-      </tr>
-    </table>
-    <!-- Footer message toolbar -->
-    <script type="text/ng-template" id="custom/pager">
-      <div class="data-table-toolbar">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="pull-right">
+            <tr class="items" data-ng-repeat="vendor in $data">
+                <td data-title="'Vendor'" sortable="'name'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
+                    {{vendor.Name}}
+                </td>
+                <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
+                    {{vendor.Phone}}
+                </td>
+                <td data-title="'Email'" sortable="'email'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
+                    {{vendor.Email}}
+                </td>
+                <td data-title="'Outstanding'" sortable="'email'">
+                </td>
+                <td data-title="'Overdue'" sortable="'email'">
+                </td>
+                <td data-title="'Action'">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default fa fa-edit"
+                                data-ng-click="editVendor(vendor)"></button>
+                        <button type="button" class="btn btn-danger fa fa-trash-o"
+                                data-ng-click="removeVendor(vendor)"></button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- Footer message toolbar -->
+        <script type="text/ng-template" id="custom/pager">
+            <div class="data-table-toolbar">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pull-right">
 
-              <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
-              <div class="btn-group">
+                            <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
+
+                            <div class="btn-group">
                       <span ng-repeat="page in pages"
                             ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
                             ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
-                          <a ng-switch-when="prev" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
-                          <a ng-switch-when="next" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
+                          <a ng-switch-when="prev" ng-click="params.page(page.number)" href=""
+                             class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                          <a ng-switch-when="next" ng-click="params.page(page.number)" href=""
+                             class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
                       </span>
-              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </script>
-    <!-- End Footer message toolbar -->
-  </div>
-  <div class="panel-body" >
-    <div data-ng-show="total == 0" class="well well-small">{{'No Vendor Available.' | translate}}</div>
-  </div>
+        </script>
+        <!-- End Footer message toolbar -->
+    </div>
+    <div class="panel-body">
+        <div data-ng-show="total == 0" class="well well-small">{{'No Vendor Available.' | translate}}</div>
+    </div>
 </panel>
 

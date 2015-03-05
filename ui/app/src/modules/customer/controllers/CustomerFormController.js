@@ -6,6 +6,7 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
     $scope.countries = Country.$search();
     $scope.states    = State.$search();
     $scope.customer = {};
+
     if(!_.isUndefined($stateParams.id)){
        $scope.customer = Customer.$find($stateParams.id);
     }else{

@@ -1,5 +1,7 @@
 <page-content-title title="Customers">
-    <a title="Add" class="btn btn-primary" href="#/customers/create"><i class="fa fa-plus"> New Customer</i></a>
+    <a title="Add" class="btn btn-primary" href="#/customers/create"><i class="fa fa-plus"> Create Statements</i></a>
+    <a title="Add" class="btn btn-primary" href="#/customers/create"><i class="fa fa-plus"> Import / Export</i></a>
+    <a title="Add" class="btn btn-primary" href="#/customers/create"><i class="fa fa-plus"> New</i></a>
 </page-content-title>
 
 <panel type="plain">
@@ -20,7 +22,7 @@
             <col width="15%"/>
 
             <tr  class="items" data-ng-repeat="customer in $data">
-                <td data-title="'Name'" sortable="'name'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
+                <td data-title="'Customer'" sortable="'name'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
                     {{customer.Name}}
                 </td>
                 <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
@@ -29,7 +31,7 @@
                 <td data-title="'Email'" sortable="'email'" style="cursor:pointer;" data-ng-click="viewCustomer(customer)">
                     {{customer.Email}}
                 </td>
-                <td data-title="'Balance'" sortable="'email'">
+                <td data-title="'Outstanding'" sortable="'email'">
                 </td>
                 <td data-title="'Overdue'" sortable="'email'">
                 </td>

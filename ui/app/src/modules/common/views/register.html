@@ -3,7 +3,11 @@
 <wizard data-hide-indicators="true">
 <wz-step data-title="{{step.register1}}">
     <div class="full-content-center animated fadeInDownBig">
-        <a href="#fakelink"><img src="images/logo.png" class="logo" alt="Logo"></a>
+        <div class="panel-heading">
+            <h4 class="panel-title text-center">
+                <img src="/images/roster_850x300.png" width="300px" alt="Roster logo">
+            </h4>
+        </div>
 
         <div class="login-wrap">
             <div class="box-info">
@@ -80,7 +84,7 @@
 
                         </div>
                         <div class="col-md-2  pull-right">
-                            <button class="btn btn-default" data-ng-click="toStepTwo()"><i class="fa fa-plus"></i>
+                            <button class="btn btn-primary" data-ng-click="toStepTwo()">
                                 {{'Continue' |
                                 translate}}
                             </button>
@@ -94,7 +98,11 @@
 </wz-step>
 <wz-step data-title="{{step.register2}}">
     <div class="full-content-center animated fadeInDownBig">
-        <a href="#fakelink"><img src="images/logo.png" class="logo" alt="Logo"></a>
+        <div class="panel-heading">
+            <h4 class="panel-title text-center">
+                <img src="/images/roster_850x300.png" width="300px" alt="Roster logo">
+            </h4>
+        </div>
 
         <div class="login-wrap">
             <div class="box-info">
@@ -108,7 +116,8 @@
                         <div class="col-md-6">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Business Name' | translate}}</label>
-                                <select class="form-control" data-ng-model="user.Company.Id" data-ng-options ="company.Id as company.Name for company in companies"></select>
+                                <input type="text" data-ng-model="user.BusinessName" class="form-control text-input"
+                                       placeholder="Name">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -210,14 +219,13 @@
                          style="border-top: 1px solid #000; border-bottom: thin solid #000; padding: 20px 0 20px 0;">
 
                         <div class="col-md-2 pull-left">
-                            <button class="btn btn-default" data-ng-click="toStepOne()"><i class="fa fa-plus"></i>
-                                {{'Back to
-                                step 1' | translate}}
+                            <button class="btn btn-default" data-ng-click="toStepOne()">
+                                {{'Back' | translate}}
                             </button>
 
                         </div>
                         <div class="col-md-2 pull-right">
-                            <button class="btn btn-default" data-ng-click="save()"><i class="fa fa-plus"></i>
+                            <button class="btn btn-primary" data-ng-click="save()">
                                 {{'Finish' |
                                 translate}}
                             </button>

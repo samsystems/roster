@@ -1163,7 +1163,7 @@ CREATE TABLE `state` (
 
 INSERT INTO `state` (`id`,`country_id`,`creator_id`,`updater_id`,`name`,`accent_name`,`deleted`,`created`,`created_time_zone`,`updated`,`updated_time_zone`)
 VALUES
-	('6d76fc5b-80e8-11e4-9884-b8ac6f58483b','AF','5fbec591-acc8-49fe-a44e-46c59cae99f9','fde7b2da-4d90-11e4-9918-98407aa1b8b7','Miami','Miami',0,'2014-12-10 00:00:00',NULL,'2014-12-10 00:00:00',NULL);
+	('6d76fc5b-80e8-11e4-9884-b8ac6f58483b','AF','5fbec591-acc8-49fe-a44e-46c59cae99f9','fde7b2da-4d90-11e4-9918-98407aa1b8b7','Florida','Florida',0,'2014-12-10 00:00:00',NULL,'2014-12-10 00:00:00',NULL);
 
 DROP TABLE IF EXISTS `transaction`;
 

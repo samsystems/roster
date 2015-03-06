@@ -181,6 +181,110 @@ ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D64932C8A3DE` ;
 ALTER TABLE `user` DROP `organization_id`;
 
 ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
+
+ALTER TABLE `customer` DROP FOREIGN KEY `FK_81398E095373C966`;
+ALTER TABLE `customer` DROP `country_id`;
+ALTER TABLE `customer` DROP `email`;
+ALTER TABLE `customer` ADD `company_name` VARCHAR(255) NULL AFTER `fax`;
+ALTER TABLE `customer` ADD `web_site` VARCHAR(255) NULL AFTER `company_name`;
+ALTER TABLE `customer` ADD `account_number` VARCHAR(255) NULL AFTER `web_site`;
+ALTER TABLE `customer` CHANGE `address` `billing_address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+ALTER TABLE `customer` ADD `billing_apto` VARCHAR(100) NOT NULL AFTER `billing_address`;
+ALTER TABLE `customer` CHANGE `city` `billing_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+ALTER TABLE `customer` ADD `billing_zipcode` VARCHAR( 20 ) NOT NULL AFTER `billing_city` ;
+ALTER TABLE `customer` CHANGE `state_id` `billing_state_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `customer` ADD `shipping_address` VARCHAR(255) NULL AFTER `billing_city`;
+ALTER TABLE `customer` ADD `shipping_apto` VARCHAR(100) NOT NULL AFTER `shipping_address`;
+ALTER TABLE `customer` ADD `shipping_city` VARCHAR(100) NOT NULL AFTER `shipping_apto` ;
+ALTER TABLE `customer` CHANGE `zipcode` `shipping_zipcode` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `customer` ADD `shipping_state_id` VARCHAR(36) NOT NULL AFTER `shipping_zipcode`,ADD INDEX (`shipping_state_id`) ;
+ALTER TABLE `customer` DROP FOREIGN KEY `FK_81398E0961220EA6`;
+ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA0` FOREIGN KEY (`creator_id`) REFERENCES `inventory`.`user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `customer` ADD `tax` FLOAT NULL AFTER `shipping_state_id`;
+ALTER TABLE `customer` ADD `discount` FLOAT NULL AFTER `tax` ;
+ALTER TABLE `customer` ADD `bank_account` VARCHAR(255) NOT NULL AFTER `discount`;
+ALTER TABLE `customer` ADD `bank_account_name` VARCHAR(255) NOT NULL AFTER `bank_account`;
+ALTER TABLE `customer` ADD `batch_payments_detailt` VARCHAR(255) NOT NULL AFTER `bank_account_name`;
+ALTER TABLE `customer` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `id`,
+  CHANGE `phone` `phone` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `name`,
+  CHANGE `mobile` `mobile` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `phone`,
+  CHANGE `fax` `fax` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `mobile`,
+  CHANGE `company_name` `company_name` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `fax`,
+  CHANGE `web_site` `web_site` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `company_name`,
+  CHANGE `account_number` `account_number` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `web_site`,
+  CHANGE `billing_address` `billing_address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `account_number`,
+  CHANGE `billing_apto` `billing_apto` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_address`,
+  CHANGE `billing_city` `billing_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_apto`,
+  CHANGE `billing_zipcode` `billing_zipcode` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_city`,
+  CHANGE `billing_state_id` `billing_state_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `billing_zipcode`,
+  CHANGE `shipping_address` `shipping_address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `billing_state_id`,
+  CHANGE `shipping_apto` `shipping_apto` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_address`,
+  CHANGE `shipping_city` `shipping_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_apto`,
+  CHANGE `shipping_zipcode` `shipping_zipcode` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_city`,
+  CHANGE `shipping_state_id` `shipping_state_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_zipcode`,
+  CHANGE `tax` `tax` FLOAT NULL DEFAULT NULL AFTER `shipping_state_id`,
+  CHANGE `discount` `discount` FLOAT NULL DEFAULT NULL AFTER `tax`,
+  CHANGE `bank_account` `bank_account` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `discount`,
+  CHANGE `bank_account_name` `bank_account_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `bank_account`,
+  CHANGE `batch_payments_detailt` `batch_payments_detailt` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `bank_account_name`,
+  CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL AFTER `batch_payments_detailt`,
+  CHANGE `creator_id` `creator_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `deleted`,
+  CHANGE `created` `created` DATETIME NOT NULL AFTER `creator_id`,
+  CHANGE `created_time_zone` `created_time_zone` INT(11) NULL DEFAULT NULL AFTER `created`;
+
+ALTER TABLE `vendor` DROP `category` ;
+ALTER TABLE `vendor` ADD `mobile` VARCHAR( 100 ) NOT NULL AFTER `phone`;
+ALTER TABLE `vendor` DROP `email`;
+ALTER TABLE `vendor` ADD `company_name` VARCHAR(100) NULL AFTER `fax`;
+ALTER TABLE `vendor` ADD `web_site` VARCHAR(255) NULL AFTER `company_name`;
+ALTER TABLE `vendor` ADD `account_number` VARCHAR(255) NULL AFTER `web_site`;
+ALTER TABLE `vendor` ADD `apto` VARCHAR(100) NOT NULL AFTER `address`;
+ALTER TABLE `vendor` DROP `notes`;
+ALTER TABLE `vendor` ADD `track_transaction` BOOLEAN NOT NULL AFTER `zipcode`;
+ALTER TABLE `vendor` ADD `tax_id` VARCHAR( 10 ) NOT NULL AFTER `track_transaction`;
+ALTER TABLE `vendor` ADD `bank_account` VARCHAR(255) NOT NULL AFTER `tax_id`;
+ALTER TABLE `vendor` ADD `bank_account_name` VARCHAR(255) NOT NULL AFTER `bank_account`;
+ALTER TABLE `vendor` ADD `batch_payments_detailt` VARCHAR(255) NOT NULL AFTER `bank_account_name`;
+ALTER TABLE `vendor` DROP FOREIGN KEY `FK_F52233F65373C966`;
+ALTER TABLE `vendor` DROP `country_id`;
+
+ALTER TABLE `vendor` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `id`,
+  CHANGE `phone` `phone` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `name`,
+  CHANGE `mobile` `mobile` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `phone`,
+  CHANGE `fax` `fax` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `mobile`,
+  CHANGE `company_name` `company_name` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `fax`,
+  CHANGE `web_site` `web_site` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `company_name`,
+  CHANGE `account_number` `account_number` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `web_site`,
+  CHANGE `address` `address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `account_number`,
+  CHANGE `apto` `apto` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `address`,
+  CHANGE `city` `city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `apto`,
+  CHANGE `zipcode` `zipcode` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `city`,
+  CHANGE `track_transaction` `track_transaction` TINYINT(1) NOT NULL AFTER `state_id`,
+  CHANGE `tax_id` `tax_id` VARCHAR(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `track_transaction`,
+  CHANGE `bank_account` `bank_account` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `tax_id`,
+  CHANGE `bank_account_name` `bank_account_name` VARCHAR(255)   CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `bank_account`,
+  CHANGE `batch_payments_detailt` `batch_payments_detailt` VARCHAR(255)   CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `bank_account_name`,
+  CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL AFTER `batch_payments_detailt`,
+  CHANGE `created` `created` DATETIME NOT NULL AFTER `creator_id`,
+  CHANGE `created_time_zone` `created_time_zone` INT(11) NULL DEFAULT NULL AFTER `created`;
+
+ALTER TABLE `contact` DROP FOREIGN KEY `FK_4C62E638C33F7837` ;
+ALTER TABLE `contact` DROP `document_id`;
+ALTER TABLE `contact` DROP `notes`;
+ALTER TABLE `contact` DROP `position`;
+ALTER TABLE `contact` ADD `owner_id` VARCHAR(36) NOT NULL AFTER `owner`;
+ALTER TABLE `contact` ADD `include_email` BOOLEAN NOT NULL DEFAULT FALSE AFTER `email`;
+ALTER TABLE `contact` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `id`,
+  CHANGE `last_name` `last_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `name`,
+  CHANGE `phone` `phone` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `last_name`,
+  CHANGE `email` `email` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `phone`,
+  CHANGE `include_email` `include_email` TINYINT(1)   NOT NULL DEFAULT '0' AFTER `email`,
+  CHANGE `owner` `owner` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `include_email`,
+  CHANGE `owner_id` `owner_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `owner`,
+  CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL AFTER `owner_id`,
+  CHANGE `created` `created` DATETIME NOT NULL AFTER `creator_id`,
+  CHANGE `created_time_zone` `created_time_zone` INT(11)   NULL DEFAULT NULL AFTER `created`;
+
 DROP TABLE IF EXISTS `organization`;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
@@ -193,4 +297,3 @@ DROP TABLE IF EXISTS `organization`;
 
 -- +goose Down
 -- SQL section 'Down' is executed when this migration is rolled back
-

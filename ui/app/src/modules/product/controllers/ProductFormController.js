@@ -1,18 +1,28 @@
 'use strict';
 
-angular.module('product').controller('ProductFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product','$state',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Product, $state) {
+angular.module('product').controller('ProductFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product','$state','Account', 'Location',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Product, $state, Account, Location) {
 
-    $scope.statuses = [
-        {"value": 2, "description": "Inactive"},
-        {"value": 1, "description": "Active"}
-    ];
+    $scope.accounts = Account.$search();
+    $scope.locations    = Location.$search();
+
     $scope.product = {};
     if(!_.isUndefined($stateParams.id)){
         $scope.product = Product.$find($stateParams.id);
+        $scope.product.variations.$fetch();
     }else{
         $scope.product =  Product.$build();
     }
+
+    $scope.addVariation = function(){
+        $scope.product.variations.$build().$reveal();
+    }
+
+    $scope.removeVariations = function(product){
+        $scope.product.variations.$remove(product);
+    }
+
+
     $scope.save = function() {
         //$validation.validate($scope, 'product').success(function() {
 

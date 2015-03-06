@@ -25,7 +25,7 @@ func (controller *ProductController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/product", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
-	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}/product-variation", handler.New(controller.GetAllProductVariations)).Methods("GET")
+	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}/variations", handler.New(controller.GetAllProductVariations)).Methods("GET")
 }
 
 // @Title Get

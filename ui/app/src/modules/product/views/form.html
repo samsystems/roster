@@ -3,7 +3,7 @@
 <panel type="plain">
     <form role="form">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="name" class="col-md-12 control-label" >{{'Name' | translate}}</label>
                     <div class="col-md-12">
@@ -11,11 +11,75 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label class="col-md-12 control-label" for="status">{{'Status' | translate}}</label>
+                    <label class="col-md-12 control-label" for="status">{{'Category' | translate}}</label>
                     <div class="col-md-12">
-                        <select class="form-control" data-ng-model="product.Status" data-ng-options ="status.value as status.description for status in statuses" validator="required"></select>
+                        <select class="form-control" data-ng-model="product.Category"  validator="required">
+                            <option value="1">{{'Product' | translate}}</option>
+                            <option value="1">{{'Service' | translate}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-1 s64" >{{product.getStock()}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="price" class="col-md-12 control-label" >{{'Purchase Information' | translate}}</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-default" data-ng-model="product.Purchasable" btn-checkbox data-ng-class="{'btn-primary': product.Purchasable}">{{product.Purchasable ? 'On' : 'Off' }}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="price" class="col-md-12 control-label" >{{'Sale Information' | translate}}</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-default" data-ng-model="product.Salable" btn-checkbox data-ng-class="{'btn-primary': product.Salable}">{{product.Salable ? 'On' : 'Off' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="manufacturer" class="col-md-12 control-label" >{{'Cost' | translate}}</label>
+                    <div class="col-md-12">
+                        <input data-ng-model="product.Cost" type="text" class="form-control" validator="required" data-ng-disabled="!product.Purchasable">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-md-12 control-label" for="size">{{'Account' | translate}}</label>
+                    <div class="col-md-12">
+                        <select class="form-control" data-ng-model="product.PurchaseAccount.Id" data-ng-options="account.Id as account.Name for account in accounts" data-ng-disabled="!product.Purchasable"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="manufacturer" class="col-md-12 control-label" >{{'Price' | translate}}</label>
+                    <div class="col-md-12">
+                        <input data-ng-model="product.Price" type="text" class="form-control" validator="required"  data-ng-disabled="!product.Salable">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-md-12 control-label" for="size">{{'Account' | translate}}</label>
+                    <div class="col-md-12">
+                        <select class="form-control" data-ng-model="product.SaleAccount.Id" data-ng-options="account.Id as account.Name for account in accounts" data-ng-disabled="!product.Salable"></select>
                     </div>
                 </div>
             </div>
@@ -23,72 +87,61 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="price" class="col-md-12 control-label" >{{'Price' | translate}}</label>
+                    <label for="description" class="control-label col-md-12" >{{'Description' | translate}}</label>
                     <div class="col-md-12">
-                        <input data-ng-model="product.Price" type="text" class="form-control" validator="required,number" >
+                        <textarea data-ng-model="product.PurchaseDescription" class="form-control" data-ng-disabled="!product.Purchasable"></textarea>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="col-md-12 control-label" for="stock">{{'Stock' | translate}}</label>
+                    <label for="description" class="control-label col-md-12" >{{'Description' | translate}}</label>
                     <div class="col-md-12">
-                        <input data-ng-model="product.Stock" type="text" class="form-control" validator="required" >
+                        <textarea data-ng-model="product.SaleDescription" class="form-control" data-ng-disabled="!product.Salable"></textarea>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="manufacturer" class="col-md-12 control-label" >{{'Manufacture' | translate}}</label>
-                    <div class="col-md-12">
-                        <input data-ng-model="product.Manufacturer" type="text" class="form-control" validator="required" >
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="col-md-12 control-label" for="size">{{'Size' | translate}}</label>
-                    <div class="col-md-12">
-                        <input data-ng-model="product.Size" type="text" class="form-control" validator="required" >
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="sku" class="col-md-12 control-label" >{{'SKU' | translate}}</label>
-                    <div class="col-md-12">
-                        <input id="sku" data-ng-model="product.Sku" type="text" class="form-control" validator="required" >
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="col-md-12 control-label" for="serial">{{'Serial' | translate}}</label>
-                    <div class="col-md-12">
-                        <input id="serial" data-ng-model="product.Serial" type="text" class="form-control" validator="required" >
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="description" class="control-label col-md-12" >{{'Description' | translate}}</label>
-                        <div class="col-md-12">
-                            <textarea data-ng-model="product.Description" class="form-control" ></textarea>
-                        </div>
-                    </div>
-            </div>
-        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th style="width: 35%">Variation</th>
+                    <th style="width: 15%">Code/Sku</th>
+                    <th style="width: 10%"> Stock</th>
+                    <th style="width: 5%">Alert</th>
+                    <th style="width: 10%">Alert At</th>
+                    <th style="width: 20%">Location</th>
+                    <th style="width: 5%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="variation in product.variations">
+                    <td><input class="form-control" type="text" data-ng-model="variation.Variation"/></td>
+                    <td><input class="form-control" type="text" data-ng-model="variation.Sku"/></td>
+                    <td><input class="form-control" type="text" data-ng-model="variation.Stock"/></td>
+                    <td><input type="checkbox" data-ng-model="variation.Alert"/></td>
+                    <td><input class="form-control" type="text" data-ng-model="variation.AlertAt"/></td>
+                    <td><select class="form-control" data-ng-model="variation.Location.Id" data-ng-options="location.Id as location.Name for location in locations"></select></td>
+                    <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeVariations(variation)"></button></td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <button class="btn btn-default" data-ng-click="addVariation()">{{'Add' | translate}}</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div><!-- End div .table-responsive -->
+
         <div class="row modal-footer" style="border-top:0px;">
             <div class="row col-md-4 pull-right">
                 <a class="btn btn-primary" href="#/products">{{'Cancel' | translate}}</a>
                 <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
             </div>
         </div>
+
+
     </form>
 </panel>

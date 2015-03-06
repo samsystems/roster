@@ -3,6 +3,7 @@
 angular.module('product').factory('Product', ['restmod','$http','config', function(restmod, $http, config) {
 
     return restmod.model('/product').mix({
+        variations: { hasMany: 'ProductVariation'},
         $config: { primaryKey: 'Id' },
         $extend: {
             Record: {
@@ -25,7 +26,12 @@ angular.module('product').factory('Product', ['restmod','$http','config', functi
                     return (this.Category == 1) ? "Product" : "Service";
                 },
                 getStock: function () {
-                    return this.Stock;
+                    var total = 0;
+                    for(var i = 0; i < this.variations.length; i++){
+                        if(!isNaN(this.variations[i].Stock))
+                            total+= parseInt(this.variations[i].Stock);
+                    }
+                    return total;
                 },
                 getPrice: function () {
                     return this.Price;

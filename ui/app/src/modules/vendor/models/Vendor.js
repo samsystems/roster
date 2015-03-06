@@ -3,6 +3,7 @@
 angular.module('vendor').factory('Vendor', ['restmod', '$window', 'config','$http', function(restmod, $window, config, $http) {
 
     return restmod.model('/vendor').mix({
+        contacts: { hasMany: 'VendorContact'},
         $config: { primaryKey: 'Id' },
         $extend: {
             Model: {

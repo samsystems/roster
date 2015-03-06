@@ -9,27 +9,24 @@ import (
 const VENDOR_LIMIT int = 20
 
 type Vendor struct {
-	Id                    string   `orm:"pk"`
-	Name                  string
-	Phone                 string
-	Mobile                string
-	Fax                   string
-	CompanyName           string
-	WebSite               string
-	AccountNumber         string
-	
-	Address               string
-	Apto                  string
-	City                  string
-	Zipcode               string
-	State                 *State      `orm:"rel(one)" valid:"Entity(State)"`
-	
+	Id                     string   `orm:"pk"`
+	Name                   string
+	Phone                  string
+	Mobile                 string
+	Fax                    string
+	CompanyName            string
+	WebSite                string
+	AccountNumber          string
+	Address                string
+	Address1                   string
+	City                   string
+	Zipcode                string
+	State                  *State      `orm:"rel(one)" valid:"Entity(State)"`
 	TrackTransaction       bool
 	TaxId                  string
 	BankAccount            string
 	BankAccountName        string
 	BatchPaymentsDetailt   string
-	
 	Deleted                time.Time   `orm:"type(datetime)"`
 	Creator                *User       `orm:"rel(one)" valid:"Entity(Creator)"`
 	Created                time.Time   `orm:"auto_now_add;type(datetime)"`

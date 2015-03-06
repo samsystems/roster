@@ -38,7 +38,7 @@ func AddTransaction(transaction *Transaction) string {
 	return transaction.Id
 }
 
-func CreateFromInvoice(invoice *Invoice) string{
+func CreateTransactionFromInvoice(invoice *Invoice) string{
 	var transaction *Transaction
 	transaction.Creator = invoice.Creator
     transaction.Updater = invoice.Updater

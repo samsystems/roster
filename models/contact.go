@@ -9,22 +9,20 @@ import (
 const CONTACT_LIMIT int = 20
 
 type Contact struct {
-	Id              string    `orm:"pk"`
-	Name*            string
-	LastName*        string
-	Email*           string
-	Phone*           string
-	IncludeEmail**     bool
-	
-	Owner*             string
+	Id                 string        `orm:"pk"`
+	Name               string
+	LastName           string
+	Email              string
+	Phone              string
+	IncludeEmail       bool
+	Owner              string
 	OwnerId            string
-	
-	Deleted         time.Time `orm:"type(datetime)"`
-	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
-	Created         time.Time `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone int
-	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
-	Updated         time.Time `orm:"auto_now_add;type(datetime)"`
+	Deleted            time.Time     `orm:"type(datetime)"`
+	Creator            *User         `orm:"rel(one)" valid:"Entity(Creator)"`
+	Created            time.Time     `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone    int
+	Updater            *User         `orm:"rel(one)" valid:"Entity(Updater)"`
+	Updated            time.Time     `orm:"auto_now_add;type(datetime)"`
 	UpdatedTimeZone int
 }
 

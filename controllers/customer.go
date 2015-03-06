@@ -101,8 +101,11 @@ func (controller *CustomerController) Post(context appengine.Context, writer htt
 	}
 
 	var customer models.Customer
-	json.Unmarshal(data, &customer)
-
+	err1 :=  json.Unmarshal(data, &customer)
+    
+    if err1 != nil {
+		log.Println("error:", err1)
+	}
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	customer.Creator = user
 	customer.Updater = user
@@ -119,6 +122,12 @@ func (controller *CustomerController) Post(context appengine.Context, writer htt
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.AddCustomer(&customer)
+		for i := 0; i < len(customer.Contacts); i++ {
+			contact := customer.Contacts[i]
+			contact.Owner="customer"
+			contact.OwnerId=customer.Id
+			models.AddContact(contact)
+		}
 	}
 
 	return customer, nil

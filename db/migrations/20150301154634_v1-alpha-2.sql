@@ -189,13 +189,13 @@ ALTER TABLE `customer` ADD `company_name` VARCHAR(255) NULL AFTER `fax`;
 ALTER TABLE `customer` ADD `web_site` VARCHAR(255) NULL AFTER `company_name`;
 ALTER TABLE `customer` ADD `account_number` VARCHAR(255) NULL AFTER `web_site`;
 ALTER TABLE `customer` CHANGE `address` `billing_address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
-ALTER TABLE `customer` ADD `billing_apto` VARCHAR(100) NOT NULL AFTER `billing_address`;
+ALTER TABLE `customer` ADD `billing_address1` VARCHAR(100) NOT NULL AFTER `billing_address`;
 ALTER TABLE `customer` CHANGE `city` `billing_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 ALTER TABLE `customer` ADD `billing_zipcode` VARCHAR( 20 ) NOT NULL AFTER `billing_city` ;
 ALTER TABLE `customer` CHANGE `state_id` `billing_state_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
 ALTER TABLE `customer` ADD `shipping_address` VARCHAR(255) NULL AFTER `billing_city`;
-ALTER TABLE `customer` ADD `shipping_apto` VARCHAR(100) NOT NULL AFTER `shipping_address`;
-ALTER TABLE `customer` ADD `shipping_city` VARCHAR(100) NOT NULL AFTER `shipping_apto` ;
+ALTER TABLE `customer` ADD `shipping_address1` VARCHAR(100) NOT NULL AFTER `shipping_address`;
+ALTER TABLE `customer` ADD `shipping_city` VARCHAR(100) NOT NULL AFTER `shipping_address1` ;
 ALTER TABLE `customer` CHANGE `zipcode` `shipping_zipcode` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
 ALTER TABLE `customer` ADD `shipping_state_id` VARCHAR(36) NOT NULL AFTER `shipping_zipcode`,ADD INDEX (`shipping_state_id`) ;
 ALTER TABLE `customer` DROP FOREIGN KEY `FK_81398E0961220EA6`;
@@ -213,13 +213,13 @@ ALTER TABLE `customer` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLL
   CHANGE `web_site` `web_site` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `company_name`,
   CHANGE `account_number` `account_number` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `web_site`,
   CHANGE `billing_address` `billing_address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `account_number`,
-  CHANGE `billing_apto` `billing_apto` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_address`,
-  CHANGE `billing_city` `billing_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_apto`,
+  CHANGE `billing_address1` `billing_address1` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_address`,
+  CHANGE `billing_city` `billing_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_address1`,
   CHANGE `billing_zipcode` `billing_zipcode` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `billing_city`,
   CHANGE `billing_state_id` `billing_state_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `billing_zipcode`,
   CHANGE `shipping_address` `shipping_address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `billing_state_id`,
-  CHANGE `shipping_apto` `shipping_apto` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_address`,
-  CHANGE `shipping_city` `shipping_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_apto`,
+  CHANGE `shipping_address1` `shipping_address1` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_address`,
+  CHANGE `shipping_city` `shipping_city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_address1`,
   CHANGE `shipping_zipcode` `shipping_zipcode` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_city`,
   CHANGE `shipping_state_id` `shipping_state_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `shipping_zipcode`,
   CHANGE `tax` `tax` FLOAT NULL DEFAULT NULL AFTER `shipping_state_id`,
@@ -238,7 +238,7 @@ ALTER TABLE `vendor` DROP `email`;
 ALTER TABLE `vendor` ADD `company_name` VARCHAR(100) NULL AFTER `fax`;
 ALTER TABLE `vendor` ADD `web_site` VARCHAR(255) NULL AFTER `company_name`;
 ALTER TABLE `vendor` ADD `account_number` VARCHAR(255) NULL AFTER `web_site`;
-ALTER TABLE `vendor` ADD `apto` VARCHAR(100) NOT NULL AFTER `address`;
+ALTER TABLE `vendor` ADD `address1` VARCHAR(100) NOT NULL AFTER `address`;
 ALTER TABLE `vendor` DROP `notes`;
 ALTER TABLE `vendor` ADD `track_transaction` BOOLEAN NOT NULL AFTER `zipcode`;
 ALTER TABLE `vendor` ADD `tax_id` VARCHAR( 10 ) NOT NULL AFTER `track_transaction`;
@@ -256,8 +256,8 @@ ALTER TABLE `vendor` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLLAT
   CHANGE `web_site` `web_site` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `company_name`,
   CHANGE `account_number` `account_number` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `web_site`,
   CHANGE `address` `address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `account_number`,
-  CHANGE `apto` `apto` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `address`,
-  CHANGE `city` `city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `apto`,
+  CHANGE `address1` `address1` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `address`,
+  CHANGE `city` `city` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `address1`,
   CHANGE `zipcode` `zipcode` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `city`,
   CHANGE `track_transaction` `track_transaction` TINYINT(1) NOT NULL AFTER `state_id`,
   CHANGE `tax_id` `tax_id` VARCHAR(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `track_transaction`,

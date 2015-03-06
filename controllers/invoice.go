@@ -310,7 +310,7 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 			models.AddInvoiceProduct(invoiceProduct)
 			models.UpdateProduct(invoiceProduct.Product)
 		}
-		//models.CreateFromInvoice(invoice)
+		//models.CreateTransactionFromInvoice(invoice)
 
 	}
 

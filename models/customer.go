@@ -17,33 +17,29 @@ type Customer struct {
 	CompanyName             string
 	WebSite                 string
 	AccountNumber           string
-	
-	
 	BillingAddress          string
-	BillingApto             string
+	BillingAddress1         string
 	BillingCity             string
 	BillingZipcode          string
-	BillingState            *State       `orm:"column(billing_state_id),rel(one)" valid:"Entity(State)"`
-	
+	BillingState            *State       `orm:"column(billing_state_id);rel(one)" valid:"Entity(State)"`
 	ShippingAddress         string
-	ShippingApto            string
+	ShippingAddress1        string
 	ShippingCity            string
 	ShippingZipcode         string
-	ShippingState           *State       `orm:"column(shipping_state_id),rel(one)" valid:"Entity(State)"`
-	
+	ShippingState           *State       `orm:"column(shipping_state_id);rel(one)" valid:"Entity(State)"`
 	Tax                     float32      `json:",string"`
 	Discount                float32      `json:",string"`
 	BankAccount             string
 	BankAccountName         string
 	BatchPaymentsDetailt    string
-	
-	Deleted                time.Time     `orm:"type(datetime)"`
-	Creator                *User         `orm:"rel(one)" valid:"Entity(Creator)"`
-	Created                time.Time     `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone        int
-	Updater                *User         `orm:"rel(one)" valid:"Entity(Updater)"`
-	Updated                time.Time     `orm:"auto_now;type(datetime)"`
-	UpdatedTimeZone        int
+	Deleted                 time.Time     `orm:"type(datetime)"`
+	Creator                 *User         `orm:"rel(one)" valid:"Entity(Creator)"`
+	Created                 time.Time     `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone         int
+	Updater                 *User         `orm:"rel(one)" valid:"Entity(Updater)"`
+	Updated                 time.Time     `orm:"auto_now;type(datetime)"`
+	UpdatedTimeZone         int
+	Contacts                []*Contact     `orm:"-"`
 }
 
 func init() {

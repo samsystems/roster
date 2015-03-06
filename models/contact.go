@@ -10,19 +10,20 @@ const CONTACT_LIMIT int = 20
 
 type Contact struct {
 	Id              string    `orm:"pk"`
-	Document        *Document `orm:"rel(one)"`
-	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
-	Name            string
-	LastName        string
-	Phone           string
-	Email           string
-	Notes           string
-	Position        string
-	Owner           *User     `orm:"rel(one)"`
+	Name*            string
+	LastName*        string
+	Email*           string
+	Phone*           string
+	IncludeEmail**     bool
+	
+	Owner*             string
+	OwnerId            string
+	
 	Deleted         time.Time `orm:"type(datetime)"`
+	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
+	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Updated         time.Time `orm:"auto_now_add;type(datetime)"`
 	UpdatedTimeZone int
 }

@@ -9,24 +9,41 @@ import (
 const CUSTOMER_LIMIT int = 20
 
 type Customer struct {
-	Id              string   `orm:"pk"`
-	Country         *Country `orm:"rel(one)" valid:"Entity(Country)"`
-	State           *State   `orm:"rel(one)" valid:"Entity(State)"`
-	Creator         *User    `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User    `orm:"rel(one)" valid:"Entity(Updater)"`
-	Name            string
-	Phone           string
-	Mobile          string
-	Fax             string
-	Email           string
-	Address         string
-	City            string
-	Zipcode         string
-	Deleted         time.Time `orm:"type(datetime)"`
-	Created         time.Time `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone int
-	Updated         time.Time `orm:"auto_now;type(datetime)"`
-	UpdatedTimeZone int
+	Id                      string       `orm:"pk"`
+	Name                    string
+	Phone                   string
+	Mobile                  string
+	Fax                     string
+	CompanyName             string
+	WebSite                 string
+	AccountNumber           string
+	
+	
+	BillingAddress          string
+	BillingApto             string
+	BillingCity             string
+	BillingZipcode          string
+	BillingState            *State       `orm:"column(billing_state_id),rel(one)" valid:"Entity(State)"`
+	
+	ShippingAddress         string
+	ShippingApto            string
+	ShippingCity            string
+	ShippingZipcode         string
+	ShippingState           *State       `orm:"column(shipping_state_id),rel(one)" valid:"Entity(State)"`
+	
+	Tax                     float32      `json:",string"`
+	Discount                float32      `json:",string"`
+	BankAccount             string
+	BankAccountName         string
+	BatchPaymentsDetailt    string
+	
+	Deleted                time.Time     `orm:"type(datetime)"`
+	Creator                *User         `orm:"rel(one)" valid:"Entity(Creator)"`
+	Created                time.Time     `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone        int
+	Updater                *User         `orm:"rel(one)" valid:"Entity(Updater)"`
+	Updated                time.Time     `orm:"auto_now;type(datetime)"`
+	UpdatedTimeZone        int
 }
 
 func init() {

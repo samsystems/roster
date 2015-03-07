@@ -1,7 +1,14 @@
-<div class="form-group col-md-{{size || 12}}">
-    <label for="">{{title}}</label>
+<div class="form-group col-md-{{size >= 1 && size <= 12 ? size : 12}}">
+    <label for="{{name}}">{{title}}</label>
 
-    <input ng-if="type == 'text'" type="text" class="form-control" />
+    <!-- Text fields -->
+    <input ng-if="type == 'text'" type="text" class="form-control" name="{{name}}" ng-model="parentModel.value" />
 
-    <date-time-picker ng-if="type == 'datetimepicker'" class="form-control" data-format="date" ></date-time-picker>
+    <!-- DateTime Pickers -->
+    <date-time-picker ng-if="type == 'datetimepicker'" class="form-control"></date-time-picker>
+
+    <!-- DateTime Pickers -->
+    <select ng-if="type == 'select'" class="form-control" />
+
+    <pre>{{parentModel | json}}</pre>
 </div>

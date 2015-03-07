@@ -1,6 +1,7 @@
 <page-content-title title="Create/Update Company"></page-content-title>
 
 <panel type="plain">
+    <pre>{{company | json}}</pre>
     <ros-form>
         <ros-field-set>
             <ros-field type="text" name="name" title="{{'Name' | translate}}" ng-model="company.Name" size="6"></ros-field>

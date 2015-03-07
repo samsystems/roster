@@ -31,6 +31,32 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                     toaster.pop('error', 'Error', 'Something went wrong a new Customer could not be created');
                 });
             } else {
+                var customer = Customer.$build();
+                customer.Name = $scope.customer.Name;
+                customer.Phone = $scope.customer.Phone;
+                customer.Mobile = $scope.customer.Mobile;
+                customer.Fax = $scope.customer.Fax;
+                customer.CompanyName = $scope.customer.CompanyName;
+                customer.WebSite = $scope.customer.WebSite;
+                customer.AccountNumber = $scope.customer.AccountNumber;
+                customer.BillingAddress = $scope.customer.BillingAddress;
+                customer.BillingAddress1 = $scope.customer.BillingApto;
+                customer.BillingCity = $scope.customer.BillingCity;
+                customer.BillingState = $scope.customer.BillingState;
+                customer.BillingZipcode = $scope.customer.BillingZipcode;
+                customer.ShippingAddress = $scope.customer.ShippingAddress;
+                customer.ShippingAddress1 = $scope.customer.ShippingApto;
+                customer.ShippingCity = $scope.customer.ShippingCity;
+                customer.ShippingState = $scope.customer.ShippingState;
+                customer.ShippingZipcode = $scope.customer.ShippingZipcode;
+               // customer.Tax = $scope.customer.Name;
+               // customer.Discount = $scope.customer.Name;
+                customer.BankAccountName = $scope.customer.BankAccountName;
+                customer.BankAccount = $scope.customer.BankAccount;
+                customer.BatchPaymentsDetailt = $scope.customer.BatchPaymentsDetailt;
+
+
+
                 $scope.customer.$save().$then(function (response) {
                     $rootScope.$broadcast('customer::created');
                     toaster.pop('success', 'Customer Created', 'You have successfully created a new customer.');

@@ -50,7 +50,7 @@
                             <div class="form-group">
                                 <label for="companyName" class="control-label">{{'Company Name' |
                                     translate}}:</label>
-                                <input id="companyName" data-ng-model="customer.Company" type="text"
+                                <input id="companyName" data-ng-model="customer.CompanyName" type="text"
                                        class="form-control" validator="required" placeholder="Company">
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                                 <div class="form-group">
                                     <label class="control-label" for="website">{{'Website' |
                                         translate}}:</label>
-                                    <input id="website" data-ng-model="customer.Phone" type="text"
+                                    <input id="website" data-ng-model="customer.WebSite" type="text"
                                            class="form-control" validator="required" placeholder="Enter text here...">
                                 </div>
                             </div>
@@ -100,13 +100,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input data-ng-model="customer.BillingApt" type="text"
+                                <input data-ng-model="customer.BillingAddress1" type="text"
                                        class="form-control" validator="required" placeholder="Apt/suite">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input data-ng-model="customer.ShippingApt" type="text"
+                                <input data-ng-model="customer.ShippingAddress1" type="text"
                                        class="form-control" validator="required" placeholder="Apt/suite">
                             </div>
                         </div>
@@ -159,71 +159,75 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="billingAddress" class="control-label"></label>
-                                <select class="form-control" data-ng-model="customer.BillingState.Id" data-ng-options ="state.Id as state.Name for state in states"></select>
+                               <!-- <select class="form-control" data-ng-model="customer.BillingState.Id" data-ng-options ="state.Id as state.Name for state in states"></select> -->
+                                <input data-ng-model="customer.Tax" type="text"
+                                       class="form-control" placeholder="Tax">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="billingAddress" class="control-label">{{'Discount' |
                                     translate}}:</label>
-                                <select class="form-control" data-ng-model="customer.BillingState.Id" data-ng-options ="state.Id as state.Name for state in states"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="billingAddress" class="control-label">{{'Batch Payments' |
-                                    translate}}:</label>
-                                <input data-ng-model="customer.ShippingCity" type="text"
-                                       class="form-control" validator="required" placeholder="Bank Account Name">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="billingAddress" class="control-label"></label>
-                                <input data-ng-model="customer.ShippingCity" type="text"
-                                       class="form-control" validator="required" placeholder="Bank Account">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="billingAddress" class="control-label"></label>
-                                <input data-ng-model="customer.ShippingZipcode" type="text"
-                                       class="form-control" placeholder="Details">
-                            </div>
-                        </div>
-                    </div>
+                                <!--   <select class="form-control" data-ng-model="customer.BillingState.Id" data-ng-options ="state.Id as state.Name for state in states"></select> -->
+                                  <input data-ng-model="customer.Discount" type="text"
+                                         class="form-control" placeholder="Discount">
+                              </div>
+                          </div>
+                          <div class="col-md-2">
+                              <div class="form-group">
+                                  <label for="billingAddress" class="control-label">{{'Batch Payments' |
+                                      translate}}:</label>
+                                  <input data-ng-model="customer.BankAccountName" type="text"
+                                         class="form-control" validator="required" placeholder="Bank Account Name">
+                              </div>
+                          </div>
+                          <div class="col-md-2">
+                              <div class="form-group">
+                                  <label for="billingAddress" class="control-label"></label>
+                                  <input data-ng-model="customer.BankAccount" type="text"
+                                         class="form-control" validator="required" placeholder="Bank Account">
+                              </div>
+                          </div>
+                          <div class="col-md-2">
+                              <div class="form-group">
+                                  <label for="billingAddress" class="control-label"></label>
+                                  <input data-ng-model="customer.BatchPaymentsDetailt" type="text"
+                                         class="form-control" placeholder="Details">
+                              </div>
+                          </div>
+                      </div>
 
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th style="width: 20%">First Name</th>
-                            <th style="width: 20%">Last Name</th>
-                            <th style="width: 20%">Email</th>
-                            <th style="width: 15%">Phone</th>
-                            <th style="width: 15%"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr data-ng-repeat="contact in customer.contacts">
-                            <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
-                            <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
-                            <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
-                            <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
-                            <td> <input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="invoice.BillShip" name="locked" value="1">
-                                <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>
-                            </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="row modal-footer" style="border-top:0px;">
-                        <div class="row col-md-4 pull-right">
-                            <a class="btn btn-primary" href="#/customers">{{'Cancel' | translate}}</a>
-                            <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                      <table class="table table-hover">
+                          <thead>
+                          <tr>
+                              <th style="width: 20%">First Name</th>
+                              <th style="width: 20%">Last Name</th>
+                              <th style="width: 20%">Email</th>
+                              <th style="width: 15%">Phone</th>
+                              <th style="width: 15%"></th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr data-ng-repeat="contact in customer.contacts">
+                              <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
+                              <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
+                              <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
+                              <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
+                              <td> <input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="invoice.BillShip" name="locked" value="1">
+                                  <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>
+                              </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                      <div class="row modal-footer" style="border-top:0px;">
+                          <div class="row col-md-4 pull-right">
+                              <a class="btn btn-primary" href="#/customers">{{'Cancel' | translate}}</a>
+                              <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
 
-        </div>
-    </div>
-</panel>
+          </div>
+      </div>
+  </panel>

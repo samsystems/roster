@@ -54,6 +54,7 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                 customer.BankAccountName = $scope.customer.BankAccountName;
                 customer.BankAccount = $scope.customer.BankAccount;
                 customer.BatchPaymentsDetailt = $scope.customer.BatchPaymentsDetailt;
+                customer.Contacts =  $scope.customer.contacts;
 
 
 

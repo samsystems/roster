@@ -168,15 +168,12 @@
                         </thead>
                         <tbody>
                         <tr data-ng-repeat="contact in vendor.contacts">
-                            <td><input type="text" data-ng-model="contact.FirstName"
-                                       data-ng-click="addContact($index)"/></td>
-                            <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
-                            <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
-                            <td><input type="text" data-ng-model="contact.FirstName" data-ng-click="addContact($index)"/></td>
-                            <td><input style="margin-left: 15px" type="checkbox" ng-change="BillShip()"
-                                       data-ng-model="invoice.BillShip" name="locked" value="1">
-                                <label style="margin-left: 10px" class="control-label">{{'Include in Emails' |
-                                    translate}}</label>
+                            <td><input type="text" data-ng-model="contact.Name" data-ng-click="addContact($index)"/></td>
+                            <td><input type="text" data-ng-model="contact.LastName" data-ng-click="addContact($index)"/></td>
+                            <td><input type="text" data-ng-model="contact.Email" data-ng-click="addContact($index)"/></td>
+                            <td><input type="text" data-ng-model="contact.Phone" data-ng-click="addContact($index)"/></td>
+                            <td> <input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="invoice.IncludeEmail" name="locked" value="1">
+                                <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>
                             </td>
                         </tr>
                         </tbody>

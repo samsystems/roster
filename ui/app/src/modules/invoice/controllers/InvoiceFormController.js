@@ -26,8 +26,8 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 $scope.invoice.CustomerShipping = '';
                 angular.element('#CustomerShipping').attr('readonly', false);
             }
+        }
 
-        };
 
         // TODO: implement Invoice.getMaxOrderNumber()
         //   $scope.invoiceNumber = 500;

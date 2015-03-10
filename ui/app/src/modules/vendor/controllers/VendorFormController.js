@@ -8,6 +8,7 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
         $scope.vendor = {};
         if (!_.isUndefined($stateParams.id)) {
             $scope.vendor = Vendor.$find($stateParams.id);
+            $scope.vendor.contacts.$fetch();
         } else {
             $scope.vendor = Vendor.$build();
             $scope.vendor.contacts.$build().$reveal();
@@ -31,7 +32,28 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
                     toaster.pop('error', 'Error', 'Something went wrong a new Vendor could not be created');
                 });
             } else {
-                $scope.vendor.$save().$then(function (response) {
+                var vendor = Vendor.$build();
+                vendor.Name = $scope.vendor.Name;
+                vendor.Phone = $scope.vendor.Phone;
+                vendor.Mobile = $scope.vendor.Mobile;
+                vendor.Fax = $scope.vendor.Fax;
+                vendor.CompanyName = $scope.vendor.CompanyName;
+                vendor.WebSite = $scope.vendor.WebSite;
+                vendor.AccountNumber = $scope.vendor.AccountNumber;
+                vendor.Address = $scope.vendor.Address;
+                vendor.Address1 = $scope.vendor.Address1;
+                vendor.City = $scope.vendor.City;
+                vendor.State = $scope.vendor.State;
+                vendor.Zipcode = $scope.vendor.Zipcode;
+
+                vendor.TaxId = $scope.vendor.TaxId;
+                // vendor.Discount = $scope.vendor.Name;
+                vendor.BankAccountName = $scope.vendor.BankAccountName;
+                vendor.BankAccount = $scope.vendor.BankAccount;
+                vendor.BatchPaymentsDetailt = $scope.vendor.BatchPaymentsDetailt;
+                vendor.Contacts =  $scope.vendor.contacts;
+
+                vendor.$save().$then(function (response) {
                     $rootScope.$broadcast('vendor::created');
                     toaster.pop('success', 'Vendor Created', 'You have successfully created a new vendor.');
                     $state.go("app.vendor");

@@ -49,7 +49,7 @@
                             <div class="form-group">
                                 <label for="companyName" class="control-label">{{'Company Name' |
                                     translate}}:</label>
-                                <input id="companyName" data-ng-model="vendor.Company" type="text"
+                                <input id="companyName" data-ng-model="vendor.CompanyName" type="text"
                                        class="form-control" validator="required" placeholder="Company">
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                 <div class="form-group">
                                     <label class="control-label" for="website">{{'Website' |
                                         translate}}:</label>
-                                    <input id="website" data-ng-model="vendor.Phone" type="text"
+                                    <input id="website" data-ng-model="vendor.WebSite" type="text"
                                            class="form-control" validator="required" placeholder="Enter text here...">
                                 </div>
                             </div>
@@ -78,29 +78,29 @@
                             <div class="form-group">
                                 <label for="billingAddress" class="control-label">{{'Address' |
                                     translate}}:</label>
-                                <input id="billingAddress" data-ng-model="vendor.Street" type="text"
+                                <input id="billingAddress" data-ng-model="vendor.Address" type="text"
                                        class="form-control" validator="required" placeholder="Street">
                             </div>
                             <div class="form-group">
-                                <input data-ng-model="vendor.BillingApt" type="text"
+                                <input data-ng-model="vendor.Address1" type="text"
                                        class="form-control" validator="required" placeholder="Apt/suite">
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input data-ng-model="vendor.BillingCity" type="text"
+                                        <input data-ng-model="vendor.City" type="text"
                                                class="form-control" validator="required" placeholder="City">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <select class="form-control" data-ng-model="vendor.BillingState.Id"
+                                        <select class="form-control" data-ng-model="vendor.State.Id"
                                                 data-ng-options="state.Id as state.Name for state in states"></select>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input data-ng-model="vendor.BillingZipcode" type="text"
+                                        <input data-ng-model="vendor.Zipcode" type="text"
                                                class="form-control" placeholder="Zipcode">
                                     </div>
                                 </div>
@@ -132,14 +132,14 @@
                                     <div class="form-group">
                                         <label for="billingAddress" class="control-label">{{'Batch Payments' |
                                             translate}}:</label>
-                                        <input data-ng-model="vendor.ShippingCity" type="text"
+                                        <input data-ng-model="vendor.BankAccount" type="text"
                                                class="form-control" validator="required" placeholder="Bank Account">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="billingAddress" class="control-label"></label>
-                                        <input data-ng-model="vendor.ShippingCity" type="text"
+                                        <input data-ng-model="vendor.BankAccountName" type="text"
                                                class="form-control" validator="required"
                                                placeholder="Bank Account Name">
                                     </div>
@@ -147,7 +147,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="billingAddress" class="control-label"></label>
-                                        <input data-ng-model="vendor.ShippingZipcode" type="text"
+                                        <input data-ng-model="vendor.BatchPaymentsDetail" type="text"
                                                class="form-control" placeholder="Details">
                                     </div>
                                 </div>

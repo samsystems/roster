@@ -8,8 +8,9 @@ angular.module('vendor').controller('VendorViewController', ['$scope', '$rootSco
 
     if(id != null){
         $scope.vendor = Vendor.$find(id).$then(function(){
-            $scope.vendor.Country = Country.$find($scope.vendor.Country.Iso);
+           // $scope.vendor.Country = Country.$find($scope.vendor.Country.Iso);
             $scope.vendor.State = State.$find($scope.vendor.State.Id);
+            $scope.vendor.contacts.$fetch();
         });
     }
 

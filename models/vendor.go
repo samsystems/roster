@@ -34,6 +34,7 @@ type Vendor struct {
 	Updater                *User       `orm:"rel(one)" valid:"Entity(Updater)"`
 	Updated                time.Time   `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone        int
+	Contacts                []*Contact     `orm:"-"`
 }
 
 func init() {

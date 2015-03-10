@@ -26,6 +26,7 @@ func (controller *CustomerController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/customer", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}/contacts", handler.New(controller.GetAllContacts)).Methods("GET")
 }
 
 // @Title Get
@@ -126,6 +127,8 @@ func (controller *CustomerController) Post(context appengine.Context, writer htt
 			contact := customer.Contacts[i]
 			contact.Owner="customer"
 			contact.OwnerId=customer.Id
+			contact.Creator = user
+			contact.Updater = user
 			models.AddContact(contact)
 		}
 	}
@@ -188,3 +191,14 @@ func (controller *CustomerController) Delete(context appengine.Context, writer h
 
 	return nil, nil
 }
+
+// @Title Get
+// @Description get all Invoices
+// @Success 200 {object} models.Invoice
+// @router /:id/products [get]
+func (controller *CustomerController) GetAllContacts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uidCustomer := v["uid"]
+	var contacts []models.Contact = models.GetAllContactByOwner("customer",uidCustomer)
+	return contacts, nil
+}
+

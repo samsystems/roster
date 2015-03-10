@@ -108,3 +108,13 @@ func DeleteContact(contact *Contact) {
 	contact.Deleted = time.Now()
 	o.Update(contact)
 }
+
+func GetAllContactByOwner(owner string, uidOwner string) ([]Contact) {
+	o := orm.NewOrm()
+	var contacts []Contact
+	querySetter := o.QueryTable("contact")
+	querySetter.Filter("deleted__isnull", true).Filter("owner_id", uidOwner).Filter("owner", owner).All(&contacts)
+	
+	return contacts
+	
+}

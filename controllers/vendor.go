@@ -24,6 +24,7 @@ func (controller *VendorController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/vendor", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/vendor/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/vendor/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
+	r.Handle("/vendor/{uid:[a-zA-Z0-9\\-]+}/contacts", handler.New(controller.GetAllContacts)).Methods("GET")
 }
 
 // @Title Get
@@ -114,6 +115,14 @@ func (controller *VendorController) Post(context appengine.Context, writer http.
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.AddVendor(&vendor)
+			for i := 0; i < len(vendor.Contacts); i++ {
+			contact := vendor.Contacts[i]
+			contact.Owner="vendor"
+			contact.OwnerId=vendor.Id
+			contact.Creator = user
+			contact.Updater = user
+			models.AddContact(contact)
+		}
 	}
 
 	return vendor, nil
@@ -173,4 +182,13 @@ func (controller *VendorController) Delete(context appengine.Context, writer htt
 	models.DeleteVendor(vendor)
 
 	return nil, nil
+}
+// @Title Get
+// @Description get all Invoices
+// @Success 200 {object} models.Invoice
+// @router /:id/products [get]
+func (controller *VendorController) GetAllContacts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uidVendor := v["uid"]
+	var contacts []models.Contact = models.GetAllContactByOwner("vendor",uidVendor)
+	return contacts, nil
 }

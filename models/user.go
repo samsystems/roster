@@ -98,6 +98,17 @@ func GetUserByUsername(username string) (*User, error) {
 	return nil, errors.New("User not exists")
 }
 
+func GetUserByToken(token string) (*User, error) {
+	o := orm.NewOrm()
+	user := User{Token: token}
+	err := o.Read(&user, "Token")
+
+	if err == nil {
+		return &user, nil
+	}
+	return nil, errors.New("User not exists")
+}
+
 func GetAllUsers() []*User {
 	o := orm.NewOrm()
 

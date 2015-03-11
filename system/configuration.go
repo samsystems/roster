@@ -15,6 +15,7 @@ type ConfigurationDatabase struct {
 
 type Configuration struct {
 	Database ConfigurationDatabase
+	//	PublicRoute []string
 }
 
 func (configuration *Configuration) Load(filename string) (err error) {

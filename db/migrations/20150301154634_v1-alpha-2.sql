@@ -179,6 +179,7 @@ ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649979B1AD8` FOREIGN KEY (`company_sc
 ALTER TABLE `user` CHANGE `business` `business_name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D64932C8A3DE` ;
 ALTER TABLE `user` DROP `organization_id`;
+ALTER TABLE `user` CHANGE `is_active` `is_active` TINYINT(1)  NOT NULL  DEFAULT '0';
 
 ALTER TABLE `industry` CHANGE `deleted` `deleted` DATETIME NULL ;
 

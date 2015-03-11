@@ -232,6 +232,8 @@ ALTER TABLE `customer` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLL
   CHANGE `creator_id` `creator_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `deleted`,
   CHANGE `created` `created` DATETIME NOT NULL AFTER `creator_id`,
   CHANGE `created_time_zone` `created_time_zone` INT(11) NULL DEFAULT NULL AFTER `created`;
+ALTER TABLE `customer` ADD `out_standing` DOUBLE NOT NULL AFTER `batch_payments_detailt` ;
+ALTER TABLE `customer` ADD `over_due` DOUBLE NOT NULL AFTER `out_standing` ;
 
 ALTER TABLE `vendor` DROP `category` ;
 ALTER TABLE `vendor` ADD `mobile` VARCHAR( 100 ) NOT NULL AFTER `phone`;

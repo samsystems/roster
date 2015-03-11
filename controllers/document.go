@@ -63,7 +63,7 @@ func (controller *DocumentController) GetFile(context appengine.Context, writer 
 	if err != nil {
 		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}
-	dm := GetDocumentManager(context)
+	dm := GetDocumentManager(request)
 	data := dm.readFile(document.FilePath + document.Id)
 	return map[string]string{"data": base64.URLEncoding.EncodeToString(data)}, nil
 }
@@ -96,7 +96,7 @@ func (controller *DocumentController) Upload(context appengine.Context, writer h
 	}
 	//get the *fileheaders
 	files := dataForm.File["fileUpload"]
-	if documents, ok := SaveDocumentsUploads(files, context, documentType); ok {
+	if documents, ok := SaveDocumentsUploads(files, request, documentType); ok {
 		return documents, nil
 	} else {
 		return nil, &handler.Error{err, "Error saving documents", http.StatusInternalServerError}
@@ -118,13 +118,15 @@ func (controller *DocumentController) Delete(context appengine.Context, writer h
 	}
 
 	models.DeleteDocument(document)
-	dm := GetDocumentManager(context)
+	dm := GetDocumentManager(request)
 	dm.deleteFile(document.FilePath + document.Id)
 
 	return nil, nil
 }
 
-func GetDocumentManager(context appengine.Context) *documentManager {
+func GetDocumentManager(request *http.Request) *documentManager {
+	context := appengine.NewContext(request)
+
 	hc := &http.Client{
 		Transport: &oauth2.Transport{
 			Source: google.AppEngineTokenSource(context, storage.ScopeFullControl),
@@ -139,8 +141,8 @@ func GetDocumentManager(context appengine.Context) *documentManager {
 	}
 }
 
-func SaveDocumentsUploads(files []*multipart.FileHeader, context appengine.Context, docType *models.DocumentType) ([]*models.Document, bool) {
-	dm := GetDocumentManager(context)
+func SaveDocumentsUploads(files []*multipart.FileHeader, request *http.Request, docType *models.DocumentType) ([]*models.Document, bool) {
+	dm := GetDocumentManager(request)
 	var documents []*models.Document
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
@@ -160,18 +162,19 @@ func SaveDocumentsUploads(files []*multipart.FileHeader, context appengine.Conte
 			return documents, false
 		}
 		document := models.Document{
-			Type:         docType,
-			Creator:      user,
-			Updater:      user,
-			Authority:    user,
-			Name:         files[i].Filename,
-			Description:  "",
-			FilePath:     company.Id + "/" + docType.NameId + "/",
-			FileName:     files[i].Filename,
-			MimeType:     files[i].Header["Content-Type"][0],
-			Date:         time.Now(),
-			Company:      company,
+			Type:        docType,
+			Creator:     user,
+			Updater:     user,
+			Authority:   user,
+			Name:        files[i].Filename,
+			Description: "",
+			FilePath:    company.Id + "/" + docType.NameId + "/",
+			FileName:    files[i].Filename,
+			MimeType:    files[i].Header["Content-Type"][0],
+			Date:        time.Now(),
+			Company:     company,
 		}
+
 		models.AddDocument(&document)
 		documents = append(documents, &document)
 

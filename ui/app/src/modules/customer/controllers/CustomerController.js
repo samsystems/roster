@@ -52,4 +52,5 @@ angular.module('customer').controller('CustomerController', ['$scope', '$rootSco
             });
         });
     };
+
 }]);

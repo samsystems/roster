@@ -75,8 +75,17 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                 customer.BankAccountName = $scope.customer.BankAccountName;
                 customer.BankAccount = $scope.customer.BankAccount;
                 customer.BatchPaymentsDetailt = $scope.customer.BatchPaymentsDetailt;
-                customer.Contacts = $scope.customer.contacts;
 
+                customer.Contacts = [];
+                var count = 0;
+                for (var i = 0; i < $scope.customer.contacts.length; i++) {
+                    if($scope.customer.contacts[i].Name)
+                    {
+                        customer.Contacts[count] = $scope.customer.contacts[i];
+                        count++;
+                    }
+
+                }
 
                 customer.$save().$then(function (response) {
                     $rootScope.$broadcast('customer::created');

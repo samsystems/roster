@@ -32,6 +32,8 @@ type Customer struct {
 	BankAccount             string
 	BankAccountName         string
 	BatchPaymentsDetailt    string
+	OutStanding             float64
+	OverDue                 float64
 	Deleted                 time.Time     `orm:"type(datetime)"`
 	Creator                 *User         `orm:"rel(one)" valid:"Entity(Creator)"`
 	Created                 time.Time     `orm:"auto_now_add;type(datetime)"`
@@ -40,6 +42,7 @@ type Customer struct {
 	Updated                 time.Time     `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone         int
 	Contacts                []*Contact     `orm:"-"`
+	Emails                  string         `orm:"-"`
 }
 
 func init() {

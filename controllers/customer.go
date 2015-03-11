@@ -65,7 +65,22 @@ func (controller *CustomerController) GetAll(context appengine.Context, writer h
 	}
 	if len(customers) == 0 {
 		return make([]models.Customer, 0), nil
+	}else{
+		for i := 0; i < len(customers); i++ {
+			contacts := models.GetAllContactByOwner("customer",customers[i].Id)
+			email := "";
+			for j := 0; j < len(contacts); j++ {
+				if(contacts[j].IncludeEmail){
+					if(email!=""){
+						email +=", "
+					}
+					email += contacts[j].Email
+				}
+			}	
+			customers[i].Emails=email
+		}
 	}
+	
 	return customers, nil
 }
 

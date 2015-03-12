@@ -68,10 +68,28 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	if user.Username == "" {
 		user.Username = user.Email
 	}
-
-	models.AddUser(user)
-
-	return user, nil
+	
+	models.AddUser(&user)
+	
+	location := user.Company.Location
+	if location.Country == nil {
+		country, _ := models.GetCountry("US")
+		location.Country = country
+	}
+	location.Creator = &user
+	location.Updater = &user
+	models.AddLocation(location)
+	user.Company.Location = location
+	
+	company := user.Company
+	company.Creator = &user
+	company.Updater = &user
+	models.AddCompany(company)
+	user.Company=company
+	location.Company=company
+	models.UpdateLocation(location)
+	models.UpdateUser(&user)
+	return user.Id, nil
 }
 
 // @Title Get
@@ -133,7 +151,7 @@ func (controller *UserController) GetByUsername(context appengine.Context, write
 // @Failure 403 :uid is not int
 // @router /:uid [put]
 func (controller *UserController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	uid := v["uid"]
+//	uid := v["uid"]
 
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
@@ -143,13 +161,13 @@ func (controller *UserController) Put(context appengine.Context, writer http.Res
 	var user models.User
 	json.Unmarshal(data, &user)
 
-	uu, err := models.UpdateUser(uid, &user)
+	//uu, err := models.UpdateUser(uid, &user)
 	if err != nil {
 		// TODO: adjust error
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
 
-	return uu, nil
+	return nil, nil
 }
 
 // @Title delete

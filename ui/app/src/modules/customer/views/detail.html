@@ -1,4 +1,4 @@
-<page-content-title title="Company Detail">
+<page-content-title title="Customer Detail">
     <a title="Add" class="btn btn-default" href="#/customers"><i class="fa fa-plus"> Back to list</i></a>
 </page-content-title>
 <panel type="plain">
@@ -32,28 +32,72 @@
                     <td>{{customer.Fax}}</td>
                 </tr>
                 <tr>
-                    <td><strong>Email</strong></td>
-                    <td>{{customer.Email}}</td>
+                    <td><strong>Company Name</strong></td>
+                    <td>{{customer.CompanyName}}</td>
                 </tr>
                 <tr>
-                    <td><strong>Address</strong></td>
-                    <td>{{customer.Address}}</td>
+                    <td><strong>Web Site</strong></td>
+                    <td>{{customer.WebSite}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Account Number</strong></td>
+                    <td>{{customer.AccountNumber}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Billing Address -- Street</strong></td>
+                    <td>{{customer.BillingLocation.Address}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Apt/suite</strong></td>
+                    <td>{{customer.BillingLocation.Address1}}</td>
                 </tr>
                 <tr>
                     <td><strong>City</strong></td>
-                    <td>{{customer.City}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Zip Code</strong></td>
-                    <td>{{customer.Zipcode}}</td>
+                    <td>{{customer.BillingLocation.City}}</td>
                 </tr>
                 <tr>
                     <td><strong>State</strong></td>
-                    <td>{{customer.State.Name}}</td>
+                    <td>{{customer.BillingLocation.State.Name}}</td>
                 </tr>
                 <tr>
-                    <td><strong>Country</strong></td>
-                    <td>{{customer.Country.Name}}</td>
+                    <td><strong>Zipcode</strong></td>
+                    <td>{{customer.BillingLocation.Zipcode}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Shipping Address -- Street</strong></td>
+                    <td>{{customer.ShippingLocation.Address}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Apt/suite</strong></td>
+                    <td>{{customer.ShippingLocation.Address1}}</td>
+                </tr>
+                <tr>
+                    <td><strong>City</strong></td>
+                    <td>{{customer.ShippingLocation.City}}</td>
+                </tr>
+                <tr>
+                    <td><strong>State</strong></td>
+                    <td>{{customer.ShippingLocation.State.Name}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Zipcode</strong></td>
+                    <td>{{customer.ShippingLocation.Zipcode}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Tax Id</strong></td>
+                    <td>{{customer.TaxId}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Bank Account</strong></td>
+                    <td>{{customer.BankAccount}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Bank Account Name</strong></td>
+                    <td>{{customer.BankAccountName}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Details</strong></td>
+                    <td>{{customer.BatchPaymentsDetail}}</td>
                 </tr>
                 </tbody>
             </table>

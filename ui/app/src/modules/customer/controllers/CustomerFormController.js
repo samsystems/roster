@@ -44,6 +44,16 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
             //    $validation.validate($scope, 'customer').success(function() {
 
             if (!_.isUndefined($scope.customer.Id)) {
+                var customer = $scope.customer;
+                $scope.customer.Contacts = [];
+                var count = 0;
+                for (var i = 0; i < customer.contacts.length; i++) {
+                    if(customer.contacts[i].Name)
+                    {
+                        $scope.customer.Contacts[count] = customer.contacts[i];
+                        count++;
+                    }
+                }
                 $scope.customer.$save().$then(function (response) {
                     $rootScope.$broadcast('customer::updated');
                     toaster.pop('success', 'Customer Updated ', 'You have been successfully updated a customer.')
@@ -60,7 +70,10 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                 customer.CompanyName = $scope.customer.CompanyName;
                 customer.WebSite = $scope.customer.WebSite;
                 customer.AccountNumber = $scope.customer.AccountNumber;
-                customer.BillingAddress = $scope.customer.BillingAddress;
+
+                customer.BillingLocation = $scope.customer.BillingLocation;
+                customer.ShippingLocation = $scope.customer.ShippingLocation;
+               /* customer.BillingAddress = $scope.customer.BillingAddress;
                 customer.BillingAddress1 = $scope.customer.ShippingAddress1;
                 customer.BillingCity = $scope.customer.BillingCity;
                 customer.BillingState = $scope.customer.BillingState;
@@ -69,12 +82,12 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                 customer.ShippingAddress1 = $scope.customer.ShippingAddress1;
                 customer.ShippingCity = $scope.customer.ShippingCity;
                 customer.ShippingState = $scope.customer.ShippingState;
-                customer.ShippingZipcode = $scope.customer.ShippingZipcode;
+                customer.ShippingZipcode = $scope.customer.ShippingZipcode;*/
                 // customer.Tax = $scope.customer.Name;
                 // customer.Discount = $scope.customer.Name;
                 customer.BankAccountName = $scope.customer.BankAccountName;
                 customer.BankAccount = $scope.customer.BankAccount;
-                customer.BatchPaymentsDetailt = $scope.customer.BatchPaymentsDetailt;
+                customer.BatchPaymentsDetail = $scope.customer.BatchPaymentsDetail;
 
                 customer.Contacts = [];
                 var count = 0;

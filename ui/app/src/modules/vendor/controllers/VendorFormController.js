@@ -40,18 +40,24 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
                 vendor.CompanyName = $scope.vendor.CompanyName;
                 vendor.WebSite = $scope.vendor.WebSite;
                 vendor.AccountNumber = $scope.vendor.AccountNumber;
-                vendor.Address = $scope.vendor.Address;
-                vendor.Address1 = $scope.vendor.Address1;
-                vendor.City = $scope.vendor.City;
-                vendor.State = $scope.vendor.State;
-                vendor.Zipcode = $scope.vendor.Zipcode;
+                vendor.Location = $scope.vendor.Location;
 
                 vendor.TaxId = $scope.vendor.TaxId;
                 // vendor.Discount = $scope.vendor.Name;
                 vendor.BankAccountName = $scope.vendor.BankAccountName;
                 vendor.BankAccount = $scope.vendor.BankAccount;
-                vendor.BatchPaymentsDetailt = $scope.vendor.BatchPaymentsDetailt;
-                vendor.Contacts =  $scope.vendor.contacts;
+                vendor.BatchPaymentsDetail = $scope.vendor.BatchPaymentsDetail;
+
+                vendor.Contacts = [];
+                var count = 0;
+                for (var i = 0; i < $scope.vendor.contacts.length; i++) {
+                    if($scope.vendor.contacts[i].Name)
+                    {
+                        vendor.Contacts[count] = $scope.vendor.contacts[i];
+                        count++;
+                    }
+
+                }
 
                 vendor.$save().$then(function (response) {
                     $rootScope.$broadcast('vendor::created');

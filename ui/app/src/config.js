@@ -10,7 +10,7 @@ angular.module('config',[]).constant('config', {
         limitInPage: 20
     },
     api: {
-        baseUrl: ''
+        baseUrl: 'http://192.168.1.100:9000'
     },
     date: {
         outputFormatDateTime: 'MMM D, YYYY[separator]HH:mm z',

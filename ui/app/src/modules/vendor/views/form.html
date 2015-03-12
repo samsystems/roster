@@ -78,29 +78,29 @@
                             <div class="form-group">
                                 <label for="billingAddress" class="control-label">{{'Address' |
                                     translate}}:</label>
-                                <input id="billingAddress" data-ng-model="vendor.Address" type="text"
+                                <input id="billingAddress" data-ng-model="vendor.Location.Address" type="text"
                                        class="form-control" validator="required" placeholder="Street">
                             </div>
                             <div class="form-group">
-                                <input data-ng-model="vendor.Address1" type="text"
+                                <input data-ng-model="vendor.Location.Address1" type="text"
                                        class="form-control" validator="required" placeholder="Apt/suite">
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input data-ng-model="vendor.City" type="text"
+                                        <input data-ng-model="vendor.Location.City" type="text"
                                                class="form-control" validator="required" placeholder="City">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <select class="form-control" data-ng-model="vendor.State.Id"
+                                        <select class="form-control" data-ng-model="vendor.Location.State.Id"
                                                 data-ng-options="state.Id as state.Name for state in states"></select>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input data-ng-model="vendor.Zipcode" type="text"
+                                        <input data-ng-model="vendor.Location.Zipcode" type="text"
                                                class="form-control" placeholder="Zipcode">
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@
                             <td><input type="text" data-ng-model="contact.LastName" data-ng-click="addContact($index)"/></td>
                             <td><input type="text" data-ng-model="contact.Email" data-ng-click="addContact($index)"/></td>
                             <td><input type="text" data-ng-model="contact.Phone" data-ng-click="addContact($index)"/></td>
-                            <td> <input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="invoice.IncludeEmail" name="locked" value="1">
+                            <td> <input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="contact.IncludeEmail" name="locked" value="1">
                                 <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>
                             </td>
                         </tr>

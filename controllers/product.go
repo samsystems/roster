@@ -26,6 +26,7 @@ func (controller *ProductController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}/variations", handler.New(controller.GetAllProductVariations)).Methods("GET")
+	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}/variations", handler.New(controller.NewProductVariations)).Methods("POST")
 }
 
 // @Title Get
@@ -112,9 +113,10 @@ func (controller *ProductController) Post(context appengine.Context, writer http
 	json.Unmarshal(data, &product)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+
 	product.Creator = user
 	product.Updater = user
-
+	product.Company, _ = models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
 	valid := validation.Validation{}
 	b, err := valid.Valid(&product)
 	if err != nil {
@@ -158,14 +160,17 @@ func (controller *ProductController) Put(context appengine.Context, writer http.
 	valid := validation.Validation{}
 	b, err := valid.Valid(&product)
 	if err != nil {
+
 		return nil, &handler.Error{err, "Errors on validation", http.StatusNoContent}
 	}
 	if !b {
+		log.Print("asdfasdf")
 		for _, err := range valid.Errors {
 			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
+
 		models.UpdateProduct(&product)
 	}
 
@@ -188,4 +193,43 @@ func (controller *ProductController) Delete(context appengine.Context, writer ht
 	models.DeleteProduct(product)
 
 	return nil, nil
+}
+
+// @Title updateProduct
+// @Description update products
+// @Param	body		body 	models.Product	true		"body for user content"
+// @Success 200 {int} models.Product.Id
+// @Failure 403 body is empty
+// @router / [post]
+func (controller *ProductController) NewProductVariations(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uid := v["uid"]
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
+	var productVariation models.ProductVariation
+	json.Unmarshal(data, &productVariation)
+
+	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	productVariation.Creator = user
+	productVariation.Updater = user
+	productVariation.Product, _ = models.GetProduct(uid)
+
+	valid := validation.Validation{}
+	b, err := valid.Valid(&productVariation)
+	if err != nil {
+		return nil, &handler.Error{err, "Validation Errors", http.StatusBadRequest}
+	}
+	if !b {
+		for _, err := range valid.Errors {
+			return nil, &handler.Error{nil, err.Message, http.StatusBadRequest}
+		}
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
+	} else {
+		models.AddProductVariation(&productVariation)
+	}
+
+	return productVariation, nil
 }

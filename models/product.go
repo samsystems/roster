@@ -13,17 +13,17 @@ type Product struct {
 	Name                string
 	Description         string
 	Manufacturer        string
-	Category            int
+	Category            int `json:",string"`
 	Purchasable         bool
 	Cost                float32  `json:",string"`
-	PurchaseAccount     *Account `orm:"rel(one)" valid:"Entity(Account)"`
+	PurchaseAccount     *Account `orm:"rel(one)" `
 	PurchaseDescription string
 	Salable             bool
 	Price               float32 `json:",string"`
 	SaleDescription     string
-	SaleAccount         *Account `orm:"rel(one)" valid:"Entity(Account)"`
+	SaleAccount         *Account `orm:"rel(one)"`
 	IsTaxable           bool
-	Company             *Company  `orm:"rel(one)" valid:"Entity(Company)"`
+	Company             *Company  `orm:"rel(one)"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Deleted             time.Time `orm:"type(datetime)"`
@@ -114,13 +114,13 @@ func GetProductByKeyword(keyword string, page int, order string, count bool, lim
 
 }
 
-func UpdateProduct(g *Product) {
+func UpdateProduct(p *Product) {
 	o := orm.NewOrm()
-	o.Update(g)
+	o.Update(p)
 }
 
-func DeleteProduct(g *Product) {
+func DeleteProduct(p *Product) {
 	o := orm.NewOrm()
-	g.Deleted = time.Now()
-	o.Update(g)
+	p.Deleted = time.Now()
+	o.Update(p)
 }

@@ -175,7 +175,7 @@ ALTER TABLE `company_scope`
   ADD CONSTRAINT `FK_8D93D6495373C968` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `user` ADD `company_scope_id` VARCHAR(36) NULL , ADD INDEX (`company_scope_id`);
-ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649979B1AD8` FOREIGN KEY (`company_scope_id`) REFERENCES `inventory`.`company_scope` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649979B1AD8` FOREIGN KEY (`company_scope_id`) REFERENCES `company_scope` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `user` CHANGE `business` `business_name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D64932C8A3DE` ;
 ALTER TABLE `user` DROP `organization_id`;
@@ -200,7 +200,7 @@ ALTER TABLE `customer` ADD `shipping_city` VARCHAR(100) NOT NULL AFTER `shipping
 ALTER TABLE `customer` CHANGE `zipcode` `shipping_zipcode` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
 ALTER TABLE `customer` ADD `shipping_state_id` VARCHAR(36) NOT NULL AFTER `shipping_zipcode`,ADD INDEX (`shipping_state_id`) ;
 ALTER TABLE `customer` DROP FOREIGN KEY `FK_81398E0961220EA6`;
-ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA0` FOREIGN KEY (`creator_id`) REFERENCES `inventory`.`user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA0` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `customer` ADD `tax` FLOAT NULL AFTER `shipping_state_id`;
 ALTER TABLE `customer` ADD `discount` FLOAT NULL AFTER `tax` ;
 ALTER TABLE `customer` ADD `bank_account` VARCHAR(255) NOT NULL AFTER `discount`;
@@ -234,6 +234,18 @@ ALTER TABLE `customer` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLL
   CHANGE `created_time_zone` `created_time_zone` INT(11) NULL DEFAULT NULL AFTER `created`;
 ALTER TABLE `customer` ADD `out_standing` DOUBLE NOT NULL AFTER `batch_payments_detailt` ;
 ALTER TABLE `customer` ADD `over_due` DOUBLE NOT NULL AFTER `out_standing` ;
+ALTER TABLE `customer` CHANGE `batch_payments_detailt` `batch_payments_details` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `customer` DROP FOREIGN KEY `FK_81398E09A393D2FB` ;
+ALTER TABLE `customer` DROP `billing_address`, DROP `billing_address1`, DROP `billing_city`, DROP `billing_zipcode`, DROP `billing_state_id`, DROP `shipping_address`, DROP `shipping_address1`, DROP `shipping_city`, DROP `shipping_zipcode`, DROP `shipping_state_id`;
+ALTER TABLE `customer` ADD `billing_location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `account_number` ,ADD INDEX (`billing_location_id`);
+ALTER TABLE `customer` ADD `shipping_location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `billing_location_id` , ADD INDEX ( `shipping_location_id` );
+ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA1` FOREIGN KEY (`billing_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA2` FOREIGN KEY (`shipping_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `customer` ADD `company_id` VARCHAR(36) NULL DEFAULT NULL AFTER `over_due` ,ADD INDEX (`company_id`);
+ALTER TABLE `customer` ADD CONSTRAINT `81398E0961220EA3` FOREIGN KEY ( `company_id` ) REFERENCES `inventory`.`company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+
 
 ALTER TABLE `vendor` DROP `category` ;
 ALTER TABLE `vendor` ADD `mobile` VARCHAR( 100 ) NOT NULL AFTER `phone`;
@@ -271,6 +283,16 @@ ALTER TABLE `vendor` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLLAT
   CHANGE `created` `created` DATETIME NOT NULL AFTER `creator_id`,
   CHANGE `created_time_zone` `created_time_zone` INT(11) NULL DEFAULT NULL AFTER `created`;
 
+ALTER TABLE `vendor` DROP FOREIGN KEY `FK_F52233F6A393D2FB` ;
+ALTER TABLE `vendor` DROP `address`,  DROP `address1`,  DROP `city`,  DROP `zipcode`,  DROP `state_id`;
+ALTER TABLE `vendor` ADD `location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `account_number` ,ADD INDEX (`location_id`);
+UPDATE `vendor` SET `location_id` = 'NULL';
+ALTER TABLE `vendor` ADD CONSTRAINT `FK_F52233F661220EA4` FOREIGN KEY ( `location_id` ) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `vendor` ADD `company_id` VARCHAR( 36 ) NOT NULL AFTER `batch_payments_detailt` , ADD INDEX ( `company_id` );
+UPDATE `vendor` SET `company_id` = '242495b7-69f4-4107-a4d8-850540e6b834';
+ALTER TABLE `vendor` ADD CONSTRAINT `FK_F52233F661220EA9` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
 ALTER TABLE `contact` DROP FOREIGN KEY `FK_4C62E638C33F7837` ;
 ALTER TABLE `contact` DROP `document_id`;
 ALTER TABLE `contact` DROP `notes`;
@@ -286,7 +308,15 @@ ALTER TABLE `contact` CHANGE `name` `name` VARCHAR(255) CHARACTER SET utf8 COLLA
   CHANGE `owner_id` `owner_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `owner`,
   CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL AFTER `owner_id`,
   CHANGE `created` `created` DATETIME NOT NULL AFTER `creator_id`,
-  CHANGE `created_time_zone` `created_time_zone` INT(11)   NULL DEFAULT NULL AFTER `created`;
+  CHANGE `created_time_zone` `created_time_zone` INT(11)  NULL DEFAULT NULL AFTER `created`;
+
+
+ALTER TABLE `company` DROP FOREIGN KEY `FK_4FBF094FA393D2FB` ;
+ALTER TABLE `company` DROP FOREIGN KEY `FK_4FBF094F5373C966` ;
+ALTER TABLE `company` DROP `address1`, DROP `address2`, DROP `city`, DROP `state_id`, DROP `zip_code`, DROP `country_id`;
+ALTER TABLE `company` ADD `location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `tax_id`,ADD INDEX ( `location_id` );
+ALTER TABLE `company` ADD CONSTRAINT `FK_4FBF094FE37ECFB8` FOREIGN KEY ( `location_id` ) REFERENCES `inventory`.`location` (id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 
 DROP TABLE IF EXISTS `organization`;
 

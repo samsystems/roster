@@ -54,6 +54,9 @@ func GetVendor(uid string) (*Vendor, error) {
 	err := o.Read(&vendor)
 	if vendor.Location != nil {
 		o.Read(vendor.Location)
+		if vendor.Location.State != nil {
+			o.Read(vendor.Location.State)
+		}
 	}
 	return &vendor, err
 }

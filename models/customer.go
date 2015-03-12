@@ -58,9 +58,15 @@ func GetCustomer(uid string) (*Customer, error) {
 	err := o.Read(&customer)
 	if customer.BillingLocation != nil {
 		o.Read(customer.BillingLocation)
+		if customer.BillingLocation.State != nil {
+			o.Read(customer.BillingLocation.State)
+		}
 	}
 	if customer.ShippingLocation != nil {
 		o.Read(customer.ShippingLocation)
+		if customer.ShippingLocation.State != nil {
+			o.Read(customer.ShippingLocation.State)
+		}
 	}
 
 	return &customer, err

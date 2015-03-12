@@ -32,7 +32,7 @@ type User struct {
 	Address3               string
 	Apto                   string
 	City                   string
-	State                  *State `orm:"rel(one)"`
+	State                  *State `orm:"null;rel(one)"`
 	Postal                 string `json:"Zipcode"`
 	BirthPlace             string
 	Phone1                 string `json:"Phone"`
@@ -40,7 +40,6 @@ type User struct {
 	Username               string
 	Password               string
 	Email                  string
-	BusinessName           string
 	EmployerNumber         string
 	Status                 bool
 	Locked                 bool
@@ -58,9 +57,7 @@ type User struct {
 	isActive               bool `orm:"default(false)"`
 	Deleted                bool
 	Group                  *Group        `orm:"rel(one)"`
-	Company                *Company      `orm:"rel(one)"`
-	Industry               *Industry     `orm:"rel(one)"`
-	CompanyScope           *CompanyScope `orm:"rel(one)"`
+	Company                *Company      `orm:"null;rel(one)"`
 }
 
 type Token struct {
@@ -68,11 +65,11 @@ type Token struct {
 	Expires time.Time
 }
 
-func AddUser(u User) string {
+func AddUser(u *User) string {
 	o := orm.NewOrm()
 
 	u.Id = uuid.New()
-	_, err := o.Insert(&u)
+	_, err := o.Insert(u)
 	if err != nil {
 		panic(err)
 	}
@@ -121,8 +118,9 @@ func GetAllUsers() []*User {
 	return users
 }
 
-func UpdateUser(uid string, uu *User) (a *User, err error) {
-	return nil, nil
+func UpdateUser(user *User) {
+	o := orm.NewOrm()
+	o.Update(user)
 }
 
 func PasswordMatches(user *User, password string) bool {

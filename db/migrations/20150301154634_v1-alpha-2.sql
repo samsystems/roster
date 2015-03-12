@@ -239,10 +239,10 @@ ALTER TABLE `customer` DROP FOREIGN KEY `FK_81398E09A393D2FB` ;
 ALTER TABLE `customer` DROP `billing_address`, DROP `billing_address1`, DROP `billing_city`, DROP `billing_zipcode`, DROP `billing_state_id`, DROP `shipping_address`, DROP `shipping_address1`, DROP `shipping_city`, DROP `shipping_zipcode`, DROP `shipping_state_id`;
 ALTER TABLE `customer` ADD `billing_location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `account_number` ,ADD INDEX (`billing_location_id`);
 ALTER TABLE `customer` ADD `shipping_location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `billing_location_id` , ADD INDEX ( `shipping_location_id` );
-ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA1` FOREIGN KEY (`billing_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA2` FOREIGN KEY (`shipping_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA1` FOREIGN KEY (`billing_location_id`) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `customer` ADD CONSTRAINT `FK_81398E0961220EA2` FOREIGN KEY (`shipping_location_id`) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `customer` ADD `company_id` VARCHAR(36) NULL DEFAULT NULL AFTER `over_due` ,ADD INDEX (`company_id`);
-ALTER TABLE `customer` ADD CONSTRAINT `81398E0961220EA3` FOREIGN KEY ( `company_id` ) REFERENCES `inventory`.`company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `customer` ADD CONSTRAINT `81398E0961220EA3` FOREIGN KEY ( `company_id` ) REFERENCES `company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 
@@ -315,12 +315,23 @@ ALTER TABLE `company` DROP FOREIGN KEY `FK_4FBF094FA393D2FB` ;
 ALTER TABLE `company` DROP FOREIGN KEY `FK_4FBF094F5373C966` ;
 ALTER TABLE `company` DROP `address1`, DROP `address2`, DROP `city`, DROP `state_id`, DROP `zip_code`, DROP `country_id`;
 ALTER TABLE `company` ADD `location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `tax_id`,ADD INDEX ( `location_id` );
-ALTER TABLE `company` ADD CONSTRAINT `FK_4FBF094FE37ECFB8` FOREIGN KEY ( `location_id` ) REFERENCES `inventory`.`location` (id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `company` ADD CONSTRAINT `FK_4FBF094FE37ECFB8` FOREIGN KEY ( `location_id` ) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+/*
+ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D6495373C966` ;
+ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649E37ECFB9` ;
+ALTER TABLE `user` DROP `country_id`, DROP `address1`, DROP `address2`, DROP `address3`, DROP `apto`, DROP `city`, DROP `state_id`, DROP `postal`;
+ALTER TABLE `user` ADD `location_id` VARCHAR(36) NULL AFTER `driver_license`,ADD INDEX (`location_id`);
+ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649E37ECFB1` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+*/
+
+ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649979B1AD7`;
+ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649979B1AD8`;
+ALTER TABLE `user` DROP `business_name`, DROP `industry_id`, DROP `company_scope_id`;
 
 DROP TABLE IF EXISTS `organization`;
 
-ALTER TABLE `inventory`.`product` CHANGE COLUMN `sale_account_id` `sale_account_id` VARCHAR(36) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ;
+ALTER TABLE `product` CHANGE COLUMN `sale_account_id` `sale_account_id` VARCHAR(36) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

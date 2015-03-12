@@ -98,13 +98,6 @@ angular.module('common').controller('RegisterController', ['$scope', '$window', 
                     user.Password = $scope.user.Password;
                     user.Company = $scope.user.Company;
                     user.EmployerNumber = $scope.user.EmployerNumber;
-                    user.Industry = $scope.user.Industry;
-                    user.CompanyScope = $scope.user.CompanyScope;
-                    user.Address = $scope.user.StreetAddress;
-                    user.Apto = $scope.user.AptUnit;
-                    user.City = $scope.user.City;
-                    user.State = $scope.user.State;
-                    user.Zipcode = $scope.user.Zipcode;
                     user.DOB = $scope.user.DOB;
                     user.SSN = $scope.user.SSN;
                     user.Phone = $scope.user.Phone;
@@ -112,7 +105,7 @@ angular.module('common').controller('RegisterController', ['$scope', '$window', 
 
                     user.$save().$then(function (response) {
                         toaster.pop('success', 'User Created', 'You have successfully created a new user.');
-                       // $state.go("login");
+                        $state.go("login");
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new User could not be created');
                     });

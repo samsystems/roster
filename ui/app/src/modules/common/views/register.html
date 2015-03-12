@@ -115,7 +115,7 @@
                         <div class="col-md-6">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Business Name' | translate}}</label>
-                                <input type="text" data-ng-model="user.BusinessName" class="form-control text-input"
+                                <input type="text" data-ng-model="user.Company.Name" class="form-control text-input"
                                        placeholder="Name">
                             </div>
                         </div>
@@ -135,14 +135,14 @@
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Industry' |
                                     translate}}</label>
-                                <select class="form-control" data-ng-model="user.Industry.Id" data-ng-options ="industry.Id as industry.Description for industry in industries"></select>
+                                <select class="form-control" data-ng-model="user.Company.Industry.Id" data-ng-options ="industry.Id as industry.Description for industry in industries"></select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'How do you plan to use Roster?' |
                                     translate}}</label>
-                                <select id="company" class="form-control" data-ng-model="user.CompanyScope.Id" data-ng-options ="companyScope.Id as companyScope.Name for companyScope in companyScopes"></select>
+                                <select id="company" class="form-control" data-ng-model="user.Company.CompanyScope.Id" data-ng-options ="companyScope.Id as companyScope.Name for companyScope in companyScopes"></select>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                             <div class="form-group login-input">
                                 <label class="col-md-16 control-label">{{'Address' |
                                     translate}}</label>
-                                <input type="text" data-ng-model="user.StreetAddress" class="form-control text-input"
+                                <input type="text" data-ng-model="user.Company.Location.Address" class="form-control text-input"
                                        placeholder="Street Address">
                             </div>
                         </div>
@@ -161,7 +161,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group login-input">
-                                <input type="text" data-ng-model="user.AptUnit" class="form-control text-input"
+                                <input type="text" data-ng-model="user.Company.Location.Address1" class="form-control text-input"
                                        placeholder="Apt/Unit">
                             </div>
                         </div>
@@ -171,20 +171,20 @@
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'City' | translate}}</label>
-                                    <input type="text" data-ng-model="user.City" class="form-control text-input"
+                                    <input type="text" data-ng-model="user.Company.Location.City" class="form-control text-input"
                                            placeholder="City">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'State' | translate}}</label>
-                                <select class="form-control" data-ng-model="user.State.Id" data-ng-options ="state.Id as state.Name for state in states"></select>
+                                <select class="form-control" data-ng-model="user.Company.Location.State.Id" data-ng-options ="state.Id as state.Name for state in states"></select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Zipcode' | translate}}</label>
-                                    <input type="text" data-ng-model="user.ZipCode" class="form-control text-input"
+                                    <input type="text" data-ng-model="user.Company.Location.ZipCode" class="form-control text-input"
                                            placeholder="Zipcode">
                             </div>
                         </div>
@@ -208,7 +208,7 @@
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Phone' | translate}}</label>
-                                    <input type="text" data-ng-model="user.Phone" class="form-control text-input"
+                                    <input type="text" data-ng-model="user.Company.Phone" class="form-control text-input"
                                            placeholder="Phone">
                                 </div>
                         </div>

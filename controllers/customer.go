@@ -110,7 +110,7 @@ func (controller *CustomerController) GetCountAll(context appengine.Context, wri
 // @Failure 403 body is empty
 // @router / [post]
 func (controller *CustomerController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	log.Print("asdfsaf")
+	
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
@@ -125,7 +125,30 @@ func (controller *CustomerController) Post(context appengine.Context, writer htt
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	customer.Creator = user
 	customer.Updater = user
-
+	customer.Company = user.Company
+	
+	billingLocation := customer.BillingLocation
+	if billingLocation.Country == nil {
+		country, _ := models.GetCountry("US")
+		billingLocation.Country = country
+	}
+	billingLocation.Company = user.Company
+	billingLocation.Creator = user
+	billingLocation.Updater = user
+	models.AddLocation(billingLocation)
+	customer.BillingLocation = billingLocation
+	
+	shippingLocation := customer.ShippingLocation
+	if shippingLocation.Country == nil {
+		country, _ := models.GetCountry("US")
+		shippingLocation.Country = country
+	}
+	shippingLocation.Company = user.Company
+	shippingLocation.Creator = user
+	shippingLocation.Updater = user
+	models.AddLocation(shippingLocation)
+	customer.ShippingLocation = shippingLocation
+	
 	valid := validation.Validation{}
 	b, err := valid.Valid(&customer)
 	if err != nil {
@@ -182,7 +205,36 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		}
 		return nil, &handler.Error{nil, "Entity not found.", http.StatusNoContent}
 	} else {
+		idsContactDelete := make([]string, len(customer.Contacts))
 		models.UpdateCustomer(&customer)
+		
+		billingLocation := customer.BillingLocation
+		billingLocation.Company = user.Company
+		billingLocation.Updater = user
+		models.UpdateLocation(billingLocation)
+		shippingLocation := customer.ShippingLocation
+		shippingLocation.Company = user.Company
+		shippingLocation.Updater = user
+		models.UpdateLocation(billingLocation)
+		
+		for i := 0; i < len(customer.Contacts); i++ {
+			var contact = customer.Contacts[i]
+			contact.OwnerId = customer.Id
+			contact.Owner = "customer"
+			contact.Updater = user
+			
+			if contact.Id != "" {
+				models.UpdateContact(contact)
+			} else {
+				contact.Creator = user
+				models.AddContact(contact)
+			}
+			idsContactDelete[i] = contact.Id
+		}
+		contactDelete := models.GetAllContactToDeleteByIds("customer",customer.Id, idsContactDelete)
+		for i := 0; i < len(contactDelete); i++ {
+			models.DeleteContact(&contactDelete[i])
+		}
 	}
 
 	return customer, nil

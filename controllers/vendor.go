@@ -42,7 +42,6 @@ func (controller *VendorController) Get(context appengine.Context, writer http.R
 	}
 
 	return vendor, nil
-
 }
 
 // @Title Get
@@ -102,7 +101,19 @@ func (controller *VendorController) Post(context appengine.Context, writer http.
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	vendor.Creator = user
 	vendor.Updater = user
-
+	vendor.Company = user.Company
+    
+    location := vendor.Location
+    if location.Country == nil {
+		country, _ := models.GetCountry("US")
+		location.Country = country
+	}
+	location.Company = user.Company
+    location.Creator = user
+	location.Updater = user
+	models.AddLocation(location)
+	vendor.Location = location
+	
 	valid := validation.Validation{}
 	b, err := valid.Valid(&vendor)
 	if err != nil {
@@ -115,7 +126,7 @@ func (controller *VendorController) Post(context appengine.Context, writer http.
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.AddVendor(&vendor)
-			for i := 0; i < len(vendor.Contacts); i++ {
+		for i := 0; i < len(vendor.Contacts); i++ {
 			contact := vendor.Contacts[i]
 			contact.Owner="vendor"
 			contact.OwnerId=vendor.Id
@@ -160,6 +171,31 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 		return nil, &handler.Error{nil, "Entity not found.", http.StatusNoContent}
 	} else {
 		models.UpdateVendor(&vendor)
+		
+		location := vendor.Location
+		location.Company = user.Company
+		location.Updater = user
+		models.UpdateLocation(location)
+		
+		idsContactDelete := make([]string, len(vendor.Contacts))
+		for i := 0; i < len(vendor.Contacts); i++ {
+			var contact = vendor.Contacts[i]
+			contact.OwnerId = vendor.Id
+			contact.Owner = "vendor"
+			contact.Updater = user
+			
+			if contact.Id != "" {
+				models.UpdateContact(contact)
+			} else {
+				contact.Creator = user
+				models.AddContact(contact)
+			}
+			idsContactDelete[i] = contact.Id
+		}
+		contactDelete := models.GetAllContactToDeleteByIds("vendor",vendor.Id, idsContactDelete)
+		for i := 0; i < len(contactDelete); i++ {
+			models.DeleteContact(&contactDelete[i])
+		}
 	}
 
 	return vendor, nil

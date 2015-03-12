@@ -105,6 +105,17 @@ func (controller *CompanyController) Post(context appengine.Context, writer http
 	company.Creator = user
 	company.Updater = user
 
+    location := company.Location
+    if location.Country == nil {
+		country, _ := models.GetCountry("US")
+		location.Country = country
+	}
+	//location.Company = user.Company
+    location.Creator = user
+	location.Updater = user
+	models.AddLocation(location)
+	company.Location = location
+
 	valid := validation.Validation{}
 	b, err := valid.Valid(&company)
 	if err != nil {

@@ -17,23 +17,16 @@ type Customer struct {
 	CompanyName             string
 	WebSite                 string
 	AccountNumber           string
-	BillingAddress          string
-	BillingAddress1         string
-	BillingCity             string
-	BillingZipcode          string
-	BillingState            *State       `orm:"column(billing_state_id);rel(one)" valid:"Entity(State)"`
-	ShippingAddress         string
-	ShippingAddress1        string
-	ShippingCity            string
-	ShippingZipcode         string
-	ShippingState           *State       `orm:"column(shipping_state_id);rel(one)" valid:"Entity(State)"`
+	BillingLocation         *Location    `orm:"rel(one)" valid:"Entity(Location)"`
+	ShippingLocation        *Location    `orm:"rel(one)" valid:"Entity(Location)"`
 	Tax                     float32      `json:",string"`
 	Discount                float32      `json:",string"`
 	BankAccount             string
 	BankAccountName         string
-	BatchPaymentsDetailt    string
+	BatchPaymentsDetails    string
 	OutStanding             float64
 	OverDue                 float64
+	Company                 *Company    `orm:"rel(one)" valid:"Entity(Company)"`
 	Deleted                 time.Time     `orm:"type(datetime)"`
 	Creator                 *User         `orm:"rel(one)" valid:"Entity(Creator)"`
 	Created                 time.Time     `orm:"auto_now_add;type(datetime)"`
@@ -63,6 +56,12 @@ func GetCustomer(uid string) (*Customer, error) {
 	customer := Customer{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&customer)
+	if customer.BillingLocation != nil {
+		o.Read(customer.BillingLocation)
+	}
+	if customer.ShippingLocation != nil {
+		o.Read(customer.ShippingLocation)
+	}
 
 	return &customer, err
 }

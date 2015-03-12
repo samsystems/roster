@@ -9,22 +9,22 @@ import (
 const LOCATION_LIMIT int = 10
 
 type Location struct {
-	Id              string `orm:"pk"`
+	Id              string      `orm:"pk"`
 	Name            string
 	Description     string
 	Address         string
 	Address1        string
 	City            string
 	Zipcode         string
-	State           *Company  `orm:"rel(one)" valid:"Entity(State)"`
-	Country         *Company  `orm:"rel(one)" valid:"Entity(Country)"`
-	Company         *Company  `orm:"rel(one)" valid:"Entity(Company)"`
-	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
-	Deleted         time.Time `orm:"type(datetime)"`
-	Created         time.Time `orm:"auto_now_add;type(datetime)"`
+	State           *State      `orm:"rel(one)" valid:"Entity(State)"`
+	Country         *Country    `orm:"rel(one)" valid:"Entity(Country)"`
+	Company         *Company    `orm:"null;rel(one); valid:"Entity(Company)"`
+	Creator         *User       `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater         *User       `orm:"rel(one)" valid:"Entity(Updater)"`
+	Deleted         time.Time   `orm:"type(datetime)"`
+	Created         time.Time   `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
-	Updated         time.Time `orm:"auto_now;type(datetime)"`
+	Updated         time.Time   `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone int
 }
 

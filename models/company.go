@@ -11,29 +11,24 @@ import (
 const COMPANY_LIMIT int = 5
 
 type Company struct {
-	Id              string        `orm:"pk"`
-	Creator         *User         `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User         `orm:"rel(one)" valid:"Entity(Updater)"`
-	Name            string
-	IntId           int `json:",string"`
-	TaxId           string
-	Address1        string
-	Address2        string
-	City            string
-	State           *State `orm:"rel(one)" valid:"Entity(State)"`
-	ZipCode         string
-	Phone           string
-	Country         *Country `orm:"rel(one)" valid:"Entity(Country)"`
-	Tax             float32  `json:",string"`
-	Mobile          string
-	Fax             string
-	Email           string
-	OrderNumber     int       `json:",string"`
-	Deleted         time.Time `orm:"type(datetime)"`
-	Created         time.Time `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone int
-	Updated         time.Time `orm:"auto_now;type(datetime)"`
-	UpdatedTimeZone int
+	Id                     string        `orm:"pk"`
+	Creator                *User         `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater                *User         `orm:"rel(one)" valid:"Entity(Updater)"`
+	Name                   string
+	IntId                  int           `json:",string"`
+	TaxId                  string
+	Location               *Location     `orm:"rel(one)" valid:"Entity(Location)"`
+	Phone                  string
+	Tax                    float32       `json:",string"`
+	Mobile                 string
+	Fax                    string
+	Email                  string
+	OrderNumber            int           `json:",string"`
+	Deleted                time.Time     `orm:"type(datetime)"`
+	Created                time.Time     `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone        int
+	Updated                time.Time      `orm:"auto_now;type(datetime)"`
+	UpdatedTimeZone        int
 }
 
 func init() {
@@ -62,6 +57,7 @@ func GetAllCompany(page int, order string, count bool, limit int) (*[]Company, i
 	} else {
 		qs = ParseQuerySetterOrder(qs, order)
 		qs.Offset(page * limit).Limit(limit).All(&companies)
+		
 		return &companies, nil
 	}
 }
@@ -80,10 +76,7 @@ func GetCompanyByKeyword(keyword string, page int, order string, count bool, lim
 		qb.Select("count(c.id)")
 	}
 
-	qb.From("company c").
-		LeftJoin("country p").On("c.country_id = p.iso").
-		LeftJoin("state s").On("c.state_id = s.id").
-		Where("c.name LIKE ?")
+	qb.From("company c").Where("c.name LIKE ?").And("c.deleted is null")
 
 	if count == true {
 		sql := qb.String()

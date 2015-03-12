@@ -116,5 +116,13 @@ func GetAllContactByOwner(owner string, uidOwner string) ([]Contact) {
 	querySetter.Filter("deleted__isnull", true).Filter("owner_id", uidOwner).Filter("owner", owner).All(&contacts)
 	
 	return contacts
+}
+
+func GetAllContactToDeleteByIds(owner string,idOwner string, idsContact []string) ([]Contact) {
+	o := orm.NewOrm()
+	var contacts []Contact
+	querySetter := o.QueryTable("contact")
+	querySetter.Filter("owner", owner).Filter("owner_id", idOwner).Filter("deleted__isnull", true).Exclude("id__in",idsContact).All(&contacts)
 	
+	return contacts
 }

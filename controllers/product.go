@@ -1,20 +1,17 @@
 package controllers
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
-
-	"encoding/json"
-	"io/ioutil"
-
 	"appengine"
-
-	"encoding/csv"
+	//	"encoding/csv"
+	"encoding/json"
+	"github.com/gorilla/mux"
 	"handler"
+	"io/ioutil"
 	"log"
 	"models"
-	"os"
-	"strconv"
+	"net/http"
+	//	"os"
+	//	"strconv"
 	"validation"
 )
 
@@ -23,7 +20,7 @@ type ProductController struct {
 
 func (controller *ProductController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/product/count", handler.New(controller.Count)).Methods("GET")
-	r.Handle("/product/import", handler.New(controller.ImportProduct)).Methods("GET")
+	//	r.Handle("/product/import", handler.New(controller.ImportProduct)).Methods("GET")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/product", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/product", handler.New(controller.Post)).Methods("POST")
@@ -245,78 +242,78 @@ func (controller *ProductController) NewProductVariations(context appengine.Cont
 // @Success 200 {int} models.Product.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (controller *ProductController) ImportProduct(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	csvfile, err := os.Open("db/product.csv")
-
-	if err != nil {
-		log.Print(err)
-		return "some string", nil
-	}
-
-	defer csvfile.Close()
-
-	reader := csv.NewReader(csvfile)
-	reader.Comma = '\t'
-
-	rawCSVdata, err := reader.ReadAll()
-
-	if err != nil {
-		log.Print(err)
-		os.Exit(1)
-	}
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
-	company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
-	for _, each := range rawCSVdata {
-		product := models.Product{}
-		product.Creator = user
-		product.Updater = user
-		product.Company = company
-		product.Category = 1
-		product.Name = each[1]
-		temp, _ := strconv.ParseFloat(each[17], 32)
-		product.Cost = float32(temp)
-		temp, _ = strconv.ParseFloat(each[15], 32)
-		product.Price = float32(temp)
-		valid := validation.Validation{}
-		b, err := valid.Valid(&product)
-		if err != nil {
-			log.Print("Some errors on validation")
-		}
-		if !b {
-			for _, err := range valid.Errors {
-				log.Print(err.Message)
-			}
-			log.Print("Entity not found")
-		} else {
-			models.AddProduct(&product)
-		}
-		//variations
-		productVariation := models.ProductVariation{}
-
-		productVariation.Creator = user
-		productVariation.Updater = user
-		productVariation.Product = &product
-		productVariation.Stock, _ = strconv.Atoi(each[11])
-		productVariation.Sku = each[0]
-		productVariation.Variation = each[2]
-		valid = validation.Validation{}
-		b, err = valid.Valid(&productVariation)
-		if err != nil {
-			return nil, &handler.Error{err, "Validation Errors", http.StatusBadRequest}
-		}
-		if !b {
-			for _, err := range valid.Errors {
-				return nil, &handler.Error{nil, err.Message, http.StatusBadRequest}
-			}
-			return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
-		} else {
-			models.AddProductVariation(&productVariation)
-		}
-	}
-	// sanity check, display to standard output
-	//	for _, each := range rawCSVdata {
-	//		log.Print("email : %s and timestamp : %s\n", each[0], each[1])
-	//	}
-
-	return "some string", nil
-}
+//func (controller *ProductController) ImportProduct(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+//	csvfile, err := os.Open("db/product.csv")
+//
+//	if err != nil {
+//		log.Print(err)
+//		return "some string", nil
+//	}
+//
+//	defer csvfile.Close()
+//
+//	reader := csv.NewReader(csvfile)
+//	reader.Comma = '\t'
+//
+//	rawCSVdata, err := reader.ReadAll()
+//
+//	if err != nil {
+//		log.Print(err)
+//		os.Exit(1)
+//	}
+//	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+//	company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
+//	for _, each := range rawCSVdata {
+//		product := models.Product{}
+//		product.Creator = user
+//		product.Updater = user
+//		product.Company = company
+//		product.Category = 1
+//		product.Name = each[1]
+//		temp, _ := strconv.ParseFloat(each[17], 32)
+//		product.Cost = float32(temp)
+//		temp, _ = strconv.ParseFloat(each[15], 32)
+//		product.Price = float32(temp)
+//		valid := validation.Validation{}
+//		b, err := valid.Valid(&product)
+//		if err != nil {
+//			log.Print("Some errors on validation")
+//		}
+//		if !b {
+//			for _, err := range valid.Errors {
+//				log.Print(err.Message)
+//			}
+//			log.Print("Entity not found")
+//		} else {
+//			models.AddProduct(&product)
+//		}
+//		//variations
+//		productVariation := models.ProductVariation{}
+//
+//		productVariation.Creator = user
+//		productVariation.Updater = user
+//		productVariation.Product = &product
+//		productVariation.Stock, _ = strconv.Atoi(each[11])
+//		productVariation.Sku = each[0]
+//		productVariation.Variation = each[2]
+//		valid = validation.Validation{}
+//		b, err = valid.Valid(&productVariation)
+//		if err != nil {
+//			return nil, &handler.Error{err, "Validation Errors", http.StatusBadRequest}
+//		}
+//		if !b {
+//			for _, err := range valid.Errors {
+//				return nil, &handler.Error{nil, err.Message, http.StatusBadRequest}
+//			}
+//			return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
+//		} else {
+//			models.AddProductVariation(&productVariation)
+//		}
+//	}
+//	// sanity check, display to standard output
+//	//	for _, each := range rawCSVdata {
+//	//		log.Print("email : %s and timestamp : %s\n", each[0], each[1])
+//	//	}
+//
+//	return "some string", nil
+//}

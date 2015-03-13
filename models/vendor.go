@@ -22,7 +22,7 @@ type Vendor struct {
 	TaxId                  string
 	BankAccount            string
 	BankAccountName        string
-	BatchPaymentsDetailt   string
+	BatchPaymentsDetails   string
 	Company                *Company    `orm:"rel(one)" valid:"Entity(Company)"`
 	Deleted                time.Time   `orm:"type(datetime)"`
 	Creator                *User       `orm:"rel(one)" valid:"Entity(Creator)"`

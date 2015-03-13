@@ -64,7 +64,7 @@ angular.module('invoice').controller('InvoiceListAllController', ['$scope', '$ro
 
 
     $scope.removeInvoice = function (invoice) {
-        dialogs.confirm('Remove a Invoice', 'Are you sure you want to remove a Invoice?111').result.then(function (btn) {
+        dialogs.confirm('Remove a Invoice', 'Are you sure you want to remove a Invoice?').result.then(function (btn) {
             invoice.$destroy().$then(function () {
                 $rootScope.$broadcast('invoice::deleted');
                 $rootScope.$broadcast('invoice::totalTab');

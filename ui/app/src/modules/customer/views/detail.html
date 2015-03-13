@@ -7,107 +7,220 @@
         <p class="text-right"><strong>{{customer.Created | outputFormatDateTime }}</strong></p>
 
         <div>
-            <table class="table">
-                <tbody>
-                <tr>
-                    <td colspan="2">
-                        <a class="btn btn-danger btn-sm" data-ng-click="removeCustomer(customer)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
-                        <a href="#/customers" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 100px;"><strong>Name</strong></td>
-                    <td>{{customer.Name}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Phone</strong></td>
-                    <td>{{customer.Phone}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Mobile</strong></td>
-                    <td>{{customer.Mobile}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Fax</strong></td>
-                    <td>{{customer.Fax}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Company Name</strong></td>
-                    <td>{{customer.CompanyName}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Web Site</strong></td>
-                    <td>{{customer.WebSite}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Account Number</strong></td>
-                    <td>{{customer.AccountNumber}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Billing Address -- Street</strong></td>
-                    <td>{{customer.BillingLocation.Address}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Apt/suite</strong></td>
-                    <td>{{customer.BillingLocation.Address1}}</td>
-                </tr>
-                <tr>
-                    <td><strong>City</strong></td>
-                    <td>{{customer.BillingLocation.City}}</td>
-                </tr>
-                <tr>
-                    <td><strong>State</strong></td>
-                    <td>{{customer.BillingLocation.State.Name}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Zipcode</strong></td>
-                    <td>{{customer.BillingLocation.Zipcode}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Shipping Address -- Street</strong></td>
-                    <td>{{customer.ShippingLocation.Address}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Apt/suite</strong></td>
-                    <td>{{customer.ShippingLocation.Address1}}</td>
-                </tr>
-                <tr>
-                    <td><strong>City</strong></td>
-                    <td>{{customer.ShippingLocation.City}}</td>
-                </tr>
-                <tr>
-                    <td><strong>State</strong></td>
-                    <td>{{customer.ShippingLocation.State.Name}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Zipcode</strong></td>
-                    <td>{{customer.ShippingLocation.Zipcode}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Tax Id</strong></td>
-                    <td>{{customer.TaxId}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Bank Account</strong></td>
-                    <td>{{customer.BankAccount}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Bank Account Name</strong></td>
-                    <td>{{customer.BankAccountName}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Details</strong></td>
-                    <td>{{customer.BatchPaymentsDetail}}</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">{{'Display Name' |
+                        translate}}:</label>
+                    {{customer.Name}}
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">{{'Company Name' |
+                                translate}}:</label>
+                            {{customer.CompanyName}}
 
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input id="accountNumber" data-ng-model="customer.AccountNumber" type="text"
+                                   class="form-control" validator="required"
+                                   placeholder="Account Number/License Id">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 col-md-offset-2">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="phone">{{'Phone' |
+                                translate}}:</label>
+                            <input id="phone" data-ng-model="customer.Phone" type="text"
+                                   class="form-control" validator="required" placeholder="Enter text here...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="mobile" class=" control-label">{{'Mobile' |
+                                translate}}:</label>
+                            <input id="mobile" data-ng-model="customer.Mobile" type="text"
+                                   class="form-control" validator="required" placeholder="Enter text here...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="fax">{{'Fax' | translate}}:</label>
+                            <input id="fax" data-ng-model="customer.Fax" type="text"
+                                   class="form-control" placeholder="Enter text here...">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" for="website">{{'Website' |
+                                translate}}:</label>
+                            <input id="website" data-ng-model="customer.WebSite" type="text"
+                                   class="form-control" validator="required" placeholder="Enter text here...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="billingAddress" class="control-label">{{'Billing Address' |
+                                translate}}:</label>
+                            <input id="billingAddress" data-ng-model="customer.BillingLocation.Address" type="text"
+                                   class="form-control" validator="required" placeholder="Street">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input data-ng-model="customer.BillingLocation.Address1" type="text"
+                                   class="form-control" validator="required" placeholder="Apt/suite">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input data-ng-model="customer.BillingLocation.City" type="text"
+                                   class="form-control" validator="required" placeholder="City">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" data-ng-model="customer.BillingLocation.State.Id"
+                                    data-ng-options="state.Id as state.Name for state in states"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input data-ng-model="customer.BillingLocation.Zipcode" type="text"
+                                   class="form-control" placeholder="Zipcode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label" for="shippingAddress">{{'Shipping Address' |
+                                translate}}:</label>
+
+                            <div class="pull-right">
+                                <input id="CheckboxShipping" type="checkbox" ng-change="BillShip()"
+                                       data-ng-model="customer.BillShip" name="locked" value="1">
+                                <label style="margin-left: 10px" class="control-label">{{'Same As billing' | translate}}</label>
+                            </div>
+
+                            <input id="shippingAddress" data-ng-model="customer.ShippingLocation.Address" type="text"
+                                   class="form-control" validator="required" placeholder="Street">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input data-ng-model="customer.ShippingLocation.Address1" type="text"
+                                   class="form-control" validator="required" placeholder="Apt/suite">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input data-ng-model="customer.ShippingLocation.City" type="text"
+                                   class="form-control" validator="required" placeholder="City">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" data-ng-model="customer.ShippingLocation.State.Id"
+                                    data-ng-options="state.Id as state.Name for state in states"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input data-ng-model="customer.ShippingLocation.Zipcode" type="text"
+                                   class="form-control" placeholder="Zipcode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="billingAddress" class="col-md-12 control-label">{{'Tax' |
+                        translate}}:</label>
+                    <input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="customer.IsTaxable"
+                           name="locked" value="1">
+                    <label style="margin-left: 10px" class="control-label">{{'Is Taxable' | translate}}</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="billingAddress" class="control-label"></label>
+                    <!-- <select class="form-control" data-ng-model="customer.BillingState.Id" data-ng-options ="state.Id as state.Name for state in states"></select> -->
+                    <input data-ng-model="customer.Tax" type="text"
+                           class="form-control" placeholder="Tax">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="billingAddress" class="control-label">{{'Discount' |
+                        translate}}:</label>
+                    <!--   <select class="form-control" data-ng-model="customer.BillingState.Id" data-ng-options ="state.Id as state.Name for state in states"></select> -->
+                    <input data-ng-model="customer.Discount" type="text"
+                           class="form-control" placeholder="Discount">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="billingAddress" class="control-label">{{'Batch Payments' |
+                        translate}}:</label>
+                    <input data-ng-model="customer.BankAccountName" type="text"
+                           class="form-control" validator="required" placeholder="Bank Account Name">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="billingAddress" class="control-label"></label>
+                    <input data-ng-model="customer.BankAccount" type="text"
+                           class="form-control" validator="required" placeholder="Bank Account">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="billingAddress" class="control-label"></label>
+                    <input data-ng-model="customer.BatchPaymentsDetails" type="text"
+                           class="form-control" placeholder="Details">
+                </div>
+            </div>
+        </div>
             <div class="table-responsive" ng-show="customer.contacts.length > 0" style="margin: 20px 0 0 18px">
                 <p><strong>Contacts:</strong></p>
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th style="width: 15%">First Name</th>
+                        <th style="width: 15%">First Namessssssss</th>
                         <th style="width: 15%">Last Name</th>
                         <th style="width: 10%">Phone</th>
                         <th style="width: 10%">Email</th>

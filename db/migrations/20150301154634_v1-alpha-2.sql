@@ -1,4 +1,3 @@
-
 -- +goose Up
 -- SQL in section 'Up' is executed when this migration is applied
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -317,13 +316,13 @@ ALTER TABLE `company` DROP `address1`, DROP `address2`, DROP `city`, DROP `state
 ALTER TABLE `company` ADD `location_id` VARCHAR(36) NULL DEFAULT NULL AFTER `tax_id`,ADD INDEX ( `location_id` );
 ALTER TABLE `company` ADD CONSTRAINT `FK_4FBF094FE37ECFB8` FOREIGN KEY ( `location_id` ) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-/*
+
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D6495373C966` ;
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649E37ECFB9` ;
 ALTER TABLE `user` DROP `country_id`, DROP `address1`, DROP `address2`, DROP `address3`, DROP `apto`, DROP `city`, DROP `state_id`, DROP `postal`;
 ALTER TABLE `user` ADD `location_id` VARCHAR(36) NULL AFTER `driver_license`,ADD INDEX (`location_id`);
 ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649E37ECFB1` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-*/
+
 
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649979B1AD7`;
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649979B1AD8`;

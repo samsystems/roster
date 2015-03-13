@@ -76,29 +76,26 @@
                     <th style="width: 30%">Description</th>
                     <th style="width: 5%">Qty</th>
                     <th style="width: 10%">Unit Price</th>
-                    <th style="width: 10%">Disc %</th>
-                    <th style="width: 10%">Amount USD</th>
-                    <th style="width: 5%"></th>
+                    <!--<th style="width: 10%">Disc %</th>-->
+                    <th colspan="2" style="width: 10%">Amount USD</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr data-ng-repeat="product in invoice.products">
                     <td>{{$last ? '*' : $index + 1}}</td>
                     <td>
-                        <!--<input type="text" data-ng-model=""/>-->
-                        <input data-ng-model="product.CustomProductName"
+                        <input data-ng-model="product.Name"
                             autocomplete="off"
                             data-typeahead="product as product.Name for product in searchProducts($viewValue)"
                             data-typeahead-min-length="3"
-                            data-typeahead-on-select="addProduct($index)"
+                            data-typeahead-on-select="addItem($item, $index)"
                             type="text"
-                            data-ng-click="addProduct($index)"
-                                />
+                            data-ng-click="addProduct($index)" />
                     </td>
-                    <td><input type="text" data-ng-model="product.Description" data-ng-click="addProduct($index)"/></td>
-                    <td><input type="text" data-ng-model="product.Quantity" data-ng-click="addProduct($index)"/></td>
-                    <td><input type="text" data-ng-model="product.Price" data-ng-click="addProduct($index)"/></td>
-                    <td><input type="text" data-ng-model="product.DiscountPrice" data-ng-click="addProduct($index)"/></td>
+                    <td><input type="text" data-ng-model="product.Description"/></td>
+                    <td><input type="text" data-ng-model="product.Quantity"/></td>
+                    <td><input type="text" data-ng-model="product.Price"/></td>
+                    <!--<td><input type="text" data-ng-model="product.DiscountPrice"/></td>-->
                     <td>{{getAmount(product) | currency: 'USD'}}</td>
                     <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(product)" data-ng-show="!$last"></button></td>
                 </tr>
@@ -109,38 +106,18 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="no-border"></td>
-                    <td>Tax (%)</td>
+                    <td>Tax (%) </td>
                     <td colspan="2"><input type="text" data-ng-model="invoice.TotalTax"/></td>
                 </tr>
                 <tr>
                     <td colspan="5" class="no-border"></td>
-                    <td><b>Total</b></td>
-                    <td colspan="2">{{getTotal() | currency: 'USD'}}</td>
+                    <td><h3><b>Total</b></h3></td>
+                    <td colspan="2"><h3>{{getTotal() | currency: 'USD'}}</h3></td>
                 </tr>
                 </tbody>
             </table>
         </div><!-- End div .table-responsive -->
 
-
-        <!--<div class="row">-->
-            <!--<div class="col-md-  col-xs-6 col-xs-offset-3">-->
-                <!--<div class="input-group">-->
-                    <!--<input id="item" data-ng-model="item_input"-->
-                        <!--autocomplete="off"-->
-                        <!--data-typeahead="product as product.Name for product in searchProducts($viewValue)"-->
-                        <!--data-typeahead-min-length="3"-->
-                        <!--data-typeahead-on-select="addItem($item)"-->
-                        <!--placeholder="{{'Search...' | translate}}"-->
-                        <!--type="text" class="form-control" />-->
-                    <!--<span class="input-group-btn">-->
-                        <!--<button title="{{'Reset' || translate}}" class="btn btn-default" data-ng-disabled="search.keyword.length == 0" type="button" data-ng-click="reset()"><span class="glyphicon glyphicon-remove"></span></button>-->
-                        <!--<button title="{{'Search' || translate}}" class="btn btn-default" type="button" data-ng-click="search()"><span class="glyphicon glyphicon-search"></span></button>-->
-                    <!--</span>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <br/>
-        <br/>
 
         <!--<div class="table-responsive"  ng-load="updateSubTotal()">-->
             <!--<table class="table table-hover">-->
@@ -167,19 +144,7 @@
             <!--type="text"-->
             <!--class="form-control" style="padding-right: 0px !important;; width: 70px" validator="required,number">-->
             <!--&lt;!&ndash;Agregar validacion checkQuantity&ndash;&gt;-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</td>-->
-            <!--<td style="cursor:pointer;">-->
-            <!--{{item.Product.Price}}-->
-            <!--</td>-->
-            <!--<td style="cursor:pointer;">-->
-            <!--&nbsp;-->
-            <!--</td>-->
-            <!--<td style="cursor:pointer;">-->
-            <!--{{item.Quantity * item.Product.Price | currency: 'USD'}}-->
-            <!--</td>-->
-            <!--<td>-->
+
             <!--<button type="button"-->
             <!--ng-disabled="invoice.Status=='paid' || invoice.Status=='void' || invoice.Status=='completed'"-->
             <!--class="btn btn-danger fa fa-trash-o" data-ng-click="removeItem(item)"></button>-->
@@ -208,6 +173,9 @@
 
         <div class="row">
             <div class="col-md-6">
+                <div style="margin-left: 13px">
+                    <label for="customer" style="margin-left: 10px" class="control-label">{{'Billing Address' | translate}}</label>
+                </div>
                 <div style="background-color: #E5E9EC; margin: 10px 0 0 15px" ng-show="invoice.Customer.Id">
                     <p><strong>{{invoice.Customer.Name}}</strong>
                         <br/>
@@ -221,37 +189,37 @@
                     </p>
                 </div>
             </div>
-            <!--<div class="col-md-6">-->
-                <!--<div style="margin-left: 13px">-->
-                    <!--<input id="CheckboxShipping" type="checkbox" ng-change="BillShip()" data-ng-model="invoice.BillShip" name="locked" value="1">-->
-                    <!--<label for="customer" style="margin-left: 10px" class="control-label">{{'Same As Billing Address' | translate}}</label>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label for="CustomerShipping" class="col-md-12 control-label">{{'Ship To' | translate}}</label>-->
-                    <!--<div class="col-md-12">-->
-                        <!--<input id="CustomerShipping" data-ng-model="invoice.CustomerShipping" autocomplete="off"-->
-                               <!--data-typeahead="customer as customer.Name for customer in searchCustomers($viewValue)"-->
-                               <!--data-typeahead-min-length="3" type="text" class="form-control " >-->
-                    <!--</div>-->
-                    <!--<div style="background-color: #E5E9EC; margin: 10px 0 0 15px" ng-show="invoice.CustomerShipping.Id">-->
-                        <!--<p><strong>{{invoice.CustomerShipping.Name}}</strong>-->
-                            <!--<br/>-->
-                            <!--{{invoice.CustomerShipping.Address}}-->
-                            <!--<br/>-->
-                            <!--{{invoice.CustomerShipping.City}}, {{invoice.CustomerShipping.Zipcode}}-->
-                            <!--<br/>-->
-                            <!--P: {{invoice.CustomerShipping.Phone}}-->
-                            <!--<br/>-->
-                            <!--Email: {{invoice.customer.Email}}-->
-                        <!--</p>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
+            <div class="col-md-6">
+                <div style="margin-left: 13px">
+                    <input id="CheckboxShipping" type="checkbox" ng-change="BillShip()" data-ng-model="invoice.BillShip" name="locked" value="1">
+                    <label for="customer" style="margin-left: 10px" class="control-label">{{'Same As Billing Address' | translate}}</label>
+                </div>
+                <div class="form-group">
+                    <label for="CustomerShipping" class="col-md-12 control-label">{{'Ship To' | translate}}</label>
+                    <div class="col-md-12">
+                        <input id="CustomerShipping" data-ng-model="invoice.CustomerShipping" autocomplete="off"
+                               data-typeahead="customer as customer.Name for customer in searchCustomers($viewValue)"
+                               data-typeahead-min-length="3" type="text" class="form-control " >
+                    </div>
+                    <div style="background-color: #E5E9EC; margin: 10px 0 0 15px" ng-show="invoice.CustomerShipping.Id">
+                        <p><strong>{{invoice.CustomerShipping.Name}}</strong>
+                            <br/>
+                            {{invoice.CustomerShipping.Address}}
+                            <br/>
+                            {{invoice.CustomerShipping.City}}, {{invoice.CustomerShipping.Zipcode}}
+                            <br/>
+                            P: {{invoice.CustomerShipping.Phone}}
+                            <br/>
+                            Email: {{invoice.customer.Email}}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="col-md-12 control-label" for="DeliveryInstruction">{{'Delivery Instruction' |
+                    <label class="col-md-12 control-label" for="DeliveryInstruction">{{'Memo Notes' |
                         translate}}:</label>
 
                     <div class="col-md-12">

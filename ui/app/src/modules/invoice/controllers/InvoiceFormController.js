@@ -6,7 +6,8 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
         User.$find(User.getCurrentUserId()).$asPromise().then(function (user) {
             Company.$find(user.Company.Id).$asPromise().then(function (company) {
-                $scope.tax = company.Tax;
+                $scope.tax = 7;
+//                $scope.tax = company.Tax;
             });
         });
 
@@ -36,7 +37,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
 
         // TODO: implement Invoice.getMaxOrderNumber()
-        //   $scope.invoiceNumber = 500;
+//       $scope.invoice.invoiceNumber = 500;
         $scope.searchCustomers = function (val) {
             return Customer.$search({keyword: val, page: 1, order: 'notSorting'}).$asPromise().then(function (customers) {
                 if(customers == null)
@@ -62,15 +63,18 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         }
 
         $scope.getAmount = function(product){
-            var quantity = (!isNaN(product.QuantitySolicited) && product.QuantitySolicited != "") ? parseInt(product.QuantitySolicited) : 0;
+            var quantity = (!isNaN(product.Quantity) && product.Quantity != "") ? parseInt(product.Quantity) : 0;
             var price = (!isNaN(product.Price) && product.Price != "") ? parseFloat(product.Price) : 0;
             var discount = (!isNaN(product.DiscountPrice) && product.DiscountPrice != "") ? parseFloat(product.DiscountPrice) : 0;
             return  ( quantity * price ) - ( quantity * price * discount / 100);
         }
 
+        $scope.invoice.TotalTax = 7;
         $scope.getTotal = function(product){
             var total = 0;
-            var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 0;
+//            var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 7;
+
+            var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 7;
             _.each($scope.invoice.products,function(product){
                 total += $scope.getAmount(product);
             })
@@ -78,22 +82,25 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             return  ( total) + ( total * tax / 100);
         }
 
-//        $scope.addItem = function (item_input) {
-//            if (!_.isEmpty(item_input) && !_.isEmpty(item_input.Id)) {
-//                $scope.subtotal = 0;
-//                // item_input.quantity = 1;
-//                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
-//                    if ($scope.invoice.InvoiceProducts[i].Product.Id == item_input.Id) {
-//                        toaster.pop('error', 'Error', 'The product has already been added');
-//                        return;
-//                    }
-//                }
-//                var item = {Product: item_input, Price: item_input.Price, Quantity: '1'};
-//                $scope.invoice.InvoiceProducts[$scope.invoice.InvoiceProducts.length] = item;
-//                $scope.item_input = '';
-//            } else
-//                toaster.pop('error', 'Error', 'Select an item');
-//        };
+        $scope.addItem = function (product, $index) {
+            if (!_.isEmpty(product) && !_.isEmpty(product.Id)) {
+                $scope.subtotal = 0;
+
+                for (var i = 0; i < $scope.invoice.products.length; i++) {
+
+                    if(!_.isEmpty($scope.invoice.products[i].Id)){
+                        if ($scope.invoice.products[i].Id == product.Id) {
+                            toaster.pop('error', 'Error', 'The product has already been added');
+                            return;
+                        }
+                    }
+                }
+                var item = {Id: product.Id, Name: product.Name, Description: product.Description, Price: product.Price, DiscountPrice: product.DiscountPrice, Quantity: '1'};
+                $scope.invoice.products[$index] = item;
+            } else{
+                toaster.pop('error', 'Error', 'Select an item');
+            }
+        };
 
         /*
          $scope.saveQuantity = function (item) {
@@ -114,20 +121,19 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         $scope.updateSubTotal = function () {
             $scope.subtotal = 0;
             $scope.total_amount = 0;
-            if ($scope.invoice && $scope.invoice.InvoiceProducts) {
-                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
-                    $scope.subtotal += $scope.invoice.InvoiceProducts[i].Quantity * $scope.invoice.InvoiceProducts[i].Price;
+            if ($scope.invoice && $scope.invoice.products) {
+                for (var i = 0; i < $scope.invoice.products.length; i++) {
+                    $scope.subtotal += $scope.invoice.products[i].Quantity * $scope.invoice.products[i].Price;
                 }
                 $scope.total_tax = $scope.subtotal * $scope.tax / 100;
                 $scope.total_amount = $scope.total_tax + $scope.subtotal;
             }
         };
 
-
         $scope.save = function (status) {
             //  $validation.validate($scope, 'invoice').success(function () {
             console.log(status);
-            if ($scope.invoice.InvoiceProducts.length > 0) {
+            if ($scope.invoice.products.length > 0) {
                 if (!_.isUndefined($scope.invoice.Id) && $scope.invoice.Id) {
                     $scope.invoice.Status = status;
 
@@ -155,7 +161,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency;
-                    invoice.InvoiceProducts = $scope.invoice.InvoiceProducts;
+                    invoice.products = $scope.invoice.products;
                     invoice.Status = status;
 
                     invoice.$save().$then(function (response) {
@@ -169,23 +175,6 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 }
             } else
                 toaster.pop('error', 'Error', 'The invoice must have at least one product.');
-            //   }).error(function () {
-            //       toaster.pop('error', 'Error', 'Complete the required entry fields.');
-            //    });
         };
-
-        function deshabilitar(valor) {
-            angular.forEach(
-                angular.element('#form_invoice .form-control'),
-                function (inputElem) {
-                    angular.element(inputElem).attr('readonly', valor);
-                });
-            angular.forEach(
-                angular.element('date-time-picker'),
-                function (inputElem) {
-                    angular.element(inputElem).attr('readonly', valor);
-                });
-            $scope.visible = false;
-        }
 
     }]);

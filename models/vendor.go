@@ -65,7 +65,7 @@ func GetVendor(uid string) (*Vendor, error) {
 func GetAllVendors(page int, order string, count bool, limit int) ([]Vendor, interface{}) {
 	page -= 1
 	if limit < 0 {
-		limit = COMPANY_LIMIT
+		limit = VENDOR_LIMIT
 	}
 	o := orm.NewOrm()
 	var vendors []Vendor

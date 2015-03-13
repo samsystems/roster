@@ -75,7 +75,7 @@ func GetCustomer(uid string) (*Customer, error) {
 func GetAllCustomers(page int, order string, count bool, limit int) ([]Customer, interface{}) {
 	page -= 1
 	if limit < 0 {
-		limit = COMPANY_LIMIT
+		limit = CUSTOMER_LIMIT
 	}
 	o := orm.NewOrm()
 	var customers []Customer

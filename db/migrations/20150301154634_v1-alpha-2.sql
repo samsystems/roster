@@ -1933,16 +1933,46 @@ VALUES
 /*!40000 ALTER TABLE `vendor` ENABLE KEYS */;
 UNLOCK TABLES;
 
-
-
-
 ALTER TABLE `contact` CHANGE `last_name` `last_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 ALTER TABLE `contact` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
+ALTER TABLE `contact` CHANGE `phone` `phone` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
+ALTER TABLE `contact` CHANGE `email` `email` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 
 ALTER TABLE `vendor` CHANGE `phone` `phone` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 ALTER TABLE `vendor` CHANGE `mobile` `mobile` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 ALTER TABLE `vendor` CHANGE `fax` `fax` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 
+ALTER TABLE `customer` ADD `is_taxable` BOOLEAN NOT NULL DEFAULT FALSE AFTER `shipping_location_id` ;
+
+INSERT INTO `state` (`id`, `country_id`, `creator_id`, `updater_id`, `name`, `accent_name`, `deleted`, `created`, `created_time_zone`, `updated`, `updated_time_zone`) VALUES
+('26c3a0a8-c8f6-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Oregon', 'Oregon', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('2aa051b0-c8f2-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Wisconsin', 'Wisconsin', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('2e0ebb42-c8ed-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'California', 'California', '0000-00-00 00:00:00', '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('353d3b7a-c8f4-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Ohio', 'Ohio', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('426f0ca2-c8f3-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Maryland', 'Maryland', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('44194158-c8f5-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'llinois', 'llinois', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('58ba3e78-c8f6-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'MI', 'MI', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('684e726d-c8f3-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Texas', 'Texas', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('6df8c233-c8f5-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'South Carolina', 'South Carolina', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('6e239b4c-c8f4-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'MS', 'MS', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('80d7764a-c8f6-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'US', 'US', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('84a4145e-c8f2-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Washington', 'Washington', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('8c3f4a8f-c8f3-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Georgia', 'Georgia', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('931d2362-c8f4-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'VA', 'VA', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('94c3615a-c8f5-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Colorado', 'Colorado', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('a0099cd4-c8f1-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Tennessee', 'Tennessee', NULL, '0000-00-00 00:00:00', NULL, '0000-00-00 00:00:00', NULL),
+('a90d7393-c8f6-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'ST', 'ST', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('c1000158-c8f3-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Kansas', 'Kansas', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('c4a641e8-c8f2-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'North Carolina', 'North Carolina', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('c6f8d6cc-c8f4-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'MA', 'MA', '0000-00-00 00:00:00', '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('cff98ef5-c8f5-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'IC', 'IC', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('dd9504bc-c8f6-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Pennsylvania', 'PA', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('ebe06cc3-c8f1-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'New York', 'New York', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('f2ead29b-c8f4-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Arizona', 'Arizona', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('fb55999c-c8f3-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Minnesota-MN', 'Minnesota-MN', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('fb7eb24d-c8f2-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Alabama', 'Alabama', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('fcbcc989-c8f5-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Montana', 'Montana', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
+('fe2eefc8-c8f6-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'LA', 'LA', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL);
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

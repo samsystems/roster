@@ -231,9 +231,11 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 			}
 			idsContactDelete[i] = contact.Id
 		}
-		contactDelete := models.GetAllContactToDeleteByIds("customer",customer.Id, idsContactDelete)
-		for i := 0; i < len(contactDelete); i++ {
-			models.DeleteContact(&contactDelete[i])
+		if(len(idsContactDelete)>0){
+			contactDelete := models.GetAllContactToDeleteByIds("customer",customer.Id, idsContactDelete)
+			for i := 0; i < len(contactDelete); i++ {
+				models.DeleteContact(&contactDelete[i])
+			}
 		}
 	}
 

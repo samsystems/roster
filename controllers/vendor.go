@@ -52,7 +52,7 @@ func (controller *VendorController) Get(context appengine.Context, writer http.R
 // @Success 200 {array} models.Vendor
 // @router / [get]
 func (controller *VendorController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	var vendors *[]models.Vendor
+	var vendors []models.Vendor
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 
 	if keyword != "" {
@@ -60,7 +60,23 @@ func (controller *VendorController) GetAll(context appengine.Context, writer htt
 	} else {
 		vendors, _ = models.GetAllVendors(page, sort, false, -1)
 	}
-
+	if len(vendors) == 0 {
+		return make([]models.Vendor, 0), nil
+	}else{
+		for i := 0; i < len(vendors); i++ {
+			contacts := models.GetAllContactByOwner("vendor",vendors[i].Id)
+			email := "";
+			for j := 0; j < len(contacts); j++ {
+				if(contacts[j].IncludeEmail){
+					if(email!=""){
+						email +=", "
+					}
+					email += contacts[j].Email
+				}
+			}	
+			vendors[i].Emails=email
+		}
+	}
 	return vendors, nil
 }
 
@@ -159,6 +175,21 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 	vendor.Creator = user
 	vendor.Updater = user
 
+	location := vendor.Location
+	if location.Country == nil {
+		country, _ := models.GetCountry("US")
+		location.Country = country
+	}
+	location.Company = user.Company
+	location.Creator = user
+	location.Updater = user
+	if location.Id =="NULL"{
+		models.AddLocation(location)
+	}else{
+		models.UpdateLocation(location)
+	}
+	vendor.Location = location
+
 	valid := validation.Validation{}
 	b, err := valid.Valid(&vendor)
 	if err != nil {
@@ -171,11 +202,6 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 		return nil, &handler.Error{nil, "Entity not found.", http.StatusNoContent}
 	} else {
 		models.UpdateVendor(&vendor)
-		
-		location := vendor.Location
-		location.Company = user.Company
-		location.Updater = user
-		models.UpdateLocation(location)
 		
 		idsContactDelete := make([]string, len(vendor.Contacts))
 		for i := 0; i < len(vendor.Contacts); i++ {
@@ -192,9 +218,11 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 			}
 			idsContactDelete[i] = contact.Id
 		}
-		contactDelete := models.GetAllContactToDeleteByIds("vendor",vendor.Id, idsContactDelete)
-		for i := 0; i < len(contactDelete); i++ {
-			models.DeleteContact(&contactDelete[i])
+		if(len(idsContactDelete)>0){
+			contactDelete := models.GetAllContactToDeleteByIds("vendor",vendor.Id, idsContactDelete)
+			for i := 0; i < len(contactDelete); i++ {
+				models.DeleteContact(&contactDelete[i])
+			}
 		}
 	}
 

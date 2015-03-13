@@ -31,7 +31,8 @@ type Vendor struct {
 	Updater                *User       `orm:"rel(one)" valid:"Entity(Updater)"`
 	Updated                time.Time   `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone        int
-	Contacts                []*Contact     `orm:"-"`
+	Contacts               []*Contact     `orm:"-"`
+	Emails                 string         `orm:"-"`
 }
 
 func init() {
@@ -61,7 +62,7 @@ func GetVendor(uid string) (*Vendor, error) {
 	return &vendor, err
 }
 
-func GetAllVendors(page int, order string, count bool, limit int) (*[]Vendor, interface{}) {
+func GetAllVendors(page int, order string, count bool, limit int) ([]Vendor, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = COMPANY_LIMIT
@@ -72,15 +73,15 @@ func GetAllVendors(page int, order string, count bool, limit int) (*[]Vendor, in
 	qs = qs.Filter("deleted__isnull", true)
 	if count == true {
 		cnt, _ := qs.Count()
-		return &vendors, cnt
+		return vendors, cnt
 	} else {
 		qs = ParseQuerySetterOrder(qs, order)
 		qs.Offset(page * limit).Limit(limit).All(&vendors)
-		return &vendors, nil
+		return vendors, nil
 	}
 }
 
-func GetVendorByKeyword(keyword string, page int, order string, count bool, limit int) (*[]Vendor, interface{}) {
+func GetVendorByKeyword(keyword string, page int, order string, count bool, limit int) ([]Vendor, interface{}) {
 	var vendors []Vendor
 	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
@@ -103,7 +104,7 @@ func GetVendorByKeyword(keyword string, page int, order string, count bool, limi
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
-		return &vendors, total
+		return vendors, total
 
 	} else {
 		ParseQueryBuilderOrder(qb, order, "vendor")
@@ -115,7 +116,7 @@ func GetVendorByKeyword(keyword string, page int, order string, count bool, limi
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%").QueryRows(&vendors)
-		return &vendors, nil
+		return vendors, nil
 	}
 
 }

@@ -17,7 +17,7 @@ type Vendor struct {
 	CompanyName            string
 	WebSite                string
 	AccountNumber          string
-	Location               *Location   `orm:"rel(one)" valid:"Entity(Location)"`
+	Location               *Location   `orm:"null;rel(one)" valid:"Entity(Location)"`
 	TrackTransaction       bool
 	TaxId                  string
 	BankAccount            string

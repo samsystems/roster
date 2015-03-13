@@ -126,29 +126,30 @@ func (controller *CustomerController) Post(context appengine.Context, writer htt
 	customer.Creator = user
 	customer.Updater = user
 	customer.Company = user.Company
-	
-	billingLocation := customer.BillingLocation
-	if billingLocation.Country == nil {
-		country, _ := models.GetCountry("US")
-		billingLocation.Country = country
+	if(customer.BillingLocation !=nil){
+		billingLocation := customer.BillingLocation
+		if billingLocation.Country == nil {
+			country, _ := models.GetCountry("US")
+			billingLocation.Country = country
+		}
+		billingLocation.Company = user.Company
+		billingLocation.Creator = user
+		billingLocation.Updater = user
+		models.AddLocation(billingLocation)
+		customer.BillingLocation = billingLocation
 	}
-	billingLocation.Company = user.Company
-	billingLocation.Creator = user
-	billingLocation.Updater = user
-	models.AddLocation(billingLocation)
-	customer.BillingLocation = billingLocation
-	
-	shippingLocation := customer.ShippingLocation
-	if shippingLocation.Country == nil {
-		country, _ := models.GetCountry("US")
-		shippingLocation.Country = country
+	if(customer.ShippingLocation !=nil){
+		shippingLocation := customer.ShippingLocation
+		if shippingLocation.Country == nil {
+			country, _ := models.GetCountry("US")
+			shippingLocation.Country = country
+		}
+		shippingLocation.Company = user.Company
+		shippingLocation.Creator = user
+		shippingLocation.Updater = user
+		models.AddLocation(shippingLocation)
+		customer.ShippingLocation = shippingLocation
 	}
-	shippingLocation.Company = user.Company
-	shippingLocation.Creator = user
-	shippingLocation.Updater = user
-	models.AddLocation(shippingLocation)
-	customer.ShippingLocation = shippingLocation
-	
 	valid := validation.Validation{}
 	b, err := valid.Valid(&customer)
 	if err != nil {
@@ -193,6 +194,36 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	customer.Creator = user
 	customer.Updater = user
+	if(customer.BillingLocation !=nil){
+		billingLocation := customer.BillingLocation
+		if billingLocation.Country == nil {
+			country, _ := models.GetCountry("US")
+			billingLocation.Country = country
+		}
+		billingLocation.Company = user.Company
+		billingLocation.Updater = user
+		if billingLocation.Id =="NULL"{
+			billingLocation.Creator = user
+			models.AddLocation(billingLocation)
+		}else{
+			models.UpdateLocation(billingLocation)
+		}
+	}
+	if(customer.ShippingLocation !=nil){
+		shippingLocation := customer.ShippingLocation
+		if shippingLocation.Country == nil {
+			country, _ := models.GetCountry("US")
+			shippingLocation.Country = country
+		}
+		shippingLocation.Company = user.Company
+		shippingLocation.Updater = user
+		if shippingLocation.Id =="NULL"{
+			shippingLocation.Creator = user
+			models.AddLocation(shippingLocation)
+		}else{
+			models.UpdateLocation(shippingLocation)
+		}
+	}
 
 	valid := validation.Validation{}
 	b, err := valid.Valid(&customer)
@@ -207,15 +238,6 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 	} else {
 		idsContactDelete := make([]string, len(customer.Contacts))
 		models.UpdateCustomer(&customer)
-		
-		billingLocation := customer.BillingLocation
-		billingLocation.Company = user.Company
-		billingLocation.Updater = user
-		models.UpdateLocation(billingLocation)
-		shippingLocation := customer.ShippingLocation
-		shippingLocation.Company = user.Company
-		shippingLocation.Updater = user
-		models.UpdateLocation(billingLocation)
 		
 		for i := 0; i < len(customer.Contacts); i++ {
 			var contact = customer.Contacts[i]

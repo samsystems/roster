@@ -118,18 +118,18 @@ func (controller *VendorController) Post(context appengine.Context, writer http.
 	vendor.Creator = user
 	vendor.Updater = user
 	vendor.Company = user.Company
-    
-    location := vendor.Location
-    if location.Country == nil {
-		country, _ := models.GetCountry("US")
-		location.Country = country
+	if(vendor.Location !=nil){
+		location := vendor.Location
+		if location.Country == nil {
+			country, _ := models.GetCountry("US")
+			location.Country = country
+		}
+		location.Company = user.Company
+		location.Creator = user
+		location.Updater = user
+		models.AddLocation(location)
+		vendor.Location = location
 	}
-	location.Company = user.Company
-    location.Creator = user
-	location.Updater = user
-	models.AddLocation(location)
-	vendor.Location = location
-	
 	valid := validation.Validation{}
 	b, err := valid.Valid(&vendor)
 	if err != nil {
@@ -174,22 +174,22 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
 	vendor.Creator = user
 	vendor.Updater = user
-
-	location := vendor.Location
-	if location.Country == nil {
-		country, _ := models.GetCountry("US")
-		location.Country = country
+	if(vendor.Location !=nil){
+		location := vendor.Location
+		if location.Country == nil {
+			country, _ := models.GetCountry("US")
+			location.Country = country
+		}
+		location.Company = user.Company
+		location.Updater = user
+		if location.Id =="NULL"{
+			location.Creator = user
+			models.AddLocation(location)
+		}else{
+			models.UpdateLocation(location)
+		}
+		vendor.Location = location
 	}
-	location.Company = user.Company
-	location.Creator = user
-	location.Updater = user
-	if location.Id =="NULL"{
-		models.AddLocation(location)
-	}else{
-		models.UpdateLocation(location)
-	}
-	vendor.Location = location
-
 	valid := validation.Validation{}
 	b, err := valid.Valid(&vendor)
 	if err != nil {

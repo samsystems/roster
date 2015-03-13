@@ -9,20 +9,26 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
 
         if (!_.isUndefined($stateParams.id)) {
             $scope.customer = Customer.$find($stateParams.id).$then(function () {
-                if ($scope.customer.ShippingLocation.Address == $scope.customer.BillingLocation.Address &&
-                    $scope.customer.ShippingLocation.Address1 == $scope.customer.BillingLocation.Address1 &&
-                    $scope.customer.ShippingLocation.City == $scope.customer.BillingLocation.City &&
-                    $scope.customer.ShippingLocation.State == $scope.customer.BillingLocation.State &&
-                    $scope.customer.ShippingLocation.Zipcode == $scope.customer.BillingLocation.Zipcode) {
-                    $scope.customer.BillShip = true;
-                }
+                if ($scope.customer.ShippingLocation!=null && $scope.customer.BillingLocation!=null)
+                    if ($scope.customer.ShippingLocation.Address == $scope.customer.BillingLocation.Address &&
+                        $scope.customer.ShippingLocation.Address1 == $scope.customer.BillingLocation.Address1 &&
+                        $scope.customer.ShippingLocation.City == $scope.customer.BillingLocation.City &&
+                        $scope.customer.ShippingLocation.State.Id == $scope.customer.BillingLocation.State.Id &&
+                        $scope.customer.ShippingLocation.Zipcode == $scope.customer.BillingLocation.Zipcode) {
+                        $scope.customer.BillShip = true;
+                    }
+                $scope.customer.contacts.$fetch().$then(function () {
+                    if($scope.customer.contacts.length==0){
+                        $scope.customer.contacts.$build().$reveal();
+                    }
+                });
             });
-            $scope.customer.contacts.$fetch();
+
         } else {
             $scope.customer = Customer.$build();
             $scope.customer.contacts.$build().$reveal();
-            $scope.customer.ShippingLocation = {};
-            $scope.customer.BillingLocation = {};
+            $scope.customer.ShippingLocation = null;
+            $scope.customer.BillingLocation = null;
         }
 
         $scope.BillShip = function () {

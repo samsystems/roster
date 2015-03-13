@@ -16,12 +16,12 @@ type Product struct {
 	Category            int `json:",string"`
 	Purchasable         bool
 	Cost                float32  `json:",string"`
-	PurchaseAccount     *Account `orm:"rel(one)" `
+	PurchaseAccount     *Account `orm:"null;rel(one)" `
 	PurchaseDescription string
 	Salable             bool
 	Price               float32 `json:",string"`
 	SaleDescription     string
-	SaleAccount         *Account `orm:"rel(one)"`
+	SaleAccount         *Account `orm:"null;rel(one)"`
 	IsTaxable           bool
 	Company             *Company  `orm:"rel(one)"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`

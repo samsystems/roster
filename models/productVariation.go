@@ -17,7 +17,7 @@ type ProductVariation struct {
 	Stock           int `json:",string"`
 	Sku             string
 	Serial          string
-	Location        *Location `orm:"rel(one)" valid:"Entity(Location)"`
+	Location        *Location `orm:"null;rel(one)"`
 	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Deleted         time.Time `orm:"type(datetime)"`

@@ -290,7 +290,7 @@ ALTER TABLE `vendor` ADD CONSTRAINT `FK_F52233F661220EA4` FOREIGN KEY ( `locatio
 ALTER TABLE `vendor` ADD `company_id` VARCHAR( 36 ) NOT NULL AFTER `batch_payments_detailt` , ADD INDEX ( `company_id` );
 UPDATE `vendor` SET `company_id` = '242495b7-69f4-4107-a4d8-850540e6b834';
 ALTER TABLE `vendor` ADD CONSTRAINT `FK_F52233F661220EA9` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
+ALTER TABLE `vendor` CHANGE `batch_payments_detailt` `batch_payments_details` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
 
 ALTER TABLE `contact` DROP FOREIGN KEY `FK_4C62E638C33F7837` ;
 ALTER TABLE `contact` DROP `document_id`;
@@ -327,6 +327,14 @@ ALTER TABLE `user` ADD CONSTRAINT `FK_8D93D649E37ECFB1` FOREIGN KEY (`location_i
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649979B1AD7`;
 ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649979B1AD8`;
 ALTER TABLE `user` DROP `business_name`, DROP `industry_id`, DROP `company_scope_id`;
+
+
+UPDATE `state` SET `country_id` = 'US' WHERE `state`.`id` = '6d76fc5b-80e8-11e4-9884-b8ac6f58483b';
+ALTER TABLE `state` CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL ;
+ALTER TABLE `location` ADD INDEX `FK_D34A04AD61220AA3` (`state_id`);
+ALTER TABLE `location` ADD INDEX `FK_D34A04AD61220AA4` (`country_id`);
+ALTER TABLE `location` CHANGE `name` `name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL;
+
 
 DROP TABLE IF EXISTS `organization`;
 

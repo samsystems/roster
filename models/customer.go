@@ -19,6 +19,7 @@ type Customer struct {
 	AccountNumber           string
 	BillingLocation         *Location    `orm:"null;rel(one)" `//valid:"Entity(Location)"
 	ShippingLocation        *Location    `orm:"null;rel(one)"`// valid:"Entity(Location)"
+	IsTaxable               bool
 	Tax                     float32      `json:",string"`
 	Discount                float32      `json:",string"`
 	BankAccount             string

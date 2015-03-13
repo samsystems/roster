@@ -112,7 +112,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <input id="CheckboxShipping" type="checkbox" ng-change="BillShip()"
-                                       data-ng-model="invoice.BillShip" name="locked" value="1">
+                                       data-ng-model="vendor.TrackTransaction" name="locked" value="1">
                                 <label style="margin-left: 10px" class="control-label">{{'Track transactions for
                                     1099' |
                                     translate}}</label>
@@ -147,7 +147,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="billingAddress" class="control-label"></label>
-                                        <input data-ng-model="vendor.BatchPaymentsDetail" type="text"
+                                        <input data-ng-model="vendor.BatchPaymentsDetails" type="text"
                                                class="form-control" placeholder="Details">
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@
                             <td><input type="text" data-ng-model="contact.LastName" data-ng-click="addContact($index)"/></td>
                             <td><input type="text" data-ng-model="contact.Email" data-ng-click="addContact($index)"/></td>
                             <td><input type="text" data-ng-model="contact.Phone" data-ng-click="addContact($index)"/></td>
-                            <td> <input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="contact.IncludeEmail" name="locked" value="1">
+                            <td> <input style="margin-left: 15px" type="checkbox" data-ng-model="contact.IncludeEmail" name="locked" value="1">
                                 <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>
                             </td>
                         </tr>

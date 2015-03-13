@@ -8,29 +8,41 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
         $scope.customer = {};
 
         if (!_.isUndefined($stateParams.id)) {
-            $scope.customer = Customer.$find($stateParams.id);
+            $scope.customer = Customer.$find($stateParams.id).$then(function () {
+                if ($scope.customer.ShippingLocation.Address == $scope.customer.BillingLocation.Address &&
+                    $scope.customer.ShippingLocation.Address1 == $scope.customer.BillingLocation.Address1 &&
+                    $scope.customer.ShippingLocation.City == $scope.customer.BillingLocation.City &&
+                    $scope.customer.ShippingLocation.State == $scope.customer.BillingLocation.State &&
+                    $scope.customer.ShippingLocation.Zipcode == $scope.customer.BillingLocation.Zipcode) {
+                    $scope.customer.BillShip = true;
+                }
+            });
             $scope.customer.contacts.$fetch();
         } else {
             $scope.customer = Customer.$build();
             $scope.customer.contacts.$build().$reveal();
+            $scope.customer.ShippingLocation = {};
+            $scope.customer.BillingLocation = {};
         }
 
         $scope.BillShip = function () {
+            if (!$scope.customer.ShippingLocation)
+                $scope.customer.ShippingLocation = {};
+            if (!$scope.customer.BillingLocation)
+                $scope.customer.BillingLocation = {};
             if ($scope.customer.BillShip) {
-                $scope.customer.ShippingAddress = $scope.customer.BillingAddress;
-                $scope.customer.ShippingAddress1 = $scope.customer.BillingAddress1;
-                $scope.customer.ShippingCity = $scope.customer.BillingCity;
-                $scope.customer.ShippingState = $scope.customer.BillingState;
-                $scope.customer.ShippingZipcode = $scope.customer.BillingZipcode;
-                angular.element('#CustomerShipping').attr('readonly', true);
+                $scope.customer.ShippingLocation.Address = $scope.customer.BillingLocation.Address;
+                $scope.customer.ShippingLocation.Address1 = $scope.customer.BillingLocation.Address1;
+                $scope.customer.ShippingLocation.City = $scope.customer.BillingLocation.City;
+                $scope.customer.ShippingLocation.State = $scope.customer.BillingLocation.State;
+                $scope.customer.ShippingLocation.Zipcode = $scope.customer.BillingLocation.Zipcode;
             }
             else {
-                $scope.customer.ShippingAddress = '';
-                $scope.customer.ShippingAddress1 = '';
-                $scope.customer.ShippingCity = '';
-                $scope.customer.ShippingState = '';
-                $scope.customer.ShippingZipcode = '';
-                angular.element('#CustomerShipping').attr('readonly', false);
+                $scope.customer.ShippingLocation.Address = '';
+                $scope.customer.ShippingLocation.Address1 = '';
+                $scope.customer.ShippingLocation.City = '';
+                $scope.customer.ShippingLocation.State = '';
+                $scope.customer.ShippingLocation.Zipcode = '';
             }
         };
 
@@ -48,8 +60,7 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                 $scope.customer.Contacts = [];
                 var count = 0;
                 for (var i = 0; i < customer.contacts.length; i++) {
-                    if(customer.contacts[i].Name)
-                    {
+                    if (customer.contacts[i].Name) {
                         $scope.customer.Contacts[count] = customer.contacts[i];
                         count++;
                     }
@@ -73,27 +84,26 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
 
                 customer.BillingLocation = $scope.customer.BillingLocation;
                 customer.ShippingLocation = $scope.customer.ShippingLocation;
-               /* customer.BillingAddress = $scope.customer.BillingAddress;
-                customer.BillingAddress1 = $scope.customer.ShippingAddress1;
-                customer.BillingCity = $scope.customer.BillingCity;
-                customer.BillingState = $scope.customer.BillingState;
-                customer.BillingZipcode = $scope.customer.BillingZipcode;
-                customer.ShippingAddress = $scope.customer.ShippingAddress;
-                customer.ShippingAddress1 = $scope.customer.ShippingAddress1;
-                customer.ShippingCity = $scope.customer.ShippingCity;
-                customer.ShippingState = $scope.customer.ShippingState;
-                customer.ShippingZipcode = $scope.customer.ShippingZipcode;*/
+                /* customer.BillingAddress = $scope.customer.BillingAddress;
+                 customer.BillingAddress1 = $scope.customer.ShippingAddress1;
+                 customer.BillingCity = $scope.customer.BillingCity;
+                 customer.BillingState = $scope.customer.BillingState;
+                 customer.BillingZipcode = $scope.customer.BillingZipcode;
+                 customer.ShippingAddress = $scope.customer.ShippingAddress;
+                 customer.ShippingAddress1 = $scope.customer.ShippingAddress1;
+                 customer.ShippingCity = $scope.customer.ShippingCity;
+                 customer.ShippingState = $scope.customer.ShippingState;
+                 customer.ShippingZipcode = $scope.customer.ShippingZipcode;*/
                 // customer.Tax = $scope.customer.Name;
                 // customer.Discount = $scope.customer.Name;
                 customer.BankAccountName = $scope.customer.BankAccountName;
                 customer.BankAccount = $scope.customer.BankAccount;
-                customer.BatchPaymentsDetail = $scope.customer.BatchPaymentsDetail;
+                customer.BatchPaymentsDetails = $scope.customer.BatchPaymentsDetails;
 
                 customer.Contacts = [];
                 var count = 0;
                 for (var i = 0; i < $scope.customer.contacts.length; i++) {
-                    if($scope.customer.contacts[i].Name)
-                    {
+                    if ($scope.customer.contacts[i].Name) {
                         customer.Contacts[count] = $scope.customer.contacts[i];
                         count++;
                     }

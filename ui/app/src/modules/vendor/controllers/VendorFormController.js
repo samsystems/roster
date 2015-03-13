@@ -42,11 +42,12 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
                 vendor.AccountNumber = $scope.vendor.AccountNumber;
                 vendor.Location = $scope.vendor.Location;
 
+                vendor.TrackTransaction = $scope.vendor.TrackTransaction;
                 vendor.TaxId = $scope.vendor.TaxId;
                 // vendor.Discount = $scope.vendor.Name;
                 vendor.BankAccountName = $scope.vendor.BankAccountName;
                 vendor.BankAccount = $scope.vendor.BankAccount;
-                vendor.BatchPaymentsDetail = $scope.vendor.BatchPaymentsDetail;
+                vendor.BatchPaymentsDetails = $scope.vendor.BatchPaymentsDetails;
 
                 vendor.Contacts = [];
                 var count = 0;

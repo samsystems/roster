@@ -128,8 +128,7 @@
 
                     <div class="pull-right">
                         <input id="CheckboxShipping" type="checkbox" ng-change="BillShip()"
-                               data-ng-model="customer.BillShip"
-                               value="1">
+                               data-ng-model="customer.BillShip" name="locked" value="1">
                         <label style="margin-left: 10px" class="control-label">{{'Same As billing' | translate}}</label>
                     </div>
 
@@ -214,7 +213,7 @@
     <div class="col-md-2">
         <div class="form-group">
             <label for="billingAddress" class="control-label"></label>
-            <input data-ng-model="customer.BatchPaymentsDetail" type="text"
+            <input data-ng-model="customer.BatchPaymentsDetails" type="text"
                    class="form-control" placeholder="Details">
         </div>
     </div>
@@ -236,7 +235,7 @@
         <td><input type="text" data-ng-model="contact.LastName" data-ng-click="addContact($index)"/></td>
         <td><input type="text" data-ng-model="contact.Email" data-ng-click="addContact($index)"/></td>
         <td><input type="text" data-ng-model="contact.Phone" data-ng-click="addContact($index)"/></td>
-        <td><input style="margin-left: 15px" type="checkbox" ng-change="BillShip()" data-ng-model="contact.IncludeEmail"
+        <td><input style="margin-left: 15px" type="checkbox" data-ng-model="contact.IncludeEmail"
                    value="1">
             <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>
         </td>

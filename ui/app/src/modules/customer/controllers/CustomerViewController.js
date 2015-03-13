@@ -9,7 +9,7 @@ angular.module('customer').controller('CustomerViewController', ['$scope', '$roo
     if(id != null){
         $scope.customer = Customer.$find(id).$then(function(){
           //  $scope.customer.Country = Country.$find($scope.customer.Country.Iso);
-            $scope.customer.BillingState = State.$find($scope.customer.BillingState.Id);
+           // $scope.customer.BillingState = State.$find($scope.customer.BillingState.Id);
             $scope.customer.contacts.$fetch();
         });
     }

@@ -1,4 +1,4 @@
-<page-content-title title="Company Detail">
+<page-content-title title="Vendor Detail">
     <a title="Add" class="btn btn-default" href="#/vendors"><i class="fa fa-plus"> Back to list</i></a>
 </page-content-title>
 <panel type="plain">
@@ -80,7 +80,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="table-responsive" ng-show="contacts.length > 0" style="margin: 20px 0 0 18px">
+            <div class="table-responsive" ng-show="vendor.contacts.length > 0" style="margin: 20px 0 0 18px">
                 <p><strong>Contacts:</strong></p>
                 <table class="table table-hover">
                     <thead>
@@ -89,44 +89,44 @@
                         <th style="width: 15%">Last Name</th>
                         <th style="width: 10%">Phone</th>
                         <th style="width: 10%">Email</th>
-                        <th style="width: 15%">Photo</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr data-ng-repeat="contact in contacts">
-                        <td style="cursor:pointer;">
-                            {{contact.name}}
-                        </td>
-                        <td style="cursor:pointer;">
-                            {{contact.last_name}}
-                        </td>
-                        <td style="cursor:pointer;">
-                            {{contact.phone}}
-                        </td>
-                        <td style="cursor:pointer;">
-                            {{contact.email}}
-                        </td>
-                        <td style="cursor:pointer;">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="inner">
-                                        <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
-                                            <div class="img-wrap" style="height: 232px; width: 307px;"
-                                                 ng-show="contact.document.id">
-                                                <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
-                                                     alt="" class="mfp-fade">
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                        <!--   <th style="width: 15%">Photo</th>-->
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr data-ng-repeat="contact in vendor.contacts">
+                         <td style="cursor:pointer;">
+                             {{contact.Name}}
+                         </td>
+                         <td style="cursor:pointer;">
+                             {{contact.LastName}}
+                         </td>
+                         <td style="cursor:pointer;">
+                             {{contact.Email}}
+                         </td>
+                         <td style="cursor:pointer;">
+                             {{contact.Phone}}
+                         </td>
+                          <!-- <td style="cursor:pointer;">
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="inner">
+                                         <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
+                                             <div class="img-wrap" style="height: 232px; width: 307px;"
+                                                  ng-show="contact.document.id">
+                                                 <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
+                                                      alt="" class="mfp-fade">
+                                             </div>
+                                         </a>
+                                     </div>
+                                 </div>
+                             </div>
+                         </td>-->
+                     </tr>
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-</panel>
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+     </div>
+ </div>
+ </panel>

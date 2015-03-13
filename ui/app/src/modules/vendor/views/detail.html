@@ -3,133 +3,197 @@
 </page-content-title>
 <panel type="plain">
     <div class="row">
-    <div class="box-info">
-        <p class="text-right"><strong>{{vendor.created | outputFormatDateTime }}</strong></p>
-        <div>
-            <table class="table">
-                <tbody>
-                <tr>
-                    <td colspan="4">
-                        <a class="btn btn-danger btn-sm" data-ng-click="removeVendor(vendor)"><i class="fa fa-trash-o"></i> {{'Remove' | translate}}</a>
-                        <a href="#/vendors" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
-                    </td>
+        <div class="box-info">
+            <div class="row" style="margin: 20px 0 0 18px">
+                <div class="pull-right">
+                    <p class="text-right"><strong>{{vendor.Created | outputFormatDateTime }}</strong></p>
+                </div>
+                <div class="pull-left">
+                    <a class="btn btn-danger btn-sm" data-ng-click="removeVendor(vendor)"><i class="fa fa-trash-o"></i>
+                        {{'Remove' |
+                        translate}}</a>
+                    <a href="#/vendors" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                </div>
+            </div>
+            <div style="margin: 20px 0 0 18px">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">{{'Display Name' | translate}}:</label>
+                            {{vendor.Name}}
+                        </div>
+                    </div>
+                    <div class="col-md-7 col-md-offset-2">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">{{'Phone' | translate}}:</label>
+                                {{vendor.Phone}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class=" control-label">{{'Mobile' | translate}}:</label>
+                                {{vendor.Mobile}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">{{'Fax' | translate}}:</label>
+                                {{vendor.Fax}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                </tr>
-                <tr>
-                    <td style="width: 15px;"><strong>Name</strong></td>
-                    <td style="width: 20px;">{{vendor.Name}}</td>
-                    <td style="width: 15px;">Otro</td>
-                    <td style="width: 20px;">Otro</td>
-                </tr>
-                <tr>
-                    <td><strong>Phone</strong></td>
-                    <td>{{vendor.Phone}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Mobile</strong></td>
-                    <td>{{vendor.Mobile}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Fax</strong></td>
-                    <td>{{vendor.Fax}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Company Name</strong></td>
-                    <td>{{vendor.CompanyName}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Web Site</strong></td>
-                    <td>{{vendor.WebSite}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Account Number</strong></td>
-                    <td>{{vendor.AccountNumber}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Address</strong></td>
-                    <td>{{vendor.Location.Address}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Apt/suite</strong></td>
-                    <td>{{vendor.Location.Address1}}</td>
-                </tr>
-                <tr>
-                    <td><strong>City</strong></td>
-                    <td>{{vendor.Location.City}}</td>
-                </tr>
-                <tr>
-                    <td><strong>State</strong></td>
-                    <td>{{vendor.Location.State.Name}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Zipcode</strong></td>
-                    <td>{{vendor.Location.Zipcode}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Tax Id</strong></td>
-                    <td>{{vendor.TaxId}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Bank Account</strong></td>
-                    <td>{{vendor.BankAccount}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Bank Account Name</strong></td>
-                    <td>{{vendor.BankAccountName}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Details</strong></td>
-                    <td>{{vendor.BatchPaymentsDetail}}</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="table-responsive" ng-show="vendor.contacts.length > 0" style="margin: 20px 0 0 18px">
-                <p><strong>Contacts:</strong></p>
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th style="width: 15%">First Name</th>
-                        <th style="width: 15%">Last Name</th>
-                        <th style="width: 10%">Phone</th>
-                        <th style="width: 10%">Email</th>
-                        <!--   <th style="width: 15%">Photo</th>-->
-                     </tr>
-                     </thead>
-                     <tbody>
-                     <tr data-ng-repeat="contact in vendor.contacts">
-                         <td style="cursor:pointer;">
-                             {{contact.Name}}
-                         </td>
-                         <td style="cursor:pointer;">
-                             {{contact.LastName}}
-                         </td>
-                         <td style="cursor:pointer;">
-                             {{contact.Email}}
-                         </td>
-                         <td style="cursor:pointer;">
-                             {{contact.Phone}}
-                         </td>
-                          <!-- <td style="cursor:pointer;">
-                             <div class="row">
-                                 <div class="col-md-6">
-                                     <div class="inner">
-                                         <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
-                                             <div class="img-wrap" style="height: 232px; width: 307px;"
-                                                  ng-show="contact.document.id">
-                                                 <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
-                                                      alt="" class="mfp-fade">
-                                             </div>
-                                         </a>
-                                     </div>
-                                 </div>
-                             </div>
-                         </td>-->
-                     </tr>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">{{'Company Name' | translate}}:</label>
+                            {{vendor.CompanyName}}
+                        </div>
+                    </div>
+                    <div class="col-md-7 col-md-offset-2">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">{{'Website' | translate}}:</label>
+                                {{vendor.WebSite}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">{{'Account Number/License Id' | translate}}:</label>
+                            {{vendor.AccountNumber}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">{{'Address' | translate}}:</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{'Street' | translate}}:</label>
+                            {{vendor.Location.Address}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{'Apt/suite' | translate}}:</label>
+                            {{vendor.Location.Address1}}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">{{'City' | translate}}:</label>
+                                    {{vendor.Location.City}}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">{{'State' | translate}}:</label>
+                                    {{vendor.Location.State.Name}}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">{{'Zipcode' | translate}}:</label>
+                                    {{vendor.Location.Zipcode}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                     </tbody>
-                 </table>
-             </div>
-         </div>
-     </div>
- </div>
- </panel>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <div data-ng-show="vendor.TrackTransaction == true">
+                                    <label style="margin-left: 10px" class="control-label">{{'Track transactions for 1099' | translate}}:</label>
+                                    Yes
+                                </div>
+                                <div data-ng-show="vendor.TrackTransaction == false">
+                                    <label style="margin-left: 10px" class="control-label">{{'Track transactions for 1099' | translate}}:</label>
+                                    No
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">{{'Tax Id' | translate}}:</label>
+                                    {{vendor.TaxId}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">{{'Batch Payments' | translate}}:</label>
+                                    {{vendor.BankAccount}}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">{{'Bank Account Name' | translate}}:</label>
+                                    {{vendor.BankAccountName}}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">{{'Bank Account Name' | translate}}:</label>
+                                    {{vendor.BatchPaymentsDetails}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" ng-show="vendor.contacts.length > 0" style="margin: 20px 0 0 18px">
+                    <p><strong>Contacts:</strong></p>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 15%">First Name</th>
+                            <th style="width: 15%">Last Name</th>
+                            <th style="width: 10%">Email</th>
+                            <th style="width: 10%">Phone</th>
+                            <!--   <th style="width: 15%">Photo</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="contact in vendor.contacts">
+                            <td style="cursor:pointer;">
+                                {{contact.Name}}
+                            </td>
+                            <td style="cursor:pointer;">
+                                {{contact.LastName}}
+                            </td>
+                            <td style="cursor:pointer;">
+                                {{contact.Email}}
+                            </td>
+                            <td style="cursor:pointer;">
+                                {{contact.Phone}}
+                            </td>
+                            <!-- <td style="cursor:pointer;">
+                               <div class="row">
+                                   <div class="col-md-6">
+                                       <div class="inner">
+                                           <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
+                                               <div class="img-wrap" style="height: 232px; width: 307px;"
+                                                    ng-show="contact.document.id">
+                                                   <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
+                                                        alt="" class="mfp-fade">
+                                               </div>
+                                           </a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </td>-->
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</panel>

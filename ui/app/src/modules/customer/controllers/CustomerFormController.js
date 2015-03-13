@@ -52,6 +52,10 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                 $scope.customer.contacts.$build().$reveal();
         }
 
+        $scope.removeContact = function(contact){
+            $scope.customer.contacts.$remove(contact);
+        }
+
         $scope.save = function () {
             //    $validation.validate($scope, 'customer').success(function() {
 

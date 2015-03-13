@@ -20,9 +20,21 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
                 $scope.vendor.contacts.$build().$reveal();
         }
 
+        $scope.removeContact = function(contact){
+            $scope.vendor.contacts.$remove(contact);
+        }
+
         $scope.save = function () {
             //    $validation.validate($scope, 'vendor').success(function() {
-
+            var vendor = $scope.vendor;
+            $scope.vendor.Contacts = [];
+            var count = 0;
+            for (var i = 0; i < vendor.contacts.length; i++) {
+                if (vendor.contacts[i].Name) {
+                    $scope.vendor.Contacts[count] = vendor.contacts[i];
+                    count++;
+                }
+            }
             if (!_.isUndefined($scope.vendor.Id)) {
                 $scope.vendor.$save().$then(function (response) {
                     $rootScope.$broadcast('vendor::updated');

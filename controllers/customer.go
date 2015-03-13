@@ -192,8 +192,9 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 	json.Unmarshal(data, &customer)
 
 	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
-	customer.Creator = user
+
 	customer.Updater = user
+	customer.Company = user.Company
 	if(customer.BillingLocation !=nil){
 		billingLocation := customer.BillingLocation
 		if billingLocation.Country == nil {

@@ -1,148 +1,161 @@
-<div class="animated active fadeInRight">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box-info">
-                <div class="row" data-ng-controller="InvoiceFormController">
-                    <div class="col-md-3">
-                        <div class="box-info">
-                            <!-- Icon box -->
-                            <div class="icon-box">
-                                                        <span class="fa-stack">
-                                                          <i class="fa fa-circle fa-stack-2x default"></i>
-                                                          <i class="fa fa-save fa-stack-1x fa-inverse"></i>
-                                                        </span>
-                            </div>
-                            <!-- End div .icon-box -->
-                            <!-- Text box -->
-                            <div class="text-box">
-                                <p>DRAFT ({{qty_draft}})</p>
-
-                                <h3>{{amountInvoicesDraft | currency: currency }}</h3>
-                            </div>
-                            <!-- End div .text-box -->
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="box-info">
-                            <!-- Icon box -->
-                            <div class="icon-box">
-                                                        <span class="fa-stack">
-                                                          <i class="fa fa-circle fa-stack-2x warning"></i>
-                                                          <i class="fa fa-clock-o fa-stack-1x fa-inverse"></i>
-                                                        </span>
-                            </div>
-                            <!-- End div .icon-box -->
-                            <!-- Text box -->
-                            <div class="text-box">
-                                <p>Unpaid ({{qty_completed}})</p>
-
-                                <h3>{{amountInvoicesCompleted | currency: currency }}</h3>
-                            </div>
-                            <!-- End div .text-box -->
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="box-info">
-                            <!-- Icon box -->
-                            <div class="icon-box">
-                                                        <span class="fa-stack">
-                                                          <i class="fa fa-circle fa-stack-2x success"></i>
-                                                          <i class="fa fa-check fa-stack-1x fa-inverse"></i>
-                                                        </span>
-                            </div>
-                            <!-- End div .icon-box -->
-                            <!-- Text box -->
-                            <div class="text-box">
-                                <p>Paid ({{qty_paid}})</p>
-
-                                <h3>{{amountInvoicesPaid | currency: currency }}</h3>
-                            </div>
-                            <!-- End div .text-box -->
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="box-info">
-                            <!-- Icon box -->
-                            <div class="icon-box">
-                                                        <span class="fa-stack">
-                                                          <i class="fa fa-circle fa-stack-2x danger"></i>
-                                                          <i class="fa fa-info fa-stack-1x fa-inverse"></i>
-                                                        </span>
-                            </div>
-                            <!-- End div .icon-box -->
-                            <!-- Text box -->
-                            <div class="text-box">
-                                <p>Overdue ({{qty_overdues}})</p>
-
-                                <h3>{{amountInvoicesOverdue | currency: currency }}</h3>
-                            </div>
-                            <!-- End div .text-box -->
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- Sales report -->
-                        <div class="box-info full">
-                            <h2><strong>Sales</strong> Report</h2>
-                            <!-- Sales report collapse body -->
-                            <div id="sales-report" class="collapse in">
-                                <div class="table-responsive">
-                                    <table data-sortable="" class="table table-striped"
-                                           data-sortable-initialized="true">
-                                        <thead>
-                                        <tr>
-                                            <th data-sortable="false">
-                                                <div class="icheckbox_minimal-grey" aria-checked="false"
-                                                     aria-disabled="false" style="position: relative;"><input
-                                                        type="checkbox" id="select-all-rows"
-                                                        style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);">
-                                                    <ins class="iCheck-helper"
-                                                         style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
-                                                </div>
-                                            </th>
-                                            <th>Number</th>
-                                            <th>Buyer</th>
-                                            <th>Status</th>
-                                            <th>Location</th>
-                                            <th>Total</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr data-ng-repeat="(key,invoice) in invoices">
-                                            <td>
-                                                <div class="icheckbox_minimal-grey" aria-checked="false"
-                                                     aria-disabled="false" style="position: relative;"><input
-                                                        type="checkbox" class="rows-check"
-                                                        style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);">
-                                                    <ins class="iCheck-helper"
-                                                         style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
-                                                </div>
-                                            </td>
-                                            <td>INV-{{invoice.OrderNumber}}</td>
-                                            <td><a href="{{'#/customers/view/' + invoice.Customer.Id}}">{{invoice.Customer.Name}}</a></td>
-                                            <td><span class="label label-{{class[invoice.Status]}}">{{invoice.Status}}</span></td>
-                                            <td>{{invoice.Customer.City}}</td>
-                                            <td><strong class="text-primary">{{invoice.Amount | currency: currency}}</strong></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- End div #sales-report -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<page-content-title title="Sales">
+    <div class="btn-group mr10 mb10">
+        <button type="button" class="btn btn-primary"><i class="fa fa-plus"> Actions</i></button>
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
+            <li><a href="#/invoice/create">New Invoice</a></li>
+        </ul>
     </div>
-</div>
+</page-content-title>
+
+<!--<div class="animated active fadeInRight">-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<div class="box-info">-->
+                <!--<div class="row" data-ng-controller="InvoiceFormController">-->
+                    <!--<div class="col-md-3">-->
+                        <!--<div class="box-info">-->
+                            <!--&lt;!&ndash; Icon box &ndash;&gt;-->
+                            <!--<div class="icon-box">-->
+                                                        <!--<span class="fa-stack">-->
+                                                          <!--<i class="fa fa-circle fa-stack-2x default"></i>-->
+                                                          <!--<i class="fa fa-save fa-stack-1x fa-inverse"></i>-->
+                                                        <!--</span>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .icon-box &ndash;&gt;-->
+                            <!--&lt;!&ndash; Text box &ndash;&gt;-->
+                            <!--<div class="text-box">-->
+                                <!--<p>DRAFT ({{qty_draft}})</p>-->
+
+                                <!--<h3>{{amountInvoicesDraft | currency: currency }}</h3>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .text-box &ndash;&gt;-->
+                            <!--<div class="clear"></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="col-md-3">-->
+                        <!--<div class="box-info">-->
+                            <!--&lt;!&ndash; Icon box &ndash;&gt;-->
+                            <!--<div class="icon-box">-->
+                                                        <!--<span class="fa-stack">-->
+                                                          <!--<i class="fa fa-circle fa-stack-2x warning"></i>-->
+                                                          <!--<i class="fa fa-clock-o fa-stack-1x fa-inverse"></i>-->
+                                                        <!--</span>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .icon-box &ndash;&gt;-->
+                            <!--&lt;!&ndash; Text box &ndash;&gt;-->
+                            <!--<div class="text-box">-->
+                                <!--<p>Unpaid ({{qty_completed}})</p>-->
+
+                                <!--<h3>{{amountInvoicesCompleted | currency: currency }}</h3>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .text-box &ndash;&gt;-->
+                            <!--<div class="clear"></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="col-md-3">-->
+                        <!--<div class="box-info">-->
+                            <!--&lt;!&ndash; Icon box &ndash;&gt;-->
+                            <!--<div class="icon-box">-->
+                                                        <!--<span class="fa-stack">-->
+                                                          <!--<i class="fa fa-circle fa-stack-2x success"></i>-->
+                                                          <!--<i class="fa fa-check fa-stack-1x fa-inverse"></i>-->
+                                                        <!--</span>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .icon-box &ndash;&gt;-->
+                            <!--&lt;!&ndash; Text box &ndash;&gt;-->
+                            <!--<div class="text-box">-->
+                                <!--<p>Paid ({{qty_paid}})</p>-->
+
+                                <!--<h3>{{amountInvoicesPaid | currency: currency }}</h3>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .text-box &ndash;&gt;-->
+                            <!--<div class="clear"></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="col-md-3">-->
+                        <!--<div class="box-info">-->
+                            <!--&lt;!&ndash; Icon box &ndash;&gt;-->
+                            <!--<div class="icon-box">-->
+                                                        <!--<span class="fa-stack">-->
+                                                          <!--<i class="fa fa-circle fa-stack-2x danger"></i>-->
+                                                          <!--<i class="fa fa-info fa-stack-1x fa-inverse"></i>-->
+                                                        <!--</span>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .icon-box &ndash;&gt;-->
+                            <!--&lt;!&ndash; Text box &ndash;&gt;-->
+                            <!--<div class="text-box">-->
+                                <!--<p>Overdue ({{qty_overdues}})</p>-->
+
+                                <!--<h3>{{amountInvoicesOverdue | currency: currency }}</h3>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div .text-box &ndash;&gt;-->
+                            <!--<div class="clear"></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12">-->
+                        <!--&lt;!&ndash; Sales report &ndash;&gt;-->
+                        <!--<div class="box-info full">-->
+                            <!--<h2><strong>Sales</strong> Report</h2>-->
+                            <!--&lt;!&ndash; Sales report collapse body &ndash;&gt;-->
+                            <!--<div id="sales-report" class="collapse in">-->
+                                <!--<div class="table-responsive">-->
+                                    <!--<table data-sortable="" class="table table-striped"-->
+                                           <!--data-sortable-initialized="true">-->
+                                        <!--<thead>-->
+                                        <!--<tr>-->
+                                            <!--<th data-sortable="false">-->
+                                                <!--<div class="icheckbox_minimal-grey" aria-checked="false"-->
+                                                     <!--aria-disabled="false" style="position: relative;"><input-->
+                                                        <!--type="checkbox" id="select-all-rows"-->
+                                                        <!--style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);">-->
+                                                    <!--<ins class="iCheck-helper"-->
+                                                         <!--style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>-->
+                                                <!--</div>-->
+                                            <!--</th>-->
+                                            <!--<th>Number</th>-->
+                                            <!--<th>Buyer</th>-->
+                                            <!--<th>Status</th>-->
+                                            <!--<th>Location</th>-->
+                                            <!--<th>Total</th>-->
+                                        <!--</tr>-->
+                                        <!--</thead>-->
+                                        <!--<tbody>-->
+                                        <!--<tr data-ng-repeat="(key,invoice) in invoices">-->
+                                            <!--<td>-->
+                                                <!--<div class="icheckbox_minimal-grey" aria-checked="false"-->
+                                                     <!--aria-disabled="false" style="position: relative;"><input-->
+                                                        <!--type="checkbox" class="rows-check"-->
+                                                        <!--style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);">-->
+                                                    <!--<ins class="iCheck-helper"-->
+                                                         <!--style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>-->
+                                                <!--</div>-->
+                                            <!--</td>-->
+                                            <!--<td>INV-{{invoice.OrderNumber}}</td>-->
+                                            <!--<td><a href="{{'#/customers/view/' + invoice.Customer.Id}}">{{invoice.Customer.Name}}</a></td>-->
+                                            <!--<td><span class="label label-{{class[invoice.Status]}}">{{invoice.Status}}</span></td>-->
+                                            <!--<td>{{invoice.Customer.City}}</td>-->
+                                            <!--<td><strong class="text-primary">{{invoice.Amount | currency: currency}}</strong></td>-->
+                                        <!--</tr>-->
+                                        <!--</tbody>-->
+                                    <!--</table>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; End div #sales-report &ndash;&gt;-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->

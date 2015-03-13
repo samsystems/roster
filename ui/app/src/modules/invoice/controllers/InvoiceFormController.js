@@ -2,6 +2,8 @@
 
 angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
     function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company) {
+
+
         User.$find(User.getCurrentUserId()).$asPromise().then(function (user) {
             Company.$find(user.Company.Id).$asPromise().then(function (company) {
                 $scope.tax = company.Tax;
@@ -12,10 +14,14 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         $scope.currencies = [
             {"value": "USD", "description": "USD United States Dollar"}
         ];
-
-        /*    $scope.countries = Country.$search();
-         $scope.states = State.$search();*/
         $scope.now = DateTimeService.nowIsoFormat();
+        $scope.invoice = {};
+        if(!_.isUndefined($stateParams.id)){
+            $scope.invoice = Invoice.$find($stateParams.id);
+        }else{
+            $scope.invoice = Invoice.$build();
+            $scope.invoice.products.$build().$reveal();
+        }
 
         $scope.BillShip = function () {
             if ($scope.invoice.BillShip) {
@@ -46,22 +52,48 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             });
         };
 
-        $scope.addItem = function (item_input) {
-            if (!_.isEmpty(item_input) && !_.isEmpty(item_input.Id)) {
-                $scope.subtotal = 0;
-                // item_input.quantity = 1;
-                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
-                    if ($scope.invoice.InvoiceProducts[i].Product.Id == item_input.Id) {
-                        toaster.pop('error', 'Error', 'The product has already been added');
-                        return;
-                    }
-                }
-                var item = {Product: item_input, Price: item_input.Price, Quantity: '1'};
-                $scope.invoice.InvoiceProducts[$scope.invoice.InvoiceProducts.length] = item;
-                $scope.item_input = '';
-            } else
-                toaster.pop('error', 'Error', 'Select an item');
-        };
+        $scope.addProduct = function(index){
+            if(index == $scope.invoice.products.length - 1)
+                $scope.invoice.products.$build().$reveal();
+        }
+
+        $scope.removeProduct = function(product){
+            $scope.invoice.products.$remove(product);
+        }
+
+        $scope.getAmount = function(product){
+            var quantity = (!isNaN(product.QuantitySolicited) && product.QuantitySolicited != "") ? parseInt(product.QuantitySolicited) : 0;
+            var price = (!isNaN(product.Price) && product.Price != "") ? parseFloat(product.Price) : 0;
+            var discount = (!isNaN(product.DiscountPrice) && product.DiscountPrice != "") ? parseFloat(product.DiscountPrice) : 0;
+            return  ( quantity * price ) - ( quantity * price * discount / 100);
+        }
+
+        $scope.getTotal = function(product){
+            var total = 0;
+            var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 0;
+            _.each($scope.invoice.products,function(product){
+                total += $scope.getAmount(product);
+            })
+            $scope.total = total;
+            return  ( total) + ( total * tax / 100);
+        }
+
+//        $scope.addItem = function (item_input) {
+//            if (!_.isEmpty(item_input) && !_.isEmpty(item_input.Id)) {
+//                $scope.subtotal = 0;
+//                // item_input.quantity = 1;
+//                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
+//                    if ($scope.invoice.InvoiceProducts[i].Product.Id == item_input.Id) {
+//                        toaster.pop('error', 'Error', 'The product has already been added');
+//                        return;
+//                    }
+//                }
+//                var item = {Product: item_input, Price: item_input.Price, Quantity: '1'};
+//                $scope.invoice.InvoiceProducts[$scope.invoice.InvoiceProducts.length] = item;
+//                $scope.item_input = '';
+//            } else
+//                toaster.pop('error', 'Error', 'Select an item');
+//        };
 
         /*
          $scope.saveQuantity = function (item) {
@@ -69,15 +101,15 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
          toaster.pop('error', 'Error', 'The maximum quantity in stock is ' + item.product.stock);
          };
          */
-        $scope.removeItem = function (item) {
-            if (!_.isEmpty(item)) {
-                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
-                    if ($scope.invoice.InvoiceProducts[i].Product.Id == item.Product.Id) {
-                        $scope.invoice.InvoiceProducts.splice(i, 1);
-                    }
-                }
-            }
-        };
+//        $scope.removeItem = function (item) {
+//            if (!_.isEmpty(item)) {
+//                for (var i = 0; i < $scope.invoice.InvoiceProducts.length; i++) {
+//                    if ($scope.invoice.InvoiceProducts[i].Product.Id == item.Product.Id) {
+//                        $scope.invoice.InvoiceProducts.splice(i, 1);
+//                    }
+//                }
+//            }
+//        };
 
         $scope.updateSubTotal = function () {
             $scope.subtotal = 0;
@@ -92,10 +124,6 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         };
 
 
-      //  $scope.$watch($scope.updateSubTotal);
-        $scope.reset = function () {
-            $scope.item_input="";
-        }
         $scope.save = function (status) {
             //  $validation.validate($scope, 'invoice').success(function () {
             console.log(status);

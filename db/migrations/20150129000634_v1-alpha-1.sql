@@ -1,5 +1,5 @@
 
--- +goose Up
+
 -- SQL in section 'Up' is executed when this migration is applied
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;

@@ -20,6 +20,16 @@ angular.module('invoice', [
             templateUrl: 'src/modules/invoice/views/index.html',
             controller: 'InvoiceController'
         })
+        .state('app.invoice-create', {
+            url: 'invoice/create',
+            templateUrl: 'src/modules/invoice/views/form.html',
+            controller: 'InvoiceFormController'
+        })
+        .state('app.invoice-update', {
+            url: 'invoice/update/:id',
+            templateUrl: 'src/modules/invoice/views/form.html',
+            controller: 'InvoiceFormController'
+        })
         .state('app.invoice/view', {
             url: 'invoice/view/:id',
             templateUrl: 'src/modules/invoice/views/detail.html',

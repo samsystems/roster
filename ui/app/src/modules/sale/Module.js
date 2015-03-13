@@ -8,22 +8,13 @@
  *
  * Dashboard module.
  */
-angular.module('sale', [
-    'ngRoute',
-    'ngSanitize',
-    'pascalprecht.translate'
-])
+angular.module('sale', [])
 .config(['$stateProvider', function ($stateProvider) {
     $stateProvider
         .state('app.sale', {
             url: 'sales/:action',
-            templateUrl: 'src/modules/sale/views/index.html',
+            templateUrl: 'src/modules/sale/views/list.html',
             controller: 'SaleController'
-        })
-        .state('app.sale/view', {
-            url: 'sales/view/:id',
-            templateUrl: 'src/modules/sale/views/detail.html',
-            controller: 'ReviewSaleController'
         })
     ;
 }]);

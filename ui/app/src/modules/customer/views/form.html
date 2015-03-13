@@ -222,7 +222,6 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th style="width: 5%">No.</th>
         <th style="width: 20%">First Name</th>
         <th style="width: 20%">Last Name</th>
         <th style="width: 20%">Email</th>
@@ -233,16 +232,20 @@
     </thead>
     <tbody>
     <tr data-ng-repeat="contact in customer.contacts">
-        <td>{{$last ? '*' : $index + 1}}</td>
-        <td><input type="text" data-ng-model="contact.Name" data-ng-click="addContact($index)"/></td>
-        <td><input type="text" data-ng-model="contact.LastName" data-ng-click="addContact($index)"/></td>
-        <td><input type="text" data-ng-model="contact.Email" data-ng-click="addContact($index)"/></td>
-        <td><input type="text" data-ng-model="contact.Phone" data-ng-click="addContact($index)"/></td>
+        <td><input type="text" data-ng-model="contact.Name"/></td>
+        <td><input type="text" data-ng-model="contact.LastName"/></td>
+        <td><input type="text" data-ng-model="contact.Email"/></td>
+        <td><input type="text" data-ng-model="contact.Phone"/></td>
         <td><input style="margin-left: 15px" type="checkbox" data-ng-model="contact.IncludeEmail"
                    value="1">
             <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>
         </td>
-        <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeContact(contact)" data-ng-show="!$last"></button></td>
+        <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeContact(contact)"></button></td>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <button class="btn btn-default" data-ng-click="addContact($index)">{{'Add' | translate}}</button>
+        </td>
     </tr>
     </tbody>
 </table>

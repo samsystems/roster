@@ -52,10 +52,8 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
             }
         };
 
-
-        $scope.addContact = function (index) {
-            if (index == $scope.customer.contacts.length - 1)
-                $scope.customer.contacts.$build().$reveal();
+        $scope.addContact = function(){
+            $scope.customer.contacts.$build().$reveal();
         }
 
         $scope.removeContact = function(contact){

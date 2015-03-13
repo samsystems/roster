@@ -15,9 +15,8 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
         }
         //
 
-        $scope.addContact = function (index) {
-            if (index == $scope.vendor.contacts.length - 1)
-                $scope.vendor.contacts.$build().$reveal();
+        $scope.addContact = function(){
+            $scope.vendor.contacts.$build().$reveal();
         }
 
         $scope.removeContact = function(contact){

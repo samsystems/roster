@@ -23,8 +23,6 @@ angular.module('inventory', [
     'ui.keypress',
     'pascalprecht.translate',
     'dialogs.main',
-    'validation',
-    'validation.rule',
     'ui.multiselect',
     'angularFileUpload',
     'config',
@@ -46,7 +44,7 @@ angular.module('inventory', [
     'ngTable',
     'oitozero.ngSweetAlert'
 ])
-.config(['$httpProvider', '$translateProvider', 'restmodProvider', 'config', function($httpProvider, $translateProvider, restmodProvider, config){
+.config(['$httpProvider', '$translateProvider', 'restmodProvider', 'config', '$tooltipProvider', function($httpProvider, $translateProvider, restmodProvider, config, $tooltipProvider){
     $httpProvider.interceptors.push('TokenInterceptor');
 
     $translateProvider.translations('en_US',{
@@ -78,6 +76,9 @@ angular.module('inventory', [
             urlPrefix: config.api.baseUrl
         }
     });
+
+    // Tooltip events
+    $tooltipProvider.setTriggers({'show-validation': 'hide-validation'});
 }])
 .run(['$rootScope', 'config', '$interval', '$window', '$templateCache', 'toaster', function($rootScope, config, $interval, $window, $templateCache, toaster) {
 

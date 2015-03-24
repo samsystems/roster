@@ -3519,3 +3519,7 @@ div.gallery-upload .dropzone .dz-message:after {
     display: none;
   }
 }
+
+span.validation{
+  display:block;
+}

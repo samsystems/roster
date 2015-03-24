@@ -53,7 +53,7 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	user.Updater = userSession
 
 	if user.Company == nil {
-		company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
+		company, _ := userSession.Company
 		user.Company = company
 	}
 	if user.Group == nil {

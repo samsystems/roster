@@ -118,7 +118,7 @@ func (controller *ProductController) Post(context appengine.Context, writer http
 
 	product.Creator = user
 	product.Updater = user
-	product.Company, _ = models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
+	product.Company, _ = user.Company
 	valid := validation.Validation{}
 	b, err := valid.Valid(&product)
 	if err != nil {
@@ -262,7 +262,7 @@ func (controller *ProductController) NewProductVariations(context appengine.Cont
 //		os.Exit(1)
 //	}
 //user, _ := models.GetCurrentUser(request)
-//	company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
+//	company, _ := user.Company
 //	for _, each := range rawCSVdata {
 //		product := models.Product{}
 //		product.Creator = user

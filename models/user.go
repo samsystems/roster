@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/astaxie/beego/orm"
+	"net/http"
 	"time"
 )
 
@@ -56,8 +57,8 @@ type User struct {
 	UpdatedTimeZone        int
 	isActive               bool `orm:"default(false)"`
 	Deleted                bool
-	Group                  *Group        `orm:"rel(one)"`
-	Company                *Company      `orm:"null;rel(one)"`
+	Group                  *Group   `orm:"rel(one)"`
+	Company                *Company `orm:"null;rel(one)"`
 }
 
 type Token struct {
@@ -97,13 +98,14 @@ func GetUserByUsername(username string) (*User, error) {
 
 func GetUserByToken(token string) (*User, error) {
 	o := orm.NewOrm()
-	user := User{Token: token}
-	err := o.Read(&user, "Token")
+	var user User
+	o.QueryTable("user").Filter("token", token).One(&user)
+	return &user, errors.New("User not exists!!!")
+}
 
-	if err == nil {
-		return &user, nil
-	}
-	return nil, errors.New("User not exists")
+func GetCurrentUser(request *http.Request) (*User, error) {
+	var token string = request.Header.Get("Access-Token")
+	return GetUserByToken(token)
 }
 
 func GetAllUsers() []*User {
@@ -142,7 +144,7 @@ func GenerateToken(size int) string {
 }
 
 func Login(username string, password string) (Token, error) {
-	token := Token{Token: "111", Expires: time.Now()}
+	token := Token{Token: "1113", Expires: time.Now()}
 
 	var authenticated bool = false
 	if username != "" {
@@ -152,7 +154,9 @@ func Login(username string, password string) (Token, error) {
 			if authenticated == true {
 				token.Token = GenerateToken(32)
 				token.Expires = token.Expires.AddDate(0, 0, 1)
-				//Save in user new values
+				user.Token = token.Token
+				user.TokenExpirationDate = token.Expires
+				UpdateUser(user)
 			}
 		}
 	}

@@ -87,7 +87,7 @@ func (controller *NotificationController) Put(context appengine.Context, writer 
 	var notification models.Notification
 	json.Unmarshal(data, &notification)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	notification.Creator = user
 	notification.Updater = user
 

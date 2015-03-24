@@ -141,7 +141,7 @@ func (controller *DocumentController) RegisterHandlers(r *mux.Router) {
 //	dm := GetDocumentManager(request)
 //	var documents []*models.Document
 //
-//	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+//user, _ := models.GetCurrentUser(request)
 //	company := user.Company
 //
 //	for i, _ := range files {

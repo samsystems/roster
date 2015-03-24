@@ -103,7 +103,7 @@ func (controller *AccountController) Post(context appengine.Context, writer http
 	var account models.Account
 	json.Unmarshal(data, &account)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	account.Creator = user
 	account.Updater = user
 
@@ -140,7 +140,7 @@ func (controller *AccountController) Put(context appengine.Context, writer http.
 	var account models.Account
 	json.Unmarshal(data, &account)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	account.Creator = user
 	account.Updater = user
 

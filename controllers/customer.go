@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 
 	"appengine"
-
 	"handler"
 	"log"
 	"models"
@@ -65,22 +64,22 @@ func (controller *CustomerController) GetAll(context appengine.Context, writer h
 	}
 	if len(customers) == 0 {
 		return make([]models.Customer, 0), nil
-	}else{
+	} else {
 		for i := 0; i < len(customers); i++ {
-			contacts := models.GetAllContactByOwner("customer",customers[i].Id)
-			email := "";
+			contacts := models.GetAllContactByOwner("customer", customers[i].Id)
+			email := ""
 			for j := 0; j < len(contacts); j++ {
-				if(contacts[j].IncludeEmail){
-					if(email!=""){
-						email +=", "
+				if contacts[j].IncludeEmail {
+					if email != "" {
+						email += ", "
 					}
 					email += contacts[j].Email
 				}
-			}	
-			customers[i].Emails=email
+			}
+			customers[i].Emails = email
 		}
 	}
-	
+
 	return customers, nil
 }
 
@@ -110,23 +109,23 @@ func (controller *CustomerController) GetCountAll(context appengine.Context, wri
 // @Failure 403 body is empty
 // @router / [post]
 func (controller *CustomerController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	
+
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
 
 	var customer models.Customer
-	err1 :=  json.Unmarshal(data, &customer)
-    
-    if err1 != nil {
+	err1 := json.Unmarshal(data, &customer)
+
+	if err1 != nil {
 		log.Println("error:", err1)
 	}
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	customer.Creator = user
 	customer.Updater = user
 	customer.Company = user.Company
-	if(customer.BillingLocation !=nil){
+	if customer.BillingLocation != nil {
 		billingLocation := customer.BillingLocation
 		if billingLocation.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -138,7 +137,7 @@ func (controller *CustomerController) Post(context appengine.Context, writer htt
 		models.AddLocation(billingLocation)
 		customer.BillingLocation = billingLocation
 	}
-	if(customer.ShippingLocation !=nil){
+	if customer.ShippingLocation != nil {
 		shippingLocation := customer.ShippingLocation
 		if shippingLocation.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -164,8 +163,8 @@ func (controller *CustomerController) Post(context appengine.Context, writer htt
 		models.AddCustomer(&customer)
 		for i := 0; i < len(customer.Contacts); i++ {
 			contact := customer.Contacts[i]
-			contact.Owner="customer"
-			contact.OwnerId=customer.Id
+			contact.Owner = "customer"
+			contact.OwnerId = customer.Id
 			contact.Creator = user
 			contact.Updater = user
 			models.AddContact(contact)
@@ -190,12 +189,12 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 
 	var customer models.Customer
 	json.Unmarshal(data, &customer)
+	user, _ := models.GetCurrentUser(request)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
-
-	customer.Updater = user
 	customer.Company = user.Company
-	if(customer.BillingLocation !=nil){
+	customer.Updater = user
+
+	if customer.BillingLocation != nil {
 		billingLocation := customer.BillingLocation
 		if billingLocation.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -203,14 +202,14 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		}
 		billingLocation.Company = user.Company
 		billingLocation.Updater = user
-		if billingLocation.Id =="NULL"{
+		if billingLocation.Id == "NULL" {
 			billingLocation.Creator = user
 			models.AddLocation(billingLocation)
-		}else{
+		} else {
 			models.UpdateLocation(billingLocation)
 		}
 	}
-	if(customer.ShippingLocation !=nil){
+	if customer.ShippingLocation != nil {
 		shippingLocation := customer.ShippingLocation
 		if shippingLocation.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -218,10 +217,10 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		}
 		shippingLocation.Company = user.Company
 		shippingLocation.Updater = user
-		if shippingLocation.Id =="NULL"{
+		if shippingLocation.Id == "NULL" {
 			shippingLocation.Creator = user
 			models.AddLocation(shippingLocation)
-		}else{
+		} else {
 			models.UpdateLocation(shippingLocation)
 		}
 	}
@@ -239,13 +238,13 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 	} else {
 		idsContactDelete := make([]string, len(customer.Contacts))
 		models.UpdateCustomer(&customer)
-		
+
 		for i := 0; i < len(customer.Contacts); i++ {
 			var contact = customer.Contacts[i]
 			contact.OwnerId = customer.Id
 			contact.Owner = "customer"
 			contact.Updater = user
-			
+
 			if contact.Id != "" {
 				models.UpdateContact(contact)
 			} else {
@@ -254,8 +253,8 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 			}
 			idsContactDelete[i] = contact.Id
 		}
-		if(len(idsContactDelete)>0){
-			contactDelete := models.GetAllContactToDeleteByIds("customer",customer.Id, idsContactDelete)
+		if len(idsContactDelete) > 0 {
+			contactDelete := models.GetAllContactToDeleteByIds("customer", customer.Id, idsContactDelete)
 			for i := 0; i < len(contactDelete); i++ {
 				models.DeleteContact(&contactDelete[i])
 			}
@@ -290,7 +289,6 @@ func (controller *CustomerController) Delete(context appengine.Context, writer h
 // @router /:id/products [get]
 func (controller *CustomerController) GetAllContacts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uidCustomer := v["uid"]
-	var contacts []models.Contact = models.GetAllContactByOwner("customer",uidCustomer)
+	var contacts []models.Contact = models.GetAllContactByOwner("customer", uidCustomer)
 	return contacts, nil
 }
-

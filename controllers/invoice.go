@@ -142,7 +142,7 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 		return invoiceSave, nil
 	}
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	invoice.Creator = user
 	invoice.Updater = user
 	invoiceProducts := invoice.InvoiceProducts
@@ -262,7 +262,7 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 		log.Println("error:", err1)
 	}
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	company, _ := models.GetCompany(user.Company.Id)
 	invoice.Creator = user
 	invoice.Updater = user

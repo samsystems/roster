@@ -103,7 +103,7 @@ func (controller *LocationController) Post(context appengine.Context, writer htt
 	var location models.Location
 	json.Unmarshal(data, &location)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	location.Creator = user
 	location.Updater = user
 
@@ -140,7 +140,7 @@ func (controller *LocationController) Put(context appengine.Context, writer http
 	var location models.Location
 	json.Unmarshal(data, &location)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	location.Creator = user
 	location.Updater = user
 

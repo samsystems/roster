@@ -103,7 +103,7 @@ func (controller *ProductVariationController) Post(context appengine.Context, wr
 	var productVariation models.ProductVariation
 	json.Unmarshal(data, &productVariation)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	productVariation.Creator = user
 	productVariation.Updater = user
 
@@ -140,7 +140,7 @@ func (controller *ProductVariationController) Put(context appengine.Context, wri
 	var productVariation models.ProductVariation
 	json.Unmarshal(data, &productVariation)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	productVariation.Creator = user
 	productVariation.Updater = user
 

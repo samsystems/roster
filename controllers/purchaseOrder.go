@@ -124,7 +124,7 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 	var purchaseOrder models.PurchaseOrder
 	json.Unmarshal(data, &purchaseOrder)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	purchaseOrder.Creator = user
 	purchaseOrder.Updater = user
 
@@ -161,7 +161,7 @@ func (c *PurchaseOrderController) Put(context appengine.Context, writer http.Res
 	var purchaseOrder models.PurchaseOrder
 	json.Unmarshal(data, &purchaseOrder)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	purchaseOrder.Creator = user
 	purchaseOrder.Updater = user
 

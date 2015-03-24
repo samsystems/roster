@@ -101,17 +101,17 @@ func (controller *CompanyController) Post(context appengine.Context, writer http
 	var company models.Company
 	json.Unmarshal(data, &company)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	company.Creator = user
 	company.Updater = user
 
-    location := company.Location
-    if location.Country == nil {
+	location := company.Location
+	if location.Country == nil {
 		country, _ := models.GetCountry("US")
 		location.Country = country
 	}
 	//location.Company = user.Company
-    location.Creator = user
+	location.Creator = user
 	location.Updater = user
 	models.AddLocation(location)
 	company.Location = location
@@ -149,7 +149,7 @@ func (controller *CompanyController) Put(context appengine.Context, writer http.
 	var company models.Company
 	json.Unmarshal(data, &company)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	company.Creator = user
 	company.Updater = user
 

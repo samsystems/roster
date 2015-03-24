@@ -87,7 +87,7 @@ func (controller *GroupController) Put(context appengine.Context, writer http.Re
 	var group models.Group
 	json.Unmarshal(data, &group)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	group.Creator = user
 	group.Updater = user
 

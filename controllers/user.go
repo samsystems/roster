@@ -48,7 +48,7 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	if err1 != nil {
 		log.Println("error:", err1)
 	}
-	userSession, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	userSession, _ := models.GetCurrentUser(request)
 	user.Creator = userSession
 	user.Updater = userSession
 
@@ -68,9 +68,9 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	if user.Username == "" {
 		user.Username = user.Email
 	}
-	
+
 	models.AddUser(&user)
-	
+
 	location := user.Company.Location
 	if location.Country == nil {
 		country, _ := models.GetCountry("US")
@@ -80,13 +80,13 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	location.Updater = &user
 	models.AddLocation(location)
 	user.Company.Location = location
-	
+
 	company := user.Company
 	company.Creator = &user
 	company.Updater = &user
 	models.AddCompany(company)
-	user.Company=company
-	location.Company=company
+	user.Company = company
+	location.Company = company
 	models.UpdateLocation(location)
 	models.UpdateUser(&user)
 	return user.Id, nil
@@ -151,7 +151,7 @@ func (controller *UserController) GetByUsername(context appengine.Context, write
 // @Failure 403 :uid is not int
 // @router /:uid [put]
 func (controller *UserController) Put(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-//	uid := v["uid"]
+	//	uid := v["uid"]
 
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
@@ -190,9 +190,9 @@ func (controller *UserController) Delete(context appengine.Context, writer http.
 // @Failure 403 user not exist
 // @router /login [get]
 func (controller *UserController) Login(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	user, password := getAuth(writer, request)
+	username, password := getAuth(writer, request)
 
-	token, err := models.Login(user, password)
+	token, err := models.Login(username, password)
 	if err != nil {
 		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
 	}

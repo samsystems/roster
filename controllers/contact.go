@@ -88,7 +88,7 @@ func (g *ContactController) Put(c appengine.Context, w http.ResponseWriter, r *h
 	var contact models.Contact
 	json.Unmarshal(data, &contact)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(r)
 	contact.Creator = user
 	contact.Updater = user
 

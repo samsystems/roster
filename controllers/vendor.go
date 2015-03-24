@@ -62,19 +62,19 @@ func (controller *VendorController) GetAll(context appengine.Context, writer htt
 	}
 	if len(vendors) == 0 {
 		return make([]models.Vendor, 0), nil
-	}else{
+	} else {
 		for i := 0; i < len(vendors); i++ {
-			contacts := models.GetAllContactByOwner("vendor",vendors[i].Id)
-			email := "";
+			contacts := models.GetAllContactByOwner("vendor", vendors[i].Id)
+			email := ""
 			for j := 0; j < len(contacts); j++ {
-				if(contacts[j].IncludeEmail){
-					if(email!=""){
-						email +=", "
+				if contacts[j].IncludeEmail {
+					if email != "" {
+						email += ", "
 					}
 					email += contacts[j].Email
 				}
-			}	
-			vendors[i].Emails=email
+			}
+			vendors[i].Emails = email
 		}
 	}
 	return vendors, nil
@@ -114,11 +114,11 @@ func (controller *VendorController) Post(context appengine.Context, writer http.
 	var vendor models.Vendor
 	json.Unmarshal(data, &vendor)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	vendor.Creator = user
 	vendor.Updater = user
 	vendor.Company = user.Company
-	if(vendor.Location !=nil){
+	if vendor.Location != nil {
 		location := vendor.Location
 		if location.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -144,8 +144,8 @@ func (controller *VendorController) Post(context appengine.Context, writer http.
 		models.AddVendor(&vendor)
 		for i := 0; i < len(vendor.Contacts); i++ {
 			contact := vendor.Contacts[i]
-			contact.Owner="vendor"
-			contact.OwnerId=vendor.Id
+			contact.Owner = "vendor"
+			contact.OwnerId = vendor.Id
 			contact.Creator = user
 			contact.Updater = user
 			models.AddContact(contact)
@@ -171,10 +171,10 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 	var vendor models.Vendor
 	json.Unmarshal(data, &vendor)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	vendor.Creator = user
 	vendor.Updater = user
-	if(vendor.Location !=nil){
+	if vendor.Location != nil {
 		location := vendor.Location
 		if location.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -182,10 +182,10 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 		}
 		location.Company = user.Company
 		location.Updater = user
-		if location.Id =="NULL"{
+		if location.Id == "NULL" {
 			location.Creator = user
 			models.AddLocation(location)
-		}else{
+		} else {
 			models.UpdateLocation(location)
 		}
 		vendor.Location = location
@@ -202,14 +202,14 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 		return nil, &handler.Error{nil, "Entity not found.", http.StatusNoContent}
 	} else {
 		models.UpdateVendor(&vendor)
-		
+
 		idsContactDelete := make([]string, len(vendor.Contacts))
 		for i := 0; i < len(vendor.Contacts); i++ {
 			var contact = vendor.Contacts[i]
 			contact.OwnerId = vendor.Id
 			contact.Owner = "vendor"
 			contact.Updater = user
-			
+
 			if contact.Id != "" {
 				models.UpdateContact(contact)
 			} else {
@@ -218,8 +218,8 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 			}
 			idsContactDelete[i] = contact.Id
 		}
-		if(len(idsContactDelete)>0){
-			contactDelete := models.GetAllContactToDeleteByIds("vendor",vendor.Id, idsContactDelete)
+		if len(idsContactDelete) > 0 {
+			contactDelete := models.GetAllContactToDeleteByIds("vendor", vendor.Id, idsContactDelete)
 			for i := 0; i < len(contactDelete); i++ {
 				models.DeleteContact(&contactDelete[i])
 			}
@@ -247,12 +247,13 @@ func (controller *VendorController) Delete(context appengine.Context, writer htt
 
 	return nil, nil
 }
+
 // @Title Get
 // @Description get all Invoices
 // @Success 200 {object} models.Invoice
 // @router /:id/products [get]
 func (controller *VendorController) GetAllContacts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uidVendor := v["uid"]
-	var contacts []models.Contact = models.GetAllContactByOwner("vendor",uidVendor)
+	var contacts []models.Contact = models.GetAllContactByOwner("vendor", uidVendor)
 	return contacts, nil
 }

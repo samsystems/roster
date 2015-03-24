@@ -114,7 +114,7 @@ func (controller *ProductController) Post(context appengine.Context, writer http
 	var product models.Product
 	json.Unmarshal(data, &product)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 
 	product.Creator = user
 	product.Updater = user
@@ -155,7 +155,7 @@ func (controller *ProductController) Put(context appengine.Context, writer http.
 	if err1 != nil {
 		log.Println("error:", err1)
 	}
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	product.Creator = user
 	product.Updater = user
 
@@ -214,7 +214,7 @@ func (controller *ProductController) NewProductVariations(context appengine.Cont
 	var productVariation models.ProductVariation
 	json.Unmarshal(data, &productVariation)
 
-	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+	user, _ := models.GetCurrentUser(request)
 	productVariation.Creator = user
 	productVariation.Updater = user
 	productVariation.Product, _ = models.GetProduct(uid)
@@ -261,7 +261,7 @@ func (controller *ProductController) NewProductVariations(context appengine.Cont
 //		log.Print(err)
 //		os.Exit(1)
 //	}
-//	user, _ := models.GetUser("5fbec591-acc8-49fe-a44e-46c59cae99f9") //TODO use user in session
+//user, _ := models.GetCurrentUser(request)
 //	company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
 //	for _, each := range rawCSVdata {
 //		product := models.Product{}

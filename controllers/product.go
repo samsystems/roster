@@ -262,7 +262,7 @@ func (controller *ProductController) NewProductVariations(context appengine.Cont
 //		os.Exit(1)
 //	}
 //user, _ := models.GetCurrentUser(request)
-//	company, _ := user.Company
+//	company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
 //	for _, each := range rawCSVdata {
 //		product := models.Product{}
 //		product.Creator = user

@@ -118,7 +118,7 @@ func (controller *ProductController) Post(context appengine.Context, writer http
 
 	product.Creator = user
 	product.Updater = user
-	product.Company, _ = user.Company
+	product.Company = user.Company
 	valid := validation.Validation{}
 	b, err := valid.Valid(&product)
 	if err != nil {

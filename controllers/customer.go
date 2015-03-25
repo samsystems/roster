@@ -202,14 +202,16 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		}
 		billingLocation.Company = user.Company
 		billingLocation.Updater = user
-		if billingLocation.Id == "NULL" {
+		if billingLocation.Id == "" {
 			billingLocation.Creator = user
 			models.AddLocation(billingLocation)
 		} else {
 			models.UpdateLocation(billingLocation)
 		}
+		customer.BillingLocation=billingLocation
 	}
 	if customer.ShippingLocation != nil {
+		
 		shippingLocation := customer.ShippingLocation
 		if shippingLocation.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -217,12 +219,15 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		}
 		shippingLocation.Company = user.Company
 		shippingLocation.Updater = user
-		if shippingLocation.Id == "NULL" {
+			log.Println(shippingLocation.Id)
+		if shippingLocation.Id == ""  {
 			shippingLocation.Creator = user
 			models.AddLocation(shippingLocation)
+		
 		} else {
 			models.UpdateLocation(shippingLocation)
 		}
+		customer.ShippingLocation=shippingLocation
 	}
 
 	valid := validation.Validation{}

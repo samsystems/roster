@@ -53,7 +53,7 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	user.Updater = userSession
 
 	if user.Company == nil {
-		company, _ := userSession.Company
+		company := userSession.Company
 		user.Company = company
 	}
 	if user.Group == nil {

@@ -9,11 +9,11 @@
  * Common module of the application.
  */
 angular.module('common', [
-        'ngRoute',
-        'ngSanitize',
-        'config'
-    ])
-    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    'ngRoute',
+    'ngSanitize',
+    'config'
+])
+    .config(['$stateProvider', '$urlRouterProvider', '$injector', '$validationProvider', function ($stateProvider, $urlRouterProvider, $injector, $validationProvider) {
 
         $urlRouterProvider.when('', '/login');
         $urlRouterProvider.when('/', '/dashboard');
@@ -45,4 +45,24 @@ angular.module('common', [
             });
 
         $urlRouterProvider.otherwise('/404');
+
+        $validationProvider.setExpression({
+            uniqueRegisterEmail: function (value, scope, element, attrs) {
+                if (value) {
+                    var idValue = element.attr('data-value-id');
+                    console.log('asas');
+                    return $injector.get('CommunService').checkUniqueValue('User', 'email', value, idValue)
+                        .then(function (unique) {
+                            return unique.data.isUnique;
+                        });
+                }
+                else
+                    return true;
+            }
+        }).setDefaultMsg({
+            error: {
+                error: 'Email is already taken',
+                success: 'Email is available!'
+            }
+        });
     }]);

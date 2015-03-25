@@ -55,7 +55,7 @@ func GetProduct(uid string) (*Product, error) {
 	return &g, err
 }
 
-func GetAllProducts(page int, order string, count bool, limit int) ([]Product, interface{}) {
+func GetAllProducts(user *User, page int, order string, count bool, limit int) ([]Product, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = PRODUCT_LIMIT
@@ -63,7 +63,7 @@ func GetAllProducts(page int, order string, count bool, limit int) ([]Product, i
 	o := orm.NewOrm()
 	var products []Product
 	querySetter := o.QueryTable("product")
-	querySetter = querySetter.Filter("deleted__isnull", true)
+	querySetter = querySetter.Filter("company", user.Company).Filter("deleted__isnull", true)
 	if count == true {
 		cnt, _ := querySetter.Count()
 		return products, cnt
@@ -74,7 +74,7 @@ func GetAllProducts(page int, order string, count bool, limit int) ([]Product, i
 	}
 }
 
-func GetProductByKeyword(keyword string, page int, order string, count bool, limit int) ([]Product, interface{}) {
+func GetProductByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]Product, interface{}) {
 	var products []Product
 	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1

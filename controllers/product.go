@@ -56,11 +56,13 @@ func (controller *ProductController) GetAll(context appengine.Context, writer ht
 	var products []models.Product
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 	log.Print(request.URL.Query())
+	user, _ := models.GetCurrentUser(request)
+
 	if keyword != "" {
-		products, _ = models.GetProductByKeyword(keyword, page, sort, false, -1)
+		products, _ = models.GetProductByKeyword(keyword, user, page, sort, false, -1)
 
 	} else {
-		products, _ = models.GetAllProducts(page, sort, false, -1)
+		products, _ = models.GetAllProducts(user, page, sort, false, -1)
 	}
 	if len(products) == 0 {
 		return make([]models.Product, 0), nil
@@ -75,13 +77,13 @@ func (controller *ProductController) GetAll(context appengine.Context, writer ht
 // @router /count [get]
 func (controller *ProductController) Count(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
-
+	user, _ := models.GetCurrentUser(request)
 	keyword := ""
 	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
-		_, total["total"] = models.GetProductByKeyword(keyword, 1, "notSorting", true, -1)
+		_, total["total"] = models.GetProductByKeyword(keyword, user, 1, "notSorting", true, -1)
 	} else {
-		_, total["total"] = models.GetAllProducts(1, "notSorting", true, -1)
+		_, total["total"] = models.GetAllProducts(user, 1, "notSorting", true, -1)
 	}
 
 	return total, nil

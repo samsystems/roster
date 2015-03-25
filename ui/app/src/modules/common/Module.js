@@ -12,7 +12,7 @@
 angular.module('common', [
     'ngRoute',
     'ngSanitize',
-    'config'
+    'config',
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$translateProvider', '$validationProvider', '$injector', function ($stateProvider, $urlRouterProvider, $translateProvider, $validationProvider, $injector) {
     $stateProvider
@@ -49,7 +49,6 @@ angular.module('common', [
             uniqueRegisterEmail: function (value, scope, element, attrs) {
                if (value) {
                    var idValue = element.attr('data-value-id');
-                   console.log('asas');
                    return $injector.get('CommonService').checkUniqueValue('User', 'email', value, idValue)
                                        .then(function (unique) {
                                            return unique.data.isUnique;
@@ -66,7 +65,3 @@ angular.module('common', [
             }
         });
 }]);
-//
-//    .config(['$stateProvider', '$urlRouterProvider', '$injector', '$validationProvider', function ($stateProvider, $urlRouterProvider, $injector, $validationProvider) {
-//
-//    }]);

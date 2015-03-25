@@ -13,6 +13,11 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     };
 
     $scope.flag_status = {
+        open: 'OPEN',
+        openSent: 'OPENSENT',
+        partial: 'PARTIAL',
+        overdue: 'OVERDUE',
+        billed: 'BILLED',
         draft: 'DRAFT',
         completed: 'COMPLETED',
         paid: 'PAID',
@@ -30,15 +35,15 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
         WizardHandler.wizard().goTo(step);
     };
 
-    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+    /*$scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         if (toState.name == 'app.sale' && fromState.name == 'app.dashboard' && toParams.action == 'newInvoice') {
             $timeout(function () {
                 $scope.createInvoice();
             });
         }
-    });
+    });*/
 
-    $scope.createInvoice = function () {
+    /*$scope.createInvoice = function () {
 
         $scope.visible = true;
         $scope.item_input = "";
@@ -59,11 +64,12 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
         disable(false, $scope.invoice);
         var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
             $scope.invoice.OrderNumber = response.max;
+            console.log(response.max);
         });
 
         $scope.$goTo($scope.step.form);
     };
-
+*/
     $scope.getList = function () {
         $scope.$goTo($scope.step.list);
     };
@@ -326,11 +332,11 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
      updateTotalTabs();
      });
      */
-    if (!_.isUndefined($stateParams.action) && $stateParams.action == 'newInvoice') {
+  /*  if (!_.isUndefined($stateParams.action) && $stateParams.action == 'newInvoice') {
         $timeout(function () {
             $scope.createInvoice();
         });
-    }
+    }*/
 
     /*  angular.element(document).ready(function () {
      if($stateParams.action=='newInvoice'){

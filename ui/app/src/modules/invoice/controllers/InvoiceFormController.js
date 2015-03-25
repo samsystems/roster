@@ -17,21 +17,36 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         ];
         $scope.now = DateTimeService.nowIsoFormat();
         $scope.invoice = {};
-        if(!_.isUndefined($stateParams.id)){
+        if (!_.isUndefined($stateParams.id)) {
             $scope.invoice = Invoice.$find($stateParams.id);
-        }else{
+        } else {
             $scope.invoice = Invoice.$build();
             $scope.invoice.products.$build().$reveal();
+            var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
+                $scope.invoice.OrderNumber = response.max;
+            });
         }
 
         $scope.BillShip = function () {
+            if (!$scope.invoice.ShippingLocation)
+                $scope.invoice.ShippingLocation = {};
+            if (!$scope.invoice.BillingLocation)
+                $scope.invoice.BillingLocation = {};
             if ($scope.invoice.BillShip) {
-                $scope.invoice.CustomerShipping = $scope.invoice.Customer;
-                angular.element('#CustomerShipping').attr('readonly', true);
+                $scope.invoice.ShippingLocation.Address = $scope.invoice.BillingLocation.Address;
+                $scope.invoice.ShippingLocation.Address1 = $scope.invoice.BillingLocation.Address1;
+                $scope.invoice.ShippingLocation.City = $scope.invoice.BillingLocation.City;
+                $scope.invoice.ShippingLocation.State = $scope.invoice.BillingLocation.State;
+                $scope.invoice.ShippingLocation.Zipcode = $scope.invoice.BillingLocation.Zipcode;
+                angular.element('#billingAddress').attr('readonly', true);
             }
             else {
-                $scope.invoice.CustomerShipping = '';
-                angular.element('#CustomerShipping').attr('readonly', false);
+                $scope.invoice.ShippingLocation.Address = '';
+                $scope.invoice.ShippingLocation.Address1 = '';
+                $scope.invoice.ShippingLocation.City = '';
+                $scope.invoice.ShippingLocation.State = '';
+                $scope.invoice.ShippingLocation.Zipcode = '';
+                angular.element('#billingAddress').attr('readonly', false);
             }
         }
 
@@ -40,12 +55,20 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 //       $scope.invoice.invoiceNumber = 500;
         $scope.searchCustomers = function (val) {
             return Customer.$search({keyword: val, page: 1, order: 'notSorting'}).$asPromise().then(function (customers) {
-                if(customers == null)
-                return {};
+                if (customers == null)
+                    return {};
                 else
-                return customers;
+                    return customers;
             });
         };
+
+        $scope.updateBillingShipping = function (customer) {
+            customer.$fetch().$asPromise().then(function (customer) {
+                $scope.invoice.BillingLocation = customer.BillingLocation;
+                $scope.invoice.ShippingLocation = customer.ShippingLocation;
+            });
+
+        }
 
         $scope.searchProducts = function (val) {
             return Product.$search({keyword: val, page: 1, order: 'notSorting'}).$asPromise().then(function (products) {
@@ -53,16 +76,16 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             });
         };
 
-        $scope.addProduct = function(index){
-            if(index == $scope.invoice.products.length - 1)
+        $scope.addProduct = function (index) {
+            if (index == $scope.invoice.products.length - 1)
                 $scope.invoice.products.$build().$reveal();
         }
 
-        $scope.removeProduct = function(product){
+        $scope.removeProduct = function (product) {
             $scope.invoice.products.$remove(product);
         }
 
-        $scope.getAmount = function(product){
+        $scope.getAmount = function (product) {
             var quantity = (!isNaN(product.Quantity) && product.Quantity != "") ? parseInt(product.Quantity) : 0;
             var price = (!isNaN(product.Price) && product.Price != "") ? parseFloat(product.Price) : 0;
             var discount = (!isNaN(product.DiscountPrice) && product.DiscountPrice != "") ? parseFloat(product.DiscountPrice) : 0;
@@ -70,12 +93,12 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         }
 
         $scope.invoice.TotalTax = 7;
-        $scope.getTotal = function(product){
+        $scope.getTotal = function (product) {
             var total = 0;
 //            var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 7;
 
             var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 7;
-            _.each($scope.invoice.products,function(product){
+            _.each($scope.invoice.products, function (product) {
                 total += $scope.getAmount(product);
             })
             $scope.total = total;
@@ -88,7 +111,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
                 for (var i = 0; i < $scope.invoice.products.length; i++) {
 
-                    if(!_.isEmpty($scope.invoice.products[i].Id)){
+                    if (!_.isEmpty($scope.invoice.products[i].Id)) {
                         if ($scope.invoice.products[i].Id == product.Id) {
                             toaster.pop('error', 'Error', 'The product has already been added');
                             return;
@@ -97,7 +120,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 }
                 var item = {Id: product.Id, Name: product.Name, Description: product.Description, Price: product.Price, DiscountPrice: product.DiscountPrice, Quantity: '1'};
                 $scope.invoice.products[$index] = item;
-            } else{
+            } else {
                 toaster.pop('error', 'Error', 'Select an item');
             }
         };
@@ -141,7 +164,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                     /* $scope.invoice.Date = '0001-01-01T00:00:00Z';
                      $scope.invoice.DeliveryDate = '0001-01-01T00:00:00Z';*/
 
-                    $scope.invoice.$save().$then(function(response) {
+                    $scope.invoice.$save().$then(function (response) {
                         $rootScope.$broadcast('invoice::updated');
                         $rootScope.$broadcast('invoice::totalTab');
                         toaster.pop('success', 'Invoice Updated ', 'You have been successfully updated a invoice.')
@@ -152,12 +175,12 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 } else {
 
                     var invoice = Invoice.$build();
-                    invoice.Customer = {'Id':$scope.invoice.Customer.Id};
-                    invoice.CustomerShipping = {'Id':$scope.invoice.CustomerShipping.Id};
+                    invoice.Customer = {'Id': $scope.invoice.Customer.Id};
+                    invoice.CustomerShipping = {'Id': $scope.invoice.CustomerShipping.Id};
                     invoice.Date = $scope.invoice.Date;
-                   // invoice.Date ='2015-02-25T00:19:09Z';
+                    // invoice.Date ='2015-02-25T00:19:09Z';
                     invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
-                    invoice.DeliveryDate =$scope.invoice.DeliveryDate;
+                    invoice.DeliveryDate = $scope.invoice.DeliveryDate;
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency;

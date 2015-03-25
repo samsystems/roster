@@ -29,7 +29,7 @@ angular.module('user', [
         uniqueUsername: function (value, scope, element, attrs) {
             if (value) {
                 var idValue = element.attr('data-value-id');
-                return $injector.get('CommunService').checkUniqueValue('User', 'username', value, idValue)
+                return $injector.get('CommonService').checkUniqueValue('User', 'username', value, idValue)
                     .then(function (unique) {
                         return unique.data.isUnique;
                     });

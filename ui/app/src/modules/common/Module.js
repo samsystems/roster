@@ -51,7 +51,7 @@ angular.module('common', [
                 if (value) {
                     var idValue = element.attr('data-value-id');
                     console.log('asas');
-                    return $injector.get('CommunService').checkUniqueValue('User', 'email', value, idValue)
+                    return $injector.get('CommonService').checkUniqueValue('User', 'email', value, idValue)
                         .then(function (unique) {
                             return unique.data.isUnique;
                         });

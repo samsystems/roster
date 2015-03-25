@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('common').factory('CommunService', ['$http', '$resource', '$window', 'config', 'BasicAuth', 'AuthenticationService', '$state', function ($http, $resource, $window, config, BasicAuth, AuthenticationService, $state) {
+angular.module('common').factory('CommonService', ['$http', '$resource', '$window', 'config', 'BasicAuth', 'AuthenticationService', '$state', function ($http, $resource, $window, config, BasicAuth, AuthenticationService, $state) {
     return {
         checkUniqueValue: function (id, property, value, idValue) {
             var data = {
@@ -11,7 +11,7 @@ angular.module('common').factory('CommunService', ['$http', '$resource', '$windo
             };
             return $http({
                 method: 'GET',
-                url: config.api.baseUrl + '/commun/is-unique-value/' + id + '/' + property + '/' + value + '/' + idValue
+                url: config.api.baseUrl + '/common/is-unique-value/' + id + '/' + property + '/' + value + '/' + idValue
             });
         }
     }

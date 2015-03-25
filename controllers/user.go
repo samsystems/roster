@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"appengine"
-
 	"handler"
 	"log"
 	"models"
@@ -42,22 +41,24 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
 
+	//
+	//	if user.Company == nil {
+	//		company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
+	//		user.Company = company
+	//	}
+
 	var user models.User
 
 	err1 := json.Unmarshal(data, &user)
 	if err1 != nil {
 		log.Println("error:", err1)
 	}
-	userSession, _ := models.GetCurrentUser(request)
-	user.Creator = userSession
-	user.Updater = userSession
+	userSystem, _ := models.GetUserByUsername("system")
+	user.Creator = userSystem
+	user.Updater = userSystem
 
-	if user.Company == nil {
-		company := userSession.Company
-		user.Company = company
-	}
 	if user.Group == nil {
-		group, _ := models.GetGroup("3a12ec14-24df-4926-8b5a-bbd5ff8f2a97")
+		group, _ := models.GetGroupByNameKey("USERS")
 		user.Group = group
 	}
 
@@ -65,10 +66,9 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 		country, _ := models.GetCountry("US")
 		user.Country = country
 	}
-	if user.Username == "" {
-		user.Username = user.Email
-	}
 
+	user.Username = user.Email
+	user.Password = models.EncriptPassword(user.Password)
 	models.AddUser(&user)
 
 	location := user.Company.Location

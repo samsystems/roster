@@ -2,6 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"errors"
 	"github.com/astaxie/beego/orm"
 	"time"
 )
@@ -45,6 +46,17 @@ func GetGroup(uid string) (*Group, error) {
 	err := o.Read(&g)
 
 	return &g, err
+}
+
+func GetGroupByNameKey(nameid string) (*Group, error) {
+	o := orm.NewOrm()
+	group := Group{NameId: nameid}
+	err := o.Read(&group, "NameId")
+
+	if err == nil {
+		return &group, nil
+	}
+	return nil, errors.New("Group not exists")
 }
 
 func GetAllGroups() []*Group {

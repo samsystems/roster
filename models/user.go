@@ -135,6 +135,12 @@ func PasswordMatches(user *User, password string) bool {
 	return false
 }
 
+func EncriptPassword(password string) string {
+	hasher := sha1.New()
+	hasher.Write([]byte(password))
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
 func GenerateToken(size int) string {
 	hasher := sha1.New()
 	token := make([]byte, size)

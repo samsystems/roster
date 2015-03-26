@@ -9,8 +9,8 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         $scope.states = State.$search();
         User.$find(User.getCurrentUserId()).$asPromise().then(function (user) {
             Company.$find(user.Company.Id).$asPromise().then(function (company) {
-                $scope.tax = 7;
-//                $scope.tax = company.Tax;
+              //  $scope.tax = 7;
+               $scope.tax = company.Tax;
             });
         });
 
@@ -40,11 +40,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             if (!$scope.invoice.BillingLocation)
                 $scope.invoice.BillingLocation = {};
             if ($scope.invoice.BillShip) {
-                $scope.invoice.ShippingLocation.Address = $scope.invoice.BillingLocation.Address;
-                $scope.invoice.ShippingLocation.Address1 = $scope.invoice.BillingLocation.Address1;
-                $scope.invoice.ShippingLocation.City = $scope.invoice.BillingLocation.City;
-                $scope.invoice.ShippingLocation.State = $scope.invoice.BillingLocation.State;
-                $scope.invoice.ShippingLocation.Zipcode = $scope.invoice.BillingLocation.Zipcode;
+                var idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
+                $scope.invoice.ShippingLocation = $scope.invoice.BillingLocation;
+                $scope.invoice.ShippingLocation.Id = idLocation;
                 angular.element('#billingAddress').attr('readonly', true);
             }
             else {
@@ -71,9 +69,12 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
         $scope.updateBillingShipping = function (customer) {
             customer.$fetch().$asPromise().then(function (customer) {
+                var idLocation = (!_.isUndefined($scope.invoice.BillingLocation)) ? $scope.invoice.BillingLocation.Id : null;
                 $scope.invoice.BillingLocation = customer.BillingLocation;
+                $scope.invoice.BillingLocation.Id = idLocation;
+                idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
                 $scope.invoice.ShippingLocation = customer.ShippingLocation;
-                console.log($scope.invoice.ShippingLocation.State.Name);
+                $scope.invoice.ShippingLocation.Id = idLocation;
             });
 
         }
@@ -200,7 +201,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                         $rootScope.$broadcast('invoice::updated');
                         $rootScope.$broadcast('invoice::totalTab');
                         toaster.pop('success', 'Invoice Created', 'You have successfully created a new invoice.');
-                        $scope.$goTo($scope.step.list);
+                      //  $scope.$goTo($scope.step.list);
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
                     });

@@ -14,7 +14,7 @@ angular.module('invoice', [
             controller: 'InvoiceController'
         })
         .state('app.invoice-create', {
-            url: 'invoice/create',
+            url: 'invoice/create/:type',
             templateUrl: 'src/modules/invoice/views/form.html',
             controller: 'InvoiceFormController'
         })

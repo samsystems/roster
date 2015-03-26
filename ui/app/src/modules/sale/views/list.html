@@ -1,12 +1,13 @@
 <page-content-title title="Sales">
     <div class="btn-group mr10 mb10">
-        <button type="button" class="btn btn-primary"><i class="fa fa-plus"> Actions</i></button>
+        <button type="button" class="btn btn-primary"><i class="fa fa-plus"> New Transaction</i></button>
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
-            <li><a href="#/invoice/create">New Invoice</a></li>
+            <li><a href="#/invoice/create/invoice">New Invoice</a></li>
+            <li><a href="#/invoice/create/estimate">New Estimate</a></li>
         </ul>
     </div>
 </page-content-title>
@@ -17,16 +18,16 @@
             <ng-include src="'/src/modules/invoice/views/all-invoice.html'"></ng-include>
         </tab>
         <!--<tab heading="Drafts ({{resume.draft.cant}})"  data-ng-click="init()" data-ng-controller="DraftPurchaseController">-->
-            <!--<ng-include src="'/src/modules/invoice/views/draft-purchase.html'"></ng-include>-->
+        <!--<ng-include src="'/src/modules/invoice/views/draft-purchase.html'"></ng-include>-->
         <!--</tab>-->
         <!--<tab heading="Awaiting Approval ({{resume.awaiting.cant}})" data-ng-click="init()" data-ng-controller="AwaitingPurchaseController">-->
-            <!--<ng-include src="'/src/modules/invoice/views/awaiting-purchase.html'"></ng-include>-->
+        <!--<ng-include src="'/src/modules/invoice/views/awaiting-purchase.html'"></ng-include>-->
         <!--</tab>-->
         <!--<tab heading="Approved ({{resume.approved.cant}})" data-ng-click="init()" data-ng-controller="ApprovedPurchaseController">-->
-            <!--<ng-include src="'/src/modules/invoice/views/approved-purchase.html'"></ng-include>-->
+        <!--<ng-include src="'/src/modules/invoice/views/approved-purchase.html'"></ng-include>-->
         <!--</tab>-->
         <!--<tab heading="Billed ({{resume.billed.cant}})" data-ng-click="init()" data-ng-controller="BilledPurchaseController">-->
-            <!--<ng-include src="'/src/modules/invoice/views/billed-purchase.html'"></ng-include>-->
+        <!--<ng-include src="'/src/modules/invoice/views/billed-purchase.html'"></ng-include>-->
         <!--</tab>-->
     </tabset>
 </panel>

@@ -1,9 +1,16 @@
 <page-content-title title="Invoice {{invoice.OrderNumber}}">
-    <a title="Remove" data-ng-controller="InvoiceController" class="btn btn-primary" href=""
-       data-ng-click="removeInvoice(invoice)"><i class="fa fa-plus"> Receive Payment</i></a>
-    <select class="form-control" data-ng-model="invoice.Currency"
-            data-ng-options="label for (key , value) in flag_status">
-    </select>
+    <div class="row" ng-show="type == 'invoice'">
+            <a title="Remove" data-ng-controller="InvoiceController" class="btn btn-primary pull-left" href=""
+               data-ng-click="removeInvoice(invoice)"> Receive Payment</a>
+            <select  style="width: 120px; margin-left: 10px" class="form-control pull-right" data-ng-model="invoice.Currency" data-ng-options="status.value as status.description for status in flag_status">
+        </select>
+    </div>
+    <div class="row" ng-show="type == 'estimate'">
+            <a title="Remove" data-ng-controller="InvoiceController" class="btn btn-primary pull-left" href=""
+               data-ng-click="removeInvoice(invoice)"> Copy to Invoice</a>
+            <select style="width: 120px; margin-left: 10px" class="form-control pull-right" data-ng-model="invoice.Currency" data-ng-options="status.value as status.description for status in flag_status">
+            </select>
+    </div>
 </page-content-title>
 
 <panel type="plain">
@@ -12,16 +19,17 @@
     <div class="col-md-5">
         <div class="form-group">
             <label for="customer" class="control-label">{{'Customer' | translate}}:</label>
-                <input id="customer" data-ng-model="invoice.Customer" autocomplete="off"
-                       data-typeahead="customer as customer.Name for customer in searchCustomers($viewValue)"
-                       data-typeahead-min-length="3" type="text" class="form-control" data-typeahead-on-select=updateBillingShipping(invoice.Customer)>
+            <input id="customer" data-ng-model="invoice.Customer" autocomplete="off"
+                   data-typeahead="customer as customer.Name for customer in searchCustomers($viewValue)"
+                   data-typeahead-min-length="3" type="text" class="form-control"
+                   data-typeahead-on-select=updateBillingShipping(invoice.Customer)>
         </div>
     </div>
     <div class="col-md-7">
         <div class="form-group">
             <label class="control-label" for="Emails">{{'Emails' | translate}}</label>
-                <input data-ng-model="invoice.Emails" id="Emails" type="text"
-                       class="form-control">
+            <input data-ng-model="invoice.Emails" id="Emails" type="text"
+                   class="form-control">
         </div>
     </div>
 </div>
@@ -29,8 +37,8 @@
     <div class="col-md-5">
         <div class="form-group">
             <label class="control-label" for="ReferenceNumber">{{'Reference' | translate}}</label>
-                <input data-ng-model="invoice.ReferenceNumber" id="ReferenceNumber" type="text"
-                       class="form-control" validator="number">
+            <input data-ng-model="invoice.ReferenceNumber" id="ReferenceNumber" type="text"
+                   class="form-control" validator="number">
         </div>
     </div>
     <div class="col-md-7">
@@ -38,28 +46,28 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label" for="Currency">{{'Currency' | translate}}</label>
-                        <select class="form-control" id="Currency" data-ng-model="invoice.Currency"
-                                data-ng-options="currency.value as currency.description for currency in currencies"
-                                validator="required">
-                        </select>
+                    <select class="form-control" id="Currency" data-ng-model="invoice.Currency"
+                            data-ng-options="currency.value as currency.description for currency in currencies"
+                            validator="required">
+                    </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">{{'Date' | translate}}</label>
-                        <date-time-picker class="col-md-12" data-ng-model="invoice.Date"
-                                          data-format="date" data-max-date="now"></date-time-picker>
-                        <!--<input value="{{invoice.Date | outputFormatDate }}" output-format-date ng-if="!visible" readonly type="text"-->
-                        <!--class="form-control"/>-->
+                    <date-time-picker class="col-md-12" data-ng-model="invoice.Date"
+                                      data-format="date" data-max-date="now"></date-time-picker>
+                    <!--<input value="{{invoice.Date | outputFormatDate }}" output-format-date ng-if="!visible" readonly type="text"-->
+                    <!--class="form-control"/>-->
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">{{'Due Date' | translate}}</label>
-                        <date-time-picker class="col-md-12" data-ng-model="invoice.DeliveryDate"
-                                          data-format="date"></date-time-picker>
-                        <!--<input value="{{invoice.DeliveryDate | outputFormatDate }}" ng-if="!visible" readonly type="text"-->
-                        <!--class="form-control"/>-->
+                    <date-time-picker class="col-md-12" data-ng-model="invoice.DeliveryDate"
+                                      data-format="date"></date-time-picker>
+                    <!--<input value="{{invoice.DeliveryDate | outputFormatDate }}" ng-if="!visible" readonly type="text"-->
+                    <!--class="form-control"/>-->
                 </div>
             </div>
         </div>
@@ -99,6 +107,11 @@
             <td>
                 <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(product)"
                         data-ng-show="!$last"></button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <button class="btn btn-default" data-ng-click="addProduct($index)">{{'Add' | translate}}</button>
             </td>
         </tr>
         <tr>
@@ -319,8 +332,8 @@
         <div class="form-group">
             <label class="control-label" for="DeliveryInstruction">{{'Memo Notes' |
                 translate}}:</label>
-                <textarea data-ng-model="invoice.DeliveryInstruction" id="DeliveryInstruction"
-                          class="form-control"></textarea>
+            <textarea data-ng-model="invoice.DeliveryInstruction" id="DeliveryInstruction"
+                      class="form-control"></textarea>
         </div>
     </div>
 </div>

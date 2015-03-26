@@ -4,6 +4,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
     function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company) {
 
 
+        $scope.type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : null;
+
+        $scope.states = State.$search();
         User.$find(User.getCurrentUserId()).$asPromise().then(function (user) {
             Company.$find(user.Company.Id).$asPromise().then(function (company) {
                 $scope.tax = 7;
@@ -11,6 +14,10 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             });
         });
 
+        $scope.flag_status = [
+            {"value": "open", "description": "Open"},
+            {"value": "openSent", "description": "Open Sent"}
+        ];
 
         $scope.currencies = [
             {"value": "USD", "description": "USD United States Dollar"}
@@ -66,6 +73,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             customer.$fetch().$asPromise().then(function (customer) {
                 $scope.invoice.BillingLocation = customer.BillingLocation;
                 $scope.invoice.ShippingLocation = customer.ShippingLocation;
+                console.log($scope.invoice.ShippingLocation.State.Name);
             });
 
         }
@@ -77,8 +85,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         };
 
         $scope.addProduct = function (index) {
-            if (index == $scope.invoice.products.length - 1)
-                $scope.invoice.products.$build().$reveal();
+            $scope.invoice.products.$build().$reveal();
         }
 
         $scope.removeProduct = function (product) {
@@ -176,7 +183,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
                     var invoice = Invoice.$build();
                     invoice.Customer = {'Id': $scope.invoice.Customer.Id};
-                    invoice.CustomerShipping = {'Id': $scope.invoice.CustomerShipping.Id};
+                    //invoice.CustomerShipping = {'Id': $scope.invoice.CustomerShipping.Id};
+                    invoice.BillingLocation = $scope.invoice.BillingLocation;
+                    invoice.ShippingLocation = $scope.invoice.ShippingLocation;
                     invoice.Date = $scope.invoice.Date;
                     // invoice.Date ='2015-02-25T00:19:09Z';
                     invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;

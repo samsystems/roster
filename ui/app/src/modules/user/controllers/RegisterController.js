@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('common').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Company', 'CompanyScope', 'Industry', 'State', 'toaster', 'WizardHandler', '$validation',
+angular.module('user').controller('RegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Company', 'CompanyScope', 'Industry', 'State', 'toaster', 'WizardHandler', '$validation',
     function ($scope, $window, $state, AuthenticationService, User, Company, CompanyScope, Industry, State, toaster, WizardHandler, $validation) {
         $scope.user = {};
         $scope.credentials = {};
@@ -71,11 +71,11 @@ angular.module('common').controller('RegisterController', ['$scope', '$window', 
         };
 
         $scope.toStepTwo = function () {
-            $validation.validate($scope, 'user').success(function () {
+           // $validation.validate($scope, 'user').success(function () {
                 $scope.$goTo($scope.step.register2);
-            }).error(function () {
+          /*  }).error(function () {
                 toaster.pop('error', 'Error', 'Complete the required entry fields.');
-            });
+            });*/
         };
 
         $scope.toStepOne = function () {

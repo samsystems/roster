@@ -47,7 +47,7 @@
 
                                 <div class="col-md-12">
                                     <input type="email" data-ng-model="user.Email" class="form-control text-input"
-                                           placeholder="me@example.com" validator="required,email,uniqueRegisterEmail">
+                                           placeholder="me@example.com" validator="required,email">
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                 <div class="col-md-12">
                                     <input type="password" data-ng-model="user.ConfirmPassword"
                                            class="form-control text-input"
-                                           placeholder="Re-Password" validator="required">
+                                           placeholder="Re-Password" validator="required" passwd-check="user.Password">
                                 </div>
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Business Name' | translate}}</label>
                                 <input type="text" data-ng-model="user.Company.Name" class="form-control text-input"
-                                       placeholder="Name">
+                                       placeholder="Name" validator="required">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -170,7 +170,7 @@
                                     translate}}</label>
                                 <input type="text" data-ng-model="user.Company.Location.Address"
                                        class="form-control text-input"
-                                       placeholder="Street Address">
+                                       placeholder="Street Address" validator="required">
                             </div>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
                             <div class="form-group login-input">
                                 <input type="text" data-ng-model="user.Company.Location.Address1"
                                        class="form-control text-input"
-                                       placeholder="Suite/Unit">
+                                       placeholder="Suite/Unit" validator="required">
                             </div>
                         </div>
                     </div>
@@ -191,14 +191,14 @@
                                 <label class="control-label">{{'City' | translate}}</label>
                                 <input type="text" data-ng-model="user.Company.Location.City"
                                        class="form-control text-input"
-                                       placeholder="City">
+                                       placeholder="City" validator="required">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'State' | translate}}</label>
                                 <select class="form-control" data-ng-model="user.Company.Location.State.Id"
-                                        data-ng-options="state.Id as state.Name for state in states"></select>
+                                        data-ng-options="state.Id as state.Name for state in states" validator="required"></select>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -206,7 +206,7 @@
                                 <label class="control-label">{{'Zipcode' | translate}}</label>
                                 <input type="text" data-ng-model="user.Company.Location.ZipCode"
                                        class="form-control text-input"
-                                       placeholder="Zipcode">
+                                       placeholder="Zipcode" validator="required">
                             </div>
                         </div>
                     </div>
@@ -216,21 +216,21 @@
                             <div class="form-group login-input">
                                 <label class="control-label">{{'DOB' | translate}}</label>
                                 <date-time-picker class="col-md-12" data-ng-model="user.DOB"
-                                                  data-format="date" data-max-date="now"></date-time-picker>
+                                                  data-format="date" data-max-date="now" validator="required"></date-time-picker>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Last 4 digit of SSN' | translate}}</label>
                                 <input type="text" data-ng-model="user.SSN" class="form-control text-input"
-                                       placeholder="SSN">
+                                       placeholder="SSN" validator="required">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
                                 <label class="control-label">{{'Phone' | translate}}</label>
                                 <input type="text" data-ng-model="user.Company.Phone" class="form-control text-input"
-                                       placeholder="Phone">
+                                       placeholder="Phone" validator="required">
                             </div>
                         </div>
                     </div>

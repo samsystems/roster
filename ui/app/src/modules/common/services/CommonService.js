@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('common').factory('CommonService', ['$http', '$resource', '$window', 'config', 'BasicAuth', 'AuthenticationService', '$state', function ($http, $resource, $window, config, BasicAuth, AuthenticationService, $state) {
+angular.module('common').factory('CommonService', ['$http', '$resource', '$window', 'config', function ($http, $resource, $window, config) {
     return {
         checkUniqueValue: function (id, property, value, idValue) {
             var data = {

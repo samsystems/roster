@@ -21,11 +21,6 @@ angular.module('common', [
             templateUrl: 'src/modules/common/views/login.html',
             controller: 'LoginController'
         })
-        .state('register', {
-            url: '/register',
-            templateUrl: 'src/modules/common/views/register.html',
-            controller: 'RegisterController'
-        })
         .state('forgot', {
             url: '/forgot',
             templateUrl: 'src/modules/common/views/forgot.html',
@@ -45,23 +40,4 @@ angular.module('common', [
         $urlRouterProvider.when('/admin', '/admin/users');
         $urlRouterProvider.otherwise('/404');
 
-        $validationProvider.setExpression({
-            uniqueRegisterEmail: function (value, scope, element, attrs) {
-               if (value) {
-                   var idValue = element.attr('data-value-id');
-                   return $injector.get('CommonService').checkUniqueValue('User', 'email', value, idValue)
-                                       .then(function (unique) {
-                                           return unique.data.isUnique;
-                                       });
-               }
-               else
-                   return true;
-            }
-        }).setDefaultMsg({
-            error: {
-                // TODO: make into a var
-                error: 'Email is already taken',
-                success: 'Email is available!'
-            }
-        });
 }]);

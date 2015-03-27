@@ -89,14 +89,14 @@ func GetProductByKeyword(keyword string, user *User, page int, order string, cou
 	}
 
 	qb.From("product p").
-		Where("p.name LIKE ?")
+		Where("p.name LIKE ?").And("p.company_id = ?")
 
 	if count == true {
 		sql := qb.String()
 		var total int
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRow(&total)
 		return products, total
 
 	} else {
@@ -108,7 +108,7 @@ func GetProductByKeyword(keyword string, user *User, page int, order string, cou
 
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRows(&products)
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&products)
 		return products, nil
 	}
 

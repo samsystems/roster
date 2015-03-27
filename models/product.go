@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const PRODUCT_LIMIT int = 10
+const PRODUCT_LIMIT int = 20
 
 type Product struct {
 	Id                  string `orm:"pk"`

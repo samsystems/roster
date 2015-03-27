@@ -45,14 +45,63 @@ func GetNotification(uid string) (*Notification, error) {
 	return &g, err
 }
 
-func GetAllNotifications() []*Notification {
+func GetAllNotifications(user *User, page int, order string, count bool, limit int) ([]Notification, interface{}) {
+	page -= 1
+	if limit < 0 {
+		limit = NOTIFICATION_LIMIT
+	}
 	o := orm.NewOrm()
+	var notifications []Notification
+	querySetter := o.QueryTable("notification")
+	querySetter = querySetter.Filter("owner", user).Filter("deleted__isnull", true)
+	if count == true {
+		cnt, _ := querySetter.Count()
+		return notifications, cnt
+	} else {
+		querySetter = ParseQuerySetterOrder(querySetter, order)
+		querySetter.Offset(page * limit).Limit(limit).All(&notifications)
+		return notifications, nil
+	}
+}
 
-	var notifications []*Notification
-	qs := o.QueryTable("notification")
-	qs.Filter("deleted__isnull", true).All(&notifications)
+func GetNotificationByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]Notification, interface{}) {
+	var notifications []Notification
+	qb, _ := orm.NewQueryBuilder("mysql")
+	page -= 1
+	if limit < 0 {
+		limit = NOTIFICATION_LIMIT
+	}
+	// Construct query object
+	if count == false {
+		qb.Select("n.*")
+	} else {
+		qb.Select("count(n.id)")
+	}
 
-	return notifications
+	qb.From("notification n").
+		Where("n.name LIKE ?").And("n.owner = ".user.Id)
+
+	if count == true {
+		sql := qb.String()
+		var total int
+		// execute the raw query string
+		o := orm.NewOrm()
+		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
+		return notifications, total
+
+	} else {
+		ParseQueryBuilderOrder(qb, order, "n")
+		qb.Limit(limit).Offset(page * NOTIFICATION_LIMIT)
+
+		// export raw query string from QueryBuilder object
+		sql := qb.String()
+
+		// execute the raw query string
+		o := orm.NewOrm()
+		o.Raw(sql, "%"+keyword+"%").QueryRows(&notifications)
+		return notifications, nil
+	}
+
 }
 
 func GetAllNotificationsByUserId(userId string) []*Notification {
@@ -65,46 +114,6 @@ func GetAllNotificationsByUserId(userId string) []*Notification {
 	qs.All(&notifications)
 
 	return notifications
-}
-
-func GetNotificationByKeyword(keyword string, page int, order string, count bool, limit int) (*[]Notification, interface{}) {
-	var notifications []Notification
-	qb, _ := orm.NewQueryBuilder("mysql")
-	page -= 1
-	if limit < 0 {
-		limit = NOTIFICATION_LIMIT
-	}
-	// Construct query object
-	if count == false {
-		qb.Select("g.*")
-	} else {
-		qb.Select("count(g.id)")
-	}
-
-	qb.From("notification g").
-		Where("g.name LIKE ?")
-
-	if count == true {
-		sql := qb.String()
-		var total int
-		// execute the raw query string
-		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
-		return &notifications, total
-
-	} else {
-		ParseQueryBuilderOrder(qb, order, "g")
-		qb.Limit(limit).Offset(page * NOTIFICATION_LIMIT)
-
-		// export raw query string from QueryBuilder object
-		sql := qb.String()
-
-		// execute the raw query string
-		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRows(&notifications)
-		return &notifications, nil
-	}
-
 }
 
 func UpdateNotification(g *Notification) {

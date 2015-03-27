@@ -47,8 +47,20 @@ func (controller *NotificationController) Get(context appengine.Context, writer 
 // @Success 200 {object} models.Notification
 // @router / [get]
 func (controller *NotificationController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	notifications := models.GetAllNotifications()
 
+	var notifications []models.Notification
+	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
+	user, _ := models.GetCurrentUser(request)
+
+	if keyword != "" {
+		notifications, _ = models.GetNotificationByKeyword(keyword, user, page, sort, false, -1)
+
+	} else {
+		notifications, _ = models.GetAllNotifications(user, page, sort, false, -1)
+	}
+	if len(notifications) == 0 {
+		return make([]models.Notification, 0), nil
+	}
 	return notifications, nil
 }
 
@@ -58,14 +70,15 @@ func (controller *NotificationController) GetAll(context appengine.Context, writ
 // @Success 200 {array} models.Notification
 // @router /count [get]
 func (controller *NotificationController) GetCountAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	total := make(map[string]interface{})
 
+	total := make(map[string]interface{})
+	user, _ := models.GetCurrentUser(request)
 	keyword := ""
-	if keywordP := v["keyword"]; keywordP != "" {
+	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
-		_, total["total"] = models.GetNotificationByKeyword(keyword, 1, "notSorting", true, -1)
+		_, total["total"] = models.GetNotificationByKeyword(keyword, user, 1, "notSorting", true, -1)
 	} else {
-		total["total"] = models.GetAllNotifications()
+		_, total["total"] = models.GetAllNotifications(user, 1, "notSorting", true, -1)
 	}
 
 	return total, nil

@@ -9,8 +9,8 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         $scope.states = State.$search();
         User.$find(User.getCurrentUserId()).$asPromise().then(function (user) {
             Company.$find(user.Company.Id).$asPromise().then(function (company) {
-              //  $scope.tax = 7;
-               $scope.tax = company.Tax;
+                //  $scope.tax = 7;
+                $scope.tax = company.Tax;
             });
         });
 
@@ -69,12 +69,16 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
         $scope.updateBillingShipping = function (customer) {
             customer.$fetch().$asPromise().then(function (customer) {
-                var idLocation = (!_.isUndefined($scope.invoice.BillingLocation)) ? $scope.invoice.BillingLocation.Id : null;
-                $scope.invoice.BillingLocation = customer.BillingLocation;
-                $scope.invoice.BillingLocation.Id = idLocation;
-                idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
-                $scope.invoice.ShippingLocation = customer.ShippingLocation;
-                $scope.invoice.ShippingLocation.Id = idLocation;
+                if (customer.BillingLocation) {
+                    var idLocation = (!_.isUndefined($scope.invoice.BillingLocation)) ? $scope.invoice.BillingLocation.Id : null;
+                    $scope.invoice.BillingLocation = customer.BillingLocation;
+                    $scope.invoice.BillingLocation.Id = idLocation;
+                }
+                if (customer.ShippingLocation) {
+                    idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
+                    $scope.invoice.ShippingLocation = customer.ShippingLocation;
+                    $scope.invoice.ShippingLocation.Id = idLocation;
+                }
             });
 
         }
@@ -197,11 +201,20 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                     invoice.products = $scope.invoice.products;
                     invoice.Status = status;
 
+                    invoice.Products = [];
+                    var count = 0;
+                    for (var i = 0; i < $scope.invoice.products.length; i++) {
+                        if ($scope.invoice.products[i].Name) {
+                            invoice.Products[count] = $scope.invoice.products[i];
+                            count++;
+                        }
+
+                    }
                     invoice.$save().$then(function (response) {
                         $rootScope.$broadcast('invoice::updated');
                         $rootScope.$broadcast('invoice::totalTab');
                         toaster.pop('success', 'Invoice Created', 'You have successfully created a new invoice.');
-                      //  $scope.$goTo($scope.step.list);
+                        //  $scope.$goTo($scope.step.list);
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
                     });

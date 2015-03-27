@@ -13,10 +13,7 @@
 </page-content-title>
 
 <panel type="plain">
-    <tabset>
-        <tab heading="All" data-ng-click="init()" data-ng-controller="InvoiceListAllController">
-            <ng-include src="'/src/modules/invoice/views/all-invoice.html'"></ng-include>
-        </tab>
+            <ng-include src="'/src/modules/invoice/views/list.html'"></ng-include>
         <!--<tab heading="Drafts ({{resume.draft.cant}})"  data-ng-click="init()" data-ng-controller="DraftPurchaseController">-->
         <!--<ng-include src="'/src/modules/invoice/views/draft-purchase.html'"></ng-include>-->
         <!--</tab>-->
@@ -29,7 +26,6 @@
         <!--<tab heading="Billed ({{resume.billed.cant}})" data-ng-click="init()" data-ng-controller="BilledPurchaseController">-->
         <!--<ng-include src="'/src/modules/invoice/views/billed-purchase.html'"></ng-include>-->
         <!--</tab>-->
-    </tabset>
 </panel>
 
 <!--<div class="animated active fadeInRight">-->

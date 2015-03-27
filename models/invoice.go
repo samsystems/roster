@@ -11,8 +11,9 @@ const INVOICE_LIMIT int = 20
 type Invoice struct {
 	Id                  string    `orm:"pk"`
 	Vendor              *Vendor   `orm:"null;rel(one)"`
-	Customer            *Customer `orm:"rel(one)"`
-	CustomerShipping    *Customer `orm:"rel(one)"`
+	Customer            *Customer `orm:"rel(one)" valid:"Entity(Creator)"`
+	BillingLocation     *Location `orm:"rel(one)"`
+	ShippingLocation    *Location `orm:"rel(one)"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	OrderNumber         int
@@ -55,10 +56,12 @@ func GetInvoice(uid string) (*Invoice, error) {
 	if invoice.Customer != nil {
 		o.Read(invoice.Customer)
 	}
-	if invoice.CustomerShipping != nil {
-		o.Read(invoice.CustomerShipping)
+	if invoice.BillingLocation != nil {
+		o.Read(invoice.BillingLocation)
 	}
-
+	if invoice.ShippingLocation != nil {
+		o.Read(invoice.ShippingLocation)
+	}
 	return &invoice, err
 }
 

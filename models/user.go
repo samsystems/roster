@@ -155,7 +155,7 @@ func Login(username string, password string) (Token, error) {
 	var authenticated bool = false
 	if username != "" {
 		user, _ := GetUserByUsername(username)
-		if user.Id != "" {
+		if user != nil && user.Id != "" {
 			authenticated = PasswordMatches(user, password)
 			if authenticated == true {
 				token.Token = GenerateToken(32)

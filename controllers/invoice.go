@@ -289,6 +289,32 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.TotalTax = RoundPlus((subTotal*float64(invoice.Tax))/100, 2)
 	invoice.Amount = invoice.TotalTax + subTotal
 
+	if invoice.BillingLocation != nil {
+		billingLocation := invoice.BillingLocation
+		if billingLocation.Country == nil {
+			country, _ := models.GetCountry("US")
+			billingLocation.Country = country
+		}
+		billingLocation.Company = user.Company
+		billingLocation.Creator = user
+		billingLocation.Updater = user
+		models.AddLocation(billingLocation)
+		invoice.BillingLocation = billingLocation
+	}
+	if invoice.ShippingLocation != nil {
+		shippingLocation := invoice.ShippingLocation
+		if shippingLocation.Country == nil {
+			country, _ := models.GetCountry("US")
+			shippingLocation.Country = country
+		}
+		shippingLocation.Company = user.Company
+		shippingLocation.Creator = user
+		shippingLocation.Updater = user
+		models.AddLocation(shippingLocation)
+		invoice.ShippingLocation = shippingLocation
+	}
+
+
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)
 	if err != nil {

@@ -1974,6 +1974,14 @@ INSERT INTO `state` (`id`, `country_id`, `creator_id`, `updater_id`, `name`, `ac
 ('fcbcc989-c8f5-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'Montana', 'Montana', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL),
 ('fe2eefc8-c8f6-11e4-83a6-a088694cea32', 'US', '5fbec591-acc8-49fe-a44e-46c59cae99f9', '5fbec591-acc8-49fe-a44e-46c59cae99f9', 'LA', 'LA', NULL, '2015-03-12 00:00:00', NULL, '2015-03-12 00:00:00', NULL);
 
+
+ALTER TABLE `invoice` CHANGE `customer_shipping_id` `shipping_location_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `invoice` DROP FOREIGN KEY `FK_906517441D9540B`;
+ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9540B` FOREIGN KEY (`shipping_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `invoice` ADD `billing_location_id` VARCHAR(36) NOT NULL AFTER `customer_id` , ADD INDEX (`billing_location_id`);
+ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9541B` FOREIGN KEY (`billing_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

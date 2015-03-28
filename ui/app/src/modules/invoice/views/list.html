@@ -37,13 +37,17 @@
                         <col width="10%"/>
                         <col width="15%"/>
                         <tr class="items" data-ng-repeat="invoice in $data">
-                            <td data-title="'Invoice Number'" sortable="'orderNumber'" style="cursor:pointer;"
+                            <td data-title="'Number'" sortable="'orderNumber'" style="cursor:pointer;"
                                 data-ng-click="viewInvoice(invoice)">
                                 INV-{{invoice.OrderNumber}}
                             </td>
-                            <td data-title="'Reference Number'" sortable="'referenceNumber'" style="cursor:pointer;"
+                            <td data-title="'Type'" sortable="'referenceNumber'" style="cursor:pointer;"
                                 data-ng-click="viewInvoice(invoice)">
-                                {{invoice.ReferenceNumber}}
+                                {{invoice.Type | ucfirst}}
+                            </td>
+                            <td data-title="'Customer'" sortable="'date'" style="cursor:pointer;" style="cursor:pointer;"
+                                data-ng-click="viewInvoice(invoice)">
+                                {{invoice.Customer.Name}}
                             </td>
                             <td data-title="'Date'" sortable="'date'" style="cursor:pointer;" style="cursor:pointer;"
                                 data-ng-click="viewInvoice(invoice)">
@@ -53,19 +57,23 @@
                                 style="cursor:pointer;" data-ng-click="viewInvoice(invoice)">
                                 {{invoice.DeliveryDate | date:'MMM d, yyyy'}}
                             </td>
-                            <td data-title="'Amount'" sortable="'amount'" style="cursor:pointer;"
+                            <td data-title="'Balance'" sortable="'amount'" style="cursor:pointer;"
+                                data-ng-click="viewInvoice(invoice)">
+                                {{invoice.Amount | currency: 'USD'}}
+                            </td>
+                            <td data-title="'Total'" sortable="'amount'" style="cursor:pointer;"
                                 data-ng-click="viewInvoice(invoice)">
                                 {{invoice.Amount | currency: 'USD'}}
                             </td>
                             <td data-title="'Status'" sortable="'status'" style="cursor:pointer;"
                                 data-ng-click="viewInvoice(invoice)">
-                                <span class="label label-{{class[invoice.Status]}}">{{invoice.Status}}</span>
+                                <span>{{invoice.Status | ucfirst}}</span>
                             </td>
 
                             <td data-title="'Action'">
                                 <div class="btn-group">
                                     <button type="button"
-                                            data-ng-class="(invoice.Status=='draft' || invoice.Status=='completed' || invoice.Status=='paid') ? '' : 'disabled'"
+                                            data-ng-class="(invoice.Status=='draft' || invoice.Status=='open' || invoice.Status=='paid') ? '' : 'disabled'"
                                             class="btn btn-default fa fa-edit"
                                             data-ng-click="selectInvoice(invoice)"></button>
                                     <button type="button" data-ng-class="(invoice.Status=='draft') ? '' : 'disabled'"

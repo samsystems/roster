@@ -19,6 +19,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             {"value": "openSent", "description": "Open Sent"}
         ];
 
+
         $scope.currencies = [
             {"value": "USD", "description": "USD United States Dollar"}
         ];
@@ -44,6 +45,10 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 $scope.invoice.ShippingLocation = $scope.invoice.BillingLocation;
                 $scope.invoice.ShippingLocation.Id = idLocation;
                 angular.element('#billingAddress').attr('readonly', true);
+                angular.element('#billingAddress1').attr('readonly', true);
+                angular.element('#billingCity').attr('readonly', true);
+                angular.element('#billingState').attr('readonly', true);
+                angular.element('#billingZipcode').attr('readonly', true);
             }
             else {
                 $scope.invoice.ShippingLocation.Address = '';
@@ -52,6 +57,10 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 $scope.invoice.ShippingLocation.State = '';
                 $scope.invoice.ShippingLocation.Zipcode = '';
                 angular.element('#billingAddress').attr('readonly', false);
+                angular.element('#billingAddress1').attr('readonly', false);
+                angular.element('#billingCity').attr('readonly', false);
+                angular.element('#billingState').attr('readonly', false);
+                angular.element('#billingZipcode').attr('readonly', false);
             }
         }
 
@@ -165,12 +174,11 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             }
         };
 
-        $scope.save = function (status) {
+        $scope.save = function () {
             //  $validation.validate($scope, 'invoice').success(function () {
-            console.log(status);
             if ($scope.invoice.products.length > 0) {
                 if (!_.isUndefined($scope.invoice.Id) && $scope.invoice.Id) {
-                    $scope.invoice.Status = status;
+                    $scope.invoice.Status = 'open';
 
                     /*Temporal hasta averiguar la fecha*/
                     /* $scope.invoice.Date = '0001-01-01T00:00:00Z';
@@ -199,7 +207,8 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency;
                     invoice.products = $scope.invoice.products;
-                    invoice.Status = status;
+                    invoice.Status = 'open';
+                    invoice.Type = $scope.type;
 
                     invoice.Products = [];
                     var count = 0;

@@ -13,7 +13,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     };
 
 
-   /* $scope.flag_status = {
+    $scope.flag_status = {
         open: 'OPEN',
         openSent: 'OPENSENT',
         partial: 'PARTIAL',
@@ -23,7 +23,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
         completed: 'COMPLETED',
         paid: 'PAID',
         void: 'VOID'
-    };*/
+    };
 
     /*  function updateTotalTabs() {
      $scope.total_draft      = Invoice.$search({status: 'draft'}).count();

@@ -23,6 +23,7 @@ angular.module('common').directive('validator', ['$validation', '$q', '$timeout'
             if ($validation.showSuccessMessage && messageToShow) {
                 scope.setMessage(ctrl.validationId, '');
             }
+            console.log(ctrl.$name);
             ctrl.$setValidity(ctrl.$name, true);
 
             return true;
@@ -47,6 +48,7 @@ angular.module('common').directive('validator', ['$validation', '$q', '$timeout'
             if ($validation.showErrorMessage && messageToShow) {
                 scope.setMessage(ctrl.validationId, messageToShow);
             }
+            console.log(ctrl.$name);
             ctrl.$setValidity(ctrl.$name, false);
 
             return false;
@@ -192,6 +194,7 @@ angular.module('common').directive('validator', ['$validation', '$q', '$timeout'
                     isFocusElement = false;
                     ctrl.$setViewValue('');
                     ctrl.$setPristine();
+                    console.log(ctrl.$name);
                     ctrl.$setValidity(ctrl.$name, undefined);
                     ctrl.$render();
                     scope.setMessage(ctrl.validationId, '');

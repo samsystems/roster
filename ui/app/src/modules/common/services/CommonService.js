@@ -11,7 +11,7 @@ angular.module('common').factory('CommonService', ['$http', '$resource', '$windo
             };
             return $http({
                 method: 'GET',
-                url: config.api.baseUrl + '/common/is-unique-value/' + id + '/' + property + '/' + value + '/' + idValue
+                url: config.api.baseUrl + '/'+property+'/is-unique-value/' + id + '/' + value + '/' + idValue
             });
         }
     }

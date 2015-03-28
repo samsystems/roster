@@ -49,6 +49,13 @@ angular.module('invoice').factory('Invoice', ['restmod', 'config','$http', funct
                         method: 'GET',
                         url: config.api.baseUrl + '/invoice/'+idInvoice+'/products'
                     });
+                },
+                pdf: function(html,base64) {
+                    return $http({
+                        method: 'POST',
+                        url: config.api.pdfUrl,
+                        data: { html:html,encodeBase64:base64 }
+                    });
                 }
             }
          }

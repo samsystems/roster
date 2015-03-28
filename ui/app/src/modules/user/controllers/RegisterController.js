@@ -71,11 +71,11 @@ angular.module('user').controller('RegisterController', ['$scope', '$window', '$
         };
 
         $scope.toStepTwo = function () {
-           // $validation.validate($scope, 'user').success(function () {
+            $validation.validate($scope, 'form').success(function () {
                 $scope.$goTo($scope.step.register2);
-          /*  }).error(function () {
+            }).error(function () {
                 toaster.pop('error', 'Error', 'Complete the required entry fields.');
-            });*/
+            });
         };
 
         $scope.toStepOne = function () {

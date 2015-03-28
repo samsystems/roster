@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('invoice').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q) {
+angular.module('invoice').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q','$window', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q, $window) {
 
     $scope.page = 1;
     $scope.search = {invoice: ""};
@@ -21,7 +21,6 @@ angular.module('invoice').controller('InvoiceListController', ['$scope', '$rootS
         paid: 'success',
         void: 'danger'
     };
-
 
     $scope.invoiceTable = new ngTableParams({
         page: 1,            // show first page

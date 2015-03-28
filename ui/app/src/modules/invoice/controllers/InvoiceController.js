@@ -229,8 +229,8 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
             $scope.invoicePdf = Invoice.$find(marcado).$then(function () {
                 $timeout(function () {
                     var html = document.getElementById('pdf').innerHTML;
-                    $scope.base64 = Invoice.pdf({html: html, id: marcado}, function () {
-                        $window.open("data:pdf;base64, " + $scope.base64.pdf, marcado);
+                    Invoice.pdf(html).success(function (pdf_base64) {
+                        $window.open("data:pdf;base64, " + pdf_base64.response, true);
                     });
                 });
             });

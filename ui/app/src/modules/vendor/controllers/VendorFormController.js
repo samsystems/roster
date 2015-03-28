@@ -13,7 +13,6 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
             $scope.vendor = Vendor.$build();
             $scope.vendor.contacts.$build().$reveal();
         }
-        //
 
         $scope.addContact = function(){
             $scope.vendor.contacts.$build().$reveal();
@@ -55,7 +54,7 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
 
                 vendor.TrackTransaction = $scope.vendor.TrackTransaction;
                 vendor.TaxId = $scope.vendor.TaxId;
-                // vendor.Discount = $scope.vendor.Name;
+
                 vendor.BankAccountName = $scope.vendor.BankAccountName;
                 vendor.BankAccount = $scope.vendor.BankAccount;
                 vendor.BatchPaymentsDetails = $scope.vendor.BatchPaymentsDetails;
@@ -68,7 +67,6 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
                         vendor.Contacts[count] = $scope.vendor.contacts[i];
                         count++;
                     }
-
                 }
 
                 vendor.$save().$then(function (response) {

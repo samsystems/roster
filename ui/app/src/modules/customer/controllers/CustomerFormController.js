@@ -92,18 +92,6 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
 
                 customer.BillingLocation = $scope.customer.BillingLocation;
                 customer.ShippingLocation = $scope.customer.ShippingLocation;
-                /* customer.BillingAddress = $scope.customer.BillingAddress;
-                 customer.BillingAddress1 = $scope.customer.ShippingAddress1;
-                 customer.BillingCity = $scope.customer.BillingCity;
-                 customer.BillingState = $scope.customer.BillingState;
-                 customer.BillingZipcode = $scope.customer.BillingZipcode;
-                 customer.ShippingAddress = $scope.customer.ShippingAddress;
-                 customer.ShippingAddress1 = $scope.customer.ShippingAddress1;
-                 customer.ShippingCity = $scope.customer.ShippingCity;
-                 customer.ShippingState = $scope.customer.ShippingState;
-                 customer.ShippingZipcode = $scope.customer.ShippingZipcode;*/
-                // customer.Tax = $scope.customer.Name;
-                // customer.Discount = $scope.customer.Name;
                 customer.BankAccountName = $scope.customer.BankAccountName;
                 customer.BankAccount = $scope.customer.BankAccount;
                 customer.BatchPaymentsDetails = $scope.customer.BatchPaymentsDetails;

@@ -23,6 +23,7 @@ type Invoice struct {
 	Currency            string
 	DeliveryInstruction string
 	Status              string
+	Type                string            //invoice or estimate
 	SubTotal            float64
 	TotalTax            float64
 	Amount              float64

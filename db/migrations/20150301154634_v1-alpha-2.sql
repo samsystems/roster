@@ -1980,6 +1980,7 @@ ALTER TABLE `invoice` DROP FOREIGN KEY `FK_906517441D9540B`;
 ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9540B` FOREIGN KEY (`shipping_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `invoice` ADD `billing_location_id` VARCHAR(36) NOT NULL AFTER `customer_id` , ADD INDEX (`billing_location_id`);
 ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9541B` FOREIGN KEY (`billing_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `invoice` ADD `type` VARCHAR(50) NOT NULL AFTER `status` ;
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

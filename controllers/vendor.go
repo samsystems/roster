@@ -54,11 +54,11 @@ func (controller *VendorController) Get(context appengine.Context, writer http.R
 func (controller *VendorController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var vendors []models.Vendor
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
-
+	user, _ := models.GetCurrentUser(request)
 	if keyword != "" {
-		vendors, _ = models.GetVendorByKeyword(keyword, page, sort, false, -1)
+		vendors, _ = models.GetVendorByKeyword(keyword, user, page, sort, false, -1)
 	} else {
-		vendors, _ = models.GetAllVendors(page, sort, false, -1)
+		vendors, _ = models.GetAllVendors(user, page, sort, false, -1)
 	}
 	if len(vendors) == 0 {
 		return make([]models.Vendor, 0), nil
@@ -87,13 +87,13 @@ func (controller *VendorController) GetAll(context appengine.Context, writer htt
 // @router /count [get]
 func (controller *VendorController) GetCountAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
-
+	user, _ := models.GetCurrentUser(request)
 	keyword := ""
 	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
-		_, total["total"] = models.GetVendorByKeyword(keyword, 1, "notSorting", true, -1)
+		_, total["total"] = models.GetVendorByKeyword(keyword, user, 1, "notSorting", true, -1)
 	} else {
-		_, total["total"] = models.GetAllVendors(1, "notSorting", true, -1)
+		_, total["total"] = models.GetAllVendors(user, 1, "notSorting", true, -1)
 	}
 
 	return total, nil

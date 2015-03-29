@@ -9,30 +9,30 @@ import (
 const VENDOR_LIMIT int = 20
 
 type Vendor struct {
-	Id                     string   `orm:"pk"`
-	Name                   string
-	Phone                  string
-	Mobile                 string
-	Fax                    string
-	CompanyName            string
-	WebSite                string
-	AccountNumber          string
-	Location               *Location   `orm:"null;rel(one)"`// valid:"Entity(Location)
-	TrackTransaction       bool
-	TaxId                  string
-	BankAccount            string
-	BankAccountName        string
-	BatchPaymentsDetails   string
-	Company                *Company    `orm:"rel(one)" valid:"Entity(Company)"`
-	Deleted                time.Time   `orm:"type(datetime)"`
-	Creator                *User       `orm:"rel(one)" valid:"Entity(Creator)"`
-	Created                time.Time   `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone        int
-	Updater                *User       `orm:"rel(one)" valid:"Entity(Updater)"`
-	Updated                time.Time   `orm:"auto_now;type(datetime)"`
-	UpdatedTimeZone        int
-	Contacts               []*Contact     `orm:"-"`
-	Emails                 string         `orm:"-"`
+	Id                   string `orm:"pk"`
+	Name                 string
+	Phone                string
+	Mobile               string
+	Fax                  string
+	CompanyName          string
+	WebSite              string
+	AccountNumber        string
+	Location             *Location `orm:"null;rel(one)"` // valid:"Entity(Location)
+	TrackTransaction     bool
+	TaxId                string
+	BankAccount          string
+	BankAccountName      string
+	BatchPaymentsDetails string
+	Company              *Company  `orm:"rel(one)" valid:"Entity(Company)"`
+	Deleted              time.Time `orm:"type(datetime)"`
+	Creator              *User     `orm:"rel(one)" valid:"Entity(Creator)"`
+	Created              time.Time `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone      int
+	Updater              *User     `orm:"rel(one)" valid:"Entity(Updater)"`
+	Updated              time.Time `orm:"auto_now;type(datetime)"`
+	UpdatedTimeZone      int
+	Contacts             []*Contact `orm:"-"`
+	Emails               string     `orm:"-"`
 }
 
 func init() {
@@ -62,7 +62,7 @@ func GetVendor(uid string) (*Vendor, error) {
 	return &vendor, err
 }
 
-func GetAllVendors(page int, order string, count bool, limit int) ([]Vendor, interface{}) {
+func GetAllVendors(user *User, page int, order string, count bool, limit int) ([]Vendor, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = VENDOR_LIMIT
@@ -70,7 +70,7 @@ func GetAllVendors(page int, order string, count bool, limit int) ([]Vendor, int
 	o := orm.NewOrm()
 	var vendors []Vendor
 	qs := o.QueryTable("vendor")
-	qs = qs.Filter("deleted__isnull", true)
+	qs = qs.Filter("company", user.Company).Filter("deleted__isnull", true)
 	if count == true {
 		cnt, _ := qs.Count()
 		return vendors, cnt
@@ -81,7 +81,7 @@ func GetAllVendors(page int, order string, count bool, limit int) ([]Vendor, int
 	}
 }
 
-func GetVendorByKeyword(keyword string, page int, order string, count bool, limit int) ([]Vendor, interface{}) {
+func GetVendorByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]Vendor, interface{}) {
 	var vendors []Vendor
 	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
@@ -96,14 +96,14 @@ func GetVendorByKeyword(keyword string, page int, order string, count bool, limi
 	}
 
 	qb.From("vendor vendor").
-		Where("vendor.name LIKE ?")
+		Where("vendor.name LIKE ?").And("vendor.company_id = ?")
 
 	if count == true {
 		sql := qb.String()
 		var total int
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRow(&total)
 		return vendors, total
 
 	} else {
@@ -115,7 +115,7 @@ func GetVendorByKeyword(keyword string, page int, order string, count bool, limi
 
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRows(&vendors)
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&vendors)
 		return vendors, nil
 	}
 

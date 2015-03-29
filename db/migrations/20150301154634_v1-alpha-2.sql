@@ -1398,7 +1398,7 @@ LOCK TABLES `product` WRITE;
 
 INSERT INTO `product` (`id`, `name`, `description`, `manufacturer`, `category`, `purchasable`, `cost`, `purchase_account_id`, `purchase_description`, `salable`, `price`, `sale_account_id`, `sale_description`, `is_taxable`, `deleted`, `company_id`, `updater_id`, `creator_id`, `updated`, `updated_time_zone`, `created`, `created_time_zone`)
 VALUES
-	('2fe51519-c15e-11e4-898f-10c37b247796','Michelin',NULL,NULL,1,1,45.26,'69b07036-c159-11e4-898f-10c37b247796','some description',1,54.78,'69b07036-c159-11e4-898f-10','some description',1,NULL,NULL,'5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','2015-03-02 20:10:10',NULL,'2015-03-02 20:10:10',NULL);
+	('2fe51519-c15e-11e4-898f-10c37b247796','Michelin',NULL,NULL,1,1,45.26,'69b07036-c159-11e4-898f-10c37b247796','some description',1,54.78,'69b07036-c159-11e4-898f-10','some description',1,NULL,'242495b7-69f4-4107-a4d8-850540e6b834','5fbec591-acc8-49fe-a44e-46c59cae99f9','5fbec591-acc8-49fe-a44e-46c59cae99f9','2015-03-02 20:10:10',NULL,'2015-03-02 20:10:10',NULL);
 
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;

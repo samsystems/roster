@@ -106,7 +106,7 @@ func GetCustomerByKeyword(keyword string, user *User, page int, order string, co
 	}
 
 	qb.From("customer customer").
-		Where("customer.name LIKE ?").And("p.company_id = ?")
+		Where("customer.name LIKE ?").And("customer.company_id = ?")
 
 	if count == true {
 		sql := qb.String()

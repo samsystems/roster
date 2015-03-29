@@ -151,8 +151,8 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     };
 
 
-    $scope.sendMailPdf = function (invoice) {
-       /* invoices = Object.keys(invoices).map(function (key) {
+    $scope.sendMailPdf = function (invoices) {
+        invoices = Object.keys(invoices).map(function (key) {
             if (invoices[key]['checked']) return key
         });
         var count_check = 0;
@@ -171,42 +171,40 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
                 }
             });
         if (count_check == 1) {
-
-        }*/
-
-        $scope.invoicePdf = Invoice.$find(invoice).$then(function () {
-            $timeout(function () {
-                var html = document.getElementById('pdf').innerHTML;
-                Invoice.sendMailPdf({html: html, id: invoice}, function () {
-                    toaster.pop('success', 'Invoice Mail', 'You have successfully send mail the invoices.');
+            $scope.invoicePdf = Invoice.$find(marcado).$then(function () {
+                $timeout(function () {
+                    var html = document.getElementById('pdf').innerHTML;
+                    Invoice.sendMailPdf({html: html, id: marcado}, function () {
+                        toaster.pop('success', 'Invoice Mail', 'You have successfully send mail the invoices.');
+                    });
                 });
-            });
 
-        });
+            });
+        }
 
     };
     $scope.print = function (invoice) {
-       /* invoices = Object.keys(invoices).map(function (key) {
-            if (invoices[key]['checked']) return key
-        });
-        var count_check = 0;
-        var marcado = null;
-        angular.forEach(
-            invoices,
-            function (invoice) {
-                if (invoice) {
-                    marcado = invoice;
-                    count_check++;
-                    console.log(count_check);
-                    if (count_check > 1) {
-                        toaster.pop('error', 'Error', 'Select only one invoice');
-                        return;
-                    }
-                }
-            });
-        if (count_check == 1) {
-            $location.path("/invoice/print/" + marcado);
-        }*/
+        /* invoices = Object.keys(invoices).map(function (key) {
+         if (invoices[key]['checked']) return key
+         });
+         var count_check = 0;
+         var marcado = null;
+         angular.forEach(
+         invoices,
+         function (invoice) {
+         if (invoice) {
+         marcado = invoice;
+         count_check++;
+         console.log(count_check);
+         if (count_check > 1) {
+         toaster.pop('error', 'Error', 'Select only one invoice');
+         return;
+         }
+         }
+         });
+         if (count_check == 1) {
+         $location.path("/invoice/print/" + marcado);
+         }*/
         console.log('dfdf');
         $location.path("/invoice/print/" + invoice);
     };

@@ -7,7 +7,8 @@ angular.module('invoice').controller('InvoicePrintController', ['$scope', '$root
 
     if (id != null) {
         $scope.invoice = Invoice.$find(id).$then(function(){
-            $scope.invoice.Customer.Country = Country.$find($scope.invoice.Customer.Country.Iso);
+            $scope.invoice.products.$build().$reveal();
+            //$scope.invoice.Customer.Country = Country.$find($scope.invoice.Customer.Country.Iso);
         });
 
         $scope.invoice.products.$fetch().$asPromise().then(function (response) {

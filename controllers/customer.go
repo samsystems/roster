@@ -56,11 +56,11 @@ func (controller *CustomerController) Get(context appengine.Context, writer http
 func (controller *CustomerController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var customers []models.Customer
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
-
+	user, _ := models.GetCurrentUser(request)
 	if keyword != "" {
-		customers, _ = models.GetCustomerByKeyword(keyword, page, sort, false, -1)
+		customers, _ = models.GetCustomerByKeyword(keyword, user, page, sort, false, -1)
 	} else {
-		customers, _ = models.GetAllCustomers(page, sort, false, -1)
+		customers, _ = models.GetAllCustomers(user, page, sort, false, -1)
 	}
 	if len(customers) == 0 {
 		return make([]models.Customer, 0), nil
@@ -90,13 +90,13 @@ func (controller *CustomerController) GetAll(context appengine.Context, writer h
 // @router /count [get]
 func (controller *CustomerController) GetCountAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	total := make(map[string]interface{})
-
+	user, _ := models.GetCurrentUser(request)
 	keyword := ""
 	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
-		_, total["total"] = models.GetCustomerByKeyword(keyword, 1, "notSorting", true, -1)
+		_, total["total"] = models.GetCustomerByKeyword(keyword, user, 1, "notSorting", true, -1)
 	} else {
-		_, total["total"] = models.GetAllCustomers(1, "notSorting", true, -1)
+		_, total["total"] = models.GetAllCustomers(user, 1, "notSorting", true, -1)
 	}
 
 	return total, nil
@@ -208,10 +208,10 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		} else {
 			models.UpdateLocation(billingLocation)
 		}
-		customer.BillingLocation=billingLocation
+		customer.BillingLocation = billingLocation
 	}
 	if customer.ShippingLocation != nil {
-		
+
 		shippingLocation := customer.ShippingLocation
 		if shippingLocation.Country == nil {
 			country, _ := models.GetCountry("US")
@@ -219,15 +219,15 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		}
 		shippingLocation.Company = user.Company
 		shippingLocation.Updater = user
-			log.Println(shippingLocation.Id)
-		if shippingLocation.Id == ""  {
+		log.Println(shippingLocation.Id)
+		if shippingLocation.Id == "" {
 			shippingLocation.Creator = user
 			models.AddLocation(shippingLocation)
-		
+
 		} else {
 			models.UpdateLocation(shippingLocation)
 		}
-		customer.ShippingLocation=shippingLocation
+		customer.ShippingLocation = shippingLocation
 	}
 
 	valid := validation.Validation{}

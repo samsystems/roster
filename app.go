@@ -84,4 +84,5 @@ func RegisterHandlers(r *mux.Router) {
 
 	productVariationController := controllers.ProductVariationController{}
 	productVariationController.RegisterHandlers(router)
+
 }

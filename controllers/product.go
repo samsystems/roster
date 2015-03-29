@@ -55,7 +55,7 @@ func (controller *ProductController) Get(context appengine.Context, writer http.
 func (controller *ProductController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var products []models.Product
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
-	log.Print(request.URL.Query())
+
 	user, _ := models.GetCurrentUser(request)
 
 	if keyword != "" {

@@ -9,34 +9,34 @@ import (
 const CUSTOMER_LIMIT int = 20
 
 type Customer struct {
-	Id                      string       `orm:"pk"`
-	Name                    string
-	Phone                   string
-	Mobile                  string
-	Fax                     string
-	CompanyName             string
-	WebSite                 string
-	AccountNumber           string
-	BillingLocation         *Location    `orm:"null;rel(one)" `//valid:"Entity(Location)"
-	ShippingLocation        *Location    `orm:"null;rel(one)"`// valid:"Entity(Location)"
-	IsTaxable               bool
-	Tax                     float32      `json:",string"`
-	Discount                float32      `json:",string"`
-	BankAccount             string
-	BankAccountName         string
-	BatchPaymentsDetails    string
-	OutStanding             float64
-	OverDue                 float64
-	Company                 *Company      `orm:"rel(one)" valid:"Entity(Company)"`
-	Deleted                 time.Time     `orm:"type(datetime)"`
-	Creator                 *User         `orm:"rel(one)" valid:"Entity(Creator)"`
-	Created                 time.Time     `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone         int
-	Updater                 *User         `orm:"rel(one)" valid:"Entity(Updater)"`
-	Updated                 time.Time     `orm:"auto_now;type(datetime)"`
-	UpdatedTimeZone         int
-	Contacts                []*Contact     `orm:"-"`
-	Emails                  string         `orm:"-"`
+	Id                   string `orm:"pk"`
+	Name                 string
+	Phone                string
+	Mobile               string
+	Fax                  string
+	CompanyName          string
+	WebSite              string
+	AccountNumber        string
+	BillingLocation      *Location `orm:"null;rel(one)" ` //valid:"Entity(Location)"
+	ShippingLocation     *Location `orm:"null;rel(one)"`  // valid:"Entity(Location)"
+	IsTaxable            bool
+	Tax                  float32 `json:",string"`
+	Discount             float32 `json:",string"`
+	BankAccount          string
+	BankAccountName      string
+	BatchPaymentsDetails string
+	OutStanding          float64
+	OverDue              float64
+	Company              *Company  `orm:"rel(one)" valid:"Entity(Company)"`
+	Deleted              time.Time `orm:"type(datetime)"`
+	Creator              *User     `orm:"rel(one)" valid:"Entity(Creator)"`
+	Created              time.Time `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone      int
+	Updater              *User     `orm:"rel(one)" valid:"Entity(Updater)"`
+	Updated              time.Time `orm:"auto_now;type(datetime)"`
+	UpdatedTimeZone      int
+	Contacts             []*Contact `orm:"-"`
+	Emails               string     `orm:"-"`
 }
 
 func init() {
@@ -72,7 +72,7 @@ func GetCustomer(uid string) (*Customer, error) {
 
 	return &customer, err
 }
-func GetAllCustomers(page int, order string, count bool, limit int) ([]Customer, interface{}) {
+func GetAllCustomers(user *User, page int, order string, count bool, limit int) ([]Customer, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = CUSTOMER_LIMIT
@@ -80,7 +80,7 @@ func GetAllCustomers(page int, order string, count bool, limit int) ([]Customer,
 	o := orm.NewOrm()
 	var customers []Customer
 	qs := o.QueryTable("customer")
-	qs = qs.Filter("deleted__isnull", true)
+	qs = qs.Filter("company", user.Company).Filter("deleted__isnull", true)
 	if count == true {
 		cnt, _ := qs.Count()
 		return customers, cnt
@@ -91,7 +91,7 @@ func GetAllCustomers(page int, order string, count bool, limit int) ([]Customer,
 	}
 }
 
-func GetCustomerByKeyword(keyword string, page int, order string, count bool, limit int) ([]Customer, interface{}) {
+func GetCustomerByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]Customer, interface{}) {
 	var customers []Customer
 	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
@@ -106,14 +106,14 @@ func GetCustomerByKeyword(keyword string, page int, order string, count bool, li
 	}
 
 	qb.From("customer customer").
-		Where("customer.name LIKE ?")
+		Where("customer.name LIKE ?").And("p.company_id = ?")
 
 	if count == true {
 		sql := qb.String()
 		var total int
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRow(&total)
 		return customers, total
 
 	} else {
@@ -125,7 +125,7 @@ func GetCustomerByKeyword(keyword string, page int, order string, count bool, li
 
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRows(&customers)
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&customers)
 		return customers, nil
 	}
 

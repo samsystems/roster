@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('notification').controller('NotificationViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'DateTimeService', 'NotificationService', 'User', function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, DateTimeService, NotificationService, User) {
+angular.module('notification').controller('NotificationViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'DateTimeService', 'Notification', 'User', function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, DateTimeService, Notification, User) {
 
     var id = (!_.isUndefined($stateParams.id)) ? $stateParams.id : null;
     $scope.notification = {};
 
     if(id != null){
-        $scope.notification = NotificationService.$find(id, function(notification){
+        $scope.notification = Notification.$find(id, function(notification){
             if($scope.notification.readed == false){
                 NotificationResource.read({id: id}, function(){
                     $rootScope.notifications = NotificationResource.findUnread({user: User.userInSession().id ,page : 1});

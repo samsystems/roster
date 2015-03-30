@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('notification').factory('NotificationService', ['restmod', function(restmod) {
+angular.module('notification').factory('Notification', ['restmod', function(restmod) {
 
     return restmod.model('/notification').mix({
 

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('common').controller('LoginController', ['$scope', '$rootScope', '$window', '$state', 'AuthenticationService', 'User', 'toaster', 'NotificationService', 'SweetAlert',
-    function ($scope, $rootScope, $window, $state, AuthenticationService, User, toaster, NotificationService, SweetAlert) {
+angular.module('common').controller('LoginController', ['$scope', '$rootScope', '$window', '$state', 'AuthenticationService', 'User', 'toaster', 'Notification', 'SweetAlert',
+    function ($scope, $rootScope, $window, $state, AuthenticationService, User, toaster, Notification, SweetAlert) {
 
         $scope.credentials = {};
 

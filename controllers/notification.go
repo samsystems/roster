@@ -21,6 +21,7 @@ func (controller *NotificationController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/notification/{nid}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/notification", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/notification", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/notification", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/notification/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 }
 
@@ -82,6 +83,44 @@ func (controller *NotificationController) GetCountAll(context appengine.Context,
 	}
 
 	return total, nil
+
+}
+
+// @Title Create Notification
+// @Description update products
+// @Param	body		body 	models.Product	true		"body for user content"
+// @Success 200 {int} models.Product.Id
+// @Failure 403 body is empty
+// @router / [post]
+func (controller *NotificationController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
+	var notification models.Notification
+	json.Unmarshal(data, &notification)
+
+	user, _ := models.GetCurrentUser(request)
+
+	notification.Creator = user
+	notification.Updater = user
+	valid := validation.Validation{}
+	b, err := valid.Valid(&notification)
+	if err != nil {
+		return nil, &handler.Error{err, "Some errors on validation", http.StatusNoContent}
+	}
+	if !b {
+		for _, err := range valid.Errors {
+			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
+		}
+		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
+	} else {
+		models.AddNotification(&notification)
+	}
+
+	return notification, nil
 }
 
 // @Title updateNotification

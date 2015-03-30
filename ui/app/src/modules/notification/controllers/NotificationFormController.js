@@ -1,47 +1,45 @@
 'use strict';
 
-angular.module('notification').controller('NotificationFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'NotificationService', 'User', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, NotificationService, User) {
+angular.module('notification').controller('NotificationFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Notification', 'User', '$state', 'SweetAlert',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Notification, User, $state, SweetAlert) {
 
-    var notificationResource = NotificationService.resource;
-    var userResource         = User.resource;
+    $scope.notification = Notification.$build();
 
     $scope.searchUsers = function(val) {
-        return userResource.findByKeyword({keyword: val, page: 1}).$promise.then(function(users){
-            return users;
-        });
+        return User.$search({keyword: val});
     };
-    $scope.save = function() {
-        if(_.isObject($scope.notification.owner)){
-            $validation.validate($scope, 'notification').success(function() {
 
-                if(!_.isUndefined($scope.notification.id)){
-                    $scope.notification.$update({id: $scope.notification.id}, function(response) {
-                        $rootScope.$broadcast('notification::updated');
-                        toaster.pop('success', 'Notification Updated ', 'You have been successfully updated a notification.')
-                    });
-                }else{
+    $scope.save = function(notificationForm) {
+        $validation.validate(notificationForm).success(function() {
 
-                    var notification = new notificationResource();
-                    notification.title = $scope.notification.title;
-                    notification.category = $scope.notification.category;
-                    notification.owner = $scope.notification.owner;
+            $scope.notification.$save();
 
-                    notification.$save({}, function(response) {
-                        $rootScope.notifications = notificationResource.findUnread({user: User.userInSession().id ,page : 1});
-                        $rootScope.$broadcast('notification::created');
-                        toaster.pop('success', 'Notification Created', 'You have successfully created a new notification.');
-                    }, function() {
-                        toaster.pop('error', 'Error', 'Something went wrong a new Notification could not be created');
-                    });
-                }
-
-                $scope.$goTo($scope.step.list);
-            }).error(function() {
-                toaster.pop('error', 'Error', 'Complete the required entry fields.');
+            $scope.notification.$on('after-create', function() {
+                toaster.pop('success', 'Notification Created', 'You have successfully created a new notification.');
             });
-        }
-        else{
-            toaster.pop('error', 'Error', 'Please add a valid recipient.');
-        }
+
+            $scope.$on('after-update', function() {
+                toaster.pop('success', 'Notification Created', 'You have successfully updated this notification.');
+            });
+
+            $scope.$on('after-save-error', function() {
+                toaster.pop('error', 'Unknown Error', 'Oops! Something went wrong a new please try again');
+            });
+
+            $scope.notification.$on('after-save', function() {
+                $state.go("app.notification");
+            });
+
+        }).error(function() {
+            SweetAlert.swal({
+                    title: "Invalid form",
+                    text: "Please complete all required fields!",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",confirmButtonText: "Ok, got it!",
+                    closeOnConfirm: true
+                }
+            );
+        });
     };
 }]);

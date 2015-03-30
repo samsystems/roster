@@ -4,7 +4,7 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
 
     return restmod.model('/user').mix('BaseModel', {
 
-        notifications: { hasMany: 'NotificationService' },
+        notifications: { hasMany: 'Notification' },
 
         $extend: {
             Record: {
@@ -42,6 +42,7 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
                         url: config.api.baseUrl + '/user/login'
                     });
                 },
+
                 forgot: function(username) {
                     BasicAuth.setCredentials(username, 'password');
 
@@ -50,20 +51,24 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
                         url: config.api.baseUrl + '/user/reset-pass-by-email'
                     });
                 },
-                //provisional logout
+
                 logOut: function() {
                     AuthenticationService.isLogged = false;
                     delete $window.sessionStorage.token;
                     delete $window.sessionStorage.tokenExpires;
+
                     $state.go("login");
 
                 },
+
                 userInSession: function() {
                     return this.$find(this.getCurrentUserId());
                 },
+
                 getCurrentUserId: function() {
                     return $window.sessionStorage.userId;
                 }
+
             }
         }
     });

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('notification').controller('NotificationController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'NotificationService', 'User','ngTableParams', '$filter', 'SweetAlert',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, NotificationService, User, ngTableParams, $filter, SweetAlert) {
+angular.module('notification').controller('NotificationController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Notification', 'User','ngTableParams', '$filter', 'SweetAlert',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Notification, User, ngTableParams, $filter, SweetAlert) {
 
     $scope.page = 1;
     $scope.searchNotification = '';
@@ -71,7 +71,7 @@ angular.module('notification').controller('NotificationController', ['$scope', '
             function(isConfirm){
                 if (isConfirm) {
                     notification.$destroy().$then(function() {
-                        $scope.total = NotificationService.$search({user: User.userInSession().id}).count();
+                        $scope.total = Notification.$search({user: User.userInSession().id}).count();
                         $rootScope.$broadcast('notification::deleted');
 
                         SweetAlert.swal("Notification Deleted!", "You have successfully deleted the selected notification", "success");

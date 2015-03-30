@@ -98,11 +98,11 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 // @router / [get]
 func (controller *UserController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	//username := v["username"]
-	var  username = request.URL.Query().Get("username");
+	var username = request.URL.Query().Get("username")
 	if username != "" {
 		user, _ := models.GetUserByUsername(username)
-		users := make([]*models.User,1)
-		users[0] =user
+		users := make([]*models.User, 1)
+		users[0] = user
 		return users, nil
 	} else {
 		users := models.GetAllUsers()
@@ -196,7 +196,7 @@ func (controller *UserController) Login(context appengine.Context, writer http.R
 
 	token, err := models.Login(username, password)
 	if err != nil {
-		return nil, &handler.Error{err, "Error querying database", http.StatusInternalServerError}
+		return nil, &handler.Error{err, err.Error(), http.StatusInternalServerError}
 	}
 
 	return token, nil

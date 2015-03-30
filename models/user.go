@@ -142,14 +142,15 @@ func EncriptPassword(password string) string {
 }
 
 func GenerateToken(size int) string {
-	hasher := sha1.New()
+	TokenHash := sha1.New()
 	token := make([]byte, size)
 	rand.Read(token)
-	hasher.Write([]byte(token))
-	return hex.EncodeToString(hasher.Sum(nil))
+	TokenHash.Write([]byte(token))
+
+	return hex.EncodeToString(TokenHash.Sum(nil))
 }
 
-func Login(username string, password string) (Token, error) {
+func Login(username string, password string) (*Token, error) {
 	token := Token{Token: "1113", Expires: time.Now()}
 
 	var authenticated bool = false
@@ -157,17 +158,20 @@ func Login(username string, password string) (Token, error) {
 		user, _ := GetUserByUsername(username)
 		if user != nil && user.Id != "" {
 			authenticated = PasswordMatches(user, password)
-			if authenticated == true {
+			if authenticated {
 				token.Token = GenerateToken(32)
 				token.Expires = token.Expires.AddDate(0, 0, 1)
 				user.Token = token.Token
 				user.TokenExpirationDate = token.Expires
+
 				UpdateUser(user)
+
+				return &token, nil
 			}
 		}
 	}
 
-	return token, nil
+	return nil, errors.New("Invalid username and/or password")
 }
 
 func DeleteUser(uid string) {

@@ -2,6 +2,7 @@ box: wercker/golang
 build:
   steps:
     - setup-go-workspace
+    
     - script:
         name: Adjust API url
         code: sed -i 's/http:\/\/localhost:8085//g' ui/app/src/config.js
@@ -9,6 +10,10 @@ build:
 deploy:
   steps:
     - setup-go-workspace
+    
+    - script:
+            name: Adjust API url
+            code: sed -i 's/http:\/\/localhost:8085//g' ui/app/src/config.js
 
     - script:
         name: Get dependencies

@@ -25,10 +25,14 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         ];
         $scope.now = DateTimeService.nowIsoFormat();
         $scope.invoice = {};
+
         if (!_.isUndefined($stateParams.id)) {
             $scope.invoice = Invoice.$find($stateParams.id);
         } else {
+
             $scope.invoice = Invoice.$build();
+            $scope.invoice.Currency = 'USD';
+            $scope.invoice.Date = DateTimeService.nowIsoFormat();
             $scope.invoice.products.$build().$reveal();
             var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
                 $scope.invoice.OrderNumber = response.max;

@@ -210,15 +210,15 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency;
-                    invoice.products = $scope.invoice.products;
+
                     invoice.Status = 'open';
                     invoice.Type = $scope.type;
 
-                    invoice.Products = [];
+                    invoice.InvoiceProducts = [];
                     var count = 0;
                     for (var i = 0; i < $scope.invoice.products.length; i++) {
                         if ($scope.invoice.products[i].Name) {
-                            invoice.Products[count] = $scope.invoice.products[i];
+                            invoice.InvoiceProducts[count] = $scope.invoice.products[i];
                             count++;
                         }
 

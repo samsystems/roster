@@ -16,24 +16,24 @@
                 <p style="text-align: center">Signing up for Roster is fast and free - no commitments or
                     long term contracts. </p>
 
-                <form role="form" name="form" id="form" class="form-horizontal group-border" novalidate="">
+                <form role="form" name="form" id="form" class="form-horizontal group-border">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12">{{'First Name' | translate}}</label>
+                                <label for="first-name" class="control-label col-md-12">{{'First Name' | translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="text" data-ng-model="user.FirstName" class="form-control text-input"
+                                    <input type="text" name="first-name" id="first-name"  data-ng-model="user.FirstName" class="form-control text-input"
                                            placeholder="Name" validator="required">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12">{{'Last Name' | translate}}</label>
+                                <label for="last-name"  class="control-label col-md-12">{{'Last Name' | translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="text" data-ng-model="user.LastName" class="form-control text-input"
+                                    <input type="text" name="last-name" id="last-name" data-ng-model="user.LastName" class="form-control text-input"
                                            placeholder="Last Name" validator="required">
                                 </div>
                             </div>
@@ -53,10 +53,10 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12">{{'Confirm your email' | translate}}</label>
+                                <label class="control-label col-md-12" for="confirm-email">{{'Confirm your email' | translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="email" data-ng-model="user.ConfirmEmail"
+                                    <input type="email" name="confirm-email" id="confirm-email"  data-ng-model="user.ConfirmEmail"
                                            class="form-control text-input"
                                            placeholder="me@example.com" validator="required,email">
                                 </div>
@@ -67,10 +67,10 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12">{{'Create a password' | translate}}</label>
+                                <label class="control-label col-md-12" for="password">{{'Create a password' | translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="password" data-ng-model="user.Password"
+                                    <input type="password"  name="password" id="password" data-ng-model="user.Password"
                                            class="form-control text-input"
                                            placeholder="Password" validator="required">
                                 </div>
@@ -78,11 +78,11 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12">{{'Confirm your password' |
+                                <label class="control-label col-md-12" for="confirm-password">{{'Confirm your password' |
                                     translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="password" data-ng-model="user.ConfirmPassword"
+                                    <input type="password"  name="confirm-password" id="confirm-password" data-ng-model="user.ConfirmPassword"
                                            class="form-control text-input"
                                            placeholder="Re-Password" validator="required" passwd-check="user.Password" password-match="user.ConfirmPassword">
                                 </div>
@@ -92,8 +92,7 @@
 
                     <div class="row" style=" padding: 20px 0 20px 0;">
                         <div class="col-md-2  pull-left">
-                            <a class="btn btn-default" href="#/login"> {{'Back to
-                                login' | translate}}</a>
+                            <a class="btn btn-default" href="#/login"> {{'Back to login' | translate}}</a>
 
                         </div>
                         <div class="col-md-2  pull-right">

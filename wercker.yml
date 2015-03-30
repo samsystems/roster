@@ -4,7 +4,7 @@ build:
     - setup-go-workspace
     - script:
         name: Adjust API url
-        code: sed -i 's/http://localhost:8085//g' ui/app/src/config.js
+        code: sed -i 's/http:\/\/localhost:8085//g' ui/app/src/config.js
 
 deploy:
   steps:

@@ -1,19 +1,22 @@
 'use strict';
 
-angular.module('invoice').controller('InvoiceViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'DateTimeService', 'Invoice', '$timeout', function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, DateTimeService, Invoice, $timeout) {
+angular.module('sale').controller('InvoiceViewController', ['$scope', '$rootScope', 'dialogs', '$state', 'toaster', '$stateParams', 'config', 'DateTimeService', 'Invoice', '$timeout', function ($scope, $rootScope, dialogs, $state, toaster, $stateParams, config, DateTimeService, Invoice, $timeout) {
 
     var id = (!_.isUndefined($stateParams.id)) ? $stateParams.id : null;
     $scope.invoice = {};
 
-    if(id != null){
-        $scope.invoice = Invoice.$find(id);
-        $scope.invoice.products.$fetch().$asPromise().then(function (response) {
-            for (var i = 0; i < response.length; i++) {
-                response[i].Product.Price = parseFloat(response[i].Product.Price);
-                response[i].Quantity = parseInt(response[i].Quantity);
-            }
-            $scope.InvoiceProducts =  response;
-        })
+    if (id != null) {
+        $scope.invoice = Invoice.$find(id).$then(function () {
+            $scope.invoice.itemProducts.$fetch().$asPromise().then(function (response) {
+                for (var i = 0; i < response.length; i++) {
+                    response[i].Product.Price = parseFloat(response[i].Product.Price);
+                    response[i].Quantity = parseInt(response[i].Quantity);
+
+                }
+                $scope.InvoiceProducts = response;
+
+            })
+        });
     }
 
 

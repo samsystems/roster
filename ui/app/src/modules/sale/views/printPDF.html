@@ -11,9 +11,9 @@
             <div style="float: right">
                 <p>{{invoicePdf.Customer.Name}}
                     <br/>
-                    {{invoicePdf.Customer.Address}}
+                    {{invoicePdf.BillingLocation.Address}}
                     <br/>
-                    {{invoicePdf.Customer.City}}, {{invoicePdf.Customer.Zipcode}}
+                    {{invoicePdf.BillingLocation.City}}, {{invoicePdf.BillingLocation.Zipcode}}
                     <br/>
                     {{invoicePdf.Customer.Country.Name}}
                 </p>
@@ -30,9 +30,9 @@
                         <p>
                             {{invoicePdf.Customer.Name}}
                             <br/>
-                            {{invoicePdf.Customer.Address}}
+                            {{invoicePdf.ShippingLocation.Address}}
                             <br/>
-                            {{invoicePdf.Customer.City}}, {{invoicePdf.Customer.Zipcode}}
+                            {{invoicePdf.ShippingLocation.City}}, {{invoicePdf.ShippingLocation.Zipcode}}
                             <br/>
                             {{invoicePdfCustomer.Country.Name}}
                         </p>
@@ -62,7 +62,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="(key,item) in invoicePdf.products">
+                        <tr data-ng-repeat="(key,item) in invoicePdf.itemProducts">
                             <td style="cursor:pointer; text-align: center">
                                 {{key +1 }}
                             </td>

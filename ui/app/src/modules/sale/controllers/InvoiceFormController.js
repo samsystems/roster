@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company) {
+angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
+    function ($scope, $rootScope, $stateParams, config, $state, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company) {
 
 
         $scope.type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : null;
@@ -29,7 +29,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             $scope.invoice = Invoice.$find($stateParams.id);
         } else {
             $scope.invoice = Invoice.$build();
-            $scope.invoice.products.$build().$reveal();
+            $scope.invoice.Currency = 'USD';
+            $scope.invoice.Date = DateTimeService.nowIsoFormat();
+            $scope.invoice.itemProducts.$build().$reveal();
             var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
                 $scope.invoice.OrderNumber = response.max;
             });
@@ -44,23 +46,24 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
                 var idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
                 $scope.invoice.ShippingLocation = $scope.invoice.BillingLocation;
                 $scope.invoice.ShippingLocation.Id = idLocation;
-                angular.element('#billingAddress').attr('readonly', true);
-                angular.element('#billingAddress1').attr('readonly', true);
-                angular.element('#billingCity').attr('readonly', true);
-                angular.element('#billingState').attr('readonly', true);
-                angular.element('#billingZipcode').attr('readonly', true);
+                angular.element('#shippingAddress').attr('readonly', true);
+                angular.element('#shippingAddress1').attr('readonly', true);
+                angular.element('#shippingCity').attr('readonly', true);
+                angular.element('#shippingState').attr('readonly', true);
+                angular.element('#shippingZipcode').attr('readonly', true);
             }
             else {
+                $scope.invoice.BillingLocation =jQuery.extend({}, $scope.invoice.ShippingLocation);
                 $scope.invoice.ShippingLocation.Address = '';
                 $scope.invoice.ShippingLocation.Address1 = '';
                 $scope.invoice.ShippingLocation.City = '';
                 $scope.invoice.ShippingLocation.State = '';
                 $scope.invoice.ShippingLocation.Zipcode = '';
-                angular.element('#billingAddress').attr('readonly', false);
-                angular.element('#billingAddress1').attr('readonly', false);
-                angular.element('#billingCity').attr('readonly', false);
-                angular.element('#billingState').attr('readonly', false);
-                angular.element('#billingZipcode').attr('readonly', false);
+                angular.element('#shippingAddress').attr('readonly', false);
+                angular.element('#shippingAddress1').attr('readonly', false);
+                angular.element('#shippingCity').attr('readonly', false);
+                angular.element('#shippingState').attr('readonly', false);
+                angular.element('#shippingZipcode').attr('readonly', false);
             }
         }
 
@@ -99,17 +102,17 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         };
 
         $scope.addProduct = function (index) {
-            $scope.invoice.products.$build().$reveal();
+            $scope.invoice.itemProducts.$build().$reveal();
         }
 
         $scope.removeProduct = function (product) {
-            $scope.invoice.products.$remove(product);
+            $scope.invoice.itemProducts.$remove(product);
         }
 
-        $scope.getAmount = function (product) {
-            var quantity = (!isNaN(product.Quantity) && product.Quantity != "") ? parseInt(product.Quantity) : 0;
-            var price = (!isNaN(product.Price) && product.Price != "") ? parseFloat(product.Price) : 0;
-            var discount = (!isNaN(product.DiscountPrice) && product.DiscountPrice != "") ? parseFloat(product.DiscountPrice) : 0;
+        $scope.getAmount = function (item) {
+            var quantity = (!isNaN(item.Quantity) && item.Quantity != "") ? parseInt(item.Quantity) : 0;
+            var price = (!isNaN(item.Price) && item.Price != "") ? parseFloat(item.Price) : 0;
+            var discount = (!isNaN(item.DiscountPrice) && item.DiscountPrice != "") ? parseFloat(item.DiscountPrice) : 0;
             return  ( quantity * price ) - ( quantity * price * discount / 100);
         }
 
@@ -119,8 +122,8 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 //            var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 7;
 
             var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 7;
-            _.each($scope.invoice.products, function (product) {
-                total += $scope.getAmount(product);
+            _.each($scope.invoice.itemProducts, function (item) {
+                total += $scope.getAmount(item);
             })
             $scope.total = total;
             return  ( total) + ( total * tax / 100);
@@ -130,17 +133,17 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
             if (!_.isEmpty(product) && !_.isEmpty(product.Id)) {
                 $scope.subtotal = 0;
 
-                for (var i = 0; i < $scope.invoice.products.length; i++) {
+                for (var i = 0; i < $scope.invoice.itemProducts.length; i++) {
 
-                    if (!_.isEmpty($scope.invoice.products[i].Id)) {
-                        if ($scope.invoice.products[i].Id == product.Id) {
+                    if (!_.isEmpty($scope.invoice.itemProducts[i].Product.Id)) {
+                        if ($scope.invoice.itemProducts[i].Product.Id == product.Id) {
                             toaster.pop('error', 'Error', 'The product has already been added');
                             return;
                         }
                     }
                 }
-                var item = {Id: product.Id, Name: product.Name, Description: product.Description, Price: product.Price, DiscountPrice: product.DiscountPrice, Quantity: '1'};
-                $scope.invoice.products[$index] = item;
+                var item = {Product: product, Price: product.Price, DiscountPrice: product.DiscountPrice, Quantity: '1'};
+                $scope.invoice.itemProducts[$index] = item;
             } else {
                 toaster.pop('error', 'Error', 'Select an item');
             }
@@ -165,9 +168,9 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
         $scope.updateSubTotal = function () {
             $scope.subtotal = 0;
             $scope.total_amount = 0;
-            if ($scope.invoice && $scope.invoice.products) {
-                for (var i = 0; i < $scope.invoice.products.length; i++) {
-                    $scope.subtotal += $scope.invoice.products[i].Quantity * $scope.invoice.products[i].Price;
+            if ($scope.invoice && $scope.invoice.itemProducts) {
+                for (var i = 0; i < $scope.invoice.itemProducts.length; i++) {
+                    $scope.subtotal += $scope.invoice.itemProducts[i].Quantity * $scope.invoice.itemProducts[i].Price;
                 }
                 $scope.total_tax = $scope.subtotal * $scope.tax / 100;
                 $scope.total_amount = $scope.total_tax + $scope.subtotal;
@@ -176,7 +179,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
         $scope.save = function () {
             //  $validation.validate($scope, 'invoice').success(function () {
-            if ($scope.invoice.products.length > 0) {
+            if ($scope.invoice.itemProducts.length > 0) {
                 if (!_.isUndefined($scope.invoice.Id) && $scope.invoice.Id) {
                     $scope.invoice.Status = 'open';
 
@@ -206,24 +209,24 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency;
+                    invoice.Emails = $scope.invoice.Emails;
 
                     invoice.Status = 'open';
                     invoice.Type = $scope.type;
 
                     invoice.InvoiceProducts = [];
                     var count = 0;
-                    for (var i = 0; i < $scope.invoice.products.length; i++) {
-                        if ($scope.invoice.products[i].Name) {
-                            invoice.InvoiceProducts[count] = $scope.invoice.products[i];
+                    for (var i = 0; i < $scope.invoice.itemProducts.length; i++) {
+                        if ($scope.invoice.itemProducts[i].Product.Name) {
+                            invoice.InvoiceProducts[count] = $scope.invoice.itemProducts[i];
                             count++;
                         }
-
                     }
                     invoice.$save().$then(function (response) {
                         $rootScope.$broadcast('invoice::updated');
                         $rootScope.$broadcast('invoice::totalTab');
                         toaster.pop('success', 'Invoice Created', 'You have successfully created a new invoice.');
-                        //  $scope.$goTo($scope.step.list);
+                        $state.go("app.sale");
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
                     });

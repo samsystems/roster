@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('invoice').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q', '$window', '$location', '$timeout', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q, $window, $location, $timeout) {
+angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q','$window', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q, $window) {
 
     $scope.page = 1;
     $scope.search = {invoice: ""};
@@ -8,7 +8,7 @@ angular.module('invoice').controller('InvoiceListController', ['$scope', '$rootS
     $scope.limitInPage = config.application.limitInPage;
 
     $scope.search = function () {
-        // $scope.invoiceTable.reload()
+       // $scope.invoiceTable.reload()
     };
 
     $scope.refresh = function () {
@@ -62,63 +62,6 @@ angular.module('invoice').controller('InvoiceListController', ['$scope', '$rootS
         $scope.invoiceTable.reload();
     });
 
-    $scope.print = function (invoice) {
-        /* invoices = Object.keys(invoices).map(function (key) {
-         if (invoices[key]['checked']) return key
-         });
-         var count_check = 0;
-         var marcado = null;
-         angular.forEach(
-         invoices,
-         function (invoice) {
-         if (invoice) {
-         marcado = invoice;
-         count_check++;
-         console.log(count_check);
-         if (count_check > 1) {
-         toaster.pop('error', 'Error', 'Select only one invoice');
-         return;
-         }
-         }
-         });
-         if (count_check == 1) {
-         $location.path("/invoice/print/" + marcado);
-         }*/
-        $location.path("/invoice/print/" + invoice.Id);
-    };
-
-    $scope.pdf = function (invoice) {
-        /*  invoices = Object.keys(invoices).map(function (key) {
-         if (invoices[key]['checked']) return key
-         });
-         var count_check = 0;
-         var marcado = null;
-         angular.forEach(
-         invoices,
-         function (invoice) {
-         if (invoice) {
-         marcado = invoice;
-         count_check++;
-         if (count_check > 1) {
-         toaster.pop('error', 'Error', 'Select only one invoice');
-         return;
-         }
-         }
-         });
-         if (count_check == 1) {
-
-         }*/
-
-        $scope.invoicePdf = invoice;
-        $scope.invoicePdf.products.$fetch().$asPromise().then(function (response) {
-            $timeout(function () {
-                var html = document.getElementById('pdf').innerHTML;
-                Invoice.pdf(html).success(function (pdf_base64) {
-                    $window.open("data:pdf;base64, " + pdf_base64.response, true);
-                });
-            });
-        });
-    };
 
     $scope.removeInvoice = function (invoice) {
         dialogs.confirm('Remove a Invoice', 'Are you sure you want to remove a Invoice?').result.then(function (btn) {

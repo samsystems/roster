@@ -30,7 +30,6 @@ angular.module('inventory', [
     'dashboard',
     'product',
     'vendor',
-    'invoice',
     'contact',
     'customer',
     'company',

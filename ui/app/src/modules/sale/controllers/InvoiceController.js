@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'WizardHandler', 'Invoice', '$location', 'Country', 'State', '$print', '$http', '$timeout', '$window', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, WizardHandler, Invoice, $location, Country, State, $print, $http, $timeout, $window) {
+angular.module('sale').controller('InvoiceController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'WizardHandler', 'Invoice', '$location', 'Country', 'State', '$print', '$http', '$timeout', '$window', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, WizardHandler, Invoice, $location, Country, State, $print, $http, $timeout, $window) {
 
 //    updateTotalTabs();
 
@@ -81,34 +81,7 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     };
 
     // TODO: no spanish!
-    $scope.selectInvoice = function (invoice) {
-        $scope.invoice = Invoice.$find(invoice.Id).$then(function () {
-            if ($scope.invoice.Status != 'draft') {
-                disable(true, invoice);
-            } else
-                disable(false, invoice);
 
-            $scope.invoice.products.$fetch().$asPromise().then(function (response) {
-                for (var i = 0; i < response.length; i++) {
-                    response[i] = {
-                        Id:response[i].Id,
-                        Product:  response[i].Product,
-                        Price:  response[i].Product.Price,
-                        Quantity: response[i].Quantity,
-                        QuantitySave: parseInt(response[i].Quantity)
-                    };
-
-                }
-                $scope.invoice.InvoiceProducts = response;
-
-                delete $scope.invoice.Updater;
-                delete $scope.invoice.SubTotal;
-                delete $scope.invoice.TotalTax;
-                delete $scope.invoice.Amount;
-            })
-        });
-        $scope.$goTo($scope.step.form);
-    };
 
     $scope.copyto = function (invoices) {
         invoices = Object.keys(invoices).map(function (key) {
@@ -151,96 +124,9 @@ angular.module('invoice').controller('InvoiceController', ['$scope', '$rootScope
     };
 
 
-    $scope.sendMailPdf = function (invoices) {
-        invoices = Object.keys(invoices).map(function (key) {
-            if (invoices[key]['checked']) return key
-        });
-        var count_check = 0;
-        var marcado = null;
-        angular.forEach(
-            invoices,
-            function (invoice) {
-                if (invoice) {
-                    marcado = invoice;
-                    count_check++;
-                    if (count_check > 1) {
-                        console.log(count_check);
-                        toaster.pop('error', 'Error', 'Select only one invoice');
-                        return;
-                    }
-                }
-            });
-        if (count_check == 1) {
-            $scope.invoicePdf = Invoice.$find(marcado).$then(function () {
-                $timeout(function () {
-                    var html = document.getElementById('pdf').innerHTML;
-                    Invoice.sendMailPdf({html: html, id: marcado}, function () {
-                        toaster.pop('success', 'Invoice Mail', 'You have successfully send mail the invoices.');
-                    });
-                });
 
-            });
-        }
-
-    };
-    $scope.print = function (invoice) {
-        /* invoices = Object.keys(invoices).map(function (key) {
-         if (invoices[key]['checked']) return key
-         });
-         var count_check = 0;
-         var marcado = null;
-         angular.forEach(
-         invoices,
-         function (invoice) {
-         if (invoice) {
-         marcado = invoice;
-         count_check++;
-         console.log(count_check);
-         if (count_check > 1) {
-         toaster.pop('error', 'Error', 'Select only one invoice');
-         return;
-         }
-         }
-         });
-         if (count_check == 1) {
-         $location.path("/invoice/print/" + marcado);
-         }*/
-        console.log('dfdf');
-        $location.path("/invoice/print/" + invoice);
-    };
-
-    $scope.pdf = function (invoices) {
-        invoices = Object.keys(invoices).map(function (key) {
-            if (invoices[key]['checked']) return key
-        });
-        var count_check = 0;
-        var marcado = null;
-        angular.forEach(
-            invoices,
-            function (invoice) {
-                if (invoice) {
-                    marcado = invoice;
-                    count_check++;
-                    if (count_check > 1) {
-                        toaster.pop('error', 'Error', 'Select only one invoice');
-                        return;
-                    }
-                }
-            });
-        if (count_check == 1) {
-            $scope.invoicePdf = Invoice.$find(marcado).$then(function () {
-                $timeout(function () {
-                    var html = document.getElementById('pdf').innerHTML;
-                    Invoice.pdf(html).success(function (pdf_base64) {
-                        $window.open("data:pdf;base64, " + pdf_base64.response, true);
-                    });
-                });
-            });
-        }
-    };
 
     $scope.removeGeneral = function (invoices) {
-
         invoices = Object.keys(invoices).map(function (key) {
             if (invoices[key]['checked']) return {Id: key, 'Status': invoices[key]['Status']}
         });

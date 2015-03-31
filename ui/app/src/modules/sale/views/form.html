@@ -73,7 +73,6 @@
         </div>
     </div>
 </div>
-
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -88,21 +87,22 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="product in invoice.products">
+
+        <tr data-ng-repeat="item in invoice.itemProducts">
             <td>{{$last ? '*' : $index + 1}}</td>
             <td>
-                <input data-ng-model="product.Name"
+                <input data-ng-model="item.Product.Name"
                        autocomplete="off"
                        data-typeahead="product as product.Name for product in searchProducts($viewValue)"
                        data-typeahead-min-length="3"
                        data-typeahead-on-select="addItem($item, $index)"
                        type="text" />
             </td>
-            <td><input type="text" data-ng-model="product.Description"/></td>
-            <td><input type="text" style="width: 50px" data-ng-model="product.Quantity"/></td>
-            <td><input type="text" data-ng-model="product.Price"/></td>
+            <td><input type="text" data-ng-model="item.Product.Description"/></td>
+            <td><input type="text" style="width: 50px" data-ng-model="item.Quantity"/></td>
+            <td><input type="text" data-ng-model="item.Product.Price"/></td>
             <!--<td><input type="text" data-ng-model="product.DiscountPrice"/></td>-->
-            <td>{{getAmount(product) | currency: 'USD'}}</td>
+            <td>{{getAmount(item) | currency: 'USD'}}</td>
             <td>
                 <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(product)"
                         data-ng-show="!$last"></button>
@@ -298,7 +298,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <input data-ng-model="invoice.ShippingLocation.Address1" type="text"
+                    <input id="shippingAddress1" data-ng-model="invoice.ShippingLocation.Address1" type="text"
                            class="form-control" validator="required" placeholder="Apt/suite">
                 </div>
             </div>
@@ -306,19 +306,19 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <input data-ng-model="invoice.ShippingLocation.City" type="text"
+                    <input id="shippingCity" data-ng-model="invoice.ShippingLocation.City" type="text"
                            class="form-control" validator="required" placeholder="City">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <select class="form-control" data-ng-model="invoice.ShippingLocation.State.Id"
+                    <select id="shippingState" class="form-control" data-ng-model="invoice.ShippingLocation.State.Id"
                             data-ng-options="state.Id as state.Name for state in states"></select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <input data-ng-model="invoice.ShippingLocation.Zipcode" type="text"
+                    <input id="shippingZipcode" data-ng-model="invoice.ShippingLocation.Zipcode" type="text"
                            class="form-control" placeholder="Zipcode">
                 </div>
             </div>

@@ -31,7 +31,7 @@ func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/invoice", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
-	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}/products", handler.New(controller.GetAllProducts)).Methods("GET")
+	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}/item-products", handler.New(controller.GetAllProducts)).Methods("GET")
 }
 
 // @Title Get
@@ -234,9 +234,9 @@ func (c *InvoiceController) Delete(context appengine.Context, writer http.Respon
 		return nil, &handler.Error{err, "Entity Not Found", http.StatusNoContent}
 	}
 
-	if invoice.Status != "draft" {
+	/*if invoice.Status != "draft" {
 		return nil, &handler.Error{err, "You can only delete invoice with draft status", http.StatusNoContent}
-	}
+	}*/
 
 	models.DeleteInvoice(invoice)
 
@@ -278,6 +278,7 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	var subTotal float64 = 0
 	for i := 0; i < len(invoiceProducts); i++ {
 		subTotal += float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
+		log.Print(invoiceProducts[i].Product)
 		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
 		//		if product.Stock < invoiceProducts[i].Quantity {
 		//			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}

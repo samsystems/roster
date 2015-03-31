@@ -12,6 +12,7 @@ type Invoice struct {
 	Id                  string    `orm:"pk"`
 	Vendor              *Vendor   `orm:"null;rel(one)"`
 	Customer            *Customer `orm:"rel(one)" valid:"Entity(Creator)"`
+	Emails              string
 	BillingLocation     *Location `orm:"rel(one)"`
 	ShippingLocation    *Location `orm:"rel(one)"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
@@ -59,9 +60,15 @@ func GetInvoice(uid string) (*Invoice, error) {
 	}
 	if invoice.BillingLocation != nil {
 		o.Read(invoice.BillingLocation)
+		if invoice.BillingLocation.State != nil {
+			o.Read(invoice.BillingLocation.State)
+		}
 	}
 	if invoice.ShippingLocation != nil {
 		o.Read(invoice.ShippingLocation)
+		if invoice.ShippingLocation.State != nil {
+			o.Read(invoice.ShippingLocation.State)
+		}
 	}
 	return &invoice, err
 }
@@ -163,14 +170,14 @@ func DeleteInvoice(invoice *Invoice) {
 	o := orm.NewOrm()
 	invoice.Deleted = time.Now()
 	o.Update(invoice)
-	if invoice.Status == "draft" {
+	/*if invoice.Status == "draft" {
 		invoiceProducts := GetAllInvoiceProducts(invoice.Id)
 		for _, v := range invoiceProducts {
 			product := v.Product
 			//product.Stock =product.Stock+v.Quantity //to change now a product have a variation
 			o.Update(product)
 		}
-	}
+	}*/
 }
 
 func GetMaxOrderNumber() int {

@@ -13,9 +13,9 @@
             <div class="pull-right">
                 <p>{{invoice.Customer.Name}}
                     <br/>
-                    {{invoice.Customer.Address}}
+                    {{invoice.BillingLocation.Address}}
                     <br/>
-                    {{invoice.Customer.City}}, {{invoice.Customer.Zipcode}}
+                    {{invoice.BillingLocation.City}}, {{invoice.BillingLocation.Zipcode}}
                     <br/>
                     {{invoice.Customer.Country.Name}}
                 </p>
@@ -32,9 +32,9 @@
                         <p>
                             {{invoice.Customer.Name}}
                             <br/>
-                            {{invoice.Customer.Address}}
+                            {{invoice.ShippingLocation.Address}}
                             <br/>
-                            {{invoice.Customer.City}}, {{invoice.Customer.Zipcode}}
+                            {{invoice.ShippingLocation.City}}, {{invoice.ShippingLocation.Zipcode}}
                             <br/>
                             {{invoice.Customer.Country.Name}}
                         </p>
@@ -64,7 +64,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="(key,item) in invoice.products">
+                        <tr data-ng-repeat="(key,item) in invoice.itemProducts">
                             <td style="cursor:pointer; text-align: center">
                                 {{key +1 }}
                             </td>

@@ -20,7 +20,7 @@ type Invoice struct {
 	OrderNumber         int
 	ReferenceNumber     int32     `json:"ReferenceNumber,string"`
 	Date                time.Time `orm:"type(datetime)" json:"Date"`
-	DeliveryDate        time.Time `orm:"type(datetime)" json:"DeliveryDate"`
+	DueDate        time.Time `orm:"type(datetime)" json:"DueDate"`
 	Currency            string
 	DeliveryInstruction string
 	Status              string

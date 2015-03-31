@@ -185,7 +185,7 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
 
                     /*Temporal hasta averiguar la fecha*/
                     /* $scope.invoice.Date = '0001-01-01T00:00:00Z';
-                     $scope.invoice.DeliveryDate = '0001-01-01T00:00:00Z';*/
+                     $scope.invoice.DueDate = '0001-01-01T00:00:00Z';*/
 
                     $scope.invoice.$save().$then(function (response) {
                         $rootScope.$broadcast('invoice::updated');
@@ -205,7 +205,7 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
                     invoice.Date = $scope.invoice.Date;
                     // invoice.Date ='2015-02-25T00:19:09Z';
                     invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
-                    invoice.DeliveryDate = $scope.invoice.DeliveryDate;
+                    invoice.DueDate = $scope.invoice.DueDate;
 
                     invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
                     invoice.Currency = $scope.invoice.Currency;

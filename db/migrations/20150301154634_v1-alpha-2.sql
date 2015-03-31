@@ -1977,9 +1977,9 @@ INSERT INTO `state` (`id`, `country_id`, `creator_id`, `updater_id`, `name`, `ac
 
 ALTER TABLE `invoice` CHANGE `customer_shipping_id` `shipping_location_id` VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
 ALTER TABLE `invoice` DROP FOREIGN KEY `FK_906517441D9540B`;
-ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9540B` FOREIGN KEY (`shipping_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9540B` FOREIGN KEY (`shipping_location_id`) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `invoice` ADD `billing_location_id` VARCHAR(36) NOT NULL AFTER `customer_id` , ADD INDEX (`billing_location_id`);
-ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9541B` FOREIGN KEY (`billing_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9541B` FOREIGN KEY (`billing_location_id`) REFERENCES `location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `invoice` ADD `type` VARCHAR(50) NOT NULL AFTER `status`;
 ALTER TABLE `invoice` ADD `emails` VARCHAR(255) NULL AFTER `customer_id`;
 ALTER TABLE `invoice` CHANGE `delivery_date` `due_date` DATETIME NULL ;

@@ -1982,6 +1982,7 @@ ALTER TABLE `invoice` ADD `billing_location_id` VARCHAR(36) NOT NULL AFTER `cust
 ALTER TABLE `invoice` ADD CONSTRAINT `FK_906517441D9541B` FOREIGN KEY (`billing_location_id`) REFERENCES `inventory`.`location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `invoice` ADD `type` VARCHAR(50) NOT NULL AFTER `status`;
 ALTER TABLE `invoice` ADD `emails` VARCHAR(255) NULL AFTER `customer_id`;
+ALTER TABLE `invoice` CHANGE `delivery_date` `due_date` DATETIME NULL ;
 
 
 

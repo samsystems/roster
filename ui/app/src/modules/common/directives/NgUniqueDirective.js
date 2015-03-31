@@ -18,7 +18,6 @@ angular.module("common").directive("ngUnique", function (CommonService, $validat
                         //Ensure value that being checked hasn't changed
                         //since the Ajax call was made
                         if (currentValue == element.val()) {
-                            console.log('unique = ' + unique.data);
                             if (unique.data) {
                                 var messageElem = element.closest('.form-group');
                                 messageElem.removeClass('has-error');

@@ -45,7 +45,6 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
     });
 
     /* $rootScope.$on('invoice::created', function (event, invoice) {
-     console.log('on draft');
      if (!_.isEmpty(invoice) && invoice.status=='draft') {
      $scope.total = invoiceResource.findCount(invoice.status);
      $scope.invoices.push(invoice);
@@ -107,7 +106,6 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
          if (invoice) {
          marcado = invoice;
          count_check++;
-         console.log(count_check);
          if (count_check > 1) {
          toaster.pop('error', 'Error', 'Select only one invoice');
          return;

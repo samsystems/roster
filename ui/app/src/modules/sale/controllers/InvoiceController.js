@@ -65,7 +65,6 @@ angular.module('sale').controller('InvoiceController', ['$scope', '$rootScope', 
         disable(false, $scope.invoice);
         var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
             $scope.invoice.OrderNumber = response.max;
-            console.log(response.max);
         });
 
         $scope.$goTo($scope.step.form);
@@ -233,7 +232,6 @@ angular.module('sale').controller('InvoiceController', ['$scope', '$rootScope', 
      }
      });
      $scope.$on('$viewContentLoaded', function() {
-     console.log('ok');
      if($stateParams.action=='newInvoice'){
      $scope.createInvoice();
      }

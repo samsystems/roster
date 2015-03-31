@@ -21,8 +21,7 @@ angular.module('common').config(['$validationProvider','$injector', function($va
                     //Ensure value that being checked hasn't changed
                     //since the Ajax call was made
                     if (currentValue == element.val()) {
-                        console.log('unique = ' + unique.data);
-                  return !unique.data;
+                      return !unique.data;
                     }
                 });
         }

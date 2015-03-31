@@ -84,5 +84,8 @@ func RegisterHandlers(r *mux.Router) {
 
 	productVariationController := controllers.ProductVariationController{}
 	productVariationController.RegisterHandlers(router)
+	
+	commonController := controllers.CommonController{}
+	commonController.RegisterHandlers(router)
 
 }

@@ -2,16 +2,16 @@
 
 angular.module('common').factory('CommonService', ['$http', '$resource', '$window', 'config', function ($http, $resource, $window, config) {
     return {
-        checkUniqueValue: function (id, property, value, idValue) {
+        checkUniqueValue: function (key, property, value, idValue) {
             var data = {
-                id: id,
+                key: key,
                 property: property,
                 value: value,
                 idValue: idValue
             };
             return $http({
                 method: 'GET',
-                url: config.api.baseUrl + '/'+property+'/is-unique-value/' + id + '/' + value + '/' + idValue
+                url: config.api.baseUrl + '/common/is-unique-value/'+key+'/' + property + '/' + value + '/' + idValue
             });
         }
     }

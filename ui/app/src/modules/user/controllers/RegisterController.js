@@ -70,12 +70,12 @@ angular.module('user').controller('RegisterController', ['$scope', '$window', '$
             }
         };
 
-        $scope.toStepTwo = function () {
-            $validation.validate($scope, 'form').success(function () {
-                $scope.$goTo($scope.step.register2);
-            }).error(function () {
-                toaster.pop('error', 'Error', 'Complete the required entry fields.');
-            });
+        $scope.toStepTwo = function (registerForm) {
+             $validation.validate(registerForm).success(function () {
+            $scope.$goTo($scope.step.register2);
+              }).error(function () {
+             toaster.pop('error', 'Error', 'Complete the required entry fields.');
+             });
         };
 
         $scope.toStepOne = function () {
@@ -83,29 +83,14 @@ angular.module('user').controller('RegisterController', ['$scope', '$window', '$
         };
 
 
-        $scope.save = function () {
-           /* if (!_.isUndefined($scope.user) && $scope.user.Id) {
-
-                $scope.user.$save().$then(function (response) {
-                    $rootScope.$broadcast('user::updated');
-                    toaster.pop('success', 'User Updated ', 'You have been successfully updated a user.')
-                    $scope.$goTo($scope.step.list);
-                }, function () {
-                    toaster.pop('error', 'Error', 'Something went wrong a new User could not be created');
-                });
-            } else {
-*/
+        $scope.save = function (register2Form) {
+            $validation.validate(register2Form).success(function () {
                 var user = User.$build();
                 user.FirstName = $scope.user.FirstName;
                 user.LastName = $scope.user.LastName;
                 user.Email = $scope.user.Email;
                 user.Password = $scope.user.Password;
                 user.Company = $scope.user.Company;
-            /*    user.Company.EmployerNumber = $scope.user.Company.EmployerNumber;
-                user.Company.Industry.Id = $scope.user.Company.Industry.Id;
-                user.Company.CompanyScope.Id = $scope.user.Company.CompanyScope.Id;
-                user.Company.Location.Address = $scope.user.Company.Location.Address;
-                user.Company.Location.Address1 = $scope.user.Company.Location.Address1;*/
                 user.DOB = $scope.user.DOB;
                 user.SSN = $scope.user.SSN;
                 user.Phone = $scope.user.Phone;
@@ -117,9 +102,8 @@ angular.module('user').controller('RegisterController', ['$scope', '$window', '$
                 }, function () {
                     toaster.pop('error', 'Error', 'Something went wrong a new User could not be created');
                 });
-        //    }
-            //   }).error(function () {
-            //       toaster.pop('error', 'Error', 'Complete the required entry fields.');
-            //    });
+            }).error(function () {
+                toaster.pop('error', 'Error', 'Complete the required entry fields.');
+            });
         };
     }]);

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('common').config(['$validationProvider', function($validationProvider) {
+angular.module('common').config(['$validationProvider','$injector', function($validationProvider,$injector) {
 
     var expression = {
         required: function(value) {
@@ -11,7 +11,21 @@ angular.module('common').config(['$validationProvider', function($validationProv
         number: function(value) {
             return !isNaN(value);
         },
-        phone: /([0-9]{10,14})|(^\s*$)/
+        phone: /([0-9]{10,14})|(^\s*$)/,
+        unique: function (value, scope, element, attrs) {
+            var keyProperty = scope.$eval(attrs.ngUnique);
+            var currentValue = element.val();
+
+            $injector.get('CommonService').checkUniqueValue(keyProperty.key, keyProperty.property, currentValue, keyProperty.id)
+                .then(function (unique) {
+                    //Ensure value that being checked hasn't changed
+                    //since the Ajax call was made
+                    if (currentValue == element.val()) {
+                        console.log('unique = ' + unique.data);
+                  return !unique.data;
+                    }
+                });
+        }
     };
 
     var defaultMsg = {
@@ -34,6 +48,10 @@ angular.module('common').config(['$validationProvider', function($validationProv
         phone: {
             error: 'This field should be a phone number.',
             success: 'Field is valid'
+        },
+        unique: {
+            error: 'This should be Huei Tan',
+            success: 'Thanks!'
         }
     };
 

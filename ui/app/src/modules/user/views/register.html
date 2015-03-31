@@ -16,24 +16,28 @@
                 <p style="text-align: center">Signing up for Roster is fast and free - no commitments or
                     long term contracts. </p>
 
-                <form role="form" name="form" id="form" class="form-horizontal group-border">
+                <form role="form" name="registerForm" id="registerForm" class="form-horizontal group-border">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label for="first-name" class="control-label col-md-12">{{'First Name' | translate}}</label>
+                                <label for="firstName" class="control-label col-md-12">{{'First Name' |
+                                    translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="text" name="first-name" id="first-name"  data-ng-model="user.FirstName" class="form-control text-input"
+                                    <input type="text" name="firstName" id="firstName" data-ng-model="user.FirstName"
+                                           class="form-control text-input"
                                            placeholder="Name" validator="required">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label for="last-name"  class="control-label col-md-12">{{'Last Name' | translate}}</label>
+                                <label for="lastName" class="control-label col-md-12">{{'Last Name' |
+                                    translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="text" name="last-name" id="last-name" data-ng-model="user.LastName" class="form-control text-input"
+                                    <input type="text" name="lastName" id="lastName" data-ng-model="user.LastName"
+                                           class="form-control text-input"
                                            placeholder="Last Name" validator="required">
                                 </div>
                             </div>
@@ -43,20 +47,26 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12" for="email">{{'Enter your email' | translate}}</label>
+                                <label class="control-label col-md-12" for="email">{{'Enter your email' |
+                                    translate}}</label>
+
                                 <div class="col-md-12">
-                                    <input type="email" name="email" id="email" data-ng-model="user.Email" class="form-control text-input"
-                                           placeholder="me@example.com" validator="required,email" ng-uniqu="{key: 'User', property: 'email'}">
+                                    <input type="email" name="email" id="email" data-ng-model="user.Email"
+                                           class="form-control text-input"
+                                           placeholder="me@example.com" validator="required,email"
+                                           ng-unique="{key: 'User', property: 'email',id: 0}">
                                     <span class="help-block" ng-show="form.email.$error.uniqueValue">Email is already taken.</span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12" for="confirm-email">{{'Confirm your email' | translate}}</label>
+                                <label class="control-label col-md-12" for="confirmEmail">{{'Confirm your email' |
+                                    translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="email" name="confirm-email" id="confirm-email"  data-ng-model="user.ConfirmEmail"
+                                    <input type="email" name="confirmEmail" id="confirmEmail"
+                                           data-ng-model="user.ConfirmEmail"
                                            class="form-control text-input"
                                            placeholder="me@example.com" validator="required,email">
                                 </div>
@@ -67,10 +77,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12" for="password">{{'Create a password' | translate}}</label>
+                                <label class="control-label col-md-12" for="password">{{'Create a password' |
+                                    translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="password"  name="password" id="password" data-ng-model="user.Password"
+                                    <input type="password" name="password" id="password" data-ng-model="user.Password"
                                            class="form-control text-input"
                                            placeholder="Password" validator="required">
                                 </div>
@@ -78,13 +89,15 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label col-md-12" for="confirm-password">{{'Confirm your password' |
+                                <label class="control-label col-md-12" for="confirmPassword">{{'Confirm your password' |
                                     translate}}</label>
 
                                 <div class="col-md-12">
-                                    <input type="password"  name="confirm-password" id="confirm-password" data-ng-model="user.ConfirmPassword"
+                                    <input type="password" name="confirmPassword" id="confirmPassword"
+                                           data-ng-model="user.ConfirmPassword"
                                            class="form-control text-input"
-                                           placeholder="Re-Password" validator="required" passwd-check="user.Password" password-match="user.ConfirmPassword">
+                                           placeholder="Re-Password" validator="required" passwd-check="user.Password"
+                                           password-match="user.ConfirmPassword">
                                 </div>
                             </div>
                         </div>
@@ -96,7 +109,7 @@
 
                         </div>
                         <div class="col-md-2  pull-right">
-                            <button class="btn btn-primary pull-right" data-ng-click="toStepTwo()">
+                            <button class="btn btn-primary pull-right" data-ng-click="toStepTwo(registerForm)">
                                 {{'Continue' |
                                 translate}}
                             </button>
@@ -122,23 +135,28 @@
 
                 <p style="text-align: center">Signing up for Roster is fast and free - no commitments or
                     long term contracts. </p>
-
-                <form role="form" class="form-horizontal group-border">
+                <form role="form" name="register2Form" id="register2Form" class="form-horizontal group-border">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'Business Name' | translate}}</label>
-                                <input type="text" data-ng-model="user.Company.Name" class="form-control text-input"
-                                       placeholder="Name" validator="required">
+                                <label class="control-label col-md-12">{{'Business Name' | translate}}</label>
+
+                                <div class="col-md-12">
+                                    <input type="text" id="companyName" name="companyName" data-ng-model="user.Company.Name" class="form-control text-input"
+                                           placeholder="Name" validator="required">
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'Employer Identification Number' |
+                                <label class="control-label col-md-12">{{'Employer Identification Number' |
                                     translate}}</label>
-                                <input type="text" data-ng-model="user.Company.EmployerNumber"
-                                       class="form-control text-input"
-                                       placeholder="00-0000000">
+
+                                <div class="col-md-12">
+                                    <input type="text" id="companyEmployerNumber" name="companyEmployerNumber" data-ng-model="user.Company.EmployerNumber"
+                                           class="form-control text-input"
+                                           placeholder="00-0000000">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -146,18 +164,25 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'Industry' |
+                                <label class="control-label col-md-12">{{'Industry' |
                                     translate}}</label>
-                                <select class="form-control" data-ng-model="user.Company.Industry.Id"
-                                        data-ng-options="industry.Id as industry.Description for industry in industries"></select>
+
+                                <div class="col-md-12">
+                                    <select class="form-control" id="companyIndustry" name="companyIndustry" data-ng-model="user.Company.Industry.Id"
+                                            data-ng-options="industry.Id as industry.Description for industry in industries"></select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'How do you plan to use Roster?' |
+                                <label for="companyCompanyScope" class="control-label col-md-12">{{'How do you plan to use Roster?' |
                                     translate}}</label>
-                                <select id="company" class="form-control" data-ng-model="user.Company.CompanyScope.Id"
-                                        data-ng-options="companyScope.Id as companyScope.Name for companyScope in companyScopes"></select>
+
+                                <div class="col-md-12">
+                                    <select id="companyCompanyScope" name="companyCompanyScope"  class="form-control"
+                                            data-ng-model="user.Company.CompanyScope.Id"
+                                            data-ng-options="companyScope.Id as companyScope.Name for companyScope in companyScopes"></select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -165,21 +190,26 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group login-input">
-                                <label class="col-md-16 control-label">{{'Address' |
+                                <label for="companyLocationAddress" class="control-label col-md-12">{{'Address' |
                                     translate}}</label>
-                                <input type="text" data-ng-model="user.Company.Location.Address"
-                                       class="form-control text-input"
-                                       placeholder="Street Address" validator="required">
+
+                                <div class="col-md-12">
+                                    <input type="text" data-ng-model="user.Company.Location.Address"
+                                           class="form-control text-input" id="companyLocationAddress" name="companyLocationAddress"
+                                           placeholder="Street Address" validator="required">
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group login-input">
-                                <input type="text" data-ng-model="user.Company.Location.Address1"
-                                       class="form-control text-input"
-                                       placeholder="Suite/Unit" validator="required">
+                            <div class="col-md-12">
+                                <div class="form-group login-input">
+                                    <input type="text" data-ng-model="user.Company.Location.Address1" id="companyLocationAddress1" name="companyLocationAddress1"
+                                           class="form-control text-input"
+                                           placeholder="Suite/Unit">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -187,49 +217,64 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'City' | translate}}</label>
-                                <input type="text" data-ng-model="user.Company.Location.City"
-                                       class="form-control text-input"
-                                       placeholder="City" validator="required">
+                                <label for="companyLocationCity" class="control-label col-md-12">{{'City' | translate}}</label>
+
+                                <div class="col-md-12">
+                                    <input type="text" data-ng-model="user.Company.Location.City" id="companyLocationCity" name="companyLocationCity"
+                                           class="form-control text-input"
+                                           placeholder="City" validator="required">
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'State' | translate}}</label>
-                                <select class="form-control" data-ng-model="user.Company.Location.State.Id"
-                                        data-ng-options="state.Id as state.Name for state in states" validator="required"></select>
+                                <label for="companyLocationState" class="control-label col-md-12">{{'State' | translate}}</label>
+                                <div class="col-md-12">
+                                <select class="form-control" data-ng-model="user.Company.Location.State.Id" id="companyLocationState" name="companyLocationState"
+                                        data-ng-options="state.Id as state.Name for state in states"
+                                        validator="required"></select>
+                            </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'Zipcode' | translate}}</label>
-                                <input type="text" data-ng-model="user.Company.Location.ZipCode"
+                                <label for="companyLocationZipCode" class="control-label col-md-12">{{'Zipcode' | translate}}</label>
+                                <div class="col-md-12">
+                                <input type="text" data-ng-model="user.Company.Location.ZipCode" id="companyLocationZipCode" name="companyLocationZipCode"
                                        class="form-control text-input"
                                        placeholder="Zipcode" validator="required">
                             </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'DOB' | translate}}</label>
-                                <date-time-picker class="col-md-12" data-ng-model="user.DOB"
-                                                  data-format="date" data-max-date="now" validator="required"></date-time-picker>
+                                <label for="DOB" class="control-label col-md-12">{{'DOB' | translate}}</label>
+                                <div class="col-md-12">
+                                <date-time-picker class="col-md-12" data-ng-model="user.DOB" id="DOB" name="DOB"
+                                                  data-format="date" data-max-date="now"
+                                                  validator="required"></date-time-picker>
+                            </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'Last 4 digit of SSN' | translate}}</label>
-                                <input type="text" data-ng-model="user.SSN" class="form-control text-input"
+                                <label for="SSN" class="control-label col-md-12">{{'Last 4 digit of SSN' | translate}}</label>
+                                <div class="col-md-12">
+                                <input type="text" data-ng-model="user.SSN" class="form-control text-input" id="SSN" name="SSN"
                                        placeholder="SSN" validator="required">
                             </div>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group login-input">
-                                <label class="control-label">{{'Phone' | translate}}</label>
-                                <input type="text" data-ng-model="user.Company.Phone" class="form-control text-input"
-                                       placeholder="Phone" validator="required">
+                                <label for="companyPhone" class="control-label col-md-12">{{'Phone' | translate}}</label>
+                                <div class="col-md-12">
+                                <input type="text" data-ng-model="user.Company.Phone" class="form-control text-input"id="companyPhone" name="companyPhone"
+                                       placeholder="Phone" validator="required,phone">
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -243,7 +288,7 @@
 
                         </div>
                         <div class="col-md-2 pull-right">
-                            <button class="btn btn-primary pull-right" data-ng-click="save()">
+                            <button class="btn btn-primary pull-right" data-ng-click="save(register2Form)">
                                 {{'Finish' |
                                 translate}}
                             </button>

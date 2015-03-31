@@ -119,6 +119,7 @@ angular.module('invoice').controller('InvoiceFormController', ['$scope', '$rootS
 
         $scope.invoice.TotalTax = 7;
         $scope.getTotal = function (product) {
+            console.log('ok');
             var total = 0;
 //            var tax = (!isNaN($scope.invoice.TotalTax) && $scope.invoice.TotalTax != "") ? parseInt($scope.invoice.TotalTax) : 7;
 

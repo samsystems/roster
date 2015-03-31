@@ -146,7 +146,7 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
             $timeout(function () {
                 var html = document.getElementById('pdf').innerHTML;
                 Invoice.pdf(html, true).success(function (pdf_base64) {
-                    $window.open("data:pdf;base64, " + pdf_base64.response, true);
+                    $window.open("data:application/pdf;base64, " + pdf_base64.response, false);
                 });
             });
         });

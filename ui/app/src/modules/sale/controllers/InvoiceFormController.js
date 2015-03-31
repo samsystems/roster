@@ -53,7 +53,7 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
                 angular.element('#shippingZipcode').attr('readonly', true);
             }
             else {
-                $scope.invoice.BillingLocation =jQuery.extend({}, $scope.invoice.ShippingLocation);
+                $scope.invoice.BillingLocation = jQuery.extend({}, $scope.invoice.ShippingLocation);
                 $scope.invoice.ShippingLocation.Address = '';
                 $scope.invoice.ShippingLocation.Address1 = '';
                 $scope.invoice.ShippingLocation.City = '';
@@ -177,62 +177,72 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
             }
         };
 
-        $scope.save = function () {
-            //  $validation.validate($scope, 'invoice').success(function () {
-            if ($scope.invoice.itemProducts.length > 0) {
-                if (!_.isUndefined($scope.invoice.Id) && $scope.invoice.Id) {
-                    $scope.invoice.Status = 'open';
+        $scope.save = function (form) {
+            $validation.validate(form).success(function () {
+                if ($scope.invoice.itemProducts.length > 0) {
+                    if (!_.isUndefined($scope.invoice.Id) && $scope.invoice.Id) {
+                        $scope.invoice.Status = 'open';
 
-                    /*Temporal hasta averiguar la fecha*/
-                    /* $scope.invoice.Date = '0001-01-01T00:00:00Z';
-                     $scope.invoice.DueDate = '0001-01-01T00:00:00Z';*/
+                        /*Temporal hasta averiguar la fecha*/
+                        /* $scope.invoice.Date = '0001-01-01T00:00:00Z';
+                         $scope.invoice.DueDate = '0001-01-01T00:00:00Z';*/
 
-                    $scope.invoice.$save().$then(function (response) {
-                        $rootScope.$broadcast('invoice::updated');
-                        $rootScope.$broadcast('invoice::totalTab');
-                        toaster.pop('success', 'Invoice Updated ', 'You have been successfully updated a invoice.')
-                        $scope.$goTo($scope.step.list);
-                    }, function () {
-                        toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
-                    });
-                } else {
+                        $scope.invoice.$save().$then(function (response) {
+                            $rootScope.$broadcast('invoice::updated');
+                            $rootScope.$broadcast('invoice::totalTab');
+                            toaster.pop('success', 'Invoice Updated ', 'You have been successfully updated a invoice.')
+                            $scope.$goTo($scope.step.list);
+                        }, function () {
+                            toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
+                        });
+                    } else {
 
-                    var invoice = Invoice.$build();
-                    invoice.Customer = {'Id': $scope.invoice.Customer.Id};
-                    //invoice.CustomerShipping = {'Id': $scope.invoice.CustomerShipping.Id};
-                    invoice.BillingLocation = $scope.invoice.BillingLocation;
-                    invoice.ShippingLocation = $scope.invoice.ShippingLocation;
-                    invoice.Date = $scope.invoice.Date;
-                    // invoice.Date ='2015-02-25T00:19:09Z';
-                    invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
-                    invoice.DueDate = $scope.invoice.DueDate;
+                        var invoice = Invoice.$build();
 
-                    invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
-                    invoice.Currency = $scope.invoice.Currency;
-                    invoice.Emails = $scope.invoice.Emails;
-
-                    invoice.Status = 'open';
-                    invoice.Type = $scope.type;
-
-                    invoice.InvoiceProducts = [];
-                    var count = 0;
-                    for (var i = 0; i < $scope.invoice.itemProducts.length; i++) {
-                        if ($scope.invoice.itemProducts[i].Product.Name) {
-                            invoice.InvoiceProducts[count] = $scope.invoice.itemProducts[i];
-                            count++;
+                        invoice.InvoiceProducts = [];
+                        var count = 0;
+                        for (var i = 0; i < $scope.invoice.itemProducts.length; i++) {
+                            if (!_.isUndefined($scope.invoice.itemProducts[i].Product))
+                                if ($scope.invoice.itemProducts[i].Product.Name) {
+                                    invoice.InvoiceProducts[count] = $scope.invoice.itemProducts[i];
+                                    count++;
+                                }
                         }
+                        if (invoice.InvoiceProducts.length == 0) {
+                            toaster.pop('error', 'Error', 'You must add at least one product.');
+                            return;
+                        }
+                        invoice.Customer = {'Id': $scope.invoice.Customer.Id};
+                        invoice.BillingLocation = $scope.invoice.BillingLocation;
+                        invoice.ShippingLocation = $scope.invoice.ShippingLocation;
+                        invoice.Date = $scope.invoice.Date;
+                        
+                        invoice.DeliveryInstruction = $scope.invoice.DeliveryInstruction;
+                        invoice.DueDate = $scope.invoice.DueDate;
+
+                        invoice.ReferenceNumber = $scope.invoice.ReferenceNumber;
+                        invoice.Currency = $scope.invoice.Currency;
+                        invoice.Emails = $scope.invoice.Emails;
+
+                        invoice.Status = 'open';
+                        invoice.Type = $scope.type;
+
+
+
+                        invoice.$save().$then(function (response) {
+                            $rootScope.$broadcast('invoice::updated');
+                            $rootScope.$broadcast('invoice::totalTab');
+                            toaster.pop('success', 'Invoice Created', 'You have successfully created a new invoice.');
+                            $state.go("app.sale");
+                        }, function () {
+                            toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
+                        });
                     }
-                    invoice.$save().$then(function (response) {
-                        $rootScope.$broadcast('invoice::updated');
-                        $rootScope.$broadcast('invoice::totalTab');
-                        toaster.pop('success', 'Invoice Created', 'You have successfully created a new invoice.');
-                        $state.go("app.sale");
-                    }, function () {
-                        toaster.pop('error', 'Error', 'Something went wrong a new Invoice could not be created');
-                    });
-                }
-            } else
-                toaster.pop('error', 'Error', 'The invoice must have at least one product.');
+                } else
+                    toaster.pop('error', 'Error', 'The invoice must have at least one product.');
+            }).error(function () {
+                toaster.pop('error', 'Error', 'Complete the required entry fields.');
+            });
         };
 
     }]);

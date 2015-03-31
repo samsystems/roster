@@ -25,39 +25,38 @@ angular.module('product').controller('ProductFormController', ['$scope', '$rootS
     }
 
 
-    $scope.save = function() {
-        //$validation.validate($scope, 'product').success(function() {
+    $scope.save = function(productForm) {
+            $validation.validate(productForm).success(function() {validator="required"validator="required"validator="required"validator="required"sd
+                if(!_.isUndefined($scope.product.Id)){
+                    $scope.product.$save().$then(function(response) {
+                        for(var i = 0; i < $scope.product.variations.length; i++)
+                            $scope.product.variations[i].$save();
 
-            if(!_.isUndefined($scope.product.Id)){
-                $scope.product.$save().$then(function(response) {
-                    for(var i = 0; i < $scope.product.variations.length; i++)
-                        $scope.product.variations[i].$save();
+                        for(var i = 0; i < $scope.removeProducts.length; i++)
+                            $scope.removeProducts[i].$destroy();
 
-                    for(var i = 0; i < $scope.removeProducts.length; i++)
-                        $scope.removeProducts[i].$destroy();
+                        $rootScope.$broadcast('product::updated');
+                        toaster.pop('success', 'Product Updated ', 'You have been successfully updated a product.')
+                        $state.go("app.product");
+                    });
+                }else{
+                    $scope.product.$save().$then( function(response) {
+                        for(var i = 0; i < $scope.product.variations.length; i++)
+                            $scope.product.variations[i].$save();
 
-                    $rootScope.$broadcast('product::updated');
-                    toaster.pop('success', 'Product Updated ', 'You have been successfully updated a product.')
-                    //$state.go("app.product");
-                });
-            }else{
-                $scope.product.$save().$then( function(response) {
-                    for(var i = 0; i < $scope.product.variations.length; i++)
-                        $scope.product.variations[i].$save();
+                        for(var i = 0; i < $scope.removeProducts.length; i++)
+                            $scope.removeProducts[i].$destroy();
 
-                    for(var i = 0; i < $scope.removeProducts.length; i++)
-                        $scope.removeProducts[i].$destroy();
-
-                    $rootScope.$broadcast('product::created');
-                    toaster.pop('success', 'Product Created', 'You have successfully created a new product.');
-                   // $state.go("app.product");
-                }, function() {
-                    toaster.pop('error', 'Error', 'Something went wrong a new Product could not be created');
-                });
-            }
-            //$scope.$goTo($scope.step.list);
-        //}).error(function() {
-        //    toaster.pop('error', 'Error', 'Complete the required entry fields.');
-        //});
+                        $rootScope.$broadcast('product::created');
+                        toaster.pop('success', 'Product Created', 'You have successfully created a new product.');
+                        $state.go("app.product");
+                    }, function() {
+                        toaster.pop('error', 'Error', 'Something went wrong a new Product could not be created');
+                    });
+                }
+            }).error(function() {
+                toaster.pop('error', 'Error', 'Complete the required entry fields.');
+            });
+        }
     };
 }]);

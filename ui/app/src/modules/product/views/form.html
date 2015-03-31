@@ -1,13 +1,13 @@
 <page-content-title title="Create/Update Product"></page-content-title>
 
 <panel type="plain">
-    <form role="form" class="form-horizontal group-border">
+    <form role="form" class="form-horizontal group-border" name="productForm">
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="name" class="col-md-12 control-label" >{{'Name' | translate}}</label>
                     <div class="col-md-12">
-                        <input data-ng-model="product.Name" type="text" class="form-control" validator="required" >
+                        <input data-ng-model="product.Name" type="text" class="form-control" validator="required" name="name">
                     </div>
                 </div>
             </div>
@@ -15,7 +15,7 @@
                 <div class="form-group">
                     <label class="col-md-12 control-label" for="status">{{'Category' | translate}}</label>
                     <div class="col-md-12">
-                        <select class="form-control" data-ng-model="product.Category"  validator="required">
+                        <select class="form-control" data-ng-model="product.Category"  validator="required" name="category">
                             <option value="1">{{'Product' | translate}}</option>
                             <option value="1">{{'Service' | translate}}</option>
                         </select>
@@ -55,7 +55,7 @@
                 <div class="form-group">
                     <label for="manufacturer" class="col-md-12 control-label" >{{'Cost' | translate}}</label>
                     <div class="col-md-12">
-                        <input data-ng-model="product.Cost" type="text" class="form-control" validator="required" data-ng-disabled="!product.Purchasable">
+                        <input data-ng-model="product.Cost" type="text" class="form-control" data-ng-disabled="!product.Purchasable">
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="form-group">
                     <label for="manufacturer" class="col-md-12 control-label" >{{'Price' | translate}}</label>
                     <div class="col-md-12">
-                        <input data-ng-model="product.Price" type="text" class="form-control" validator="required"  data-ng-disabled="!product.Salable">
+                        <input data-ng-model="product.Price" type="text" class="form-control" data-ng-disabled="!product.Salable">
                     </div>
                 </div>
             </div>
@@ -104,41 +104,43 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th style="width: 35%">Variation</th>
-                    <th style="width: 15%">Code/Sku</th>
-                    <th style="width: 10%"> Stock</th>
-                    <th style="width: 5%">Alert</th>
-                    <th style="width: 10%">Alert At</th>
-                    <th style="width: 20%">Location</th>
-                    <th style="width: 5%"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="variation in product.variations">
-                    <td><input class="form-control" type="text" data-ng-model="variation.Variation"/></td>
-                    <td><input class="form-control" type="text" data-ng-model="variation.Sku"/></td>
-                    <td><input class="form-control" type="text" data-ng-model="variation.Stock"/></td>
-                    <td><input type="checkbox" data-ng-model="variation.Alert"/></td>
-                    <td><input class="form-control" type="text" data-ng-model="variation.AlertAt"/></td>
-                    <td><select class="form-control" data-ng-model="variation.Location.Id" data-ng-options="location.Id as location.Name for location in locations"></select></td>
-                    <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeVariations(variation)"></button></td>
-                </tr>
-                <tr>
-                    <td colspan="7">
-                        <button class="btn btn-default" data-ng-click="addVariation()">{{'Add' | translate}}</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width: 35%">Variation</th>
+                        <th style="width: 15%">Code/Sku</th>
+                        <th style="width: 10%"> Stock</th>
+                        <th style="width: 5%">Alert</th>
+                        <th style="width: 10%">Alert At</th>
+                        <th style="width: 20%">Location</th>
+                        <th style="width: 5%"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr data-ng-repeat="variation in product.variations">
+                            <td><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Variation" name="variation{{$index}}" validator="required"/></div></td>
+                            <td><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Sku" name="sku{{$index}}" validator="required"/></div></td>
+                            <td><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Stock" name="index{{$index}}" validator="required"/></div></td>
+                            <td><input type="checkbox" data-ng-model="variation.Alert"/></td>
+                            <td><input class="form-control" type="text" data-ng-model="variation.AlertAt"/></td>
+                            <td><select class="form-control" data-ng-model="variation.Location.Id" data-ng-options="location.Id as location.Name for location in locations"></select></td>
+                            <td><button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeVariations(variation)"></button></td>
+                        </tr>
+
+                    <tr>
+                        <td colspan="7">
+                            <button class="btn btn-default" data-ng-click="addVariation()">{{'Add' | translate}}</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
         </div><!-- End div .table-responsive -->
 
         <div class="row modal-footer" style="border-top:0px;">
             <div class="row col-md-4 pull-right">
                 <a class="btn btn-primary" href="#/products">{{'Cancel' | translate}}</a>
-                <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button>
+                <button class="btn btn-success ng-binding" data-ng-click="save(productForm)">{{'Save' | translate}}</button>
             </div>
         </div>
 

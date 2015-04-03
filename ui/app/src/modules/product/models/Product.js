@@ -39,6 +39,12 @@ angular.module('product').factory('Product', ['restmod','$http','config', functi
                 getCost: function () {
                     return this.Cost;
                 },
+                getPurchaseDescription: function(){
+                    return this.PurchaseDescription;
+                },
+                getSaleDescription: function(){
+                    return this.SaleDescription;
+                }
             },
             Model: {
                 count: function(search) {

@@ -3453,6 +3453,17 @@ div.gallery-upload .dropzone .dz-message:after {
   .invoice-from ul {
     text-align: center;
   }
+  /* ------------------ General --------------------*/
+  .text-center{
+    text-align: center;
+  }
+  .text-right{
+      text-align: right;
+  }
+  .text-left{
+      text-align: left;
+  }
+
   /* ------------------ Error page --------------------*/
   .error-page > .error-container {
     width: 380px;

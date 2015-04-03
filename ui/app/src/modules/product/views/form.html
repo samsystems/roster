@@ -17,7 +17,7 @@
                     <div class="col-md-12">
                         <select class="form-control" data-ng-model="product.Category"  validator="required" name="category">
                             <option value="1">{{'Product' | translate}}</option>
-                            <option value="1">{{'Service' | translate}}</option>
+                            <option value="2">{{'Service' | translate}}</option>
                         </select>
                     </div>
                 </div>
@@ -119,9 +119,9 @@
                     <tbody>
 
                         <tr data-ng-repeat="variation in product.variations">
-                            <td><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Variation" name="variation{{$index}}" validator="required"/></div></td>
-                            <td><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Sku" name="sku{{$index}}" validator="required"/></div></td>
-                            <td><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Stock" name="index{{$index}}" validator="required"/></div></td>
+                            <td><div class="col-md-12"><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Variation" name="variation{{$index}}" validator="required"/></div></div></td>
+                            <td><div class="col-md-12"><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Sku" name="sku{{$index}}" validator="required"/></div></div></td>
+                            <td><div class="col-md-12"><div class="form-group"><input class="form-control" type="text" data-ng-model="variation.Stock" name="index{{$index}}" validator="required"/></div></div></td>
                             <td><input type="checkbox" data-ng-model="variation.Alert"/></td>
                             <td><input class="form-control" type="text" data-ng-model="variation.AlertAt"/></td>
                             <td><select class="form-control" data-ng-model="variation.Location.Id" data-ng-options="location.Id as location.Name for location in locations"></select></td>

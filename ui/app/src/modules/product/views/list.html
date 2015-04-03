@@ -17,11 +17,11 @@
     <div class="table-responsive table-hover" data-ng-show="total > 0">
 
         <table ng-table="productTable" class="table" template-pagination="custom/pager">
-            <col width="20%"/>
+            <col width="30%"/>
             <col width="10%"/>
             <col width="10%"/>
             <col width="10%"/>
-            <col width="25%"/>
+            <col width="15%"/>
             <col width="10%"/>
             <col width="15%"/>
             <tbody>
@@ -29,17 +29,17 @@
                     <td data-title="'Name'" sortable="'name'"style="cursor:pointer;" data-ng-click="viewProduct(product)">
                         {{product.getName()}} <span href="#" tooltip="{{product.getDescription()}}">(...)</span>
                     </td>
-                    <td data-title="'Cost Price'" sortable="'price'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    <td data-title="'Cost Price'" sortable="'price'" style="cursor:pointer;" data-ng-click="viewProduct(product)" class="text-right">
                         {{product.getPrice() | currency: 'USD'}}
                     </td>
-                    <td data-title="'Sale Price'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    <td data-title="'Sale Price'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(product)" class="text-right">
                         {{product.getCost()}}
                     </td>
-                    <td data-title="'In Stock'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(product)">
+                    <td data-title="'In Stock'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(product)" class="text-right">
                         {{product.getStock()}}
                     </td>
-                    <td  data-title="'Category'" sortable="'description'" style="cursor:pointer;">{{product.getStringCategory()}}</td>
-                    <td data-title="'Action'">
+                    <td  data-title="'Category'" sortable="'description'" style="cursor:pointer;" class="text-center">{{product.getStringCategory()}}</td>
+                    <td data-title="'Action'" class="text-center">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default fa fa-edit btn-sm mr5 mb10" data-ng-click="selectProduct(product)"></button>
                             <button type="button" class="btn btn-danger fa fa-trash-o btn-sm mr5 mb10" data-ng-click="removeProduct(product)"></button>

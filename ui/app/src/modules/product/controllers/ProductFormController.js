@@ -26,7 +26,7 @@ angular.module('product').controller('ProductFormController', ['$scope', '$rootS
 
 
     $scope.save = function(productForm) {
-            $validation.validate(productForm).success(function() {validator="required"validator="required"validator="required"validator="required"sd
+            $validation.validate(productForm).success(function() {
                 if(!_.isUndefined($scope.product.Id)){
                     $scope.product.$save().$then(function(response) {
                         for(var i = 0; i < $scope.product.variations.length; i++)
@@ -58,5 +58,4 @@ angular.module('product').controller('ProductFormController', ['$scope', '$rootS
                 toaster.pop('error', 'Error', 'Complete the required entry fields.');
             });
         }
-    };
 }]);

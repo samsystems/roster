@@ -15,44 +15,54 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 100px;"><strong>Name</strong></td>
+                        <td><strong>Name</strong></td>
                         <td>{{product.getName()}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Price</strong></td>
-                        <td>{{product.getPrice()}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Serial</strong></td>
-                        <td>{{product.getSerial()}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Size</strong></td>
-                        <td>{{product.getSize()}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Sku</strong></td>
-                        <td>{{product.getSku()}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Status</strong></td>
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" data-ng-if="product.getStatus()==1" class="btn btn-success fa">Active</button>
-                                <button type="button" data-ng-if="product.getStatus()==2" class="btn btn-default fa">Inactive</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
+                        <td><strong>Category</strong></td>
+                        <td>{{product.getCategory() == 1 ? 'Product' : 'Service'}}</td>
                         <td><strong>Stock</strong></td>
                         <td>{{product.getStock()}}</td>
-                    </tr>
                     <tr>
-                        <td><strong>Manufacturer</strong></td>
-                        <td>{{product.getManufacturer()}}</td>
+                    <tr data-ng-show="product.Purchasable">
+                        <td><strong>Cost</strong></td>
+                        <td>{{product.getCost()}}</td>
+                        <td><strong> Purchase Account</strong></td>
+                        <td>{{product.PurchaseAccount.Name}}</td>
+                        <td><strong>Purchase Description</strong></td>
+                        <td>{{product.getPurchaseDescription()}}</td>
+                    </tr>
+                    <tr data-ng-show="product.Salable">
+                        <td><strong>Price</strong></td>
+                        <td>{{product.getPrice()}}</td>
+                        <td><strong>Sales Account</strong></td>
+                        <td>{{product.SaleAccount.Name}}</td>
+                        <td><strong>Sales Description</strong></td>
+                        <td>{{product.getSaleDescription()}}</td>
+                    </tr>
+                </table>
+                <table class="table table-hover" data-ng-show="product.variations.length">
+                    <thead>
+                    <tr>
+                        <th style="width: 35%">Variation</th>
+                        <th style="width: 15%">Code/Sku</th>
+                        <th style="width: 10%"> Stock</th>
+                        <th style="width: 5%">Alert</th>
+                        <th style="width: 10%">Alert At</th>
+                        <th style="width: 20%">Location</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="variation in product.variations">
+                        <td>{{variation.Variation}}</td>
+                        <td>{{variation.Sku}}</td>
+                        <td>{{variation.Stock}}</td>
+                        <td>{{variation.Alert}}</td>
+                        <td>{{variation.AlertAt}}</td>
+                        <td>{{variation.Location.Name}}</td>
                     </tr>
                     </tbody>
                 </table>
+
+
             </div>
         </div>
     </div>

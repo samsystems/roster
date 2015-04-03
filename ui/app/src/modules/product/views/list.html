@@ -33,7 +33,7 @@
                         {{product.getPrice() | currency: 'USD'}}
                     </td>
                     <td data-title="'Sale Price'" sortable="'stock'" style="cursor:pointer;" data-ng-click="viewProduct(product)" class="text-right">
-                        {{product.getCost()}}
+                        {{product.getCost() | currency: 'USD'}}
                     </td>
                     <td data-title="'In Stock'" sortable="'size'" style="cursor:pointer;" data-ng-click="viewProduct(product)" class="text-right">
                         {{product.getStock()}}

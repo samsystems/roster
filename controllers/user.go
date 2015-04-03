@@ -41,12 +41,6 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
 
-	//
-	//	if user.Company == nil {
-	//		company, _ := models.GetCompany("242495b7-69f4-4107-a4d8-850540e6b834")
-	//		user.Company = company
-	//	}
-
 	var user models.User
 
 	err1 := json.Unmarshal(data, &user)

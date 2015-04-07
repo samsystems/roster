@@ -1,16 +1,17 @@
-<page-content-title title="Invoice {{invoice.OrderNumber}}">
-    <div class="row" ng-show="type == 'invoice'">
-        <a title="Remove" data-ng-controller="InvoiceController" class="btn btn-primary pull-left" href=""
+<page-content-title title="{{invoice.Type | ucfirst}} {{TitleNumber}}">
+<page-content-title title="{{invoice.Type | ucfirst}} {{TitleNumber}}">
+    <div class="row" ng-show="invoice.Type == 'invoice'">
+        <a title="Remove" class="btn btn-primary pull-left" href=""
            data-ng-click="removeInvoice(invoice)"> Receive Payment</a>
         <select style="width: 120px; margin-left: 10px" class="form-control pull-right" data-ng-model="invoice.Currency"
                 data-ng-options="status.value as status.description for status in flag_status">
         </select>
     </div>
-    <div class="row" ng-show="type == 'estimate'">
-        <a title="Remove" data-ng-controller="InvoiceController" class="btn btn-primary pull-left" href=""
+    <div class="row" ng-show="invoice.Type == 'estimate'">
+        <a title="Remove" class="btn btn-primary pull-left" href=""
            data-ng-click="removeInvoice(invoice)"> Copy to Invoice</a>
         <select style="width: 120px; margin-left: 10px" class="form-control pull-right" data-ng-model="invoice.Currency"
-                data-ng-options="status.value as status.description for status in flag_status">
+                data-ng-options="status.value as status.description for status in flagStatus">
         </select>
     </div>
 </page-content-title>
@@ -68,7 +69,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label class="control-label col-md-12" for="date">{{'Date' | translate}}</label>
+                    <label class="control-label col-md-12">{{'Date' | translate}}</label>
 
                     <div class="col-md-12">
                         <date-time-picker class="col-md-12" data-ng-model="invoice.Date" validator="required"
@@ -81,7 +82,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label class="control-label col-md-12" for="dueDate">{{'Due Date' | translate}}</label>
+                    <label class="control-label col-md-12">{{'Due Date' | translate}}</label>
 
                     <div class="col-md-12">
                         <date-time-picker class="col-md-12" data-ng-model="invoice.DeliveryDate" validator="required"
@@ -142,7 +143,7 @@
         </tr>
         <tr>
             <td colspan="5" class="no-border"></td>
-            <td>Tax (%)</td>
+            <td>Tax ({{invoice.Tax}}%)</td>
             <td colspan="2"><input style="width: 50px" type="text" data-ng-model="invoice.TotalTax"/></td>
         </tr>
         <tr>
@@ -288,30 +289,3 @@
 </div>
 </form>
 </panel>
-
-<!--<form role="form" id="form_invoice">-->
-
-<!--<div class="row modal-footer" style="border-top:0px;">-->
-<!--<div class="row col-md-6 pull-right">-->
-<!--<button class="btn btn-primary ng-binding" data-ng-click="$close()">{{'Cancel' | translate}}</button>-->
-<!--&lt;!&ndash;  <button class="btn btn-success ng-binding" data-ng-click="save()">{{'Save' | translate}}</button> &ndash;&gt;-->
-<!--<button class="btn btn-success ng-binding"-->
-<!--ng-disabled="invoice.Status=='completed' || invoice.Status=='paid' || invoice.Status=='void'"-->
-<!--data-ng-click="save('draft')">{{flag_status.draft | translate}}-->
-<!--</button>-->
-<!--<button class="btn btn-success ng-binding"-->
-<!--ng-disabled="invoice.Status=='paid' || invoice.Status=='void' || invoice.Status=='completed'"-->
-<!--data-ng-click="save('completed')">{{flag_status.completed | translate}}-->
-<!--</button>-->
-<!--<button class="btn btn-success ng-binding"-->
-<!--ng-disabled="invoice.Status=='void' || invoice.Status=='paid'" data-ng-click="save('paid')">-->
-<!--{{flag_status.paid | translate}}-->
-<!--</button>-->
-<!--<button class="btn btn-success ng-binding" ng-disabled="invoice.Status=='void'"-->
-<!--data-ng-click="save('void')">{{flag_status.void| translate}}-->
-<!--</button>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--</form>-->
-<!--</div>-->

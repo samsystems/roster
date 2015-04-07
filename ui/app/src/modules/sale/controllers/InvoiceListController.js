@@ -8,7 +8,7 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
     $scope.limitInPage = config.application.limitInPage;
 
     $scope.search = function () {
-        // $scope.invoiceTable.reload()
+         $scope.invoiceTable.reload()
     };
 
     $scope.refresh = function () {
@@ -21,6 +21,7 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
         paid: 'success',
         void: 'danger'
     };
+
 
     $scope.invoiceTable = new ngTableParams({
         page: 1,            // show first page
@@ -62,36 +63,12 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
     });
 
     $scope.selectInvoice = function (invoice) {
-        $scope.invoice = Invoice.$find(invoice.Id).$then(function () {
-            if ($scope.invoice.Status != 'draft') {
-                disable(true, invoice);
-            } else
-                disable(false, invoice);
-
-            $scope.invoice.products.$fetch().$asPromise().then(function (response) {
-                for (var i = 0; i < response.length; i++) {
-                    response[i] = {
-                        Id:response[i].Id,
-                        Product:  response[i].Product,
-                        Price:  response[i].Product.Price,
-                        Quantity: response[i].Quantity,
-                        QuantitySave: parseInt(response[i].Quantity)
-                    };
-
-                }
-                $scope.invoice.InvoiceProducts = response;
-
-                delete $scope.invoice.Updater;
-                delete $scope.invoice.SubTotal;
-                delete $scope.invoice.TotalTax;
-                delete $scope.invoice.Amount;
-            })
-        });
-        $scope.$goTo($scope.step.form);
+        if(invoice.Status == 'open')
+        $location.path("/transaction/update/" + invoice.Id);
     };
 
     $scope.viewInvoice = function (invoice) {
-        $location.path("/invoice/view/" + invoice.Id);
+        $location.path("/transaction/view/" + invoice.Id);
     };
 
     $scope.print = function (invoice) {
@@ -115,7 +92,7 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
          if (count_check == 1) {
          $location.path("/invoice/print/" + marcado);
          }*/
-        $location.path("/invoice/print/" + invoice.Id);
+        $location.path("/transaction/print/" + invoice.Id);
     };
 
     $scope.pdf = function (invoice) {
@@ -156,10 +133,18 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
         dialogs.confirm('Remove a Invoice', 'Are you sure you want to remove a Invoice?').result.then(function (btn) {
             invoice.$destroy().$then(function () {
                 $rootScope.$broadcast('invoice::deleted');
-                $rootScope.$broadcast('invoice::totalTab');
                 toaster.pop('success', 'Invoice Deleted', 'You have successfully deleted a invoice.')
             });
         });
     };
+
+    $scope.void = function (invoice) {
+        invoice.Status = 'void';
+        invoice.$save().$then(function (response) {
+            $rootScope.$broadcast('invoice::updated');
+            toaster.pop('success', 'Invoice Updated ', 'You have been successfully to change de status to Void.')
+        });
+    };
+
     $scope.checkboxes = { InvoiceProducts: {} };
 }]);

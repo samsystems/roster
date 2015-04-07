@@ -1,0 +1,144 @@
+<page-content-title title="Receive Payment">
+</page-content-title>
+
+<panel type="plain">
+<form role="form" name="form" style="margin: 0 10px 0 10px" class="form-horizontal group-border">
+<div class="row">
+    <div class="col-md-5">
+        <div class="form-group">
+            <label for="customer" class="control-label col-md-12">{{'Customer' | translate}}:</label>
+
+            <div class="col-md-12">
+                <input id="customer" name="customer" data-ng-model="invoice.Customer" autocomplete="off"
+                       data-typeahead="customer as customer.Name for customer in searchCustomers($viewValue)"
+                       data-typeahead-min-length="3" type="text" class="form-control"
+                       data-typeahead-on-select=updateBillingShipping(invoice.Customer) validator="required">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="form-group pull-right" style="text-align: center">
+            <label class="control-label col-md-12">{{'AMOUNT RECEIVED' | translate}}</label>
+            <span>$0.00</span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="control-label col-md-12">{{'Payment Date' | translate}}</label>
+
+            <div class="col-md-12">
+                <date-time-picker class="col-md-12" data-ng-model="invoice.Date" validator="required"
+                                  name="date" id="date"
+                                  data-format="date" data-max-date="now"></date-time-picker>
+                <!--<input value="{{invoice.Date | outputFormatDate }}" output-format-date ng-if="!visible" readonly type="text"-->
+                <!--class="form-control"/>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-12">{{'Payment method' | translate}}</label>
+
+                    <div class="col-md-12">
+                        <select class="form-control" name="Currency" data-ng-model="invoice.Currency"
+                                data-ng-options="currency.value as currency.description for currency in currencies"
+                                validator="required">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-12" for="ReferenceNumber">{{'Reference' | translate}}</label>
+
+                    <div class="col-md-12">
+                        <input data-ng-model="invoice.ReferenceNumber" id="ReferenceNumber" name="ReferenceNumber" type="text"
+                               class="form-control" validator="number">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-12">{{'Deposit to' | translate}}</label>
+
+                    <div class="col-md-12">
+                        <select class="form-control" name="Currency" data-ng-model="invoice.Currency"
+                                data-ng-options="currency.value as currency.description for currency in currencies"
+                                validator="required">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 pull-right">
+        <div class="form-group">
+            <label class="control-label col-md-12" for="amountReceived">{{'Amount received' | translate}}</label>
+
+            <div class="col-md-12">
+                <input data-ng-model="invoice.ReferenceNumber" id="amountReceived" name="ReferenceNumber" type="text"
+                       class="form-control" validator="number">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive" style="margin-top: 20px">
+    <h4>Outstanding Transactions</h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th style="width: 5%">No.</th>
+            <th style="width: 30%">Description</th>
+            <th style="width: 20%">Due Date</th>
+            <th style="width: 10%">Original Amount</th>
+            <th style="width: 10%">Open Balance</th>
+            <!--<th style="width: 10%">Disc %</th>-->
+            <th colspan="2" style="width: 10%">Payment</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr data-ng-repeat="item in invoice.itemProducts">
+            <td>{{$last ? '*' : $index + 1}}</td>
+            <td>
+                <input data-ng-model="item.Product.Name"
+                       autocomplete="off"
+                       data-typeahead="product as product.Name for product in searchProducts($viewValue)"
+                       data-typeahead-min-length="3"
+                       data-typeahead-on-select="addItem($item, $index)"
+                       type="text"/>
+            </td>
+            <td><input type="text" data-ng-model="item.Product.Description"/></td>
+            <td><input type="text" style="width: 50px" data-ng-model="item.Quantity"/></td>
+            <td><input type="text" data-ng-model="item.Product.Price"/></td>
+            <!--<td><input type="text" data-ng-model="product.DiscountPrice"/></td>-->
+            <td>{{getAmount(item) | currency: 'USD'}}</td>
+            <td>
+                <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(product)"
+                        data-ng-show="!$last"></button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <button class="btn btn-default" data-ng-click="addProduct($index)">{{'Add' | translate}}</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="row modal-footer" style="border-top:0px;">
+    <div class="row col-md-4 pull-right">
+        <a class="btn btn-primary" href="#/sales/index">{{'Cancel' | translate}}</a>
+        <button class="btn btn-success ng-binding" data-ng-click="save(form)">{{'Save' | translate}}</button>
+    </div>
+</div>
+</form>
+</panel>

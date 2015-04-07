@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
+angular.module('sale').controller('ReceivePaymentFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
     function ($scope, $rootScope, $stateParams, config, $state, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company) {
 
         $scope.states = State.$search();
@@ -11,7 +11,7 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
             });
         });
 
-        var flagStatusInvoice = [
+        $scope.flag_status = [
             {"value": "open", "description": "Open"},
             {"value": "partial", "description": "Partial"},
             {"value": "paid", "description": "Paid"},
@@ -22,25 +22,12 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
         ];
 
 
-        var flagStatusEstimate = [
-            {"value": "pending", "description": "Pending"},
-            {"value": "accepted", "description": "Accepted"},
-            {"value": "Closed", "description": "closed"},
-            {"value": "Denied", "description": "denied"}
-        ];
-
-
         $scope.currencies = [
             {"value": "USD", "description": "USD United States Dollar"}
         ];
         $scope.now = DateTimeService.nowIsoFormat();
         $scope.invoice = {};
         $scope.invoice.Type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : 'invoice';
-        if ($scope.invoice.Type == 'invoice')
-            $scope.flagStatus = flagStatusInvoice;
-        else
-            $scope.flagStatus = flagStatusEstimate;
-
         $scope.TitleNumber = '';
         if (!_.isUndefined($stateParams.id)) {
             $scope.invoice = Invoice.$find($stateParams.id).$then(function () {

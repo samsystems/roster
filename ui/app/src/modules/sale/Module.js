@@ -13,31 +13,34 @@ angular.module('sale', [
             templateUrl: 'src/modules/sale/views/list.html',
             controller: 'SaleController'
         })
-        .state('app.invoice', {
-            url: 'invoice',
-            templateUrl: 'src/modules/sale/views/index.html',
-            controller: 'InvoiceController'
+        .state('app.receivePaymet-create', {
+            url: 'transaction/create/receivePaymet',
+            templateUrl: 'src/modules/sale/views/receivePaymet/form.html',
+            controller: 'ReceivePaymentFormController'
         })
         .state('app.invoice-create', {
-            url: 'invoice/create/:type',
+            url: 'transaction/create/:type',
             templateUrl: 'src/modules/sale/views/form.html',
             controller: 'InvoiceFormController'
         })
-        .state('app.invoice-update', {
-            url: 'invoice/update/:id',
-            templateUrl: 'src/modules/sale/views/form.html',
-            controller: 'InvoiceFormController'
+        .state('app.invoice/print', {
+            url: 'transaction/print/:id',
+            templateUrl: 'src/modules/sale/views/print.html',
+            controller: 'InvoicePrintController'
         })
         .state('app.invoice/view', {
-            url: 'invoice/view/:id',
+            url: 'transaction/view/:id',
             templateUrl: 'src/modules/sale/views/detail.html',
             controller: 'InvoiceViewController'
         })
-        .state('app.invoice/print', {
-            url: 'invoice/print/:id',
-            templateUrl: 'src/modules/sale/views/print.html',
-            controller: 'InvoicePrintController'
+        .state('app.invoice-update', {
+            url: 'transaction/:action/:id',
+            templateUrl: 'src/modules/sale/views/form.html',
+            controller: 'InvoiceFormController'
         });
+
+
+
 
     $validationProvider.setExpression({
         checkQuantity: function (value, scope, element, attrs) {

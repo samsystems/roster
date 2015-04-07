@@ -5,27 +5,12 @@
 <div class="box-info">
 <div class="row" style="margin: 0 0 10px 18px">
     <div class="pull-right">
-        <button class="btn btn-warning" data-ng-click=""><i class="fa fa-send"></i> EMAIL</button>
-        <button class="btn btn-default" data-ng-click="print(invoice)"><i class="fa fa-print"></i> PRINT</button>
-        <button class="btn btn-dropbox" data-ng-click="pdf(invoice)"><i class="fa fa-file-pdf-o"></i> PDF</button>
-        <div class="btn-group mr10">
-            <button type="button" class="btn btn-primary"> Invoice Options</button>
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
-                <li ng-show="invoice.Status == 'paid'"><a href="#/transaction/print/{{invoice.Id}}">PRINT</a></li>
-                <li><a href="#" data-ng-click="viewInvoice(invoice)">PREVIEW</a></li>
-                <li><a href="#" data-ng-click="pdf(invoice)">PDF</a></li>
-                <li><a href="#" data-ng-click="sendMailPdf(invoice)">EMAIL</a></li>
-                <li><a href="#/transaction/copyto/{{invoice.Id}}">COPY</a></li>
-                <li><a href="#" data-ng-click="void(invoice)">VOID</a></li>
-            </ul>
-        </div>
+        <p class="text-right"><strong>{{invoice.Created | outputFormatDateTime }}</strong></p>
     </div>
     <div class="pull-left">
-        <h4 class="text-right"><strong>{{invoice.Status | ucfirst}}</strong></h4>
+        <a class="btn btn-danger btn-sm" data-ng-click="removeInvoice(invoice)"><i class="fa fa-trash-o"></i> {{'Remove' |
+            translate}}</a>
+        <a href="#/sales/index" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
     </div>
 </div>
 

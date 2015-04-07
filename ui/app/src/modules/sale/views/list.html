@@ -6,8 +6,9 @@
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
-            <li><a href="#/invoice/create/invoice">New Invoice</a></li>
-            <li><a href="#/invoice/create/estimate">New Estimate</a></li>
+            <li><a href="#/transaction/create/invoice">New Invoice</a></li>
+            <li><a href="#/transaction/create/estimate">New Estimate</a></li>
+            <li><a href="#/transaction/create/receivePaymet">New Receive Payment</a></li>
         </ul>
     </div>
 </page-content-title>
@@ -47,8 +48,10 @@
                                template-pagination="custom/pager">
                             <col width="10%"/>
                             <col width="10%"/>
-                            <col width="15%"/>
-                            <col width="15%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
                             <col width="10%"/>
                             <col width="10%"/>
                             <col width="15%"/>
@@ -97,15 +100,22 @@
                                          <button type="button" data-ng-class="(invoice.Status=='draft') ? '' : 'disabled'"
                                                  class="btn btn-danger fa fa-trash-o"
                                                  data-ng-click="removeInvoice(invoice)"></button>-->
-                                        <button class="btn btn-warning" data-ng-click="sendMailPdf(invoice)"><i
-                                                class="fa fa-send"></i> EMAIL
-                                        </button>
-                                        <button class="btn btn-default" data-ng-click="print(invoice)"><i
-                                                class="fa fa-print"></i> PRINT
-                                        </button>
-                                        <button class="btn btn-dropbox" data-ng-click="pdf(invoice)"><i
-                                                class="fa fa-file-pdf-o"></i> PDF
-                                        </button>
+
+                                        <div class="btn-group mr10 mb10">
+                                            <button type="button" class="btn btn-primary"> Actions</button>
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                <span class="caret"></span>
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
+                                                <li ng-show="invoice.Status == 'paid'"><a href="#/transaction/print/{{invoice.Id}}">PRINT</a></li>
+                                                <li><a href="#" data-ng-click="viewInvoice(invoice)">PREVIEW</a></li>
+                                                <li><a href="#" data-ng-click="pdf(invoice)">PDF</a></li>
+                                                <li><a href="#" data-ng-click="sendMailPdf(invoice)">EMAIL</a></li>
+                                                <li><a href="#/transaction/copyto/{{invoice.Id}}">COPY</a></li>
+                                                <li><a href="#" data-ng-click="void(invoice)">VOID</a></li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

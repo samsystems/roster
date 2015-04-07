@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Customer', 'State', 'ngTableParams', '$filter', '$q', '$state',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, State, ngTableParams, $filter, $q, $state) {
+angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Customer', 'State', 'ngTableParams', '$filter', '$q', '$state', '$upload', '$http', '$window',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, State, ngTableParams, $filter, $q, $state, $upload, $http, $window) {
 
         $scope.page = 1;
         $scope.total = 0;
@@ -53,5 +53,38 @@ angular.module('customer').controller('CustomerController', ['$scope', '$rootSco
                 });
             });
         };
+
+        $scope.onFileSelect = function () {
+            var file = $scope.uploadFile;
+            $scope.upload = $upload.upload({
+                url: config.api.baseUrl + '/documents',
+                data: {
+                    documentType: 'GENERAL'
+                },
+                file: file
+            }).progress(function (evt) {
+                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+            }).success(function (data, status, headers, config) {
+                if (data.id) {
+                    $scope.contact.document = data;
+                    /*$scope.contact.$update({id: $scope.contact.id}, function(response) {
+                     $rootScope.$broadcast('contact::updated', response);
+                     toaster.pop('success', 'Document Uploaded', 'You have been successfully uploaded a new document.')
+                     });*/
+                }
+            }).error(function () {
+                toaster.pop('error', 'Document Upload', 'An error ocurred while trying to upload the selected document. Please try again.');
+            });
+        };
+
+
+        $scope.downloadDocument = function (document) {
+            $http({
+                method: 'GET',
+                url: config.api.baseUrl + '/documents/base64/' + document.id + '/' + document.Company.Id
+            }).success(function (response) {
+                $window.open("data:" + response.type + ";base64, " + response.base64, document.name);
+            });
+        }
 
     }]);

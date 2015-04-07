@@ -35,5 +35,10 @@ angular.module('customer', [
             templateUrl: 'src/modules/customer/views/detail.html',
             controller: 'CustomerViewController'
         })
+        .state('app.customer-import', {
+            url: 'customers/import',
+            templateUrl: 'src/modules/customer/views/import.html',
+            controller: 'CustomerController'
+        })
     ;
 }]);

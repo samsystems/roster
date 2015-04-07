@@ -3,6 +3,9 @@
 angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
     function ($scope, $rootScope, $stateParams, config, $state, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company) {
 
+        $scope.invoice = {};
+        $scope.Type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : 'invoice';
+
         $scope.states = State.$search();
         User.$find(User.getCurrentUserId()).$asPromise().then(function (user) {
             Company.$find(user.Company.Id).$asPromise().then(function (company) {
@@ -34,8 +37,7 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
             {"value": "USD", "description": "USD United States Dollar"}
         ];
         $scope.now = DateTimeService.nowIsoFormat();
-        $scope.invoice = {};
-        $scope.invoice.Type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : 'invoice';
+
         if ($scope.invoice.Type == 'invoice')
             $scope.flagStatus = flagStatusInvoice;
         else
@@ -70,6 +72,7 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
                     $scope.invoice.Status = 'open';
                     $scope.invoice.Id = null;
                 }
+                $scope.Type = $scope.invoice.Type;
             });
 
 

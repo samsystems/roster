@@ -24,7 +24,7 @@ type InvoiceController struct {
 
 func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/invoice/count", handler.New(controller.Count)).Methods("GET")
-	r.Handle("/invoice/max-ordernumber", handler.New(controller.GetMaxOrderNumber)).Methods("GET")
+	r.Handle("/invoice/{type:[a-zA-Z\\-]+}/max-ordernumber", handler.New(controller.GetMaxOrderNumber)).Methods("GET")
 	r.Handle("/invoice/resume/{status:[a-zA-Z\\-]+}", handler.New(controller.GetInvoiceResume)).Methods("GET")
 	r.Handle("/invoice/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/invoice", handler.New(controller.GetAll)).Methods("GET")
@@ -98,8 +98,9 @@ func (controller *InvoiceController) Count(context appengine.Context, writer htt
 // @Success 200 int
 // @router /max-ordernumber [get]
 func (controller *InvoiceController) GetMaxOrderNumber(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	typeData := v["type"]
 	total := make(map[string]interface{})
-	total["max"] = models.GetMaxOrderNumber()
+	total["max"] = models.GetMaxOrderNumber(typeData)
 
 	return total, nil
 }
@@ -267,7 +268,7 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.Creator = user
 	invoice.Updater = user
 	invoice.Tax = company.Tax
-	invoice.OrderNumber = models.GetMaxOrderNumber()
+	invoice.OrderNumber = models.GetMaxOrderNumber(invoice.Type)
 	invoiceProducts := invoice.InvoiceProducts
 	invoice.InvoiceProducts = nil
 
@@ -286,9 +287,9 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 		//		product.Stock = product.Stock - invoiceProducts[i].Quantity
 		invoiceProducts[i].Product = product
 	}
-	invoice.SubTotal = subTotal
+	invoice.SubTotal = RoundPlus((subTotal), 2)
 	invoice.TotalTax = RoundPlus((subTotal*float64(invoice.Tax))/100, 2)
-	invoice.Amount = invoice.TotalTax + subTotal
+	invoice.Amount = invoice.TotalTax + invoice.SubTotal
 
 	if invoice.BillingLocation != nil {
 		billingLocation := invoice.BillingLocation

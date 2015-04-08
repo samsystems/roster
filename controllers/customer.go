@@ -26,6 +26,7 @@ func (controller *CustomerController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}/contacts", handler.New(controller.GetAllContacts)).Methods("GET")
+	r.Handle("/customer/import", handler.New(controller.Import)).Methods("POST")
 }
 
 // @Title Get
@@ -296,4 +297,29 @@ func (controller *CustomerController) GetAllContacts(context appengine.Context, 
 	uidCustomer := v["uid"]
 	var contacts []models.Contact = models.GetAllContactByOwner("customer", uidCustomer)
 	return contacts, nil
+}
+
+
+func (controller *CustomerController) Import(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+
+	err := request.ParseMultipartForm(100000)
+	
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return nil, nil
+	}
+
+	//get a ref to the parsed multipart form
+	dataForm := request.MultipartForm
+	files := dataForm.File["fileUpload"]
+	if files !=nil{
+		file, err := files[0].Open()
+		defer file.Close()
+		
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
+	}
+	return nil, nil
+
 }

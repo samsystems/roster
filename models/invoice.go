@@ -116,46 +116,43 @@ func GetAllInvoices(status string, page int, order string, count bool, limit int
 }
 
 func GetInvoiceByKeyword(status string, keyword string, page int, order string, count bool, limit int) ([]Invoice, interface{}) {
-	var invoices []Invoice
-	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
 	if limit < 0 {
 		limit = INVOICE_LIMIT
 	}
-	// Construct query object
-	if count == false {
-		qb.Select("inv.*")
-	} else {
-		qb.Select("count(inv.id)")
-	}
-
-	qb.From("invoice inv").Where("inv.reference_number LIKE ?").And("inv.deleted is null")
-	// execute the raw query string
 	o := orm.NewOrm()
 	if count == true {
+		qb, _ := orm.NewQueryBuilder("mysql")
+		qb.Select("count(inv.id)")
+		qb.From("invoice inv").LeftJoin("customer c").On("inv.customer_id = c.id").Where("inv.reference_number LIKE ? or c.name LIKE ?").And("inv.deleted is null")
+		// execute the raw query string
+		
 		var total int
 		if status != "all" {
 			qb.And("status = ?")
 			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%", status).QueryRow(&total)
-			return invoices, total
+			o.Raw(sql, "%"+keyword+"%","%"+keyword+"%", status).QueryRow(&total)
+			return nil, total
 		} else {
 			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%").QueryRow(&total)
-			return invoices, total
+			o.Raw(sql, "%"+keyword+"%","%"+keyword+"%").QueryRow(&total)
+			return nil, total
 		}
 
 	} else {
+		var invoices []Invoice
+		querySetter := o.QueryTable("invoice")
 		if status != "all" {
-			qb.And("status = ?")
-			ParseQueryBuilderOrder(qb, order, "invoice")
-			qb.Limit(limit).Offset(page * INVOICE_LIMIT)
-			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%", status).QueryRows(&invoices)
+			querySetter = querySetter.Filter("status", status).Filter("deleted__isnull", true).Filter("reference_number__iexact", "%"+keyword+"%")
+			
+			querySetter = ParseQuerySetterOrder(querySetter.RelatedSel("Customer"), order)
+			querySetter.Offset(page * limit).Limit(limit).All(&invoices)
 			return invoices, nil
 		} else {
-			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%").QueryRows(&invoices)
+			querySetter = querySetter.Filter("deleted__isnull", true).Filter("reference_number__icontains", keyword)
+			
+			querySetter = ParseQuerySetterOrder(querySetter.RelatedSel("Customer"), order)
+			querySetter.Offset(page * limit).Limit(limit).All(&invoices)
 			return invoices, nil
 		}
 	}
@@ -180,13 +177,17 @@ func DeleteInvoice(invoice *Invoice) {
 	}*/
 }
 
-func GetMaxOrderNumber() int {
+func GetMaxOrderNumber(typeData string) int {
 	o := orm.NewOrm()
 	var total int
 	qb, _ := orm.NewQueryBuilder("mysql")
-	qb.Select("max(inv.order_number)").From("invoice inv")
+	qb.Select("max(inv.order_number)").From("invoice inv").Where("inv.type = ?")
 	sql := qb.String()
-	o.Raw(sql).QueryRow(&total)
+	
+	err:=o.Raw(sql, typeData).QueryRow(&total)
+	if err != nil {
+		panic(err)
+	}
 	return total + 1
 }
 

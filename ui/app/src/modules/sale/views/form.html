@@ -1,12 +1,12 @@
 <page-content-title title="{{Type | ucfirst}} {{TitleNumber}}">
-    <div class="row" ng-show="invoice.Type == 'invoice'">
+    <div class="row" ng-show="Type == 'invoice'">
         <a title="Remove" class="btn btn-primary pull-left" href=""
            data-ng-click="removeInvoice(invoice)"> Receive Payment</a>
         <select style="width: 120px; margin-left: 10px" class="form-control pull-right" data-ng-model="invoice.Currency"
-                data-ng-options="status.value as status.description for status in flag_status">
+                data-ng-options="status.value as status.description for status in flagStatus">
         </select>
     </div>
-    <div class="row" ng-show="invoice.Type == 'estimate'">
+    <div class="row" ng-show="Type == 'estimate'">
         <a title="Remove" class="btn btn-primary pull-left" href=""
            data-ng-click="removeInvoice(invoice)"> Copy to Invoice</a>
         <select style="width: 120px; margin-left: 10px" class="form-control pull-right" data-ng-model="invoice.Currency"

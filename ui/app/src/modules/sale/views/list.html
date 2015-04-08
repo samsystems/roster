@@ -57,8 +57,8 @@
                             <col width="15%"/>
                             <tr class="items" data-ng-repeat="invoice in $data">
                                 <td data-title="'Number'" sortable="'orderNumber'" style="cursor:pointer;"
-                                    data-ng-click="viewInvoice(invoice)">
-                                    INV-{{invoice.OrderNumber}}
+                                    data-ng-click="selectInvoice(invoice)">
+                                    {{invoice.OrderNumber}}
                                 </td>
                                 <td data-title="'Type'" sortable="'referenceNumber'" style="cursor:pointer;"
                                     data-ng-click="viewInvoice(invoice)">
@@ -108,12 +108,11 @@
                                                 <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
-                                                <li ng-show="invoice.Status == 'paid'"><a href="#/transaction/print/{{invoice.Id}}">PRINT</a></li>
-                                                <li><a href="#" data-ng-click="viewInvoice(invoice)">PREVIEW</a></li>
+                                                <li><a href="#/transaction/print/{{invoice.Id}}">PRINT</a></li>
                                                 <li><a href="#" data-ng-click="pdf(invoice)">PDF</a></li>
                                                 <li><a href="#" data-ng-click="sendMailPdf(invoice)">EMAIL</a></li>
-                                                <li><a href="#/transaction/copyto/{{invoice.Id}}">COPY</a></li>
-                                                <li><a href="#" data-ng-click="void(invoice)">VOID</a></li>
+                                                <li ng-show="invoice.Status != 'void'"><a href="#/transaction/copyto/{{invoice.Id}}">COPY</a></li>
+                                                <li ng-show="invoice.Status != 'void'"><a href="#" data-ng-click="void(invoice)">VOID</a></li>
                                             </ul>
                                         </div>
                                     </div>

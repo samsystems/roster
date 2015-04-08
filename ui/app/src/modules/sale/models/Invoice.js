@@ -24,10 +24,11 @@ angular.module('sale').factory('Invoice', ['restmod', 'config','$http', function
                 }
             },
             Model: {
-                maxOrderNumber: function() {
+                maxOrderNumber: function(type) {
                     return $http({
                         method: 'GET',
-                        url: config.api.baseUrl + '/invoice/max-ordernumber'
+                        url: config.api.baseUrl + '/invoice/'+type+'/max-ordernumber'
+
                     });
                 },
                 getResume: function(status) {

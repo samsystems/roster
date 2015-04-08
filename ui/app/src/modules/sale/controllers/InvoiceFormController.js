@@ -5,6 +5,7 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
 
         $scope.invoice = {};
         $scope.Type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : 'invoice';
+        $scope.invoice.Type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : 'invoice';
 
         $scope.states = State.$search();
         User.$find(User.getCurrentUserId()).$asPromise().then(function (user) {
@@ -19,7 +20,6 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
             {"value": "partial", "description": "Partial"},
             {"value": "paid", "description": "Paid"},
             {"value": "overdue", "description": "Overdue"},
-            {"value": "billed", "description": "Billed"},
             {"value": "completed", "description": "Completed"},
             {"value": "void", "description": "Void"}
         ];
@@ -28,8 +28,8 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
         var flagStatusEstimate = [
             {"value": "pending", "description": "Pending"},
             {"value": "accepted", "description": "Accepted"},
-            {"value": "Closed", "description": "closed"},
-            {"value": "Denied", "description": "denied"}
+            {"value": "closed", "description": "Closed"},
+            {"value": "denied", "description": "Denied"}
         ];
 
 
@@ -82,9 +82,9 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
             $scope.invoice.Date = DateTimeService.nowIsoFormat();
             $scope.invoice.itemProducts.$build().$reveal();
 
-            var invoiceNumber = Invoice.maxOrderNumber().success(function (response) {
+            /*var invoiceNumber = Invoice.maxOrderNumber($scope.Type).success(function (response) {
                 $scope.invoice.OrderNumber = response.max;
-            });
+            });*/
         }
 
         $scope.BillShip = function () {
@@ -136,11 +136,11 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
                     $scope.invoice.BillingLocation = customer.BillingLocation;
                     $scope.invoice.BillingLocation.Id = idLocation;
                 }
-                if (customer.ShippingLocation) {
+                /*if (customer.ShippingLocation) {
                     idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
                     $scope.invoice.ShippingLocation = customer.ShippingLocation;
                     $scope.invoice.ShippingLocation.Id = idLocation;
-                }
+                }*/
             });
 
         }
@@ -274,7 +274,8 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
                         invoice.Emails = $scope.invoice.Emails;
 
                         invoice.Status = 'open';
-                        invoice.Type = $scope.type;
+                        invoice.Type = $scope.Type;
+                        console.log($scope.Type);
 
 
                         invoice.$save().$then(function (response) {

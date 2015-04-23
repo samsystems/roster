@@ -912,6 +912,7 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
 }
 .page-navbar .navbar-brand.collapse-sidebar .logo {
   display: none;
+  height: 50px !important;
 }
 .page-navbar .navbar-brand.collapse-sidebar .logo-sm {
   display: block !important;

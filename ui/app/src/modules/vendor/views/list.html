@@ -1,5 +1,5 @@
 <page-content-title title="Vendors">
-    <a title="Add" class="btn btn-primary" href="#/vendors/create"><i class="fa fa-plus"> Import / Export</i></a>
+    <a title="Add" class="btn btn-primary" href="#/vendors/import"><i class="fa fa-plus"> Import / Export</i></a>
     <a title="Add" class="btn btn-primary" href="#/vendors/create"><i class="fa fa-plus"> New</i></a>
 </page-content-title>
 
@@ -7,56 +7,74 @@
 </page-content-title>
 
 <panel type="plain">
-    <div class="row">
-        <div class="col-sm-5">
-            <form role="form" ng-submit="search(search.vendor)">
-                <input type="text" data-ng-model="search.vendor" class="form-control" placeholder="Search ..."/>
-            </form>
-        </div>
-    </div>
-    <div class="table-responsive table-hover" data-ng-show="total > 0">
-        <table ng-table="vendorTable" class="table table-hover table-message" template-pagination="custom/pager">
-            <col width="20%"/>
-            <col width="10%"/>
-            <col width="10%"/>
-            <col width="10%"/>
-            <col width="10%"/>
-            <col width="10%"/>
-
-            <tr class="items" data-ng-repeat="vendor in $data">
-                <td data-title="'Vendor'" sortable="'name'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
-                    {{vendor.Name}}
-                </td>
-                <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
-                    {{vendor.Phone}}
-                </td>
-                <td data-title="'Email'" sortable="'email'" style="cursor:pointer;" data-ng-click="viewVendor(vendor)">
-                    {{vendor.Emails}}
-                </td>
-                <td data-title="'Outstanding'" sortable="'email'">
-                    {{vendor.OutStanding}}
-                </td>
-                <td data-title="'Overdue'" sortable="'email'">
-                    {{vendor.OverDue}}
-                </td>
-                <td data-title="'Action'">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default fa fa-edit"
-                                data-ng-click="editVendor(vendor)"></button>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <!-- Footer message toolbar -->
-        <script type="text/ng-template" id="custom/pager">
+    <div class="row" data-ng-controller="VendorController">
+        <div class="row">
             <div class="data-table-toolbar">
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="pull-right">
+                    <div class="col-sm-5">
+                        <form role="form" ng-submit="search(searchVendor)">
+                            <input type="text" data-ng-model="searchVendor" class="form-control" placeholder="Search ..."/>
+                        </form>
+                    </div>
+                    <div class="col-sm-4">
+                        <a data-toggle="tooltip" title="Refresh" class="btn btn-default"
+                           data-ng-click="refresh()"><i
+                                class="fa fa-refresh"></i></a>
+                    </div>
+                    <!-- End div .col-sm-3 -->
+                </div>
+                <!-- End div .row -->
+            </div>
 
-                            <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
 
-                            <div class="btn-group">
+
+        </div>
+        <div class="table-responsive table-hover" data-ng-show="total > 0">
+            <table ng-table="vendorTable" class="table table-hover table-message" template-pagination="custom/pager">
+                <col width="20%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+
+                <tr class="items" data-ng-repeat="vendor in $data">
+                    <td data-title="'Vendor'" sortable="'name'" style="cursor:pointer;"
+                        data-ng-click="viewVendor(vendor)">
+                        {{vendor.Name}}
+                    </td>
+                    <td data-title="'Phone'" sortable="'phone'" style="cursor:pointer;"
+                        data-ng-click="viewVendor(vendor)">
+                        {{vendor.Phone}}
+                    </td>
+                    <td data-title="'Email'" style="cursor:pointer;"
+                        data-ng-click="viewVendor(vendor)">
+                        {{vendor.Emails}}
+                    </td>
+                    <td data-title="'Outstanding'">
+                        {{vendor.OutStanding}}
+                    </td>
+                    <td data-title="'Overdue'">
+                        {{vendor.OverDue}}
+                    </td>
+                    <td data-title="'Action'">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default fa fa-edit"
+                                    data-ng-click="editVendor(vendor)"></button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <!-- Footer message toolbar -->
+            <script type="text/ng-template" id="custom/pager">
+                <div class="data-table-toolbar">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="pull-right">
+
+                                <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
+
+                                <div class="btn-group">
                       <span ng-repeat="page in pages"
                             ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
                             ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
@@ -65,16 +83,17 @@
                           <a ng-switch-when="next" ng-click="params.page(page.number)" href=""
                              class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
                       </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </script>
-        <!-- End Footer message toolbar -->
-    </div>
-    <div class="panel-body">
-        <div data-ng-show="total == 0" class="well well-small">{{'No Vendor Available.' | translate}}</div>
+            </script>
+            <!-- End Footer message toolbar -->
+        </div>
+        <div class="panel-body">
+            <div data-ng-show="total == 0" class="well well-small">{{'No Vendor Available.' | translate}}</div>
+        </div>
     </div>
 </panel>
 

@@ -1,0 +1,57 @@
+<page-content-title>
+    <h4 style="margin-right: 550px"><strong>Import Vendors</strong></h4>
+</page-content-title>
+<panel type="plain">
+    <div class="animated active fadeInRight">
+        <div class="row">
+            <div style="margin: 0px 20px 0 18px">
+                <p><strong>Download our template file </strong></p>
+
+                <div class="row">
+                    <div class="col-md-12" data-ng-controller="VendorController">
+                        <form role="form">
+                            <div class="row" style="margin: 20px 0 0 5px">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <div class="col-md-1">
+                                            <i style="font-size: 42px;" class="l-basic-elaboration-document-upload"></i>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="file" style="margin-top: 8px" class="btn form-control" ng-model="uploadFile" data-ng-file-select="onFileSelect($files)"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-left: 20px">
+                                <div class="col-md-6">
+                                    <div class="box-info">
+                                        <div class="inner">
+                                            <a class="zooming" ng-click="downloadDocument(contact.document)" title="">
+                                                <div class="img-wrap" style="height: 232px; width: 307px;"
+                                                     ng-show="contact.document.id">
+                                                    <img ng-src="data:{{contact.document.file.mime}};base64,{{contact.document.file.base64}}"
+                                                         alt="" class="mfp-fade">
+                                                </div>
+                                                <div class="caption-static">
+                                                    {{contact.document.name}}
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row modal-footer" style="border-top:0px;">
+                                <div class="row col-md-4 pull-right">
+                                    <a class="btn btn-primary" href="#/vendors">{{'Cancel' | translate}}</a>
+                                    <button class="btn btn-success ng-binding" data-ng-click="onFileImport()">{{'Upload' | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</panel>

@@ -35,5 +35,10 @@ angular.module('vendor', [
             templateUrl: 'src/modules/vendor/views/detail.html',
             controller: 'VendorViewController'
         })
+        .state('app.vendor-import', {
+            url: 'vendors/import',
+            templateUrl: 'src/modules/vendor/views/import.html',
+            controller: 'VendorController'
+        })
     ;
 }]);

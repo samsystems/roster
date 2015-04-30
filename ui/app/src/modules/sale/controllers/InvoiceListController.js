@@ -41,7 +41,7 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
         }
     });
 
-    $scope.$watch('searchInvoice', function (data) {
+    $scope.$watch('searchInvoice', function () {
         $scope.search();
     });
 

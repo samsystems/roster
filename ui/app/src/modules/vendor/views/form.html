@@ -168,7 +168,7 @@
                         <tr data-ng-repeat="contact in vendor.contacts">
                             <td><input type="text" data-ng-model="contact.Name"/></td>
                             <td><input type="text" data-ng-model="contact.LastName"/></td>
-                            <td><input type="text" data-ng-model="contact.Email"/></td>
+                            <td><input type="text" data-ng-model="contact.Email" validator="email"/></td>
                             <td><input type="text" data-ng-model="contact.Phone"/></td>
                             <td> <input style="margin-left: 15px" type="checkbox" data-ng-model="contact.IncludeEmail" name="locked" value="1">
                                 <label style="margin-left: 10px" class="control-label">{{'Include in Emails' | translate}}</label>

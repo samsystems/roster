@@ -91,4 +91,19 @@ angular.module('inventory', [
         toaster.pop('info', 'Feature Locked', 'This feature is locked.');
     };
 
+        $rootScope.$on("$locationChangeStart", function (event, next, current) {
+            if (_.isUndefined($window.sessionStorage.token) && $window.location.hash != '#/login') {
+                event.preventDefault();
+                $window.location = '#/login';
+            } else {
+                var dateExpire = new Date($window.sessionStorage.tokenExpires);
+                var dateNow = new Date();
+                if (dateNow > dateExpire) {
+                    delete $window.sessionStorage.token;
+                    delete $window.sessionStorage.tokenExpires;
+                    event.preventDefault();
+                    $window.location = '#/login';
+                }
+            }
+        });
 }]);

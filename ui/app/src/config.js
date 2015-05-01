@@ -10,7 +10,7 @@ angular.module('config',[]).constant('config', {
         limitInPage: 20
     },
     api: {
-        baseUrl: 'http://192.168.1.100:9000',
+        baseUrl: 'http://localhost:8085',
         pdfUrl:'http://130.211.118.47/documents/generate-pdf'
     },
     date: {

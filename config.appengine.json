@@ -1,7 +1,6 @@
 {
   "debug": false,
   "database": {
-//    "host":    "173.194.106.117",
     "host":    "cloudsql(sam-roster:alpha)",
     "user":     "vertikal",
     "password": "88@KD_P9$(sh27#=",

@@ -220,7 +220,7 @@ func (controller *CustomerController) Put(context appengine.Context, writer http
 		}
 		shippingLocation.Company = user.Company
 		shippingLocation.Updater = user
-		log.Println(shippingLocation.Id)
+
 		if shippingLocation.Id == "" {
 			shippingLocation.Creator = user
 			models.AddLocation(shippingLocation)
@@ -299,11 +299,10 @@ func (controller *CustomerController) GetAllContacts(context appengine.Context, 
 	return contacts, nil
 }
 
-
 func (controller *CustomerController) Import(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 
 	err := request.ParseMultipartForm(100000)
-	
+
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return nil, nil
@@ -312,10 +311,10 @@ func (controller *CustomerController) Import(context appengine.Context, writer h
 	//get a ref to the parsed multipart form
 	dataForm := request.MultipartForm
 	files := dataForm.File["fileUpload"]
-	if files !=nil{
+	if files != nil {
 		file, err := files[0].Open()
 		defer file.Close()
-		
+
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}

@@ -1,17 +1,13 @@
 package controllers
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
-
-	"encoding/json"
-	"io/ioutil"
-
 	"appengine"
-
+	"encoding/json"
+	"github.com/gorilla/mux"
 	"handler"
-	"log"
+	"io/ioutil"
 	"models"
+	"net/http"
 	"validation"
 )
 
@@ -94,7 +90,7 @@ func (controller *ProductVariationController) GetCountAll(context appengine.Cont
 // @Failure 403 body is empty
 // @router / [post]
 func (controller *ProductVariationController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	log.Print("asdfsaf")
+
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}

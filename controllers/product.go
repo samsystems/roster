@@ -168,7 +168,7 @@ func (controller *ProductController) Put(context appengine.Context, writer http.
 		return nil, &handler.Error{err, "Errors on validation", http.StatusNoContent}
 	}
 	if !b {
-		log.Print("asdfasdf")
+
 		for _, err := range valid.Errors {
 			return nil, &handler.Error{nil, err.Message, http.StatusNoContent}
 		}

@@ -10,7 +10,6 @@ import (
 
 	"appengine"
 	"handler"
-	"log"
 	"models"
 	"validation"
 )
@@ -178,9 +177,9 @@ func (controller *CompanyController) Put(context appengine.Context, writer http.
 // @Failure 403 uid is empty
 // @router /:uid [delete]
 func (controller *CompanyController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	log.Print(v)
+
 	uid := v["uid"]
-	log.Print(v)
+
 	company, err := models.GetCompany(uid)
 	if err != nil {
 		return nil, &handler.Error{err, "Entity not found.", http.StatusNoContent}

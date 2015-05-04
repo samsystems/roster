@@ -279,7 +279,7 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	var subTotal float64 = 0
 	for i := 0; i < len(invoiceProducts); i++ {
 		subTotal += float64(invoiceProducts[i].Price) * float64(invoiceProducts[i].Quantity)
-		log.Print(invoiceProducts[i].Product)
+
 		product, _ := models.GetProduct(invoiceProducts[i].Product.Id)
 		//		if product.Stock < invoiceProducts[i].Quantity {
 		//			return nil, &handler.Error{err, "Not in stock", http.StatusBadRequest}
@@ -315,7 +315,6 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 		models.AddLocation(shippingLocation)
 		invoice.ShippingLocation = shippingLocation
 	}
-
 
 	valid := validation.Validation{}
 	b, err := valid.Valid(&invoice)

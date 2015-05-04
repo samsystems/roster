@@ -3,7 +3,6 @@ package models
 import (
 	"code.google.com/p/go-uuid/uuid"
 	"github.com/astaxie/beego/orm"
-	"log"
 	"time"
 )
 
@@ -107,7 +106,7 @@ func GetNotificationByKeyword(keyword string, user *User, page int, order string
 
 func GetAllNotificationsByUserId(userId string) []*Notification {
 	o := orm.NewOrm()
-	log.Println("UUID:", userId)
+
 	var notifications []*Notification
 	querySetter := o.QueryTable("notification")
 	querySetter = querySetter.Filter("deleted__isnull", true).Filter("owner_id", userId)

@@ -4,7 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 
-	"appengine"
+	//	"appengine"
 
 	"controllers"
 	"system"
@@ -15,11 +15,11 @@ var router = new(mux.Router)
 func init() {
 	var application = &system.Application{}
 
-	if appengine.IsDevAppServer() {
-		application.Init("config.json")
-	} else {
-		application.Init("config.appengine.json")
-	}
+	//	if appengine.IsDevAppServer() {
+	//		application.Init("config.json")
+	//	} else {
+	application.Init("config.appengine.json")
+	//	}
 
 	application.ConnectToDatabase()
 
@@ -84,7 +84,7 @@ func RegisterHandlers(r *mux.Router) {
 
 	productVariationController := controllers.ProductVariationController{}
 	productVariationController.RegisterHandlers(router)
-	
+
 	commonController := controllers.CommonController{}
 	commonController.RegisterHandlers(router)
 

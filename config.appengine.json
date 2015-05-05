@@ -1,9 +1,9 @@
 {
   "debug": false,
   "database": {
-    "host":    "cloudsql(sam-roster:alpha)",
-    "user":     "root",
-    "password": "",
+    "host":    "tcp(173.194.106.117:3306)",
+    "user":     "vertikal",
+    "password": "88@KD_P9$(sh27#=",
     "name":     "vertikal",
     "debug":    false
   }

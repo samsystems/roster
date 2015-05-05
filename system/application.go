@@ -5,7 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	//	"appengine"
-	"github.com/golang/glog"
+	//	"github.com/golang/glog"
 	"strings"
 )
 
@@ -20,7 +20,7 @@ func (application *Application) Init(filename string) {
 	err := application.Configuration.Load(filename)
 
 	if err != nil {
-		glog.Fatalf("Can't read configuration file: %s", err)
+		//		glog.Fatalf("Can't read configuration file: %s", err)
 		panic(err)
 	}
 }
@@ -49,7 +49,7 @@ func (application *Application) ConnectToDatabase() {
 	err = orm.RegisterDataBase("default", "mysql", strings.Join(dsn, ""), 30)
 
 	if err != nil {
-		glog.Fatalf("Can't connect to the database: %v", err)
+		//		glog.Fatalf("Can't connect to the database: %v", err)
 		panic(err)
 	}
 

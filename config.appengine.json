@@ -2,7 +2,7 @@
   "debug": true,
   "database": {
     "host":    "cloudsql(sam-roster:alpha)",
-    "user":     "root",
+    "user":     "",
     "password": "vertikal",
     "name":     "",
     "debug":    true

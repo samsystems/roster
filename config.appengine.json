@@ -3,8 +3,8 @@
   "database": {
     "host":    "cloudsql(sam-roster:alpha)",
     "user":     "",
-    "password": "vertikal",
-    "name":     "",
+    "password": "",
+    "name":     "vertikal",
     "debug":    false
   }
 }

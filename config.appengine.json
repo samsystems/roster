@@ -1,10 +1,10 @@
 {
-  "debug": true,
+  "debug": false,
   "database": {
     "host":    "cloudsql(sam-roster:alpha)",
-    "user":     "root",
+    "user":     "",
     "password": "vertikal",
     "name":     "",
-    "debug":    true
+    "debug":    false
   }
 }

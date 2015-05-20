@@ -39,13 +39,7 @@ func (application *Application) ConnectToDatabase() {
 		host = ""
 	}
 
-	var dsn []string
-	if appengine.IsDevAppServer() {
-		dsn = []string{application.Configuration.Database.User, password, "@", host, "/", application.Configuration.Database.Name}
-	} else {
-		dsn = []string{application.Configuration.Database.Host, "/", application.Configuration.Database.Name}
-	}
-
+	var dsn []string = []string{application.Configuration.Database.User, password, "@", host, "/", application.Configuration.Database.Name}
 	err = orm.RegisterDataBase("default", "mysql", strings.Join(dsn, ""), 30)
 
 	if err != nil {

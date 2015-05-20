@@ -167,8 +167,14 @@ func Login(username string, password string) (*Token, error) {
 				UpdateUser(user)
 
 				return &token, nil
+			} else {
+				return nil, errors.New("The password provided is invalid")
 			}
+
+		} else {
+			return nil, errors.New("The username provided is invalid")
 		}
+
 	}
 
 	return nil, errors.New("Invalid username and/or password")

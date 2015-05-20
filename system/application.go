@@ -4,7 +4,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 
-	//	"appengine"
+	"appengine"
 	//	"github.com/golang/glog"
 	"strings"
 )

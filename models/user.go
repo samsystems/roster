@@ -93,7 +93,7 @@ func GetUserByUsername(username string) (*User, error) {
 	if err == nil {
 		return &user, nil
 	}
-	return nil, errors.New("User not exists")
+	return nil, err
 }
 
 func GetUserByToken(token string) (*User, error) {
@@ -155,7 +155,7 @@ func Login(username string, password string) (*Token, error) {
 
 	var authenticated bool = false
 	if username != "" {
-		user, _ := GetUserByUsername(username)
+		user, err := GetUserByUsername(username)
 		if user != nil && user.Id != "" {
 			authenticated = PasswordMatches(user, password)
 			if authenticated {
@@ -172,7 +172,7 @@ func Login(username string, password string) (*Token, error) {
 			}
 
 		} else {
-			return nil, errors.New("The username provided is invalid")
+			return nil, err
 		}
 
 	}

@@ -9,7 +9,7 @@ angular.module('vendor').controller('VendorController', ['$scope', '$rootScope',
 
         $scope.limitInPage = config.application.limitInPage;
 
-        $scope.search = function () {
+        $scope.search = function (term) {
             $scope.vendorTable.reload();
         };
 
@@ -33,9 +33,6 @@ angular.module('vendor').controller('VendorController', ['$scope', '$rootScope',
             }
         });
 
-        $scope.$watch('searchVendor', function () {
-            $scope.search();
-        });
         $scope.viewVendor = function (vendor) {
             $state.go('app.vendor-view', {id: vendor.Id});
         }

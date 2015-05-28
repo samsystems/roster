@@ -36,10 +36,6 @@ angular.module('customer').controller('CustomerController', ['$scope', '$rootSco
             }
         });
 
-        $scope.$watch('searchCustomer', function () {
-            $scope.search();
-        });
-
         $scope.viewCustomer = function (customer) {
             $state.go('app.customer-view', {id: customer.Id});
         }

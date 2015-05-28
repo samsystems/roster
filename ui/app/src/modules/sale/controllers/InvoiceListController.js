@@ -41,10 +41,6 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
         }
     });
 
-    $scope.$watch('searchInvoice', function () {
-        $scope.search();
-    });
-
     /* $rootScope.$on('invoice::created', function (event, invoice) {
      if (!_.isEmpty(invoice) && invoice.status=='draft') {
      $scope.total = invoiceResource.findCount(invoice.status);

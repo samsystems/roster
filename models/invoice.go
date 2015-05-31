@@ -125,18 +125,18 @@ func GetInvoiceByKeyword(status string, company *Company,keyword string, page in
 	if count == true {
 		qb, _ := orm.NewQueryBuilder("mysql")
 		qb.Select("count(inv.id)")
-		qb.From("invoice inv").LeftJoin("customer c").On("inv.customer_id = c.id").Where("inv.reference_number LIKE ? or c.name LIKE ?").And("inv.deleted is null").And("inv.company_id = ?")
+		qb.From("invoice inv").LeftJoin("customer c").On("inv.customer_id = c.id").Where("inv.reference_number LIKE ? or inv.order_number LIKE ? or c.name LIKE ?").And("inv.deleted is null").And("inv.company_id = ?")
 		// execute the raw query string
 		
 		var total int
 		if status != "all" {
 			qb.And("status = ?")
 			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%","%"+keyword+"%", status, company.Id).QueryRow(&total)
+			o.Raw(sql, "%"+keyword+"%","%"+keyword+"%","%"+keyword+"%", status, company.Id).QueryRow(&total)
 			return nil, total
 		} else {
 			sql := qb.String()
-			o.Raw(sql, "%"+keyword+"%","%"+keyword+"%", company.Id).QueryRow(&total)
+			o.Raw(sql, "%"+keyword+"%","%"+keyword+"%","%"+keyword+"%", company.Id).QueryRow(&total)
 			return nil, total
 		}
 
@@ -147,7 +147,7 @@ func GetInvoiceByKeyword(status string, company *Company,keyword string, page in
 			//querySetter = querySetter.Filter("status", status).Filter("deleted__isnull", true).Filter("reference_number__icontains", keyword)
 			cond := orm.NewCondition()
 			cond1 := cond.And("status", status).And("deleted__isnull", true)
-			cond2 := cond.AndCond(cond1).OrCond(cond.Or("reference_number__icontains", keyword).Or("Customer__name__icontains",keyword))
+			cond2 := cond.AndCond(cond1).AndCond(cond.Or("reference_number__icontains", keyword).Or("order_number__icontains", keyword).Or("Customer__name__icontains",keyword))
 			
 			querySetter = ParseQuerySetterOrder(querySetter.RelatedSel("Customer").SetCond(cond2), order)
 			querySetter.Offset(page * limit).Limit(limit).All(&invoices)
@@ -155,8 +155,8 @@ func GetInvoiceByKeyword(status string, company *Company,keyword string, page in
 		} else {
 			//querySetter = querySetter.Filter("deleted__isnull", true).Filter("reference_number__icontains", keyword)
 			cond := orm.NewCondition()
-			cond1 := cond.And("status", status).And("deleted__isnull", true)
-			cond2 := cond.AndCond(cond1).OrCond(cond.Or("reference_number__icontains", keyword).Or("Customer__name__icontains",keyword))
+			cond1 := cond.And("deleted__isnull", true)
+			cond2 := cond.AndCond(cond1).AndCond(cond.Or("reference_number__icontains", keyword).Or("order_number__icontains", keyword).Or("Customer__name__icontains",keyword))
 			//querySetter.SetCond(cond2)
 			
 			querySetter = ParseQuerySetterOrder(querySetter.RelatedSel("Customer").SetCond(cond2), order)

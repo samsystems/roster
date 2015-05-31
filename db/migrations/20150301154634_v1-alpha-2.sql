@@ -1984,7 +1984,8 @@ ALTER TABLE `invoice` ADD `type` VARCHAR(50) NOT NULL AFTER `status`;
 ALTER TABLE `invoice` ADD `emails` VARCHAR(255) NULL AFTER `customer_id`;
 ALTER TABLE `invoice` CHANGE `delivery_date` `due_date` DATETIME NULL ;
 
-
+ALTER TABLE `invoice` ADD `company_id` VARCHAR(36) NOT NULL AFTER `customer_id`,ADD INDEX (`company_id`);
+ALTER TABLE `invoice` ADD CONSTRAINT `FK_90651744F52233F5` FOREIGN KEY ( `company_id` ) REFERENCES `company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

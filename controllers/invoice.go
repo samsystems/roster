@@ -41,14 +41,14 @@ func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
 func (controller *InvoiceController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	var invoices []models.Invoice
 	status := request.URL.Query().Get("status")
-
+	user, _ := models.GetCurrentUser(request)
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 
 	if keyword != "" {
-		invoices, _ = models.GetInvoiceByKeyword(status, keyword, page, sort, false, -1)
+		invoices, _ = models.GetInvoiceByKeyword(status, user.Company, keyword, page, sort, false, -1)
 
 	} else {
-		invoices, _ = models.GetAllInvoices(status, page, sort, false, -1)
+		invoices, _ = models.GetAllInvoices(status, user.Company, page, sort, false, -1)
 	}
 	if len(invoices) == 0 {
 		return make([]models.Invoice, 0), nil
@@ -82,11 +82,12 @@ func (controller *InvoiceController) Count(context appengine.Context, writer htt
 	total := make(map[string]interface{})
 	status := request.URL.Query().Get("status")
 	keyword := ""
+	user, _ := models.GetCurrentUser(request)
 	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
 		keyword = keywordP
-		_, total["total"] = models.GetInvoiceByKeyword(status, keyword, 1, "notSorting", true, -1)
+		_, total["total"] = models.GetInvoiceByKeyword(status, user.Company, keyword, 1, "notSorting", true, -1)
 	} else {
-		_, total["total"] = models.GetAllInvoices(status, 1, "notSorting", true, -1)
+		_, total["total"] = models.GetAllInvoices(status, user.Company, 1, "notSorting", true, -1)
 	}
 
 	return total, nil
@@ -113,7 +114,8 @@ func (controller *InvoiceController) GetMaxOrderNumber(context appengine.Context
 func (controller *InvoiceController) GetInvoiceResume(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	status := v["status"]
 	total := make(map[string]interface{})
-	total["amount"], total["cant"] = models.GetInvoiceResume(status)
+	user, _ := models.GetCurrentUser(request)
+	total["amount"], total["cant"] = models.GetInvoiceResume(status,user.Company)
 
 	return total, nil
 }
@@ -146,6 +148,7 @@ func (controller *InvoiceController) Put(context appengine.Context, writer http.
 	user, _ := models.GetCurrentUser(request)
 	invoice.Creator = user
 	invoice.Updater = user
+	invoice.Company = user.Company
 	invoiceProducts := invoice.InvoiceProducts
 	invoice.InvoiceProducts = nil
 
@@ -268,6 +271,7 @@ func (controller *InvoiceController) Post(context appengine.Context, writer http
 	invoice.Creator = user
 	invoice.Updater = user
 	invoice.Tax = company.Tax
+	invoice.Company = company
 	invoice.OrderNumber = models.GetMaxOrderNumber(invoice.Type)
 	invoiceProducts := invoice.InvoiceProducts
 	invoice.InvoiceProducts = nil

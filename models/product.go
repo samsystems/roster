@@ -114,6 +114,15 @@ func GetProductByKeyword(keyword string, user *User, page int, order string, cou
 
 }
 
+func GetAllProductsWithoutPagination(user *User) ([]Product, interface{}) {
+	o := orm.NewOrm()
+	var products []Product
+	querySetter := o.QueryTable("product")
+	querySetter = querySetter.Filter("company", user.Company).Filter("deleted__isnull", true)
+	querySetter.All(&products)
+	return products, nil
+}
+
 func UpdateProduct(p *Product) {
 	o := orm.NewOrm()
 	o.Update(p)

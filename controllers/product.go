@@ -11,8 +11,8 @@ import (
 	"models"
 	"net/http"
 	//"os"
-	//	"strconv"
 	"bytes"
+	"strconv"
 	"validation"
 )
 
@@ -240,17 +240,22 @@ func (controller *ProductController) NewProductVariations(context appengine.Cont
 	return productVariation, nil
 }
 func (controller *ProductController) Export(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	var products []models.Product
+	user, _ := models.GetCurrentUser(request)
+	products, _ = models.GetAllProductsWithoutPagination(user)
+	category := []string{"Product", "Service"}
 	csvfile := &bytes.Buffer{} // creates IO Writer
-
-	records := [][]string{{"item1", "value1"}, {"item2", "value2"}, {"item3", "value3"}}
-
+	var records [][]string
+	for i := 0; i < len(products); i++ {
+		records = append(records, []string{products[i].Name, category[products[i].Category], strconv.FormatFloat(float64(products[i].Cost), 'f', 2, 32), strconv.FormatFloat(float64(products[i].Price), 'f', 2, 32)})
+	}
 	writer1 := csv.NewWriter(csvfile)
 	err := writer1.WriteAll(records) // flush everything into csvfile
 	if err != nil {
 		log.Println("Error:", err)
-		return nil, nil
+		return nil, &handler.Error{err, "Could not write the record to csv file.", http.StatusBadRequest}
 	}
-	log.Println(csvfile)
+
 	return csvfile.Bytes(), nil
 }
 

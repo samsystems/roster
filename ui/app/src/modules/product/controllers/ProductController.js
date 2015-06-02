@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('product').controller('ProductController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Product','ngTableParams','$filter','$q','$state',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Product, ngTableParams,$filter, $q, $state) {
+angular.module('product').controller('ProductController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Product','ngTableParams','$filter','$q','$state','ExportCSVService',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Product, ngTableParams,$filter, $q, $state, ExportCSVService) {
 
     $scope.page = 1;
     $scope.total = 0;
@@ -53,4 +53,8 @@ angular.module('product').controller('ProductController', ['$scope', '$rootScope
             });
         });
     };
+
+    $scope.exportToCSV = function(){
+        ExportCSVService.export('product');
+    }
 }]);

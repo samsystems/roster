@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"appengine"
-	//	"encoding/csv"
+	"encoding/csv"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"handler"
@@ -10,8 +10,9 @@ import (
 	"log"
 	"models"
 	"net/http"
-	//	"os"
+	//"os"
 	//	"strconv"
+	"bytes"
 	"validation"
 )
 
@@ -20,6 +21,7 @@ type ProductController struct {
 
 func (controller *ProductController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/product/count", handler.New(controller.Count)).Methods("GET")
+	r.Handle("/export-csv/product", handler.New(controller.Export)).Methods("GET")
 	//	r.Handle("/product/import", handler.New(controller.ImportProduct)).Methods("GET")
 	r.Handle("/product/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/product", handler.New(controller.GetAll)).Methods("GET")
@@ -236,6 +238,20 @@ func (controller *ProductController) NewProductVariations(context appengine.Cont
 	}
 
 	return productVariation, nil
+}
+func (controller *ProductController) Export(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	csvfile := &bytes.Buffer{} // creates IO Writer
+
+	records := [][]string{{"item1", "value1"}, {"item2", "value2"}, {"item3", "value3"}}
+
+	writer1 := csv.NewWriter(csvfile)
+	err := writer1.WriteAll(records) // flush everything into csvfile
+	if err != nil {
+		log.Println("Error:", err)
+		return nil, nil
+	}
+	log.Println(csvfile)
+	return csvfile.Bytes(), nil
 }
 
 // @Title updateProduct

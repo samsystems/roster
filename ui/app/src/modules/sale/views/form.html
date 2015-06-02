@@ -163,9 +163,9 @@
                         translate}}:</label>
 
                     <div class="col-md-12">
-                        <input id="billingAddress" data-ng-model="invoice.BillingLocation.Address" type="text"
+                        <input id="billingAddress" name="billingAddress" data-ng-model="invoice.BillingLocation.Address" type="text"
                                name="billingLocationAAddress" id="billingLocationAAddress"
-                               class="form-control" placeholder="Street">
+                               validator="required" class="form-control" placeholder="Street">
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input id="billingAddress1" data-ng-model="invoice.BillingLocation.Address1" type="text"
+                        <input id="billingAddress1" name="billingAddress1" data-ng-model="invoice.BillingLocation.Address1" type="text"
                                class="form-control" placeholder="Apt/suite">
                     </div>
                 </div>
@@ -184,24 +184,24 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input id="billingCity" data-ng-model="invoice.BillingLocation.City" type="text"
-                               class="form-control" placeholder="City">
+                        <input id="billingCity" name="billingCity" data-ng-model="invoice.BillingLocation.City" type="text"
+                               validator="required" class="form-control" placeholder="City">
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <select id="billingState" class="form-control" data-ng-model="invoice.BillingLocation.State.Id"
-                                data-ng-options="state.Id as state.Name for state in states"></select>
+                        <select id="billingState" name="billingState" class="form-control" data-ng-model="invoice.BillingLocation.State.Id"
+                                validator="required" data-ng-options="state.Id as state.Name for state in states"></select>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input id="billingZipcode" data-ng-model="invoice.BillingLocation.Zipcode" type="text"
-                               class="form-control" placeholder="Zipcode">
+                        <input id="billingZipcode" name="billingZipcode" data-ng-model="invoice.BillingLocation.Zipcode" type="text"
+                               class="form-control" validator="required" placeholder="Zipcode">
                     </div>
                 </div>
             </div>
@@ -221,7 +221,7 @@
                             translate}}</label>
                     </div>
                     <div class="col-md-12">
-                        <input id="shippingAddress" data-ng-model="invoice.ShippingLocation.Address" type="text"
+                        <input id="shippingAddress" name="shippingAddress" data-ng-model="invoice.ShippingLocation.Address" type="text"
                                class="form-control" validator="required" placeholder="Street">
                     </div>
                 </div>
@@ -231,7 +231,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input id="shippingAddress1" data-ng-model="invoice.ShippingLocation.Address1" type="text"
+                        <input id="shippingAddress1" name="shippingAddress1" data-ng-model="invoice.ShippingLocation.Address1" type="text"
                                class="form-control" placeholder="Apt/suite">
                     </div>
                 </div>
@@ -241,25 +241,25 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input id="shippingCity" data-ng-model="invoice.ShippingLocation.City" type="text"
-                               class="form-control" placeholder="City">
+                        <input id="shippingCity" name="shippingCity" data-ng-model="invoice.ShippingLocation.City" type="text"
+                               class="form-control" validator="required" placeholder="City">
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <select id="shippingState" class="form-control"
+                        <select id="shippingState" name="shippingState" class="form-control"
                                 data-ng-model="invoice.ShippingLocation.State.Id"
-                                data-ng-options="state.Id as state.Name for state in states"></select>
+                                validator="required" data-ng-options="state.Id as state.Name for state in states"></select>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input id="shippingZipcode" data-ng-model="invoice.ShippingLocation.Zipcode" type="text"
-                               class="form-control" placeholder="Zipcode">
+                        <input id="shippingZipcode" name="shippingZipcode" data-ng-model="invoice.ShippingLocation.Zipcode" type="text"
+                               class="form-control" validator="required" placeholder="Zipcode">
                     </div>
                 </div>
             </div>

@@ -7,12 +7,12 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
 
     $scope.limitInPage = config.application.limitInPage;
 
-    $scope.search = function () {
-         $scope.invoiceTable.reload()
+    $scope.search = function () {;
+         $scope.invoiceTable.reload();
     };
 
     $scope.refresh = function () {
-        $scope.searchInvoice = '';
+        $scope.search.invoice = '';
     };
 
     $scope.class = {
@@ -30,8 +30,8 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
         total: 0, // length of data
         getData: function ($defer, params) {
 
-            var invoices = Invoice.$search({status: 'all', keyword: $scope.searchInvoice, page: params.page(), sort: params.orderBy()});
-            var total = Invoice.count("all", $scope.searchInvoice);
+            var invoices = Invoice.$search({status: 'all', keyword: $scope.search.invoice, page: params.page(), sort: params.orderBy()});
+            var total = Invoice.count("all", $scope.search.invoice);
 
             $q.all([invoices.$asPromise(), total]).then(function (data) {
                 $scope.total = data[1].data.total;

@@ -7,7 +7,7 @@ angular.module('notification').controller('NotificationController', ['$scope', '
     $scope.searchNotification = '';
 
     $scope.limitInPage      = config.application.limitInPage;
-    $scope.total            = User.$new(User.getCurrentUserId()).notifications.$fetch().count();
+    $scope.total            = 0;
     $scope.notifications    = $rootScope.notifications = User.$new(User.getCurrentUserId()).notifications.$fetch({page: $scope.page});
 
     $scope.setPage = function(page) {
@@ -30,6 +30,7 @@ angular.module('notification').controller('NotificationController', ['$scope', '
         getData: function($defer, params) {
             $scope.notifications.$promise.then(function(){
                 params.total($scope.notifications.length);
+                $scope.total=$scope.notifications.length;
                 var orderedData = params.sorting() ? $filter('orderBy')($scope.notifications, params.orderBy()) : $scope.notifications;
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             })

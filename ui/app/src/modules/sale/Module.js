@@ -11,7 +11,7 @@ angular.module('sale', [
         .state('app.sale', {
             url: 'sales/:action',
             templateUrl: 'src/modules/sale/views/list.html',
-            controller: 'SaleController'
+            controller: 'InvoiceListController'
         })
         .state('app.receivePaymet-create', {
             url: 'transaction/create/receivePaymet',

@@ -79,14 +79,14 @@ func GetNotificationByKeyword(keyword string, user *User, page int, order string
 	}
 
 	qb.From("notification n").
-		Where("n.name LIKE ?").And("n.owner_id = ?")
+		Where("n.title LIKE ? or n.category LIKE ?").And("n.owner_id = ?")
 
 	if count == true {
 		sql := qb.String()
 		var total int
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%", user.Id).QueryRow(&total)
+		o.Raw(sql, "%"+keyword+"%", "%"+keyword+"%", user.Id).QueryRow(&total)
 		return notifications, total
 
 	} else {
@@ -98,7 +98,7 @@ func GetNotificationByKeyword(keyword string, user *User, page int, order string
 
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%").QueryRows(&notifications)
+		o.Raw(sql,  "%"+keyword+"%","%"+keyword+"%", user.Id).QueryRows(&notifications)
 		return notifications, nil
 	}
 

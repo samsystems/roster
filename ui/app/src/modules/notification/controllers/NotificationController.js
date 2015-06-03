@@ -1,50 +1,46 @@
 'use strict';
 
-angular.module('notification').controller('NotificationController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Notification', 'User','ngTableParams', '$filter', 'SweetAlert',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Notification, User, ngTableParams, $filter, SweetAlert) {
+angular.module('notification').controller('NotificationController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Notification', 'User','ngTableParams', '$filter', 'SweetAlert', '$q',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Notification, User, ngTableParams, $filter, SweetAlert, $q) {
 
     $scope.page = 1;
-    $scope.searchNotification = '';
-
+    $scope.total = 0;
+    $scope.search = {notification: ""};
     $scope.limitInPage      = config.application.limitInPage;
-    $scope.total            = 0;
-    $scope.notifications    = $rootScope.notifications = User.$new(User.getCurrentUserId()).notifications.$fetch({page: $scope.page});
 
-    $scope.setPage = function(page) {
-        $scope.page = page;
-    };
-
-    $scope.search = function(term) {
-        $scope.searchNotification = term;
+    $scope.search = function() {
+        $scope.notificationTable.reload();
     };
 
     $scope.refresh = function() {
-        $scope.searchNotification = '';
+        $scope.search.notification = '';
     };
 
-    $scope.notificationTable = new ngTableParams({
-        page: 1,            // show first page
-        count: 20          // count per page
-    }, {
-        total: 0, // length of data
-        getData: function($defer, params) {
-            $scope.notifications.$promise.then(function(){
-                params.total($scope.notifications.length);
-                $scope.total=$scope.notifications.length;
-                var orderedData = params.sorting() ? $filter('orderBy')($scope.notifications, params.orderBy()) : $scope.notifications;
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            })
-        }
-    });
+        $scope.notificationTable = new ngTableParams({
+            page: 1,            // show first page
+            count: 20           // count per page
+        }, {
+            total: 0, // length of data
+            getData: function ($defer, params) {
+                var notifications = Notification.$search({page: params.page(), sort: params.orderBy(), keyword: $scope.search.notification});
+                var total = Notification.count($scope.search.notification);
+                $q.all([notifications.$asPromise(), total]).then(function (data) {
+                    $scope.total = data[1].data.total;
+                    params.total(data[1].data.total);
+                    $defer.resolve(data[0]);
+                })
+            }
+        });
 
-    $scope.$watchGroup(['searchNotification' ,'page'], function(data) {
+
+  /*  $scope.$watchGroup(['searchNotification' ,'page'], function(data) {
         if(data[0] != null && data[0] != '') {
             $scope.notifications = User.$new(User.getCurrentUserId()).notifications.$fetch({keyword: data[0], page: data[1]});
         }else{
             $scope.notifications = User.$new(User.getCurrentUserId()).notifications.$fetch({page: data[1]});
         }
         $scope.notificationTable.reload();
-    });
+    });*/
 
     $rootScope.$on('notification::created', function(event) {
         $scope.notificationTable.reload();

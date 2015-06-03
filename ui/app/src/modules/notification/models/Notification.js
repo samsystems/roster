@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('notification').factory('Notification', ['restmod', function(restmod) {
+angular.module('notification').factory('Notification', ['restmod','config','$http', function(restmod, config, $http) {
 
     return restmod.model('/notification').mix({
 
@@ -27,6 +27,16 @@ angular.module('notification').factory('Notification', ['restmod', function(rest
             Collection: {
                 count: function () {
                     return this.length;
+                }
+            },
+            Model: {
+                count: function(search) {
+                    var keyword = (!_.isUndefined(search)) ? search :null;
+                    return $http({
+                        method: 'GET',
+                        url: config.api.baseUrl + '/notification/count',
+                        params: { keyword: keyword }
+                    });
                 }
             }
         }

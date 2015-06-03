@@ -18,7 +18,8 @@ type NotificationController struct {
 }
 
 func (controller *NotificationController) RegisterHandlers(r *mux.Router) {
-	r.Handle("/notification/{nid}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/notification/count", handler.New(controller.GetCountAll)).Methods("GET")
+	r.Handle("/notification/{nid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/notification", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/notification", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/notification", handler.New(controller.Post)).Methods("POST")

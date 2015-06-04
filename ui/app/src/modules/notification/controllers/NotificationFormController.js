@@ -5,11 +5,18 @@ angular.module('notification').controller('NotificationFormController', ['$scope
 
     $scope.notification = Notification.$build();
 
-    $scope.searchUsers = function(val) {
-        return User.$search({keyword: val});
-    };
 
-    $scope.save = function(notificationForm) {
+        $scope.searchUsers = function (val) {
+            return User.$search({keyword: val, page: 1, order: 'notSorting'}).$asPromise().then(function (users) {
+                if (users == null)
+                    return {};
+                else
+                    return users;
+            });
+        };
+
+
+        $scope.save = function(notificationForm) {
         $validation.validate(notificationForm).success(function() {
 
             $scope.notification.$save();

@@ -69,7 +69,6 @@ func GetAllProductVariations(page int, order string, count bool, limit int) ([]P
 }
 
 func GetAllProductVariationsByProduct(uidProduct string) ([]ProductVariation, interface{}) {
-
 	o := orm.NewOrm()
 	var productVariations []ProductVariation
 	querySetter := o.QueryTable("product_variation")

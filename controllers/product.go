@@ -243,13 +243,22 @@ func (controller *ProductController) Export(context appengine.Context, writer ht
 	var products []models.Product
 	user, _ := models.GetCurrentUser(request)
 	products, _ = models.GetAllProductsWithoutPagination(user)
-	category := []string{"Product", "Service"}
+	category := []string{"Other", "Product", "Service"}
 	csvfile := &bytes.Buffer{} // creates IO Writer
-	var records [][]string
+	records := [][]string{{"Name", "Category", "Cost", "Price", "Variation", "Sku", "Stock", "Alert Flag"}}
 	for i := 0; i < len(products); i++ {
-		records = append(records, []string{products[i].Name, category[products[i].Category], strconv.FormatFloat(float64(products[i].Cost), 'f', 2, 32), strconv.FormatFloat(float64(products[i].Price), 'f', 2, 32)})
+		variations, _ := models.GetAllProductVariationsByProduct(products[i].Id)
+		if len(variations) == 0 {
+			records = append(records, []string{products[i].Name, category[products[i].Category], strconv.FormatFloat(float64(products[i].Cost), 'f', 2, 32), strconv.FormatFloat(float64(products[i].Price), 'f', 2, 32)})
+		} else {
+			for j := 0; j < len(variations); j++ {
+				records = append(records, []string{products[i].Name, category[products[i].Category], strconv.FormatFloat(float64(products[i].Cost), 'f', 2, 32), strconv.FormatFloat(float64(products[i].Price), 'f', 2, 32),
+					variations[j].Variation, variations[j].Sku, strconv.Itoa(variations[j].Stock), strconv.Itoa(variations[j].AlertAt)})
+			}
+		}
 	}
 	writer1 := csv.NewWriter(csvfile)
+	writer1.Comma = '\t'
 	err := writer1.WriteAll(records) // flush everything into csvfile
 	if err != nil {
 		log.Println("Error:", err)

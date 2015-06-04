@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"time"
 )
-
+const USER_LIMIT int = 20
 func init() {
 	orm.RegisterModel(new(User))
 }
@@ -118,6 +118,46 @@ func GetAllUsers() []*User {
 		panic(err)
 	}
 	return users
+}
+
+func GetUserByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]User, interface{}) {
+	var users []User
+	qb, _ := orm.NewQueryBuilder("mysql")
+	page -= 1
+	if limit < 0 {
+		limit = USER_LIMIT
+	}
+	// Construct query object
+	if count == false {
+		qb.Select("user.*")
+	} else {
+		qb.Select("count(user.id)")
+	}
+
+	qb.From("user user").
+		Where("user.name LIKE ?").And("user.company_id = ?")
+
+	if count == true {
+		sql := qb.String()
+		var total int
+		// execute the raw query string
+		o := orm.NewOrm()
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRow(&total)
+		return users, total
+
+	} else {
+		ParseQueryBuilderOrder(qb, order, "user")
+		qb.Limit(limit).Offset(page * USER_LIMIT)
+
+		// export raw query string from QueryBuilder object
+		sql := qb.String()
+
+		// execute the raw query string
+		o := orm.NewOrm()
+		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&users)
+		return users, nil
+	}
+
 }
 
 func UpdateUser(user *User) {

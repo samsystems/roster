@@ -7,7 +7,7 @@
                     <div class="col-md-12">
                         <input name="owner" placeholder="{{'Recipients' | translate}}" data-ng-model="notification.owner"
                                type="text" class="form-control" validator="required"
-                               data-typeahead="user as user.fullName for user in searchUsers($viewValue)" data-typeahead-min-length="3" >
+                               data-typeahead="user as (user.FirstName+ ' ' + user.LastName) for user in searchUsers($viewValue)" data-typeahead-min-length="3" >
                     </div>
                 </div>
             </div>

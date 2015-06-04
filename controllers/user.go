@@ -93,15 +93,29 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 func (controller *UserController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	//username := v["username"]
 	var username = request.URL.Query().Get("username")
+	var keyword = request.URL.Query().Get("keyword")
 	if username != "" {
 		user, _ := models.GetUserByUsername(username)
 		users := make([]*models.User, 1)
 		users[0] = user
 		return users, nil
-	} else {
-		users := models.GetAllUsers()
-		return users, nil
-	}
+	} else if keyword != ""{
+		var users []models.User
+		page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
+		user, _ := models.GetCurrentUser(request)
+	//	if keyword != "" {
+			users, _ = models.GetUserByKeyword(keyword, user, page, sort, false, -1)
+	//	} else {
+	//		customers, _ = models.GetAllCustomers(user, page, sort, false, -1)
+	//	}
+		if len(users) == 0 {
+			return make([]models.User, 0), nil
+		} 
+
+	    return users, nil
+	} 
+	users := models.GetAllUsers()
+	return users, nil
 }
 
 // @Title Get

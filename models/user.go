@@ -135,7 +135,7 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 	}
 
 	qb.From("user user").
-		Where("user.name LIKE ?").And("user.company_id = ?")
+		Where("user.first_name LIKE ?").And("user.company_id = ?")
 
 	if count == true {
 		sql := qb.String()
@@ -154,7 +154,10 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&users)
+		_,err :=o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&users)
+		if err != nil {
+			panic(err)
+		}
 		return users, nil
 	}
 

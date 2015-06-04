@@ -94,12 +94,15 @@ func (controller *UserController) GetAll(context appengine.Context, writer http.
 	//username := v["username"]
 	var username = request.URL.Query().Get("username")
 	var keyword = request.URL.Query().Get("keyword")
+
 	if username != "" {
+		
 		user, _ := models.GetUserByUsername(username)
 		users := make([]*models.User, 1)
 		users[0] = user
 		return users, nil
 	} else if keyword != ""{
+		
 		var users []models.User
 		page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 		user, _ := models.GetCurrentUser(request)

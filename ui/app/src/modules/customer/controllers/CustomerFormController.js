@@ -60,8 +60,8 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
             $scope.customer.contacts.$remove(contact);
         }
 
-        $scope.save = function () {
-            //    $validation.validate($scope, 'customer').success(function() {
+        $scope.save = function (form) {
+           $validation.validate(form).success(function() {
 
             if (!_.isUndefined($scope.customer.Id)) {
                 var customer = $scope.customer;
@@ -114,8 +114,8 @@ angular.module('customer').controller('CustomerFormController', ['$scope', '$roo
                     toaster.pop('error', 'Error', 'Something went wrong a new Customer could not be created');
                 });
             }
-            //}).error(function() {
-            //    toaster.pop('error', 'Error', 'Complete the required entry fields.');
-            //});
+            }).error(function() {
+                toaster.pop('error', 'Error', 'Complete the required entry fields.');
+            });
         };
     }]);

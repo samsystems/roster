@@ -22,8 +22,8 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
             $scope.vendor.contacts.$remove(contact);
         }
 
-        $scope.save = function () {
-            //    $validation.validate($scope, 'vendor').success(function() {
+        $scope.save = function (form) {
+                $validation.validate(form).success(function() {
             var vendor = $scope.vendor;
             $scope.vendor.Contacts = [];
             var count = 0;
@@ -77,8 +77,8 @@ angular.module('vendor').controller('VendorFormController', ['$scope', '$rootSco
                     toaster.pop('error', 'Error', 'Something went wrong a new Vendor could not be created');
                 });
             }
-            //}).error(function() {
-            //    toaster.pop('error', 'Error', 'Complete the required entry fields.');
-            //});
+            }).error(function() {
+                toaster.pop('error', 'Error', 'Complete the required entry fields.');
+            });
         };
     }]);

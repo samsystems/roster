@@ -41,7 +41,7 @@ func GetNotification(uid string) (*Notification, error) {
 	g := Notification{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&g)
-    o.Read(g.Creator)
+	o.Read(g.Creator)
 	return &g, err
 }
 

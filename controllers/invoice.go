@@ -16,13 +16,17 @@ import (
 	"log"
 
 	"math"
-)
+	"bytes"
+	"encoding/csv"
+	"strconv"
+	)
 
 // Operations about Users
 type InvoiceController struct {
 }
 
 func (controller *InvoiceController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/export-csv/invoice", handler.New(controller.Export)).Methods("GET")
 	r.Handle("/invoice/count", handler.New(controller.Count)).Methods("GET")
 	r.Handle("/invoice/{type:[a-zA-Z\\-]+}/max-ordernumber", handler.New(controller.GetMaxOrderNumber)).Methods("GET")
 	r.Handle("/invoice/resume/{status:[a-zA-Z\\-]+}", handler.New(controller.GetInvoiceResume)).Methods("GET")
@@ -365,4 +369,36 @@ func Round(f float64) float64 {
 func RoundPlus(f float64, places int) float64 {
 	shift := math.Pow(10, float64(places))
 	return Round(f*shift) / shift
+}
+
+func (controller *InvoiceController) Export(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	var invoices []models.Invoice
+	user, _ := models.GetCurrentUser(request)
+	invoices, _ = models.GetAllInvoicesWithoutPagination(user)
+	csvfile := &bytes.Buffer{} // creates IO Writer
+	records := [][]string{{"Vendor", "Customer","Order Number","Reference Number","Currency","DeliveryInstruction","Status","SubTotal","TotalTax","Amount","Tax","Company","Date","DueDate","BillingLocation","ShippingLocation","Creator","Updater" }}
+	const layout = "Jan 2, 2006 at 3:04pm (MST)"
+	for i := 0; i < len(invoices); i++ {
+		var ShippingLocation string = models.LocationToString(invoices[i].ShippingLocation)
+		var BillingLocation string = models.LocationToString(invoices[i].BillingLocation)
+		var DueDate string = ""
+		if invoices[i].DueDate.IsZero() != true {
+			DueDate =invoices[i].DueDate.Format(layout)
+		}
+		var vendorName string = ""
+		if invoices[i].Vendor != nil{
+			vendorName=invoices[i].Vendor.Name
+		}
+		
+		records = append(records, []string{vendorName,invoices[i].Customer.Name,strconv.FormatInt(int64(invoices[i].OrderNumber), 10),strconv.FormatInt(int64(invoices[i].ReferenceNumber), 10),invoices[i].Currency,invoices[i].DeliveryInstruction,invoices[i].Status,strconv.FormatFloat(float64(invoices[i].SubTotal), 'f', 2, 32),strconv.FormatFloat(float64(invoices[i].TotalTax), 'f', 2, 32),strconv.FormatFloat(float64(invoices[i].Amount), 'f', 2, 32),strconv.FormatFloat(float64(invoices[i].Tax), 'f', 2, 32),invoices[i].Company.Name ,invoices[i].Date.Format(layout),DueDate,BillingLocation,ShippingLocation,invoices[i].Creator.FirstName,invoices[i].Updater.FirstName})
+	}
+	writer1 := csv.NewWriter(csvfile)
+	writer1.Comma = '\t'
+	err := writer1.WriteAll(records) // flush everything into csvfile
+	if err != nil {
+		//log.Println("Error:", err)
+		return nil, &handler.Error{err, "Could not write the record to csv file.", http.StatusBadRequest}
+	}
+
+	return csvfile.Bytes(), nil
 }

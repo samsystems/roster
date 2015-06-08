@@ -20,7 +20,7 @@ type Invoice struct {
 	OrderNumber         int
 	ReferenceNumber     int32     `json:"ReferenceNumber,string"`
 	Date                time.Time `orm:"type(datetime)" json:"Date"`
-	DueDate        time.Time `orm:"type(datetime)" json:"DueDate"`
+	DueDate             time.Time `orm:"type(datetime)" json:"DueDate"`
 	Currency            string
 	DeliveryInstruction string
 	Status              string
@@ -217,4 +217,14 @@ func GetInvoiceResume(status string,company *Company) (amount float64, cant int)
 		o.Raw(sql,company.Id).QueryRow(&result)
 	}
 	return result.Amount, result.Cant
+}
+
+func GetAllInvoicesWithoutPagination(user *User) ([]Invoice, interface{}) {
+	o := orm.NewOrm()
+	var invoices []Invoice
+	querySetter := o.QueryTable("invoice")
+	querySetter = querySetter.Filter("company", user.Company).Filter("deleted__isnull", true)
+	querySetter=querySetter.RelatedSel("BillingLocation").RelatedSel("ShippingLocation").RelatedSel("Company").RelatedSel("Creator").RelatedSel("Updater").RelatedSel("Customer").RelatedSel("Vendor")
+	querySetter.All(&invoices)
+	return invoices, nil
 }

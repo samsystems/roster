@@ -12,6 +12,8 @@ import (
 	"handler"
 	"models"
 	"validation"
+	"bytes"
+	"encoding/csv"
 )
 
 type VendorController struct {
@@ -19,6 +21,7 @@ type VendorController struct {
 
 func (controller *VendorController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/vendor/count", handler.New(controller.GetCountAll)).Methods("GET")
+	r.Handle("/export-csv/vendor", handler.New(controller.Export)).Methods("GET")
 	r.Handle("/vendor/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/vendor", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/vendor", handler.New(controller.Post)).Methods("POST")
@@ -256,4 +259,31 @@ func (controller *VendorController) GetAllContacts(context appengine.Context, wr
 	uidVendor := v["uid"]
 	var contacts []models.Contact = models.GetAllContactByOwner("vendor", uidVendor)
 	return contacts, nil
+}
+
+func (controller *VendorController) Export(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	var vendors []models.Vendor
+	user, _ := models.GetCurrentUser(request)
+	vendors, _ = models.GetAllVendorsWithoutPagination(user)
+	csvfile := &bytes.Buffer{} // creates IO Writer
+	records := [][]string{{"Name", "Phone", "Mobile", "Fax", "Company Name", "Web Site", "Account Number", "Location","Track Transaction","TaxId","Bank account","Bank account Name","Batch Payments Details","Company","Creator","Updater"}}
+	for i := 0; i < len(vendors); i++ {
+		var location string = models.LocationToString(vendors[i].Location)
+		var TrackTransaction string
+		if vendors[i].TrackTransaction {
+			TrackTransaction ="Yes"
+		}else{
+			TrackTransaction ="No"
+		}
+		records = append(records, []string{vendors[i].Name,vendors[i].Phone,vendors[i].Mobile,vendors[i].Fax,vendors[i].CompanyName,vendors[i].WebSite,vendors[i].AccountNumber,location,TrackTransaction,vendors[i].TaxId,vendors[i].BankAccount,vendors[i].BankAccountName,vendors[i].BatchPaymentsDetails,vendors[i].Company.Name,vendors[i].Creator.FirstName,vendors[i].Updater.FirstName})
+	}
+	writer1 := csv.NewWriter(csvfile)
+	writer1.Comma = '\t'
+	err := writer1.WriteAll(records) // flush everything into csvfile
+	if err != nil {
+		//log.Println("Error:", err)
+		return nil, &handler.Error{err, "Could not write the record to csv file.", http.StatusBadRequest}
+	}
+
+	return csvfile.Bytes(), nil
 }

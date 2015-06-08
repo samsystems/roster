@@ -3,7 +3,8 @@ package controllers
 import (
 	"github.com/gorilla/mux"
 	"net/http"
-
+	
+	"encoding/csv"
 	"encoding/json"
 	"io/ioutil"
 
@@ -12,6 +13,8 @@ import (
 	"log"
 	"models"
 	"validation"
+	"bytes"
+	"strconv"
 )
 
 // Operations about Customers
@@ -19,6 +22,7 @@ type CustomerController struct {
 }
 
 func (controller *CustomerController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/export-csv/customer", handler.New(controller.Export)).Methods("GET")
 	r.Handle("/customer/count", handler.New(controller.GetCountAll)).Methods("GET")
 	r.Handle("/customer/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/customer", handler.New(controller.GetAll)).Methods("GET")
@@ -320,5 +324,33 @@ func (controller *CustomerController) Import(context appengine.Context, writer h
 		}
 	}
 	return nil, nil
+}
 
+func (controller *CustomerController) Export(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	var customers []models.Customer
+	user, _ := models.GetCurrentUser(request)
+	customers, _ = models.GetAllCustomersWithoutPagination(user)
+	//category := []string{"Other", "Product", "Service"}
+	csvfile := &bytes.Buffer{} // creates IO Writer
+	records := [][]string{{"Name", "Phone", "Mobile", "Fax", "Company Name", "Web Site", "Account Number", "Billing Location", "Shipping Location","Taxable","Tax","Discount","Bank account","Bank account Name","Batch Payments Details","Out Standing","Over due","Company","Creator","Updater"}}
+	for i := 0; i < len(customers); i++ {
+		var ShippingLocation string = models.LocationToString(customers[i].ShippingLocation)
+		var BillingLocation string = models.LocationToString(customers[i].BillingLocation)
+		var IsTaxable string
+		if customers[i].IsTaxable {
+			IsTaxable ="Yes"
+		}else{
+			IsTaxable ="No"
+		}
+		records = append(records, []string{customers[i].Name,customers[i].Phone,customers[i].Mobile,customers[i].Fax,customers[i].CompanyName,customers[i].WebSite,customers[i].AccountNumber,ShippingLocation,BillingLocation,IsTaxable,strconv.FormatFloat(float64(customers[i].Tax), 'f', 2, 32),strconv.FormatFloat(float64(customers[i].Discount), 'f', 2, 32),customers[i].BankAccount,customers[i].BankAccountName,customers[i].BatchPaymentsDetails,strconv.FormatFloat(float64(customers[i].OutStanding), 'f', 2, 64),strconv.FormatFloat(float64(customers[i].OverDue), 'f', 2, 32),customers[i].Company.Name,customers[i].Creator.FirstName,customers[i].Updater.FirstName})
+	}
+	writer1 := csv.NewWriter(csvfile)
+	writer1.Comma = '\t'
+	err := writer1.WriteAll(records) // flush everything into csvfile
+	if err != nil {
+		log.Println("Error:", err)
+		return nil, &handler.Error{err, "Could not write the record to csv file.", http.StatusBadRequest}
+	}
+
+	return csvfile.Bytes(), nil
 }

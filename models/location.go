@@ -119,3 +119,24 @@ func DeleteLocation(g *Location) {
 	g.Deleted = time.Now()
 	o.Update(g)
 }
+
+func LocationToString(location *Location) (string) {
+	var ShippingLocation string;
+	o := orm.NewOrm()
+	if location != nil {
+		ShippingLocation =	location.Address
+		if location.Address1 != ""{
+			ShippingLocation +=  ", "+ location.Address1
+		}
+		if location.State != nil {
+			o.Read(location.State)
+			ShippingLocation += ", "+location.State.Name
+		}
+		
+		if location.Country != nil {
+			o.Read(location.Country)
+			ShippingLocation +=  ", "+ location.Country.Name
+		}
+	}
+	return ShippingLocation
+}

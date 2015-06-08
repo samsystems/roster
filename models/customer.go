@@ -141,3 +141,13 @@ func DeleteCustomer(customer *Customer) {
 	customer.Deleted = time.Now()
 	o.Update(customer)
 }
+
+func GetAllCustomersWithoutPagination(user *User) ([]Customer, interface{}) {
+	o := orm.NewOrm()
+	var customers []Customer
+	querySetter := o.QueryTable("customer")
+	querySetter = querySetter.Filter("company", user.Company).Filter("deleted__isnull", true)
+	querySetter=querySetter.RelatedSel("ShippingLocation").RelatedSel("BillingLocation").RelatedSel("Company").RelatedSel("Creator").RelatedSel("Updater")
+	querySetter.All(&customers)
+	return customers, nil
+}

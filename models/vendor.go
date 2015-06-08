@@ -131,3 +131,13 @@ func DeleteVendor(vendor *Vendor) {
 	vendor.Deleted = time.Now()
 	o.Update(vendor)
 }
+func GetAllVendorsWithoutPagination(user *User) ([]Vendor, interface{}) {
+	o := orm.NewOrm()
+	var vendors []Vendor
+	querySetter := o.QueryTable("vendor")
+	querySetter = querySetter.Filter("company", user.Company).Filter("deleted__isnull", true)
+	querySetter=querySetter.RelatedSel("Location").RelatedSel("Company").RelatedSel("Creator").RelatedSel("Updater")
+	querySetter.All(&vendors)
+	return vendors, nil
+}
+

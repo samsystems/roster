@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q', '$window', '$location', '$timeout', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q, $window, $location, $timeout) {
+angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q', '$window', '$location', '$timeout','ExportCSVService', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q, $window, $location, $timeout, ExportCSVService) {
 
     $scope.page = 1;
     $scope.search = {invoice: ""};
@@ -143,4 +143,8 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
     };
 
     $scope.checkboxes = { InvoiceProducts: {} };
+
+    $scope.exportToCSV = function(){
+        ExportCSVService.export('invoice');
+    }
 }]);

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('vendor').controller('VendorController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Vendor', 'ngTableParams', '$filter', '$q', '$state',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Vendor, ngTableParams, $filter, $q, $state) {
+angular.module('vendor').controller('VendorController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Vendor', 'ngTableParams', '$filter', '$q', '$state','ExportCSVService',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Vendor, ngTableParams, $filter, $q, $state, ExportCSVService) {
 
         $scope.page = 1;
         $scope.total = 0;
@@ -244,5 +244,9 @@ angular.module('vendor').controller('VendorController', ['$scope', '$rootScope',
 
             // Return the parsed data.
             return( arrData );
+        }
+
+        $scope.exportToCSV = function(){
+            ExportCSVService.export('vendor');
         }
     }]);

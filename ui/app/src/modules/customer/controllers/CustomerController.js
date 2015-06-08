@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Customer', 'Contact', 'State', 'ngTableParams', '$filter', '$q', '$state', '$upload', '$http', '$window',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, Contact, State, ngTableParams, $filter, $q, $state, $upload, $http, $window) {
+angular.module('customer').controller('CustomerController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Customer', 'Contact', 'State', 'ngTableParams', '$filter', '$q', '$state', '$upload', '$http', '$window','ExportCSVService',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Customer, Contact, State, ngTableParams, $filter, $q, $state, $upload, $http, $window, ExportCSVService) {
 
         $scope.page = 1;
         $scope.total = 0;
@@ -270,6 +270,11 @@ angular.module('customer').controller('CustomerController', ['$scope', '$rootSco
 
             // Return the parsed data.
             return( arrData );
+        }
+
+
+        $scope.exportToCSV = function(){
+            ExportCSVService.export('customer');
         }
     }])
 ;

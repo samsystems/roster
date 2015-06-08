@@ -8,11 +8,11 @@ angular.module('common').service('ExportCSVService', ['toaster', '$http', 'confi
         export : function(model){
             $http({
                 method: 'GET',
-                url: config.api.baseUrl + "/export-csv/" + model,
+                url: config.api.baseUrl + "/export-csv/" + model
             }).success(function(response) {
                 $('#link-download-element').remove();
                 var href = "data:application/octet-stream;base64," + response;
-                $('<a id="link-download-element" href="' + href +'" download="' + model + '" style="display: none">').appendTo($('body'))[0].click();
+                $('<a id="link-download-element" href="' + href +'" download="' + model + '.csv" style="display: none">').appendTo($('body'))[0].click();
             });
         }
     }

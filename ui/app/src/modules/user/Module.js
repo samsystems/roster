@@ -16,14 +16,21 @@ angular.module('user', [
         $stateProvider
             .state('app.user', {
                 url: 'users',
-                templateUrl: 'src/modules/user/views/user.html',
+                templateUrl: 'src/modules/user/views/user-list.html',
                 controller: 'UserController'
             })
             .state('register', {
                 url: '/register',
                 templateUrl: 'src/modules/user/views/register.html',
                 controller: 'RegisterController'
-            });
+            })
+            .state('app.user-create', {
+                url: 'users/create',
+                templateUrl: 'src/modules/user/views/form.html',
+                controller: 'UserFormController'
+            })
+        ;
+
 
         // Module translations
         $translateProvider.translations('en', {});

@@ -1,69 +1,77 @@
-<div data-ng-controller="UserListController">
-    <!-- Toolbar message -->
-    <div class="data-table-toolbar">
-        <div class="row">
-            <div class="col-sm-3">
-                <form role="form" ng-submit="search(searchUser)">
-                    <input type="text" data-ng-model="searchUser" class="form-control" placeholder="Search ..."/>
-                </form>
-            </div>
-            <div class="col-sm-6">
-                <a data-toggle="tooltip" title="Refresh" class="btn btn-default" data-ng-click="refresh()"><i class="fa fa-refresh"></i></a>
-                <a data-toggle="tooltip" title="Refresh" class="btn btn-default" data-ng-click="createUser()"><i class="fa fa-plus"> Add</i></a>
-            </div>
-            <div class="col-sm-3">
-                <div class="pull-right" data-ng-if="users.length > 0">
-                    <span class="paging-status">{{1+((page-1)*limitInPage)}} - {{(users.length < limitInPage) ? total.count : (((page-1)*limitInPage)+limitInPage) }} of {{total.count}}</span>
-                    <div class="btn-group">
-                        <a class="btn btn-default" data-ng-click="setPage(page-1)" data-ng-class="{disabled: page == 1}"><i class="fa fa-chevron-left"></i></a>
-                        <a class="btn btn-default" data-ng-click="setPage(page+1)" data-ng-class="{disabled: page >= (total.count/limitInPage)}"><i class="fa fa-chevron-right"></i></a>
-                    </div>
+<page-content-title title="Users">
+    <!-- <a title="Add" class="btn btn-primary" href="#/users/create"><i class="fa fa-plus"> New</i></a>-->
+     <a title="Add" data-ng-controller="UserListController" class="btn btn-primary" ng-click="showForm()"><i class="fa fa-plus"> New</i></a>
+ </page-content-title>
+
+ <panel type="plain">
+     <div class="row" data-ng-controller="UserListController">
+         <div class="row">
+             <div class="data-table-toolbar">
+                 <div class="col-md-12">
+                     <div class="col-md-5">
+                         <form role="form" ng-submit="search(searchUser)">
+                             <input type="text" data-ng-model="searchUser" class="form-control" placeholder="Search ..."/>
+                         </form>
+                     </div>
+                     <div class="col-md-4">
+                         <a data-toggle="tooltip" title="Refresh" class="btn btn-default"
+                            data-ng-click="refresh()"><i
+                                 class="fa fa-refresh"></i></a>
+                     </div>
+                     <!-- End div .col-sm-3 -->
                 </div>
-            </div><!-- End div .col-sm-3 -->
-        </div><!-- End div .row -->
-    </div><!-- End div .data-table-toolbar -->
-    <!-- End toolbar message -->
+                <!-- End div .row -->
+            </div>
 
-    <div class="panel-body" >
-        <div data-ng-if="total.count==0">{{'No Users Available.' | translate}}</div>
-    </div>
+        </div>
+        <!-- End div .row -->
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive table-hover" data-ng-show="total > 0">
+                    <table ng-table="userTable" class="table table-hover table-message" template-pagination="custom/pager">
+                        <tr  class="items" data-ng-repeat="user in $data">
+                            <td data-title="'Full Name'" sortable="'fullName'" style="cursor:pointer;" ng-click="selectUser(user)"><span class="name">{{user.fullName}}</span></td>
+                            <td data-title="'Username'" sortable="'username'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.username}}</td>
+                            <td data-title="'Name'" sortable="'dob'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.dob | outputFormatDate}}</td>
+                            <td data-title="'Name'" sortable="'created.date'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.created.date | outputFormatDate}}</td>
+                            <td data-title="'Name'" sortable="'country.name'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.country.id}}</td>
+                            <td data-title="'Action'">
+                                <a><span class="badge ng-scope" data-tooltip="Remove" data-ng-click="removeUser(user)"><i class="fa fa-times"></i></span></a>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- Footer message toolbar -->
+                    <script type="text/ng-template" id="custom/pager">
+                        <div class="data-table-toolbar">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="pull-right">
 
-    <div class="the-box default margin-bottom">
-        <div class="table-responsive table-hover">
-            <table ng-table="userTable" class="table table-hover table-message" template-pagination="custom/pager">
-                    <tr  class="items" data-ng-repeat="user in $data">
-                        <td data-title="'Full Name'" sortable="'fullName'" style="cursor:pointer;" ng-click="selectUser(user)"><span class="name">{{user.fullName}}</span></td>
-                        <td data-title="'Username'" sortable="'username'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.username}}</td>
-                        <td data-title="'Name'" sortable="'dob'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.dob | outputFormatDate}}</td>
-                        <td data-title="'Name'" sortable="'created.date'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.created.date | outputFormatDate}}</td>
-                        <td data-title="'Name'" sortable="'country.name'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.country.id}}</td>
-                        <td data-title="'Action'">
-                            <a><span class="badge ng-scope" data-tooltip="Remove" data-ng-click="removeUser(user)"><i class="fa fa-times"></i></span></a>
-                        </td>
-                    </tr>
-            </table>
-            <!-- Footer message toolbar -->
-            <script type="text/ng-template" id="custom/pager">
-                <div class="data-table-toolbar">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="pull-right">
+                                        <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
 
-                                <span class="paging-status">{{1+((params.page()-1)*params.count())}} - {{(params.data.length < params.count()) ? params.total() : (((params.page()-1)*params.count())+params.count()) }} of {{params.total()}}</span>
-                                <div class="btn-group">
+                                        <div class="btn-group">
                                         <span ng-repeat="page in pages"
                                               ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
-                                              ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
-                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
-                                            <a ng-switch-when="next" ng-click="params.page(page.number)" href="" class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
+                                              ng-show="page.type == 'prev' || page.type == 'next'"
+                                              ng-switch="page.type">
+                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href=""
+                                               class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                                            <a ng-switch-when="next" ng-click="params.page(page.number)" href=""
+                                               class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
                                         </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </script>
+                    <!-- End Footer message toolbar -->
                 </div>
-            </script>
-            <!-- End Footer message toolbar -->
+                <div class="panel-body">
+                    <div data-ng-show="total == 0" class="well well-sm">{{'No Users Available.' | translate}}</div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</panel>

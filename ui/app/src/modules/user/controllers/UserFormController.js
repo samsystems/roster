@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('user').controller('UserFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'User', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, User) {
+angular.module('user').controller('UserFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'User', 'Group', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, $validation, User, Group) {
 
+    //$scope.groups = Group.$search();
     $scope.user = {};
 
     if (!_.isUndefined($stateParams.id)) {

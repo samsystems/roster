@@ -1,21 +1,11 @@
 <div class="modal-header">
-    <h3>Add User</h3>
+    <h3>Change group</h3>
 </div>
 
 <div class="row" style="margin-top: 20px">
-    <div class="col-md-12" data-ng-controller="UserFormController">
-        <form role="form" name="form" class="form-horizontal" style="margin: 0 10px 0 10px">
+    <div class="col-md-12" data-ng-controller="UserListController">
+        <form name="form.userForm" ng-submit="submitForm()" novalidate role="form" name="form" class="form-horizontal" style="margin: 0 10px 0 10px">
             <div class="row" style="padding-left: 50px">
-                <div class="form-group login-input">
-                    <label class="control-label col-md-12" for="email">{{'Enter email' |
-                        translate}}</label>
-
-                    <div class="col-md-8">
-                        <input type="email" name="email" id="email" data-ng-model="user.Email"
-                               class="form-control text-input"
-                               placeholder="me@example.com" validator="required,email">
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group">
@@ -24,7 +14,7 @@
 
                             <div class="col-md-12">
                                 <select name="group" class="form-control" validator="required"
-                                        data-ng-model="user.Group"
+                                        data-ng-model="user.Group.Id"
                                         data-ng-options="group.Id as group.Name for group in groups"></select>
                             </div>
                         </div>
@@ -37,8 +27,8 @@
             <div class="row modal-footer" style="border-top:0px;">
                 <div class="row col-md-4 pull-right">
                     <a class="btn btn-primary" data-ng-click="cancel()">{{'Cancel' | translate}}</a>
-                    <button class="btn btn-success ng-binding" data-ng-click="save(form)">{{'Save' | translate}}
-                    </button>
+                    <button type="submit" class="btn btn-success ng-binding">{{'Save' | translate}} </button>
+                  <!--  <button class="btn btn-success ng-binding" data-ng-click="saveGroup(form)">{{'Save' | translate}} </button>-->
                 </div>
             </div>
         </form>

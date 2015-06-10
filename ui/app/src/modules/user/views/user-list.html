@@ -1,6 +1,6 @@
 <page-content-title title="Users">
     <!-- <a title="Add" class="btn btn-primary" href="#/users/create"><i class="fa fa-plus"> New</i></a>-->
-     <a title="Add" data-ng-controller="UserListController" class="btn btn-primary" ng-click="showForm()"><i class="fa fa-plus"> New</i></a>
+     <a title="Add" data-ng-controller="UserListController" class="btn btn-primary" ng-click="showFormAdd()"><i class="fa fa-plus"> Add User</i></a>
  </page-content-title>
 
  <panel type="plain">
@@ -31,13 +31,14 @@
                 <div class="table-responsive table-hover" data-ng-show="total > 0">
                     <table ng-table="userTable" class="table table-hover table-message" template-pagination="custom/pager">
                         <tr  class="items" data-ng-repeat="user in $data">
-                            <td data-title="'Full Name'" sortable="'fullName'" style="cursor:pointer;" ng-click="selectUser(user)"><span class="name">{{user.fullName}}</span></td>
-                            <td data-title="'Username'" sortable="'username'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.username}}</td>
-                            <td data-title="'Name'" sortable="'dob'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.dob | outputFormatDate}}</td>
-                            <td data-title="'Name'" sortable="'created.date'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.created.date | outputFormatDate}}</td>
-                            <td data-title="'Name'" sortable="'country.name'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.country.id}}</td>
+                            <td data-title="'First Name'" sortable="'fullName'" style="cursor:pointer;" ng-click="selectUser(user)"><span class="name">{{user.FirstName}}</span></td>
+                            <td data-title="'Last Name'" sortable="'username'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.LastName}}</td>
+                            <td data-title="'Username'" sortable="'username'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.Username}}</td>
+                            <td data-title="'Group'" sortable="'group.Name'" style="cursor:pointer;" ng-click="selectUser(user)">{{user.Group.Name}}</td>
                             <td data-title="'Action'">
+                                <a><span class="badge ng-scope" data-tooltip="Group" data-ng-click="showChangeGroup(user)"><i class="fa fa-users"></i></span></a>
                                 <a><span class="badge ng-scope" data-tooltip="Remove" data-ng-click="removeUser(user)"><i class="fa fa-times"></i></span></a>
+                                <button  class="btn btn-default" data-ng-model="user.IsActive" btn-checkbox data-ng-class="{'btn-primary': user.IsActive}" data-ng-click="setActive(user)">{{user.IsActive ? 'Active' : 'Inactive' }}</button>
                             </td>
                         </tr>
                     </table>

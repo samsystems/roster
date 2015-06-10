@@ -99,109 +99,108 @@
 
 
 <div class="row">
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="billingAddress" class="control-label col-md-12">{{'Billing Address' |
-                        translate}}:</label>
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="billingAddress" class="control-label col-md-12">{{'Billing Address' |
+                    translate}}:</label>
 
-                    <div class="col-md-12">
-                        <input id="billingAddress" name="billingAddress"
-                               data-ng-model="customer.BillingLocation.Address" type="text"
-                               class="form-control" validator="required" placeholder="Street">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-12">
-                    <input data-ng-model="customer.BillingLocation.Address1" type="text"
-                           class="form-control" placeholder="Apt/suite">
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="col-md-12">
-                    <input name="billingCity" data-ng-model="customer.BillingLocation.City" type="text"
-                           class="form-control" validator="required" placeholder="City">
-                </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <select name="billingState" class="form-control" validator="required"
-                            data-ng-model="customer.BillingLocation.State.Id"
-                            data-ng-options="state.Id as state.Name for state in states"></select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="col-md-12">
-                    <input name="billingZipcode" validator="required" data-ng-model="customer.BillingLocation.Zipcode"
-                           type="text"
-                           class="form-control" placeholder="Zipcode">
-                </div>
+                <div class="col-md-12">
+                    <input id="billingAddress" name="billingAddress"
+                           data-ng-model="customer.BillingLocation.Address" type="text"
+                           class="form-control" validator="required" placeholder="Street">
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="control-label col-md-12" for="shippingAddress">{{'Shipping Address' |
-                        translate}}:</label>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input data-ng-model="customer.BillingLocation.Address1" type="text"
+                           class="form-control" placeholder="Apt/suite">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input name="billingCity" data-ng-model="customer.BillingLocation.City" type="text"
+                           class="form-control" validator="required" placeholder="City">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <select name="billingState" class="form-control" validator="required"
+                        data-ng-model="customer.BillingLocation.State.Id"
+                        data-ng-options="state.Id as state.Name for state in states"></select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input name="grupo" validator="required" data-ng-model="user.Grupo"
+                           type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label col-md-12" for="shippingAddress">{{'Shipping Address' |
+                    translate}}:</label>
 
-                    <div class="pull-right">
-                        <input id="CheckboxShipping" type="checkbox" ng-change="BillShip()"
-                               data-ng-model="customer.BillShip" name="locked" value="1">
+                <div class="pull-right">
+                    <input id="CheckboxShipping" type="checkbox" ng-change="BillShip()"
+                           data-ng-model="customer.BillShip" name="locked" value="1">
 
-                        <label style="margin-left: 10px" class="control-label">{{'Same As billing' | translate}}</label>
-                    </div>
+                    <label style="margin-left: 10px" class="control-label">{{'Same As billing' | translate}}</label>
+                </div>
 
-                    <div class="col-md-12">
+                <div class="col-md-12">
                     <input id="shippingAddress" name="shippingAddress" data-ng-model="customer.ShippingLocation.Address"
                            type="text"
                            class="form-control" validator="required" placeholder="Street">
                 </div>
-                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-12">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-12">
                     <input data-ng-model="customer.ShippingLocation.Address1" type="text"
                            class="form-control" placeholder="Apt/suite">
                 </div>
-                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="col-md-12">
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-md-12">
                     <input name="shippingCity" data-ng-model="customer.ShippingLocation.City" type="text"
                            class="form-control" validator="required" placeholder="City">
                 </div>
-                </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <select name="shippingState" validator="required" class="form-control"
-                            data-ng-model="customer.ShippingLocation.State.Id"
-                            data-ng-options="state.Id as state.Name for state in states"></select>
-                </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <select name="shippingState" validator="required" class="form-control"
+                        data-ng-model="customer.ShippingLocation.State.Id"
+                        data-ng-options="state.Id as state.Name for state in states"></select>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="col-md-12">
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-md-12">
                     <input name="shippingZipcode" validator="required" data-ng-model="customer.ShippingLocation.Zipcode"
                            type="text"
                            class="form-control" placeholder="Zipcode">
@@ -217,8 +216,8 @@
             <label for="billingAddress" class="col-md-12 control-label">{{'Tax' |
                 translate}}:</label>
 
-                <input style="margin-left: 15px" type="checkbox" data-ng-model="customer.IsTaxable"
-                       name="locked" value="1">
+            <input style="margin-left: 15px" type="checkbox" data-ng-model="customer.IsTaxable"
+                   name="locked" value="1">
             <label style="margin-left: 10px" class="control-label">{{'Is Taxable' | translate}}</label>
         </div>
     </div>

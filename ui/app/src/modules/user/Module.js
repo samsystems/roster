@@ -24,9 +24,14 @@ angular.module('user', [
                 templateUrl: 'src/modules/user/views/register.html',
                 controller: 'RegisterController'
             })
+            .state('guest-register', {
+                url: '/guest-register',
+                templateUrl: 'src/modules/user/views/guest-register.html',
+                controller: 'GuestRegisterController'
+            })
             .state('app.user-create', {
                 url: 'users/create',
-                templateUrl: 'src/modules/user/views/form.html',
+                templateUrl: 'src/modules/user/views/user-modal.html',
                 controller: 'UserFormController'
             })
         ;

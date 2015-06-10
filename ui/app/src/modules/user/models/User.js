@@ -67,6 +67,14 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
 
                 getCurrentUserId: function() {
                     return $window.sessionStorage.userId;
+                },
+                count: function(search) {
+                    var keyword = (!_.isUndefined(search)) ? search :null;
+                    return $http({
+                        method: 'GET',
+                        url: config.api.baseUrl + '/user/count',
+                        params: { keyword: keyword }
+                    });
                 }
 
             }

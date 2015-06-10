@@ -13,16 +13,18 @@ import (
 	"handler"
 	"log"
 	"models"
+	"validation"
 )
 
 type UserController struct {
 }
 
 func (controller *UserController) RegisterHandlers(r *mux.Router) {
+	r.Handle("/user/count", handler.New(controller.GetCountAll)).Methods("GET")
 	r.Handle("/user/login", handler.New(controller.Login)).Methods("GET")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
 	r.Handle("/user", handler.New(controller.GetAll)).Methods("GET")
-	r.Handle("/user", handler.New(controller.Put)).Methods("PUT")
+	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/user", handler.New(controller.Post)).Methods("POST")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Delete)).Methods("DELETE")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}/notifications", handler.New(controller.GetAllUserNotifications)).Methods("GET")
@@ -93,32 +95,43 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 func (controller *UserController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	//username := v["username"]
 	var username = request.URL.Query().Get("username")
-	var keyword = request.URL.Query().Get("keyword")
-
+	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
+	user, _ := models.GetCurrentUser(request)
+	var users []models.User
 	if username != "" {
-		
-		user, _ := models.GetUserByUsername(username)
 		users := make([]*models.User, 1)
+		user, _ := models.GetUserByUsername(username)
 		users[0] = user
 		return users, nil
 	} else if keyword != ""{
-		
-		var users []models.User
-		page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
-		user, _ := models.GetCurrentUser(request)
-	//	if keyword != "" {
 			users, _ = models.GetUserByKeyword(keyword, user, page, sort, false, -1)
-	//	} else {
-	//		customers, _ = models.GetAllCustomers(user, page, sort, false, -1)
-	//	}
-		if len(users) == 0 {
+	} else {
+		users, _ = models.GetAllUsers(user, 1, "notSorting", false, -1)
+	}
+	if len(users) == 0 {
 			return make([]models.User, 0), nil
 		} 
-
-	    return users, nil
-	} 
-	users := models.GetAllUsers()
 	return users, nil
+}
+
+
+// @Title Get Count Users
+// @Description get count Users
+// @Param	keyword		string
+// @Success 200 {array} models.User
+// @router /count [get]
+func (controller *UserController) GetCountAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	total := make(map[string]interface{})
+	user, _ := models.GetCurrentUser(request)
+	keyword := ""
+	if keywordP := request.URL.Query().Get("keyword"); keywordP != "" {
+		keyword = keywordP
+		_, total["total"] = models.GetUserByKeyword(keyword, user, 1, "notSorting", true, -1)
+	} else {
+		_, total["total"] = models.GetAllUsers(user, 1, "notSorting", true, -1)
+	}
+
+	return total, nil
 }
 
 // @Title Get
@@ -173,14 +186,22 @@ func (controller *UserController) Put(context appengine.Context, writer http.Res
 
 	var user models.User
 	json.Unmarshal(data, &user)
-
-	//uu, err := models.UpdateUser(uid, &user)
+	valid := validation.Validation{}
+	b, err := valid.Valid(&user)
 	if err != nil {
-		// TODO: adjust error
-		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+		return nil, &handler.Error{err, "Some errors on validation.", http.StatusBadRequest}
+	}
+	if !b {
+		for _, err := range valid.Errors {
+			return nil, &handler.Error{nil, err.Message, http.StatusBadRequest}
+		}
+		return nil, &handler.Error{nil, "Entity not found.", http.StatusNoContent}
+	} else {
+		models.UpdateUser(&user)
 	}
 
-	return nil, nil
+
+	return user, nil
 }
 
 // @Title delete
@@ -191,8 +212,12 @@ func (controller *UserController) Put(context appengine.Context, writer http.Res
 // @router /:uid [delete]
 func (controller *UserController) Delete(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	uid := v["uid"]
+	user, err := models.GetUser(uid)
+	if err != nil {
+		return nil, &handler.Error{err, "Entity not found.", http.StatusNoContent}
+	}
 
-	models.DeleteUser(uid)
+	models.DeleteUser(user)
 
 	return nil, nil
 }

@@ -23,7 +23,7 @@ func (controller *MagentoAccountController) RegisterHandlers(r *mux.Router) {
 // @Success 200 {object} models.MagentoAccount
 // @router / [get]
 func (controller *MagentoAccountController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	accounts := models.GetAllUsers()
+	accounts := models.GetAllUsersWithoutPagination()
 
 	return accounts, nil
 }

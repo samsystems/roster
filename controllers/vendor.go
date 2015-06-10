@@ -175,7 +175,7 @@ func (controller *VendorController) Put(context appengine.Context, writer http.R
 	json.Unmarshal(data, &vendor)
 
 	user, _ := models.GetCurrentUser(request)
-	vendor.Creator = user
+	//vendor.Creator = user
 	vendor.Updater = user
 	if vendor.Location != nil {
 		location := vendor.Location

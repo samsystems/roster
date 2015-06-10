@@ -55,8 +55,8 @@ type User struct {
 	CreatedTimeZone        int
 	Updated                time.Time `orm:"auto_now_add;type(datetime)"`
 	UpdatedTimeZone        int
-	isActive               bool `orm:"default(false)"`
-	Deleted                bool
+	IsActive               bool `orm:"default(false)"`
+	Deleted                time.Time `orm:"type(datetime)"`
 	Group                  *Group   `orm:"rel(one)"`
 	Company                *Company `orm:"null;rel(one)"`
 }
@@ -108,7 +108,7 @@ func GetCurrentUser(request *http.Request) (*User, error) {
 	return GetUserByToken(token)
 }
 
-func GetAllUsers() []*User {
+func GetAllUsersWithoutPagination() []*User {
 	o := orm.NewOrm()
 
 	var users []*User
@@ -120,14 +120,34 @@ func GetAllUsers() []*User {
 	return users
 }
 
-func GetUserByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]User, interface{}) {
-	var users []User
-	qb, _ := orm.NewQueryBuilder("mysql")
+func GetAllUsers(user *User, page int, order string, count bool, limit int) ([]User, interface{}) {
+	
 	page -= 1
 	if limit < 0 {
 		limit = USER_LIMIT
 	}
-	// Construct query object
+	o := orm.NewOrm()
+	var users []User
+	qs := o.QueryTable("user")
+	qs = qs.Filter("company", user.Company).Filter("deleted__isnull", true)
+	if count == true {
+		cnt, _ := qs.Count()
+		return users, cnt
+	} else {
+		qs = ParseQuerySetterOrder(qs, order)
+		qs.RelatedSel("Group").Offset(page * limit).Limit(limit).All(&users)
+		return users, nil
+	}
+}
+
+func GetUserByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]User, interface{}) {
+	var users []User
+//	qb, _ := orm.NewQueryBuilder("mysql")
+	page -= 1
+	if limit < 0 {
+		limit = USER_LIMIT
+	}
+	/*// Construct query object
 	if count == false {
 		qb.Select("user.*")
 	} else {
@@ -136,8 +156,10 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 
 	qb.From("user user").
 		Where("user.first_name LIKE ?").And("user.company_id = ?")
-
+*/
 	if count == true {
+		qb, _ := orm.NewQueryBuilder("mysql")
+		qb.Select("count(user.id)").From("user user").Where("user.first_name LIKE ?").And("user.company_id = ?")
 		sql := qb.String()
 		var total int
 		// execute the raw query string
@@ -146,6 +168,13 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 		return users, total
 
 	} else {
+		o := orm.NewOrm()
+		qs := o.QueryTable("user")
+		qs = qs.Filter("company", user.Company).Filter("deleted__isnull", true).Filter("first_name__icontains", keyword)
+		qs = ParseQuerySetterOrder(qs, order)
+		qs.RelatedSel("Group").Offset(page * limit).Limit(limit).All(&users)
+		return users, nil
+		/*
 		ParseQueryBuilderOrder(qb, order, "user")
 		qb.Limit(limit).Offset(page * USER_LIMIT)
 
@@ -158,7 +187,7 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 		if err != nil {
 			panic(err)
 		}
-		return users, nil
+		return users, nil*/
 	}
 
 }
@@ -223,6 +252,8 @@ func Login(username string, password string) (*Token, error) {
 	return nil, errors.New("Invalid username and/or password")
 }
 
-func DeleteUser(uid string) {
-
+func DeleteUser(user *User) {
+	o := orm.NewOrm()
+	user.Deleted = time.Now()
+	o.Update(user)
 }

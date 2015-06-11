@@ -11,7 +11,8 @@ angular.module('config',[]).constant('config', {
     },
     api: {
         baseUrl: 'http://localhost:8085',
-        pdfUrl:'http://130.211.118.47/documents/generate-pdf'
+        pdfUrl:'http://130.211.118.47/documents/generate-pdf',
+        emailUrl:'http://130.211.118.47/emails/send-email'
     },
     date: {
         outputFormatDateTime: 'MMM D, YYYY[separator]HH:mm z',

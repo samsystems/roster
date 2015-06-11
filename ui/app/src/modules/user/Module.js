@@ -25,7 +25,7 @@ angular.module('user', [
                 controller: 'RegisterController'
             })
             .state('guest-register', {
-                url: '/guest-register',
+                url: '/guest-register/:token',
                 templateUrl: 'src/modules/user/views/guest-register.html',
                 controller: 'GuestRegisterController'
             })

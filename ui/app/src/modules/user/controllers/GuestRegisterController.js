@@ -2,6 +2,15 @@
 
 angular.module('user').controller('GuestRegisterController', ['$scope', '$window', '$state', 'AuthenticationService', 'User', 'Company', 'CompanyScope', 'Industry', 'State', 'toaster', 'WizardHandler', '$validation',
     function ($scope, $window, $state, AuthenticationService, User, Company, CompanyScope, Industry, State, toaster, WizardHandler, $validation) {
+
+        var id = (!_.isUndefined($stateParams.token)) ? $stateParams.token : null;
+
+        if(id==null){
+            toaster.pop('error', 'Error', 'There was an error when trying to connect to the application. Please try again.');
+            $state.go("app.login");
+        }
+
+
         $scope.user = {};
         $scope.credentials = {};
 

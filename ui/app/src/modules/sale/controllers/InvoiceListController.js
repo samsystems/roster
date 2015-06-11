@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q', '$window', '$location', '$timeout','ExportCSVService', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q, $window, $location, $timeout, ExportCSVService) {
+angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'Invoice', 'ngTableParams', '$filter', '$q', '$window', '$location', '$timeout','ExportCSVService','WorkerService', function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, Invoice, ngTableParams, $filter, $q, $window, $location, $timeout, ExportCSVService,WorkerService) {
 
     $scope.page = 1;
     $scope.search = {invoice: ""};
@@ -118,8 +118,24 @@ angular.module('sale').controller('InvoiceListController', ['$scope', '$rootScop
         $scope.invoicePdf.itemProducts.$fetch().$asPromise().then(function (response) {
             $timeout(function () {
                 var html = document.getElementById('pdf').innerHTML;
-                Invoice.pdf(html, true).success(function (pdf_base64) {
+                WorkerService.pdf(html, true).success(function (pdf_base64) {
                     $window.open("data:application/pdf;base64, " + pdf_base64.response, false);
+                });
+            });
+        });
+    };
+   $scope.sendMailPdf = function (invoice) {
+
+        $scope.invoicePdf = invoice.$fetch();
+
+        $scope.invoicePdf.itemProducts.$fetch().$asPromise().then(function (response) {
+            $timeout(function () {
+                var html = document.getElementById('pdf').innerHTML;
+                WorkerService.pdf(html, true).success(function (pdf_base64) {
+                    //$window.open("data:application/pdf;base64, " + pdf_base64.response, false);
+                    WorkerService.sendMail('hola',{'jlborrero@gmail.com':'Joe Luis'},"que bola").success(function (email_result) {
+                        console.email_result;
+                    });
                 });
             });
         });

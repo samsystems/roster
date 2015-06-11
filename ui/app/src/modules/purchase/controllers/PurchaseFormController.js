@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('purchase').controller('PurchaseFormController', ['$scope', '$rootScope', '$stateParams', '$location', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product', 'PurchaseOrder', 'PurchaseOrderItem','Vendor',
-    function ($scope, $rootScope, $stateParams, $location, config, $modal, dialogs, DateTimeService, toaster, $validation, Product, PurchaseOrder, PurchaseOrderItem,Vendor ) {
+angular.module('purchase').controller('PurchaseFormController', ['$scope', '$rootScope', '$stateParams', '$location', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Product', 'PurchaseOrder', 'PurchaseOrderItem','Vendor', '$state',
+    function ($scope, $rootScope, $stateParams, $location, config, $modal, dialogs, DateTimeService, toaster, $validation, Product, PurchaseOrder, PurchaseOrderItem,Vendor, $state ) {
 
     $scope.currencies = [
         {"value": "USD", "description": "USD United States Dollar"}
@@ -20,6 +20,7 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
         $validation.validate(form).success(function () {
 
             if(!_.isUndefined($scope.purchase.Id)){
+                $scope.purchase.Status = 'draft';
                 $scope.purchase.$save().$then(function(response) {
                   //  $rootScope.$broadcast('product::updated');
                     toaster.pop('success', 'Purchase Updated ', 'You have been successfully updated a purchase.')
@@ -49,9 +50,11 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
                 purchase.Currency=$scope.purchase.Currency;
                 purchase.TotalTax=$scope.purchase.TotalTax;
                 purchase.DeliveryInstruction=$scope.purchase.DeliveryInstruction;
+                purchase.Status = 'draft';
                 purchase.$save().$then( function(response) {
                    // $rootScope.$broadcast('product::created');
                     toaster.pop('success', 'Purchase Created', 'You have successfully created a new purchase.');
+                    $state.go("app.purchaseOrder");
                 }, function() {
                     toaster.pop('error', 'Error', 'Something went wrong a new Purchase could not be created');
                 });

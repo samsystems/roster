@@ -121,9 +121,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <p>1000 Parkview Dr</p>
-                        <p># 824, Hallandale Beach</p>
-                        <p>FL, 33009</p>
+                        <p>{{purchase.Supplier.Name}}
+                            <br/>
+                            {{purchase.Supplier.Location.Address}}
+                            <br/>
+                            {{purchase.Supplier.Location.City}}, {{purchase.Supplier.Location.Zipcode}}
+                            <br/>
+                            {{purchase.Supplier.Country.Name}}
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-6">

@@ -3,12 +3,17 @@
 angular.module('purchase').controller('PurchaseController', ['$scope','PurchaseOrder',
     function ($scope, PurchaseOrder ) {
     $scope.status = {
-        all: 0,
-        draft: 1,
-        awaiting: 2,
-        approved: 3,
-        billed: 4
+        all: 'all',
+        draft: 'draft',
+        awaiting: 'awaiting',
+        approved: 'approved',
+        billed: 'billed',
+        receiving: 'receiving',
+        completed: 'completed',
+        void: 'void'
     }
+
+
     $scope.resume = {};
     PurchaseOrder.getResume($scope.status.draft).then(function(data){
         $scope.resume.draft = data.data;

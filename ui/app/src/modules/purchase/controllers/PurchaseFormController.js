@@ -27,16 +27,16 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
             }else{
                 var purchase = PurchaseOrder.$build();
 
-                purchase.products = [];
+                purchase.PurchaseProducts = [];
                 var count = 0;
                 for (var i = 0; i < $scope.purchase.products.length; i++) {
                     if (!_.isUndefined($scope.purchase.products[i].Product))
                         if ($scope.purchase.products[i].Product.Name) {
-                            purchase.products[count] = $scope.purchase.products[i];
+                            purchase.PurchaseProducts[count] = $scope.purchase.products[i];
                             count++;
                         }
                 }
-                if (purchase.products.length == 0) {
+                if (purchase.PurchaseProducts.length == 0) {
                     toaster.pop('error', 'Error', 'You must add at least one product.');
                     return;
                 }

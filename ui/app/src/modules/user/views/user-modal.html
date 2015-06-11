@@ -4,27 +4,56 @@
 
 <div class="row" style="margin-top: 20px">
     <div class="col-md-12" data-ng-controller="UserFormController">
-        <form role="form" name="form" class="form-horizontal" style="margin: 0 10px 0 10px">
-            <div class="row" style="padding-left: 50px">
-                <div class="form-group login-input">
-                    <label class="control-label col-md-12" for="email">{{'Enter email' |
-                        translate}}</label>
+        <form name="form.guestUserForm" ng-submit="submitForm()" novalidate role="form" name="form"
+              class="form-horizontal" style="margin: 0 10px 0 10px">
+            <div class="row" style="padding: 0 20px 0 30px ">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group login-input">
+                            <label for="firstName" class="control-label col-md-12">{{'First Name' |
+                                translate}}</label>
 
-                    <div class="col-md-8">
-                        <input type="email" name="email" id="email" data-ng-model="user.Email"
-                               class="form-control text-input"
-                               placeholder="me@example.com" validator="required,email">
+                            <div class="col-md-12">
+                                <input type="text" name="firstName" id="firstName" data-ng-model="user.FirstName"
+                                       class="form-control text-input"
+                                       placeholder="Name" validator="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group login-input">
+                            <label for="lastName" class="control-label col-md-12">{{'Last Name' |
+                                translate}}</label>
+
+                            <div class="col-md-12">
+                                <input type="text" name="lastName" id="lastName" data-ng-model="user.LastName"
+                                       class="form-control text-input"
+                                       placeholder="Last Name" validator="required">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
+                        <div class="form-group login-input">
+                            <label class="control-label col-md-12" for="email">{{'Enter email' |
+                                translate}}</label>
+
+                            <div class="col-md-12">
+                                <input type="email" name="email" id="email" data-ng-model="user.Email"
+                                       class="form-control text-input"
+                                       placeholder="me@example.com" validator="required,email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label col-md-12">{{'Group' |
                                 translate}}:</label>
 
                             <div class="col-md-12">
                                 <select name="group" class="form-control" validator="required"
-                                        data-ng-model="user.Group"
+                                        multiple ng-multiple="true" data-ng-model="user.Group"
                                         data-ng-options="group.Id as group.Name for group in groups"></select>
                             </div>
                         </div>

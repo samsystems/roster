@@ -46,6 +46,10 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
         }
     });
 
+    $scope.$watch('searchUser', function (data) {
+        $scope.search();
+    });
+
     $rootScope.$on('user::created', function (event) {
         $scope.userTable.reload();
     });
@@ -115,7 +119,7 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
 
         var modalInstance = $modal.open({
             templateUrl: 'src/modules/user/views/user-modal.html',
-            controller: ModalInstanceCtrl,
+            controller: ModalGuestUser,
             scope: $scope,
             resolve: {
                 userForm: function () {
@@ -137,7 +141,7 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
         $scope.user = User.$find(user.Id);
         var modalInstance = $modal.open({
             templateUrl: 'src/modules/user/views/change-group.html',
-            controller: ModalInstanceCtrl,
+            controller: ModalGuestUser,
             scope: $scope,
             resolve: {
                 userForm: function () {
@@ -156,7 +160,7 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
 }]);
 
 
-var ModalInstanceCtrl = function ($scope, $modalInstance, userForm, toaster, $rootScope) {
+var ModalChangeGroup = function ($scope, $modalInstance, userForm, toaster, $rootScope) {
     $scope.form = {}
     $scope.submitForm = function () {
         if ($scope.form.userForm.$valid) {
@@ -169,6 +173,31 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, userForm, toaster, $ro
                     toaster.pop('error', 'Error', 'Something went wrong');
 
                 });
+            $modalInstance.close('closed');
+        } else {
+            console.log('userform is not in scope');
+        }
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+};
+
+
+var ModalGuestUser = function ($scope, $modalInstance, userForm, toaster, $rootScope) {
+    $scope.form = {}
+    $scope.submitForm = function () {
+        if ($scope.form.userForm.$valid) {
+            console.log('user form is in scope');
+            $scope.user.$save().$then(function (response) {
+                $rootScope.$broadcast('user::updated');
+                toaster.pop('success', 'User Updated ', 'You have been successfully updated a user group.')
+                //  $state.go("app.customer");
+            }, function () {
+                toaster.pop('error', 'Error', 'Something went wrong');
+
+            });
             $modalInstance.close('closed');
         } else {
             console.log('userform is not in scope');

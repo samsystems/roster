@@ -145,6 +145,7 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 	purchaseOrder.TotalTax = PurchaseRoundPlus((subTotal*float32(purchaseOrder.Tax))/100, 2)
 	purchaseOrder.Amount = purchaseOrder.TotalTax + purchaseOrder.SubTotal
 	purchaseOrder.OrderNumber = models.GetPurchaseMaxOrderNumber()
+	purchaseOrder.Status = models.PURCHASE_DRAFT
 
 	valid := validation.Validation{}
 	b, err := valid.Valid(&purchaseOrder)

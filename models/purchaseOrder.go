@@ -9,7 +9,7 @@ import (
 const (
 	PURCHASE_LIMIT             int = 5
 	PURCHASE_ALL               string = "all"
-	PURCHASE_DRAFT_LIMIT       string = "draft"
+	PURCHASE_DRAFT             string = "draft"
 	PURCHASE_AWAITING_APPROVAL string = "awaiting_approval"
 	PURCHASE_APPROVED          string = "awaiting_approval"
 	PURCHASE_BILLED            string = "billed"

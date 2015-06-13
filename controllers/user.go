@@ -131,7 +131,6 @@ func (controller *UserController) GetAll(context appengine.Context, writer http.
 		users := make([]*models.User, 1)
 		user, _:= models.GetUserByToken(token)
 		users[0] = user
-		return users, nil
 	} else if keyword != ""{
 			users, _ = models.GetUserByKeyword(keyword, user, page, sort, false, -1)
 	} else {

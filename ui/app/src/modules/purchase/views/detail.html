@@ -1,7 +1,7 @@
 <page-content-title title="Purchase Detail">
     <a class="btn btn-default" href="#/purchases"> Back to list</a>
 </page-content-title>
-<panel type="plain">
+<panel type="plain" ng-controller="PurchaseViewController">
     <div class="row">
         <div class="box-info">
             <div class="row" style="margin: 20px 0 0 18px">
@@ -91,13 +91,7 @@
                                         data-ng-click="removeProduct(item)" data-ng-show="!$last"></button>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="7">
-                                <button class="btn btn-default" data-ng-click="addProduct($index)">{{'Add' |
-                                    translate}}
-                                </button>
-                            </td>
-                        </tr>
+
                         <tr>
                             <td colspan="5" class="no-border"></td>
                             <td>Subtoal</td>
@@ -106,12 +100,12 @@
                         <tr>
                             <td colspan="5" class="no-border"></td>
                             <td>Tax (%)</td>
-                            <td colspan="2">{{Tax}}</td>
+                            <td colspan="2">{{purchase.Tax}}</td>
                         </tr>
                         <tr>
                             <td colspan="5" class="no-border"></td>
                             <td><b>Total</b></td>
-                            <td colspan="2">{{getTotal() | currency: 'USD'}}</td>
+                            <td colspan="2">{{ purchase.Amount | currency: 'USD'}}</td>
                         </tr>
                         </tbody>
                     </table>

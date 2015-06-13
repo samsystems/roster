@@ -48,7 +48,7 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
                     purchase.Reference = $scope.purchase.Reference;
                     purchase.Reference = $scope.purchase.Reference;
                     purchase.Currency = $scope.purchase.Currency;
-                    purchase.TotalTax = $scope.purchase.TotalTax;
+                    purchase.Tax = $scope.purchase.TotalTax;
                     purchase.DeliveryInstruction = $scope.purchase.DeliveryInstruction;
                     purchase.Status = 'draft';
                     purchase.$save().$then(function (response) {

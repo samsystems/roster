@@ -25,6 +25,12 @@ function ($scope, $rootScope, $stateParams, config, $validation, toaster, $uploa
         });
     }
 
+    $scope.getAmount = function (item) {
+        var quantity = (!isNaN(item.Quantity) && item.Quantity != "") ? parseInt(item.Quantity) : 0;
+        var price = (!isNaN(item.Price) && item.Price != "") ? parseFloat(item.Price) : 0;
+        var discount = (!isNaN(item.DiscountPrice) && item.DiscountPrice != "") ? parseFloat(item.DiscountPrice) : 0;
+        return  ( quantity * price ) - ( quantity * price * discount / 100);
+    }
 
     $scope.removePurchase = function(purchase) {
         dialogs.confirm('Remove a Purchase', 'Are you sure you want to remove a Purchase?').result.then(function(btn){

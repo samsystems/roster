@@ -23,6 +23,7 @@ type Group struct {
 	Email           string
 	NameId          string
 	Contactable     string
+	USers           []*User `orm:"reverse(many)"`
 	Deleted         time.Time `orm:"type(datetime)"`
 	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int

@@ -8,18 +8,18 @@ import (
 
 const (
 	PURCHASE_LIMIT             int = 5
-	PURCHASE_ALL               int = 0
-	PURCHASE_DRAFT_LIMIT       int = 1
-	PURCHASE_AWAITING_APPROVAL int = 2
-	PURCHASE_APPROVED          int = 3
-	PURCHASE_BILLED            int = 4
+	PURCHASE_ALL               string = "all"
+	PURCHASE_DRAFT_LIMIT       string = "draft"
+	PURCHASE_AWAITING_APPROVAL string = "awaiting_approval"
+	PURCHASE_APPROVED          string = "awaiting_approval"
+	PURCHASE_BILLED            string = "billed"
 )
 
 type PurchaseOrder struct {
 	Id                  string    `orm:"pk"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
-	Supplier            *User     `orm:"rel(one)" valid:"Entity(Supplier)"`
+	Supplier            *Vendor     `orm:"rel(one)" valid:"Entity(Vendor)"`
 	OrderNumber         int       `json:",string"`
 	Reference           int       `json:",string"`
 	Date                time.Time `orm:"type(datetime)"`
@@ -31,11 +31,13 @@ type PurchaseOrder struct {
 	DeliveryAddress     string
 	DeliveryAttention   string
 	DeliveryPhone       string
-	Status              int       `json:",string"`
+	Status              string
 	SubTotal            float32   `json:",string"`
 	TotalTax            float32   `json:",string"`
 	Amount              float32   `json:",string"`
 	Tax                 float32   `json:",string"`
+	Company             *Company  `orm:"rel(one)" valid:"Entity(Company)"`
+	PurchaseProducts    []*PurchaseOrderItem `orm:"reverse(many)"`
 	Deleted             time.Time `orm:"type(datetime)"`
 	Created             time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone     int
@@ -51,10 +53,14 @@ func GetPurchaseOrder(uid string) (*PurchaseOrder, error) {
 	c := PurchaseOrder{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&c)
+	if c.Supplier != nil {
+		o.Read(c.Supplier)
+	}
+	
 	return &c, err
 }
 
-func GetAllPurchaseOrder(status int, page int, order string, count bool, limit int) (*[]PurchaseOrder, interface{}) {
+func GetAllPurchaseOrder(status string, page int, order string, count bool, limit int) (*[]PurchaseOrder, interface{}) {
 	page -= 1
 	if limit < 0 {
 		limit = COMPANY_LIMIT
@@ -74,7 +80,8 @@ func GetAllPurchaseOrder(status int, page int, order string, count bool, limit i
 		cnt, _ := querySetter.Count()
 		return &companies, cnt
 	} else {
-		querySetter = ParseQuerySetterOrder(querySetter, order)
+		querySetter = ParseQuerySetterOrder(querySetter.RelatedSel("Supplier"), order)
+		
 		querySetter.Offset(page * limit).Limit(limit).All(&companies)
 		return &companies, nil
 	}
@@ -143,7 +150,7 @@ func DeletePurchaseOrder(c *PurchaseOrder) {
 	o.Update(c)
 }
 
-func GetPurchaseResume(status int) (amount float64, cant int) {
+func GetPurchaseResume(status string) (amount float64, cant int) {
 	type Resume struct {
 		Amount float64
 		Cant   int

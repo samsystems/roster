@@ -54,8 +54,6 @@ angular.module('group').controller('GroupController', [ 'Group', '$scope', '$roo
 		group.description = $scope.modal.description;
 
         group.$save(function(response) {
-                console.log("updated")
-                console.log(response)  
                 if(response != null) {
                 	loadGroupTable();
                 	toaster.pop('success', 'Added a Group', 'You Have Successfully Added a Group.')

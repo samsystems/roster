@@ -6,13 +6,13 @@ import (
 
 	"encoding/json"
 	"io/ioutil"
-	"strconv"
 
 	"appengine"
 
 	"handler"
 	"models"
 	"validation"
+	"math"
 )
 
 type PurchaseOrderController struct {
@@ -57,7 +57,7 @@ func (c *PurchaseOrderController) Get(context appengine.Context, writer http.Res
 func (c *PurchaseOrderController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	status := models.PURCHASE_ALL
 	if statusP := request.URL.Query().Get("status"); statusP != "" {
-		status, _ = strconv.Atoi(statusP)
+		status = statusP
 	}
 
 	var purchases *[]models.PurchaseOrder
@@ -81,7 +81,7 @@ func (c *PurchaseOrderController) Count(context appengine.Context, writer http.R
 
 	status := models.PURCHASE_ALL
 	if statusP := request.URL.Query().Get("status"); statusP != "" {
-		status, _ = strconv.Atoi(statusP)
+		status = statusP
 	}
 
 	keyword := ""
@@ -101,7 +101,7 @@ func (c *PurchaseOrderController) Count(context appengine.Context, writer http.R
 // @Success int
 // @router /resume/:status [get]
 func (c *PurchaseOrderController) GetResumePurchases(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
-	status, _ := strconv.Atoi(v["status"])
+	status := v["status"]
 	total := make(map[string]interface{})
 	total["amount"], total["cant"] = models.GetPurchaseResume(status)
 
@@ -116,6 +116,7 @@ func (c *PurchaseOrderController) GetResumePurchases(context appengine.Context, 
 // @router / [post]
 func (c *PurchaseOrderController) Post(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 
+
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
@@ -127,9 +128,26 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 	user, _ := models.GetCurrentUser(request)
 	purchaseOrder.Creator = user
 	purchaseOrder.Updater = user
+	
+	purchaseOrder.Company = user.Company
+	
+	purchaseProducts := purchaseOrder.PurchaseProducts
+	purchaseOrder.PurchaseProducts = nil
+
+	var subTotal float32 = 0
+	for i := 0; i < len(purchaseProducts); i++ {
+		subTotal += float32(purchaseProducts[i].Price) * float32(purchaseProducts[i].QuantitySolicited)
+		product, _ := models.GetProduct(purchaseProducts[i].Product.Id)
+		purchaseProducts[i].Product = product
+	}
+	purchaseOrder.SubTotal = PurchaseRoundPlus((subTotal), 2)
+	purchaseOrder.TotalTax = PurchaseRoundPlus((subTotal*float32(purchaseOrder.Tax))/100, 2)
+	purchaseOrder.Amount = purchaseOrder.TotalTax + purchaseOrder.SubTotal
+
 
 	valid := validation.Validation{}
 	b, err := valid.Valid(&purchaseOrder)
+
 	if err != nil {
 		return nil, &handler.Error{err, "Validation errors", http.StatusNoContent}
 	}
@@ -139,7 +157,14 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 		}
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
-		models.UpdatePurchaseOrder(&purchaseOrder)
+		models.AddPurchaseOrder(&purchaseOrder)
+		for i := 0; i < len(purchaseProducts); i++ {
+			var purchaseProduct = purchaseProducts[i]
+			purchaseProduct.Creator = user
+			purchaseProduct.Updater = user
+			purchaseProduct.PurchaseOrder = &purchaseOrder
+			models.AddPurchaseOrderItem(purchaseProduct)
+		}
 	}
 
 	return purchaseOrder, nil
@@ -200,4 +225,13 @@ func (controller *PurchaseOrderController) Delete(context appengine.Context, wri
 	models.DeletePurchaseOrder(purchaseOrder)
 
 	return nil, nil
+}
+
+
+func PurchaseRoundPlus(f float32, places int) float32 {
+	shift := math.Pow(10, float64(places))
+	return float32(PurchaseRound(float64(f)*shift) / shift)
+}
+func PurchaseRound(f float64) float64 {
+	return float64(math.Floor(f + .5))
 }

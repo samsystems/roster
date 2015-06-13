@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config', 'BasicAuth', 'AuthenticationService' , '$state', function($http, restmod, $window, config, BasicAuth, AuthenticationService, $state) {
+angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config', 'BasicAuth', 'AuthenticationService' , '$state', function ($http, restmod, $window, config, BasicAuth, AuthenticationService, $state) {
 
     return restmod.model('/user').mix('BaseModel', {
 
@@ -8,33 +8,40 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
 
         $extend: {
             Record: {
-                getId: function() {
+                getId: function () {
                     return this.Id;
                 },
-                getFirstName: function() {
+                getFirstName: function () {
                     return this.FirstName;
                 },
-                getLastName: function() {
+                getLastName: function () {
                     return this.LastName;
                 },
-                getFullName: function() {
+                getFullName: function () {
                     return (this.getFirstName() + " " + this.getLastName()).trim();
                 },
-                getCountryName: function() {
+                getCountryName: function () {
                     return this.Country;
                 },
-                getEmail: function() {
+                getEmail: function () {
                     return this.Email;
                 },
-                getPhone1: function() {
+                getPhone1: function () {
                     return this.Phone1;
                 },
-                getWeb: function() {
+                getWeb: function () {
                     return this.Web;
+                },
+                getFullGroups: function () {
+                    var result = "";
+                    for (var i = 0; i < this.Groups.length; i++) {
+                        result += ((i != 0) ? ', ' : '') + this.Groups[i].Name;
+                    }
+                    return result;
                 }
             },
             Model: {
-                logIn: function(username, password) {
+                logIn: function (username, password) {
                     BasicAuth.setCredentials(username, password);
 
                     return $http({
@@ -43,7 +50,7 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
                     });
                 },
 
-                forgot: function(username) {
+                forgot: function (username) {
                     BasicAuth.setCredentials(username, 'password');
 
                     return $http({
@@ -52,7 +59,7 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
                     });
                 },
 
-                logOut: function() {
+                logOut: function () {
                     AuthenticationService.isLogged = false;
                     delete $window.sessionStorage.token;
                     delete $window.sessionStorage.tokenExpires;
@@ -61,15 +68,15 @@ angular.module('common').factory('User', ['$http', 'restmod', '$window', 'config
 
                 },
 
-                userInSession: function() {
+                userInSession: function () {
                     return this.$find(this.getCurrentUserId());
                 },
 
-                getCurrentUserId: function() {
+                getCurrentUserId: function () {
                     return $window.sessionStorage.userId;
                 },
-                count: function(search) {
-                    var keyword = (!_.isUndefined(search)) ? search :null;
+                count: function (search) {
+                    var keyword = (!_.isUndefined(search)) ? search : null;
                     return $http({
                         method: 'GET',
                         url: config.api.baseUrl + '/user/count',

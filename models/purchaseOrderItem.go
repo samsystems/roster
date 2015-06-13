@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/astaxie/beego/orm"
 	"time"
+	"code.google.com/p/go-uuid/uuid"
 )
 
 const PURCHASEORDERITEM_LIMIT int = 5
@@ -11,7 +12,7 @@ type PurchaseOrderItem struct {
 	Id                string         `orm:"pk"`
 	Creator           *User          `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater           *User          `orm:"rel(one)" valid:"Entity(Updater)"`
-	PurchaseOrder     *PurchaseOrder `orm:"rel(one)" valid:"Entity(PurchaseOrder)"`
+	PurchaseOrder     *PurchaseOrder `orm:"rel(fk)" valid:"Entity(PurchaseOrder)"`
 	Product           *Product       `orm:"rel(one)" valid:"Entity(Product)"`
 	CustomProductName string
 	Description       string
@@ -28,4 +29,14 @@ type PurchaseOrderItem struct {
 
 func init() {
 	orm.RegisterModel(new(PurchaseOrderItem))
+}
+
+func AddPurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem) string {
+	o := orm.NewOrm()
+	purchaseOrderItem.Id = uuid.New()
+	_, err := o.Insert(purchaseOrderItem)
+	if err != nil {
+		panic(err)
+	}
+	return purchaseOrderItem.Id
 }

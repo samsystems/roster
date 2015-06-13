@@ -82,41 +82,47 @@ func GetAllVendors(user *User, page int, order string, count bool, limit int) ([
 }
 
 func GetVendorByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]Vendor, interface{}) {
-	var vendors []Vendor
-	qb, _ := orm.NewQueryBuilder("mysql")
+
 	page -= 1
 	if limit < 0 {
 		limit = VENDOR_LIMIT
 	}
-	// Construct query object
-	if count == false {
-		qb.Select("vendor.*")
-	} else {
-		qb.Select("count(vendor.id)")
-	}
+	var vendors []Vendor
 
-	qb.From("vendor vendor").
-		Where("vendor.name LIKE ?").And("vendor.company_id = ?")
-
+	
 	if count == true {
+		qb, _ := orm.NewQueryBuilder("mysql")
+		qb.Select("count(vendor.id)")
+		qb.From("vendor vendor").
+			Where("vendor.name LIKE ?").And("vendor.company_id = ?")
+
 		sql := qb.String()
 		var total int
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRow(&total)
 		return vendors, total
-
 	} else {
+		o := orm.NewOrm()
+		qs := o.QueryTable("vendor")
+		qs = qs.Filter("company", user.Company).Filter("deleted__isnull", true).Filter("name__icontains", keyword)
+		qs = ParseQuerySetterOrder(qs, order)
+		qs.Offset(page * limit).Limit(limit).All(&vendors)
+		return vendors, nil
+		
+		/*
+		
+		
 		ParseQueryBuilderOrder(qb, order, "vendor")
 		qb.Limit(limit).Offset(page * VENDOR_LIMIT)
-
+		qb.InnerJoin("location")
 		// export raw query string from QueryBuilder object
 		sql := qb.String()
 
 		// execute the raw query string
 		o := orm.NewOrm()
 		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&vendors)
-		return vendors, nil
+		return vendors, nil*/
 	}
 
 }

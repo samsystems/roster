@@ -73,15 +73,13 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
     };
 
     $scope.setActive = function (user) {
-        $scope.userSave = User.$find(user.Id).$then(function(){
+        $scope.userSave = User.$find(user.Id).$then(function () {
             console.log($scope.userSave.IsActive);
-            if ($scope.userSave.IsActive)
-            {
+            if ($scope.userSave.IsActive) {
                 $scope.userSave.IsActive = false;
                 var message = 'The user has successfully disabled';
             }
-            else
-            {
+            else {
                 $scope.userSave.IsActive = true;
                 var message = 'The user has successfully activated';
             }
@@ -98,32 +96,32 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
         });
     };
 
-    var saveGroup = function (form) {
-        $validation.validate(form).success(function() {
-                $scope.user.$save().$then(function (response) {
-                    $rootScope.$broadcast('user::updated');
-                    toaster.pop('success', 'User Updated ', 'You have been successfully updated a user group.')
-                  //  $state.go("app.customer");
-                }, function () {
-                    toaster.pop('error', 'Error', 'Something went wrong');
+    /* var saveGroup = function (form) {
+     $validation.validate(form).success(function() {
+     $scope.user.$save().$then(function (response) {
+     $rootScope.$broadcast('user::updated');
+     toaster.pop('success', 'User Updated ', 'You have been successfully updated a user group.')
+     //  $state.go("app.customer");
+     }, function () {
+     toaster.pop('error', 'Error', 'Something went wrong');
 
-                });
-        }).error(function() {
-            toaster.pop('error', 'Error', 'Complete the required entry fields.');
-        });
-    };
+     });
+     }).error(function() {
+     toaster.pop('error', 'Error', 'Complete the required entry fields.');
+     });
+     };*/
 
     $scope.showFormAdd = function () {
         $scope.message = "Show Form Button Clicked";
         console.log($scope.message);
-
+        $scope.userGuest = User.$build();
         var modalInstance = $modal.open({
             templateUrl: 'src/modules/user/views/user-modal.html',
             controller: ModalGuestUser,
             scope: $scope,
             resolve: {
-                userForm: function () {
-                    return $scope.userForm;
+                userGuestForm: function () {
+                    return $scope.userGuestForm;
                 }
             }
         });
@@ -141,11 +139,11 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
         $scope.user = User.$find(user.Id);
         var modalInstance = $modal.open({
             templateUrl: 'src/modules/user/views/change-group.html',
-            controller: ModalGuestUser,
+            controller: ModalChangeGroup,
             scope: $scope,
             resolve: {
-                userForm: function () {
-                    return $scope.userForm;
+                userChangeGroupForm: function () {
+                    return $scope.userChangeGroupForm;
                 }
             }
         });
@@ -160,35 +158,10 @@ angular.module('user').controller('UserListController', ['$scope', '$rootScope',
 }]);
 
 
-var ModalChangeGroup = function ($scope, $modalInstance, userForm, toaster, $rootScope) {
+var ModalChangeGroup = function ($scope, $modalInstance, userChangeGroupForm, toaster, $rootScope) {
     $scope.form = {}
-    $scope.submitForm = function () {
-        if ($scope.form.userForm.$valid) {
-            console.log('user form is in scope');
-                $scope.user.$save().$then(function (response) {
-                    $rootScope.$broadcast('user::updated');
-                    toaster.pop('success', 'User Updated ', 'You have been successfully updated a user group.')
-                    //  $state.go("app.customer");
-                }, function () {
-                    toaster.pop('error', 'Error', 'Something went wrong');
-
-                });
-            $modalInstance.close('closed');
-        } else {
-            console.log('userform is not in scope');
-        }
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-};
-
-
-var ModalGuestUser = function ($scope, $modalInstance, userForm, toaster, $rootScope) {
-    $scope.form = {}
-    $scope.submitForm = function () {
-        if ($scope.form.userForm.$valid) {
+    $scope.submitChangeGroupForm = function () {
+        if ($scope.form.userChangeGroupForm.$valid) {
             console.log('user form is in scope');
             $scope.user.$save().$then(function (response) {
                 $rootScope.$broadcast('user::updated');
@@ -204,7 +177,46 @@ var ModalGuestUser = function ($scope, $modalInstance, userForm, toaster, $rootS
         }
     };
 
-    $scope.cancel = function () {
+    $scope.cancelChangeGroup = function () {
+        $modalInstance.dismiss('cancel');
+    };
+};
+
+
+var ModalGuestUser = function ($scope, $modalInstance, userGuestForm, toaster, $rootScope, WorkerService, User, $validation, config) {
+    $scope.form = {}
+    $scope.submitGuestForm = function () {
+        $validation.validate($scope.form.userGuestForm).success(function () {
+            //  if ($scope.form.userGuestForm.$valid) {
+            console.log('user form is in scope');
+            $scope.userGuest.$save().$then(function (response) {
+                $rootScope.$broadcast('user::updated');
+                toaster.pop('success', 'User Updated ', 'You have been successfully invited a user.');
+                console.log(response.Id);
+                $scope.userGuest = User.$find(response.Id).$then(function () {
+                    //var emailSend=$scope.userGuest.Email;
+                    var emailSend = $scope.userGuest.Email,
+                        dest = {},
+                        subject = "hola",
+                        body = config.api.baseUrl + "/#/guest-register/" + $scope.userGuest.Token;
+
+                    dest[emailSend] = $scope.userGuest.getFullName();
+                    WorkerService.sendMail(subject, dest, body);
+
+                });
+                //  $state.go("app.customer");
+            }, function () {
+                toaster.pop('error', 'Error', 'Something went wrong');
+
+            });
+            $modalInstance.close('closed');
+        }).error(function () {
+            toaster.pop('error', 'Error', 'Complete the required entry fields.');
+        });
+
+    };
+
+    $scope.cancelGuest = function () {
         $modalInstance.dismiss('cancel');
     };
 };

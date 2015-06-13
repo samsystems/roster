@@ -46,7 +46,9 @@ func GetLocation(uid string) (*Location, error) {
 	g := Location{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&g)
-
+	if g.Country != nil {
+		o.Read(g.Country)
+	}
 	return &g, err
 }
 

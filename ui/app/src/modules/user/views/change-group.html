@@ -1,21 +1,24 @@
 <div class="modal-header">
-    <h3>Change group</h3>
+    <h3>Change group for {{user.getFullName()}}</h3>
 </div>
 
 <div class="row" style="margin-top: 20px">
     <div class="col-md-12" data-ng-controller="UserListController">
-        <form name="form.userForm" ng-submit="submitForm()" novalidate role="form" name="form" class="form-horizontal" style="margin: 0 10px 0 10px">
+        <form name="form.userChangeGroupForm" ng-submit="submitChangeGroupForm()" novalidate role="form" name="form" class="form-horizontal" style="margin: 0 10px 0 10px">
             <div class="row" style="padding-left: 50px">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label class="control-label col-md-12">{{'Group' |
+                            <label class="control-label col-md-4">{{'Group' |
                                 translate}}:</label>
 
-                            <div class="col-md-12">
-                                <select name="group" class="form-control" validator="required"
-                                        multiple ng-multiple="true" data-ng-model="user.Group.Id"
-                                        data-ng-options="group.Id as group.Name for group in groups"></select>
+                            <div class="col-md-8">
+                                <!--<select id="group"  name="group" class="form-control" validator="required"
+                                        multiple ng-multiple="true" data-ng-model="user.Groups"
+                                        data-ng-options="group.Id as group.Name for group in groups"></select>-->
+                                <!-- MultiSelect -->
+                                <multiselect id="group" name="group" data-ng-model="user.Groups" ms-header="Select Some Groups" ms-selected ="There are {{user.Groups.length}} group(s) selected" data-options="v.Id as v.Name for v in groups" multiple="true"></multiselect>
+
                             </div>
                         </div>
                     </div>
@@ -26,7 +29,7 @@
 
             <div class="row modal-footer" style="border-top:0px;">
                 <div class="row col-md-4 pull-right">
-                    <a class="btn btn-primary" data-ng-click="cancel()">{{'Cancel' | translate}}</a>
+                    <a class="btn btn-primary" data-ng-click="cancelChangeGroup()">{{'Cancel' | translate}}</a>
                     <button type="submit" class="btn btn-success ng-binding">{{'Save' | translate}} </button>
                   <!--  <button class="btn btn-success ng-binding" data-ng-click="saveGroup(form)">{{'Save' | translate}} </button>-->
                 </div>

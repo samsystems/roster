@@ -1,4 +1,4 @@
-<div class="container" data-ng-controller="RegisterController" style="margin-bottom: 40px">
+<div class="container" style="margin-bottom: 40px">
     <div class="full-content-center animated fadeInDownBig">
         <div class="panel-heading">
             <h4 class="panel-title text-center">
@@ -51,7 +51,7 @@
                                     <input type="email" name="email" id="email" data-ng-model="user.Email"
                                            class="form-control text-input"
                                            placeholder="me@example.com" validator="required,email"
-                                           ng-unique="{key: 'User', property: 'email',id: 0}">
+                                           ng-unique="{key: 'User', property: 'email',id: user.Id}">
                                     <span class="help-block" ng-show="form.email.$error.uniqueValue">Email is already taken.</span>
                                 </div>
                             </div>

@@ -92,7 +92,8 @@ angular.module('inventory', [
     };
 
         $rootScope.$on("$locationChangeStart", function (event, next, current) {
-            if (_.isUndefined($window.sessionStorage.token) && $window.location.hash != '#/login') {
+
+            if (_.isUndefined($window.sessionStorage.token) && ($window.location.hash != '#/login' && /^(#\/guest-register)\/(\d+|[a-z])*/.test($window.location.hash)==false)) {
                 event.preventDefault();
                 $window.location = '#/login';
             } else {

@@ -1987,8 +1987,30 @@ ALTER TABLE `invoice` CHANGE `delivery_date` `due_date` DATETIME NULL ;
 ALTER TABLE `invoice` ADD `company_id` VARCHAR(36) NOT NULL AFTER `customer_id`,ADD INDEX (`company_id`);
 ALTER TABLE `invoice` ADD CONSTRAINT `FK_90651744F52233F5` FOREIGN KEY ( `company_id` ) REFERENCES `company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE `user` CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL ;
+ALTER TABLE `user` CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `user` DROP FOREIGN KEY `FK_8D93D649FE54D947`;
+ALTER TABLE `user` DROP `group_id`;
 
+ALTER TABLE `purchase_order` DROP FOREIGN KEY `FK_21E210B29B2A6C7E`;
+ALTER TABLE `purchase_order` ADD CONSTRAINT `FK_21E210B29B2A6C7E` FOREIGN KEY(`supplier_id`) REFERENCES `inventory`.`vendor` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `purchase_order` ADD `company_id` VARCHAR(36) NULL DEFAULT NULL AFTER `tax` ;
+ALTER TABLE `purchase_order` ADD INDEX ( `company_id` ) ;
+ALTER TABLE `purchase_order` ADD CONSTRAINT `FK_21E210B2E37ECFB1` FOREIGN KEY (`company_id`) REFERENCES `inventory`.`company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `purchase_order` CHANGE `deleted` `deleted` DATETIME NULL DEFAULT NULL
+ALTER TABLE `purchase_order` CHANGE `status` `status` VARCHAR(100) NOT NULL;
+
+CREATE TABLE IF NOT EXISTS `user_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `group_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`group_id`),
+  KEY `group_id` (`group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+ALTER TABLE `user_groups`
+  ADD CONSTRAINT `FK_21E210B2E37ECFB2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_21E210B2E37ECFB3` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE;
+  
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

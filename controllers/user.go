@@ -14,6 +14,7 @@ import (
 	"log"
 	"models"
 	"validation"
+	"time"
 )
 
 type UserController struct {
@@ -23,6 +24,7 @@ func (controller *UserController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/user/count", handler.New(controller.GetCountAll)).Methods("GET")
 	r.Handle("/user/login", handler.New(controller.Login)).Methods("GET")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Get)).Methods("GET")
+	r.Handle("/user/{email}/invite", handler.New(controller.Invite)).Methods("GET")
 	r.Handle("/user", handler.New(controller.GetAll)).Methods("GET")
 	r.Handle("/user/{uid:[a-zA-Z0-9\\-]+}", handler.New(controller.Put)).Methods("PUT")
 	r.Handle("/user", handler.New(controller.Post)).Methods("POST")
@@ -53,9 +55,9 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	user.Creator = userSystem
 	user.Updater = userSystem
 
-	if user.Group == nil {
+	if user.Groups == nil {
 		group, _ := models.GetGroupByNameKey("USERS")
-		user.Group = group
+		user.Groups[0] = group
 	}
 
 	if user.Country == nil {
@@ -64,9 +66,29 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	}
 
 	user.Username = user.Email
-	user.Password = models.EncriptPassword(user.Password)
+	
+	
 	models.AddUser(&user)
-
+	models.UpdateUserGroups(&user)
+	
+	if user.Company == nil && user.Password == "" {
+		token := models.Token{Token: "1113", Expires: time.Now()}
+		token.Token = models.GenerateToken(32)
+		token.Expires = token.Expires.AddDate(0, 0, 1)
+		user.Token = token.Token
+		user.TokenExpirationDate = token.Expires
+		userOwner, _ := models.GetCurrentUser(request)
+		user.Creator = userOwner
+		user.Updater = userOwner
+		user.Company = userOwner.Company
+		models.UpdateUser(&user)
+		return user, nil
+	}
+	if user.Password !=""{
+		user.Password = models.EncriptPassword(user.Password)
+	}else{
+		user.Password = models.EncriptPassword(models.GenerateToken(32))
+	}
 	location := user.Company.Location
 	if location.Country == nil {
 		country, _ := models.GetCountry("US")
@@ -84,6 +106,7 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 	user.Company = company
 	location.Company = company
 	models.UpdateLocation(location)
+	
 	models.UpdateUser(&user)
 	return user.Id, nil
 }
@@ -94,13 +117,19 @@ func (controller *UserController) Post(context appengine.Context, writer http.Re
 // @router / [get]
 func (controller *UserController) GetAll(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
 	//username := v["username"]
+	var token = request.URL.Query().Get("token")
 	var username = request.URL.Query().Get("username")
 	page, sort, keyword := ParseParamsOfGetRequest(request.URL.Query())
 	user, _ := models.GetCurrentUser(request)
 	var users []models.User
 	if username != "" {
 		users := make([]*models.User, 1)
-		user, _ := models.GetUserByUsername(username)
+		user, _:= models.GetUserByUsername(username)
+		users[0] = user
+		return users, nil
+	} else if token != "" {
+		users := make([]*models.User, 1)
+		user, _:= models.GetUserByToken(token)
 		users[0] = user
 		return users, nil
 	} else if keyword != ""{
@@ -197,7 +226,16 @@ func (controller *UserController) Put(context appengine.Context, writer http.Res
 		}
 		return nil, &handler.Error{nil, "Entity not found.", http.StatusNoContent}
 	} else {
+		token := models.Token{Token: "1113", Expires: time.Now()}
+		token.Token = models.GenerateToken(32)
+		token.Expires = token.Expires.AddDate(0, 0, 1)
+		user.Token = token.Token
+		user.TokenExpirationDate = token.Expires
+		if user.Password !=""{
+			user.Password = models.EncriptPassword(user.Password)
+		}
 		models.UpdateUser(&user)
+		models.UpdateUserGroups(&user)
 	}
 
 
@@ -278,4 +316,41 @@ func getAuth(w http.ResponseWriter, r *http.Request) (string, string) {
 	}
 
 	return pair[0], pair[1]
+}
+
+// @Title Get
+// @Description get user by uid
+// @Param	uid		path 	string	true		"The key for staticblock"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is empty
+// @router /:uid [get]
+func (controller *UserController) Invite(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	email := v["email"]
+	user, err := models.GetCurrentUser(request)
+	if err != nil {
+		// TODO: adjust error
+		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
+	}
+
+	var userGuest models.User
+	userGuest.Email=email
+	
+	userGuest.Creator = user
+	userGuest.Updater = user
+
+	if userGuest.Groups == nil {
+		group, _ := models.GetGroupByNameKey("USERS")
+		userGuest.Groups[0] = group
+	}
+
+	if userGuest.Country == nil {
+		country, _ := models.GetCountry("US")
+		user.Country = country
+	}
+	userGuest.Company=user.Company
+	userGuest.Username = user.Email
+	//user.Password = models.EncriptPassword(user.Password)
+	models.AddUser(&userGuest)
+
+	return user, nil
 }

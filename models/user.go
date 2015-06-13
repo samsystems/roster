@@ -57,7 +57,8 @@ type User struct {
 	UpdatedTimeZone        int
 	IsActive               bool `orm:"default(false)"`
 	Deleted                time.Time `orm:"type(datetime)"`
-	Group                  *Group   `orm:"rel(one)"`
+//	Group                  *Group   `orm:"rel(one)"`
+	Groups                 []*Group `orm:"rel(m2m)"`
 	Company                *Company `orm:"null;rel(one)"`
 }
 
@@ -81,7 +82,7 @@ func GetUser(uid string) (*User, error) {
 	u := User{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&u)
-
+	o.LoadRelated(&u, "Groups")
 	return &u, err
 }
 
@@ -135,7 +136,13 @@ func GetAllUsers(user *User, page int, order string, count bool, limit int) ([]U
 		return users, cnt
 	} else {
 		qs = ParseQuerySetterOrder(qs, order)
-		qs.RelatedSel("Group").Offset(page * limit).Limit(limit).All(&users)
+		qs.Offset(page * limit).Limit(limit).All(&users)
+		for i := 0; i < len(users); i++ { 
+			_, err :=o.LoadRelated(&users[i], "Groups")
+			if err != nil {
+				panic(err)
+			}
+		}
 		return users, nil
 	}
 }
@@ -172,7 +179,13 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 		qs := o.QueryTable("user")
 		qs = qs.Filter("company", user.Company).Filter("deleted__isnull", true).Filter("first_name__icontains", keyword)
 		qs = ParseQuerySetterOrder(qs, order)
-		qs.RelatedSel("Group").Offset(page * limit).Limit(limit).All(&users)
+		qs.Offset(page * limit).Limit(limit).All(&users)
+		for i := 0; i < len(users); i++ { 
+			_, err :=o.LoadRelated(&users[i], "Groups")
+			if err != nil {
+				panic(err)
+			}
+		}
 		return users, nil
 		/*
 		ParseQueryBuilderOrder(qb, order, "user")
@@ -256,4 +269,19 @@ func DeleteUser(user *User) {
 	o := orm.NewOrm()
 	user.Deleted = time.Now()
 	o.Update(user)
+}
+
+func UpdateUserGroups(user *User) {
+	o := orm.NewOrm()
+	tempGroup := user.Groups
+	m2m := o.QueryM2M(user, "Groups")
+	_, err := m2m.Clear()
+	if err != nil {
+	    panic(err)
+	}
+	for _, group := range tempGroup {
+		m2m.Add(group)
+	}
+	//m2m.Remove(removeGroups)
+//	o.Update(user)
 }

@@ -74,7 +74,6 @@
                             <th style="width: 15%">Unit Price</th>
                             <th style="width: 10%">Disc %</th>
                             <th style="width: 10%">Amount USD</th>
-                            <th style="width: 5%"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -85,17 +84,13 @@
                             <td>{{item.QuantitySolicited}}</td>
                             <td>{{item.Price}}</td>
                             <td>{{item.DiscountPrice}}</td>
-                            <td>{{getAmount(item) | currency: 'USD'}}</td>
-                            <td>
-                                <button type="button" class="btn btn-danger fa fa-trash-o"
-                                        data-ng-click="removeProduct(item)" data-ng-show="!$last"></button>
-                            </td>
+                            <td>{{item.QuantitySolicited *  item.Price | currency: 'USD'}}</td>
                         </tr>
 
                         <tr>
                             <td colspan="5" class="no-border"></td>
                             <td>Subtoal</td>
-                            <td colspan="2">{{total | currency: 'USD'}}</td>
+                            <td colspan="2">{{purchase.SubTotal | currency: 'USD'}}</td>
                         </tr>
                         <tr>
                             <td colspan="5" class="no-border"></td>

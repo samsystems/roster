@@ -13,8 +13,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="table-responsive table-hover">
+                    <div class="col-md-12" data-ng-show="resume.draft.cant>0">
                             <table ng-table="purchaseAllTable" class="table table-hover table-message"
                                    template-pagination="custom/pager">
                                 <col width="5%"/>
@@ -88,7 +87,9 @@
                                     </div>
                                 </div>
                             </script>
-                        </div>
+                    </div>
+                    <div class="panel-body" data-ng-show="resume.draft.cant==0" style="margin-top: 50px">
+                        <div class="well well-small">{{'No Purchase Available.' | translate}}</div>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@
                     <button class="btn btn-warning"><i class="fa fa-send"></i> EMAIL</button>
                     <button class="btn btn-default" data-ng-click="print(checkboxes.PurchaseProducts)"><i class="fa fa-print"></i> PRINT</button>
                 </div>
-                <div class="col-md-12" >
+                <div class="col-md-12" data-ng-show="resume.draft.cant>0">
                     <table ng-table="purchaseDraftTable" class="table table-hover table-message" template-pagination="custom/pager">
                         <col width="5%"/>
                         <col width="10%"/>
@@ -71,6 +71,9 @@
                             </div>
                         </div>
                     </script>
+                </div>
+                <div class="panel-body" data-ng-show="resume.draft.cant==0" style="margin-top: 50px">
+                    <div class="well well-small">{{'No Purchase Available.' | translate}}</div>
                 </div>
             </div>
         </div>

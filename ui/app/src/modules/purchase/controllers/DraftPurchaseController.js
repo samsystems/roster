@@ -47,6 +47,7 @@ angular.module('purchase').controller('DraftPurchaseController', ['$scope', '$ro
             dialogs.confirm('Remove a Purchase Order', 'Are you sure you want to remove a Purchase Order?').result.then(function(btn){
                 purchaseOrder.$destroy().$then(function () {
                     $rootScope.$broadcast('purchaseOrder::deleted');
+                    $rootScope.$broadcast('purchaseOrder::totalTab');
                     toaster.pop('success', 'Purchase Order Deleted', 'You have successfully deleted a purchase.')
                 });
             });

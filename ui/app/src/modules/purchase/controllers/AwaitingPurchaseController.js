@@ -9,7 +9,7 @@ angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '
         $scope.limitInPage = config.application.limitInPage;
 
         $scope.search = function(term) {
-            $scope.productTable.reload()
+            $scope.purchaseAwaitingTable.reload()
         };
 
         $scope.refresh = function() {
@@ -40,7 +40,7 @@ angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '
         }
 
         $rootScope.$on('purchaseOrder::deleted', function() {
-            $scope.productTable.reload();
+            $scope.purchaseAwaitingTable.reload();
         });
 
         $scope.removeProduct = function(purchaseOrder) {

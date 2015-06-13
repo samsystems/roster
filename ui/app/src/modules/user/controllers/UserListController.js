@@ -197,8 +197,10 @@ var ModalGuestUser = function ($scope, $modalInstance, userGuestForm, toaster, $
                     //var emailSend=$scope.userGuest.Email;
                     var emailSend = $scope.userGuest.Email,
                         dest = {},
-                        subject = "hola",
-                        body = config.api.baseUrl + "/#/guest-register/" + $scope.userGuest.Token;
+                        subject = "Invitation to S.A.M. Systems",
+                        body = "Hi " + $scope.userGuest.getFullName() + ",<br /><br />Congrats! Your VertikalCloud account has been provisioned successfully.<br /><br />Click below to access you account and get started."
+                            + " <a href='" + config.api.baseUrl + "/#/guest-register/" + $scope.userGuest.Token + "'>Access your Account</a><br /><br />"
+                            + "Best Regards,<br />The S.A.M. Systems Team";
 
                     dest[emailSend] = $scope.userGuest.getFullName();
                     WorkerService.sendMail(subject, dest, body);

@@ -16,7 +16,7 @@ angular.module('common').service('WorkerService', ['$http', 'config', function($
             return $http({
                 method: 'POST',
                 url: config.api.emailUrl,
-                data: { access_token:'89c0cef32865673d4591a363dc54ea9',subject:subject,'to':to,params:{'content':body} }
+                data: { access_token:'89c0cef32865673d4591a363dc54ea9',subject:subject,'to':to,params:{'content':body,'type':'text/html'} }
             });
         },
         sendFileMail: function(subject,to,body,attachments) {

@@ -42,7 +42,8 @@
                             <div class="col-md-12">
                                 <input type="email" name="email" id="email" data-ng-model="userGuest.Email"
                                        class="form-control text-input"
-                                       placeholder="me@example.com" validator="required,email">
+                                       placeholder="me@example.com" validator="required,email"
+                                       ng-unique="{key: 'User', property: 'email',id: 0}">
                             </div>
                         </div>
                     </div>

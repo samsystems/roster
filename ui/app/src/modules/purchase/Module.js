@@ -23,7 +23,7 @@ angular.module('purchase', [
         .state('app.purchaseOrder-view', {
             url: 'purchases/view/:id',
             templateUrl: 'src/modules/purchase/views/detail.html',
-            controller: 'ReviewPurchaseController'
+            controller: 'PurchaseViewController'
         })
         .state('app.purchaseOrder-create', {
             url: 'purchase/create',
@@ -35,5 +35,9 @@ angular.module('purchase', [
             templateUrl: 'src/modules/purchase/views/form.html',
             controller: 'PurchaseFormController'
         })
-    ;
+        .state('app.purchase/print', {
+            url: 'purchase/print/:id',
+            templateUrl: 'src/modules/purchase/views/print.html',
+            controller: 'PurchasePrintController'
+        });
 }]);

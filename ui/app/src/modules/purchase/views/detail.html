@@ -1,142 +1,158 @@
-<!-- Page header -->
-<div class="page-heading animated fadeInDownBig">
-    <h1>{{'Purchase Detail'}}</h1>
-</div>
-<!-- End page header -->
-<div class="row">
-    <div class="col-sm-4">
+<page-content-title title="Purchase Detail">
+    <a class="btn btn-default" href="#/purchases"> Back to list</a>
+</page-content-title>
+<panel type="plain">
+    <div class="row">
         <div class="box-info">
-            <!-- User profile avatar, name and location -->
-            <div class="user-profile-sidebar">
-                <h2>{{project.name}}
-                    <span data-ng-if="project.status==1" class="label label-default pull-right">3D Design</span>
-                    <span data-ng-if="project.status==2" class="label label-warning pull-right">Wax modeling</span>
-                    <span data-ng-if="project.status==3" class="label label-info pull-right">Pre-polish</span>
-                    <span data-ng-if="project.status==4" class="label label-primary pull-right">Stone setting</span>
-                    <span data-ng-if="project.status==5" class="label label-success pull-right">Final polish</span>
-                </h2>
-                <div class="progress progress-sm">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{project.status}}" aria-valuemin="0" aria-valuemax="100" style="width: {{project.progress}}%">
-                        <span class="sr-only">{{project.status}}% Complete (success)</span>
+            <div class="row" style="margin: 20px 0 0 18px">
+                <div class="pull-right">
+                    <p class="text-right"><strong>{{purchase.Created | outputFormatDateTime }}</strong></p>
+                </div>
+                <div class="pull-left">
+                    <a class="btn btn-danger btn-sm" data-ng-click="removePurchase(purchase)"><i
+                            class="fa fa-trash-o"></i>
+                        {{'Remove' |
+                        translate}}</a>
+                    <a href="#/purchases" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+                </div>
+            </div>
+            <div style="margin: 20px 0 0 18px">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">{{'Supplier' | translate}}:</label>
+                            {{purchase.Supplier.Name}}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">{{'Date' | translate}}:</label>
+                            {{purchase.Date | date:'MMM d, yyyy'}}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-md-12 control-label">{{'Date Delivery' | translate}}:</label>
+                            {{purchase.DeliveryDate | date:'MMM d, yyyy'}}
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="inner">
-                            <div class="img-wrap">
-                                <img ng-src="data:{{project.documents[0].file.mime}};base64,{{project.documents[0].file.base64}}" alt="" class="mfp-fade">
-                            </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">{{'Order Number' |
+                                translate}}:</label>
+                            {{purchase.OrderNumber}}
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">{{'Reference' |
+                                translate}}:</label>
+                            {{purchase.Reference}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">{{'Currency' | translate}}:</label>
+                            {{purchase.Currency}}
                         </div>
                     </div>
                 </div>
-            </div><!-- End div .user-profile-sidebar -->
-            <!-- Account status -->
-            <div>
+                <br/>
+                <br/>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 5%">No.</th>
+                            <th style="width: 20%">Item</th>
+                            <th style="width: 30%">Description</th>
+                            <th style="width: 5%">Qty</th>
+                            <th style="width: 15%">Unit Price</th>
+                            <th style="width: 10%">Disc %</th>
+                            <th style="width: 10%">Amount USD</th>
+                            <th style="width: 5%"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="item in purchase.products">
+                            <td>{{$last ? '*' : $index + 1}}</td>
+                            <td><input data-ng-model="item.Product.Name"
+                                       autocomplete="off"
+                                       data-typeahead="product as product.Name for product in searchProducts($viewValue)"
+                                       data-typeahead-min-length="3"
+                                       data-typeahead-on-select="addItem($item, $index)"
+                                       type="text"/>
+                            </td>
+                            <td><input type="text" data-ng-model="item.Description"/></td>
+                            <td><input type="text" data-ng-model="item.QuantitySolicited"/></td>
+                            <td><input type="text" data-ng-model="item.Price"/></td>
+                            <td><input type="text" data-ng-model="item.DiscountPrice"/></td>
+                            <td>{{getAmount(item) | currency: 'USD'}}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger fa fa-trash-o"
+                                        data-ng-click="removeProduct(item)" data-ng-show="!$last"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <button class="btn btn-default" data-ng-click="addProduct($index)">{{'Add' |
+                                    translate}}
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="no-border"></td>
+                            <td>Subtoal</td>
+                            <td colspan="2">{{total | currency: 'USD'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="no-border"></td>
+                            <td>Tax (%)</td>
+                            <td colspan="2"><input type="text" data-ng-model="purchase.TotalTax"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="no-border"></td>
+                            <td><b>Total</b></td>
+                            <td colspan="2">{{getTotal() | currency: 'USD'}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End div .table-responsive -->
+
+                <br/>
+                <br/>
+
                 <div class="row">
-                    <div class="col-md-12">
-                        <h5><strong>ABOUT</strong></h5>
-                        <p>{{project.description}}</p>
+                    <div class="col-md-6">
+                        <div class="form-group" style="padding-left: 20px">
+                            <p>{{purchase.Supplier.Name}}
+                                <br/>
+                                {{locationSupplier.Address}}
+                                <br/>
+                                {{locationSupplier.City}}, {{locationSupplier.Zipcode}}
+                                <br/>
+                                {{locationSupplier.Country.Name}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">{{'Delivery Instruction' | translate}}:</label>
+                                {{purchase.DeliveryInstruction}}
+
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div><!-- End div .account-status-data -->
 
-            <h5>SHARE</h5>
-            <!-- Social icon -->
-            <div id="social">
-                <a href="#fakelink" data-toggle="tooltip" title="Facebook">
-                                        <span class="fa-stack fa-lg">
-                                          <i class="fa fa-circle facebook fa-stack-2x"></i>
-                                          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                        </span>
-                </a>
-                <a href="#fakelink" data-toggle="tooltip" title="Twitter">
-                                        <span class="fa-stack fa-lg">
-                                          <i class="fa fa-circle twitter fa-stack-2x"></i>
-                                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                        </span>
-                </a>
-                <a href="#fakelink" data-toggle="tooltip" title="Google Plus">
-                                        <span class="fa-stack fa-lg">
-                                          <i class="fa fa-circle gplus fa-stack-2x"></i>
-                                          <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
-                                        </span>
-                </a>
-            </div><!-- End div #social -->
-        </div><!-- End div .box-info -->
-    </div><!-- End div .col-sm-4 -->
-
-    <div class="col-sm-8">
-        <div class="box-info full">
-            <tabset>
-                <tab heading="{{'Summary' | translate }}">
-                    <div class="user-profile-content animated active fadeInRight">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="box-info">
-                                    <h4>Notes</h4>
-                                    <hr>
-                                    <div data-ng-if="!notes.length">
-                                        <div><p class="text-center">{{'No notes available.' | translate}}</p></div>
-                                    </div>
-                                    <blockquote data-ng-repeat="note in notes">
-                                        <p>{{note.description}}</p>
-                                        <small>Entered By <cite title="Source Title">{{note.creator.fullName}}</cite> at {{note.created | outputFormatDateTime}}</small>
-                                    </blockquote>
-
-                                    <h4>Documents</h4>
-                                    <hr>
-                                    <div data-ng-if="!project.documents.length" class="column-4">
-                                        <div><p class="text-center">{{'No documents available.' | translate}}</p></div>
-                                    </div>
-
-                                    <div class="gallery-wrap">
-                                        <div data-ng-if="project.documents.length > 0" class="column-4" data-ng-repeat="document in project.documents">
-                                            <div class="inner">
-                                                <a class="zooming" ng-click="downloadDocument(document)"  title="">
-                                                    <div class="img-wrap">
-                                                        <img ng-src="data:{{document.file.mime}};base64,{{document.file.base64}}" alt="" class="mfp-fade">
-                                                    </div>
-                                                    <div class="caption-static">
-                                                        {{document.name}}
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </tab>
-                <tab heading="{{'Gallery' | translate }}">
-                    <div class="scroll-user-widget">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="box-info">
-                                    <div data-ng-if="!project.documents.length">
-                                        <div><p class="text-center">{{'No documents available.' | translate}}</p></div>
-                                    </div>
-                                    <div class="gallery-wrap">
-                                        <div data-ng-if="project.documents.length > 0" class="column-4" data-ng-repeat="document in project.documents">
-                                            <div class="inner">
-                                                <a class="zooming" ng-click="downloadDocument(document)"  title="">
-                                                    <div class="img-wrap">
-                                                        <img ng-src="data:{{document.file.mime}};base64,{{document.file.base64}}" alt="" class="mfp-fade">
-                                                    </div>
-                                                    <div class="caption-static">
-                                                        {{document.name}}
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- End div .scroll-user-widget -->
-                </tab>
-            </tabset>
-        </div><!-- End div .box-info -->
-    </div><!-- End div .col-sm-8 -->
-</div><!-- End div .row -->
+            </div>
+        </div>
+    </div>
+    </div>
+</panel>

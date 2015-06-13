@@ -1,5 +1,5 @@
 <div class="animated active">
-    <div class="row">
+    <div class="row" data-ng-controller="AllPurchaseController">
         <div class="col-md-12">
             <div class="box-info">
                 <div class="row">
@@ -7,19 +7,23 @@
                         <button class="btn btn-success"><i class="fa fa-copy"></i> COPY TO</button>
                         <button class="btn btn-danger"><i class="fa fa-trash-o"></i> REMOVE</button>
                         <button class="btn btn-warning"><i class="fa fa-send"></i> EMAIL</button>
-                        <button class="btn btn-default"><i class="fa fa-print"></i> PRINT</button>
+                        <button class="btn btn-default" data-ng-click="print(checkboxes.PurchaseProducts)"><i class="fa fa-print"></i> PRINT</button>
                     </div>
                     <div class="table-responsive table-hover">
                         <table ng-table="purchaseAllTable" class="table table-hover table-message" template-pagination="custom/pager">
+                            <col width="5%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
                             <col width="20%"/>
-                            <col width="10%"/>
-                            <col width="10%"/>
-                            <col width="10%"/>
-                            <col width="25%"/>
+                            <col width="15%"/>
+                            <col width="15%"/>
                             <col width="10%"/>
                             <col width="15%"/>
 
                             <tr  class="items" data-ng-repeat="purchase in $data">
+                                <td>
+                                    <input data-status="{{ checkboxes.PurchaseProducts[purchase.Id]['Status']=purchase.Status}}" type="checkbox" ng-model="checkboxes.PurchaseProducts[purchase.Id]['checked']" />
+                                </td>
                                 <td data-title="'Number'" sortable="'orderNumber'"style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                     {{purchase.OrderNumber}}
                                 </td>

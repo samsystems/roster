@@ -25,7 +25,7 @@
                                 {{purchase.Reference}}
                             </td>
                             <td data-title="'Supplier'" sortable="'supplier'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
-                                {{purchase.Supplier}}
+                                {{purchase.Supplier.Name}}
                             </td>
                             <td data-title="'Date'" sortable="'date'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Date | outputFormatDate}}

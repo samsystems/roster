@@ -5,7 +5,6 @@ angular.module('sale').controller('InvoiceViewController', ['$scope', '$rootScop
     $scope.invoice = {};
     $scope.Status = '';
     var id = (!_.isUndefined($stateParams.id)) ? $stateParams.id : null;
-
    if (id != null) {
        $scope.invoice = Invoice.$find(id).$then(function () {
             $scope.invoice.itemProducts.$fetch().$asPromise().then(function (response) {

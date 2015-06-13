@@ -1,0 +1,107 @@
+<!-- Page header -->
+<div class="page-heading animated fadeInDownBig" data-ng-controller="AllPurchaseController">
+    <h1>Purchase Detail Print</h1>
+    <a href="#/purchases" class="btn btn-primary btn-sm"> {{'Back' | translate}}</a>
+    <button class="btn btn-default" data-ng-click="printPurchase('printHTML')"><i class="fa fa-print"></i> PRINT</button>
+</div>
+<div class="row" id="printHTML">
+    <div class="box-info" style="font-size: 16px; padding: 30px 40px">
+        <div>
+            <div class="pull-left">
+                <p style="font-size: 30px">PURCHASE</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td class="col-lg-10">
+                        <p><strong>Purchase To</strong></p>
+
+                        <p>
+                            {{purchase.Supplier.Name}}
+                            <br/>
+                            {{locationSupplier.Address}}
+                            <br/>
+                            {{locationSupplier.City}}, {{locationSupplier.Zipcode}}
+                            <br/>
+                            {{locationSupplier.Country.Name}}
+                        </p>
+                    </td>
+                    <td class="col-lg-2" style="text-align: right">
+                        <p><strong>Details:</strong></p>
+                        <p>
+                            <strong>Date:</strong> {{purchase.Date | date:'MMM d, yyyy'}}
+                            <br/>
+                            <strong>ID:</strong> {{purchase.OrderNumber}}
+                            <br/>
+                            <strong>Amount Due:</strong> {{purchase.Amount}}
+                            <br/>
+                        </p>
+                    </td>
+
+                </tr>
+                <tr>
+                    <table class="table table-hover" style="border: #DDDDDD 1px solid">
+                        <thead style="background-color:#1B2B36; color: #ffffff">
+                        <tr>
+                            <th style="width: 20; text-align: center">#</th>
+                            <th style="width: 30">Product</th>
+                            <th style="width: 8; text-align: center">Unit Cost</th>
+                            <th style="width: 10; text-align: center">Quantity</th>
+                            <th style="width: 15; text-align: center">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="(key,item) in purchase.products">
+                            <td style="cursor:pointer; text-align: center">
+                                {{key +1 }}
+                            </td>
+                            <td style="cursor:pointer">
+                                {{item.Product.Name}}
+                            </td>
+                            <td style="cursor:pointer; text-align: center">
+                                {{item.Product.Price}}
+                            </td>
+                            <td style="cursor:pointer; text-align: center">
+                                {{item.Quantity}}
+                            </td>
+                            <td style="cursor:pointer; text-align: center">
+                                {{item.Quantity * item.Product.Price | currency: 'USD'}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row" style="padding: 40px">
+            <div class="pull-left">
+                <p style="font-size: 20px"><strong>Thanks for your business</strong></p>
+
+                <p>Thanks for your business</p>
+
+                <p>Thanks for your business</p>
+            </div>
+            <div class="pull-right">
+                <table style="border-collapse: separate; border-spacing: 4px; text-align: right; line-height: 2.2;width: 300px">
+                    <tr style="background-color: #f4f4f4">
+                        <td>Sub - Total amount: $ {{purchase.SubTotal}}</td>
+                    </tr>
+                    <tr style="background-color: #f4f4f4">
+                        <td>Discount: ----</td>
+                    </tr>
+                    <tr style="background-color: #f4f4f4">
+                        <td>Tax({{purchase.Tax}}%): $ {{purchase.TotalTax}}</td>
+                    </tr>
+                    <tr style="background-color: #f4f4f4">
+                        <td><strong>Grand Total: $ {{purchase.Amount}}</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

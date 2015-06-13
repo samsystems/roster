@@ -40,3 +40,13 @@ func AddPurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem) string {
 	}
 	return purchaseOrderItem.Id
 }
+
+func GetAllPurchaseOrderItems(uidPurchase string) ([]PurchaseOrderItem) {
+	o := orm.NewOrm()
+	var purchaseOrderItems []PurchaseOrderItem
+	querySetter := o.QueryTable("purchase_order_item")
+	querySetter.RelatedSel("Product").Filter("deleted__isnull", true).Filter("purchase_order_id", uidPurchase).All(&purchaseOrderItems)
+	
+	return purchaseOrderItems
+	
+}

@@ -33,7 +33,7 @@ type PurchaseOrder struct {
 	DeliveryPhone       string
 	Status              string
 	SubTotal            float32   `json:",string"`
-	TotalTax            float32   `json:",string"`
+	TotalTax            float32
 	Amount              float32   `json:",string"`
 	Tax                 float32   `json:",string"`
 	Company             *Company  `orm:"rel(one)" valid:"Entity(Company)"`
@@ -168,4 +168,18 @@ func GetPurchaseResume(status string) (amount float64, cant int) {
 		o.Raw(sql).QueryRow(&result)
 	}
 	return result.Amount, result.Cant
+}
+
+func GetPurchaseMaxOrderNumber() int {
+	o := orm.NewOrm()
+	var total int
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("max(pur.order_number)").From("purchase_order pur")
+	sql := qb.String()
+	
+	err:=o.Raw(sql).QueryRow(&total)
+	if err != nil {
+		panic(err)
+	}
+	return total + 1
 }

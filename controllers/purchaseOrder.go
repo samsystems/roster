@@ -27,6 +27,7 @@ func (c *PurchaseOrderController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
 	r.Handle("/purchase/count", handler.New(c.Count)).Methods("GET")
 	r.Handle("/purchase/resume/{status}", handler.New(c.GetResumePurchases)).Methods("GET")
+	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}/products", handler.New(c.GetAllProducts)).Methods("GET")
 }
 
 // @Title Get
@@ -143,7 +144,7 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 	purchaseOrder.SubTotal = PurchaseRoundPlus((subTotal), 2)
 	purchaseOrder.TotalTax = PurchaseRoundPlus((subTotal*float32(purchaseOrder.Tax))/100, 2)
 	purchaseOrder.Amount = purchaseOrder.TotalTax + purchaseOrder.SubTotal
-
+	purchaseOrder.OrderNumber = models.GetPurchaseMaxOrderNumber()
 
 	valid := validation.Validation{}
 	b, err := valid.Valid(&purchaseOrder)
@@ -226,7 +227,15 @@ func (controller *PurchaseOrderController) Delete(context appengine.Context, wri
 
 	return nil, nil
 }
-
+// @Title Get
+// @Description get all Invoices
+// @Success 200 {object} models.Invoice
+// @router /:id/products [get]
+func (controller *PurchaseOrderController) GetAllProducts(context appengine.Context, writer http.ResponseWriter, request *http.Request, v map[string]string) (interface{}, *handler.Error) {
+	uidPurchase := v["uid"]
+	var purchaseOrderItems []models.PurchaseOrderItem = models.GetAllPurchaseOrderItems(uidPurchase)
+	return purchaseOrderItems, nil
+}
 
 func PurchaseRoundPlus(f float32, places int) float32 {
 	shift := math.Pow(10, float64(places))
@@ -235,3 +244,4 @@ func PurchaseRoundPlus(f float32, places int) float32 {
 func PurchaseRound(f float64) float64 {
 	return float64(math.Floor(f + .5))
 }
+

@@ -7,7 +7,7 @@
                     <button class="btn btn-warning"><i class="fa fa-send"></i> EMAIL</button>
                     <button class="btn btn-default"><i class="fa fa-print"></i> PRINT</button>
                 </div>
-                <div class="col-md-12">
+              <!--  <div class="col-md-12">
                     <table ng-table="purchaseBilledTable" class="table table-hover table-message" template-pagination="custom/pager">
                         <col width="20%"/>
                         <col width="10%"/>
@@ -30,8 +30,8 @@
                             <td data-title="'Date'" sortable="'date'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Date | outputFormatDate}}
                             </td>
-                            <td  data-title="'Delivery Date'" sortable="'dateRaised'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
-                                {{purchase.DateRaised | outputFormatDate}}
+                            <td  data-title="'Expected Arrival'" sortable="'dateRaised'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
+                                {{purchase.ExpectedArrival | outputFormatDate}}
                             </td>
                             <td  data-title="'Amount'" sortable="'amount'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Amount | currency: 'USD'}}
@@ -63,6 +63,9 @@
                             </div>
                         </div>
                     </script>
+                </div> -->
+                <div class="panel-body" style="margin-top: 50px">
+                    <div class="well well-small">{{'No Purchase Available.' | translate}}</div>
                 </div>
             </div>
         </div>

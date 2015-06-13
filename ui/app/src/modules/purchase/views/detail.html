@@ -32,8 +32,8 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label class="col-md-12 control-label">{{'Date Delivery' | translate}}:</label>
-                            {{purchase.DeliveryDate | date:'MMM d, yyyy'}}
+                            <label class="control-label">{{'Expected Arrival' | translate}}:</label>
+                            {{purchase.ExpectedArrival | date:'MMM d, yyyy'}}
                         </div>
                     </div>
                 </div>
@@ -80,17 +80,11 @@
                         <tbody>
                         <tr data-ng-repeat="item in purchase.products">
                             <td>{{$last ? '*' : $index + 1}}</td>
-                            <td><input data-ng-model="item.Product.Name"
-                                       autocomplete="off"
-                                       data-typeahead="product as product.Name for product in searchProducts($viewValue)"
-                                       data-typeahead-min-length="3"
-                                       data-typeahead-on-select="addItem($item, $index)"
-                                       type="text"/>
-                            </td>
-                            <td><input type="text" data-ng-model="item.Description"/></td>
-                            <td><input type="text" data-ng-model="item.QuantitySolicited"/></td>
-                            <td><input type="text" data-ng-model="item.Price"/></td>
-                            <td><input type="text" data-ng-model="item.DiscountPrice"/></td>
+                            <td>{{item.Product.Name}} </td>
+                            <td>{{item.Description}}</td>
+                            <td>{{item.QuantitySolicited}}</td>
+                            <td>{{item.Price}}</td>
+                            <td>{{item.DiscountPrice}}</td>
                             <td>{{getAmount(item) | currency: 'USD'}}</td>
                             <td>
                                 <button type="button" class="btn btn-danger fa fa-trash-o"
@@ -112,7 +106,7 @@
                         <tr>
                             <td colspan="5" class="no-border"></td>
                             <td>Tax (%)</td>
-                            <td colspan="2"><input type="text" data-ng-model="purchase.TotalTax"/></td>
+                            <td colspan="2">{{Tax}}</td>
                         </tr>
                         <tr>
                             <td colspan="5" class="no-border"></td>

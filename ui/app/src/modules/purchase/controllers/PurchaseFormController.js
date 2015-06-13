@@ -43,7 +43,7 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
                     }
                     purchase.Supplier = $scope.purchase.Supplier;
                     purchase.Date = $scope.purchase.Date;
-                    purchase.DeliveryDate = $scope.purchase.DeliveryDate;
+                    purchase.ExpectedArrival = $scope.purchase.ExpectedArrival;
                     purchase.OrderNumber = $scope.purchase.OrderNumber;
                     purchase.Reference = $scope.purchase.Reference;
                     purchase.Reference = $scope.purchase.Reference;
@@ -54,7 +54,7 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
                     purchase.$save().$then(function (response) {
                         // $rootScope.$broadcast('product::created');
                         toaster.pop('success', 'Purchase Created', 'You have successfully created a new purchase.');
-                       // $state.go("app.purchaseOrder");
+                        $state.go("app.purchaseOrder");
                     }, function () {
                         toaster.pop('error', 'Error', 'Something went wrong a new Purchase could not be created');
                     });
@@ -80,6 +80,7 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
             return  ( quantity * price ) - ( quantity * price * discount / 100);
         }
 
+        $scope.purchase.TotalTax = 7;
         $scope.getTotal = function (product) {
             var total = 0;
             var tax = (!isNaN($scope.purchase.TotalTax) && $scope.purchase.TotalTax != "") ? parseInt($scope.purchase.TotalTax) : 0;

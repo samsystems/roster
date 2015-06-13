@@ -7,19 +7,25 @@
                     <button class="btn btn-success"><i class="fa fa-check"></i> APPROVE</button>
                     <button class="btn btn-danger"><i class="fa fa-trash-o"></i> REMOVE</button>
                     <button class="btn btn-warning"><i class="fa fa-send"></i> EMAIL</button>
-                    <button class="btn btn-default"><i class="fa fa-print"></i> PRINT</button>
+                    <button class="btn btn-default" data-ng-click="print(checkboxes.PurchaseProducts)"><i class="fa fa-print"></i> PRINT</button>
                 </div>
                 <div class="col-md-12" >
                     <table ng-table="purchaseDraftTable" class="table table-hover table-message" template-pagination="custom/pager">
+                        <col width="5%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
                         <col width="20%"/>
-                        <col width="10%"/>
-                        <col width="10%"/>
-                        <col width="10%"/>
-                        <col width="25%"/>
-                        <col width="10%"/>
                         <col width="15%"/>
+                        <col width="15%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
 
                         <tr  class="items" data-ng-repeat="purchase in $data">
+                            <td>
+                                <input data-status="{{ checkboxes.PurchaseProducts[purchase.Id]['Status']=purchase.Status}}"
+                                       type="checkbox"
+                                       ng-model="checkboxes.PurchaseProducts[purchase.Id]['checked']"/>
+                            </td>
                             <td data-title="'Number'" sortable="'orderNumber'"style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.OrderNumber}}
                             </td>
@@ -32,15 +38,15 @@
                             <td data-title="'Date'" sortable="'date'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Date | outputFormatDate}}
                             </td>
-                            <td  data-title="'Delivery Date'" sortable="'dateRaised'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
-                                {{purchase.DateRaised | outputFormatDate}}
+                            <td  data-title="'Expected Arrival'" sortable="'dateRaised'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
+                                {{purchase.ExpectedArrival | outputFormatDate}}
                             </td>
                             <td  data-title="'Amount'" sortable="'amount'" style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.Amount | currency: 'USD'}}
                             </td>
                             <td data-title="'Action'">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default fa fa-edit" data-ng-click="selectPurchase(purchase)"></button>
+                                  <!--  <button type="button" class="btn btn-default fa fa-edit" data-ng-click="selectPurchase(purchase)"></button> -->
                                     <button type="button" class="btn btn-danger fa fa-trash-o" data-ng-click="removeProduct(purchase)"></button>
                                 </div>
                             </td>

@@ -23,22 +23,14 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label class="col-md-12 control-label">{{'Date Delivery' | translate}}:</label>
+                        <label class="col-md-12 control-label">{{'Expected Arrival' | translate}}:</label>
                         <div class="col-md-12">
-                            <date-time-picker id="deliveryDate" name="deliveryDate" class="col-md-12" data-ng-model="purchase.DeliveryDate" data-format="date" ></date-time-picker>
+                            <date-time-picker id="expectedArrival" name="expectedArrival" class="col-md-12" data-ng-model="purchase.ExpectedArrival" data-format="date" ></date-time-picker>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="col-md-12 control-label" for="orderNumber">{{'Order Number' | translate}}:</label>
-                        <div class="col-md-12">
-                            <input id="orderNumber" name="orderNumber" data-ng-model="purchase.OrderNumber" type="text" class="form-control" validator="required,number" >
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="col-md-12 control-label" for="referenceNumber">{{'Reference' | translate}}:</label>
@@ -50,7 +42,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="col-md-12 control-label" for="currency">{{'Currency' | translate}}:</label>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <select class="form-control" id="currency" name="currency" data-ng-model="purchase.Currency"
                                     data-ng-options="currency.value as currency.description for currency in currencies"
                                     validator="required">

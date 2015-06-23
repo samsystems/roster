@@ -52,4 +52,5 @@ angular.module('purchase').controller('BilledPurchaseController', ['$scope', '$r
             });
         };
 
+        $scope.checkboxes = { PurchaseProducts: {} };
     }]);

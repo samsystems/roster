@@ -52,4 +52,5 @@ angular.module('purchase').controller('ApprovedPurchaseController', ['$scope', '
             });
         };
 
+        $scope.checkboxes = { PurchaseProducts: {} };
     }]);

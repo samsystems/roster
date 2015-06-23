@@ -9,17 +9,23 @@
                     <button class="btn btn-warning" data-ng-click="sendMailPdf(checkboxes.PurchaseProducts)"><i class="fa fa-send"></i> EMAIL</button>
                     <button class="btn btn-default" data-ng-click="print(checkboxes.PurchaseProducts)"><i class="fa fa-print"></i> PRINT</button>
                 </div>
-              <!--  <div class="col-md-12" >
+               <div class="col-md-12" data-ng-show="resume.approved.cant>0">
                     <table ng-table="purchaseApprovedTable" class="table table-hover table-message" template-pagination="custom/pager">
+                        <col width="5%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
                         <col width="20%"/>
-                        <col width="10%"/>
-                        <col width="10%"/>
-                        <col width="10%"/>
-                        <col width="25%"/>
-                        <col width="10%"/>
                         <col width="15%"/>
+                        <col width="15%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
 
                         <tr  class="items" data-ng-repeat="purchase in $data">
+                            <td>
+                                <input data-status="{{ checkboxes.PurchaseProducts[purchase.Id]['Status']=purchase.Status}}"
+                                       type="checkbox"
+                                       ng-model="checkboxes.PurchaseProducts[purchase.Id]['checked']"/>
+                            </td>
                             <td data-title="'Number'" sortable="'orderNumber'"style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.OrderNumber}}
                             </td>
@@ -65,8 +71,8 @@
                             </div>
                         </div>
                     </script>
-                </div> -->
-                <div class="panel-body" style="margin-top: 50px">
+                </div>
+                <div class="panel-body" data-ng-show="resume.approved.cant==0" style="margin-top: 50px">
                     <div class="well well-small">{{'No Purchase Available.' | translate}}</div>
                 </div>
       </div>

@@ -10,20 +10,22 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
         $scope.purchase = {};
 
         if (!_.isUndefined($stateParams.id)) {
-            if (!_.isUndefined($stateParams.action)) {
+
                 $scope.purchase = PurchaseOrder.$find($stateParams.id).$then(function () {
-                    var id = $scope.purchase.Id;
-                    $scope.purchase.Id = null;
+                    if (!_.isUndefined($stateParams.action)) {
+                        var id = $scope.purchase.Id;
+                        $scope.purchase.Id = null;
+                    }
+
                     $scope.purchase.products.$fetch().$asPromise().then(function (response) {
-                        for (var i = 0; i < response.length; i++) {
+                       /* for (var i = 0; i < response.length; i++) {
                             response[i] = {Product:  response[i].Product, Price:  response[i].Product.Price, Quantity: response[i].Quantity};
-                        }
+                        }*/
                         //disable(false, $scope.purchase);
-                        $scope.purchase.PurchaseProducts = response;
+                      //  $scope.purchase.PurchaseProducts = response;
                     })
                 });
-            }
-            $scope.purchase = PurchaseOrder.$find($stateParams.id);
+           // $scope.purchase = PurchaseOrder.$find($stateParams.id);
         } else {
             $scope.purchase = PurchaseOrder.$build();
             $scope.purchase.Currency = 'USD';

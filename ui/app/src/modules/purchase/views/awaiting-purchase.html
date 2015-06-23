@@ -12,15 +12,20 @@
                 <div class="col-md-12" data-ng-show="resume.awaiting.cant>0">
                     <table ng-table="purchaseAwaitingTable" class="table table-hover table-message" template-pagination="custom/pager">
                         <col width="5%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
                         <col width="20%"/>
-                        <col width="10%"/>
-                        <col width="10%"/>
-                        <col width="10%"/>
-                        <col width="25%"/>
-                        <col width="10%"/>
                         <col width="15%"/>
+                        <col width="15%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
 
                         <tr  class="items" data-ng-repeat="purchase in $data">
+                            <td>
+                                <input data-status="{{ checkboxes.PurchaseProducts[purchase.Id]['Status']=purchase.Status}}"
+                                       type="checkbox"
+                                       ng-model="checkboxes.PurchaseProducts[purchase.Id]['checked']"/>
+                            </td>
                             <td data-title="'Number'" sortable="'orderNumber'"style="cursor:pointer;" data-ng-click="viewPurchase(purchase)">
                                 {{purchase.OrderNumber}}
                             </td>

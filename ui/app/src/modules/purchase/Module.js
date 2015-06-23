@@ -35,6 +35,11 @@ angular.module('purchase', [
             templateUrl: 'src/modules/purchase/views/form.html',
             controller: 'PurchaseFormController'
         })
+        .state('app.purchaseOrder-copyto', {
+            url: 'purchase/update/:id/:action',
+            templateUrl: 'src/modules/purchase/views/form.html',
+            controller: 'PurchaseFormController'
+        })
         .state('app.purchase/print', {
             url: 'purchase/print/:id',
             templateUrl: 'src/modules/purchase/views/print.html',

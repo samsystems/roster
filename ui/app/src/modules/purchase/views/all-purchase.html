@@ -5,9 +5,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div DEFAULT>
-                            <button class="btn btn-success"><i class="fa fa-copy"></i> COPY TO</button>
-                            <button class="btn btn-danger"><i class="fa fa-trash-o"></i> REMOVE</button>
-                            <button class="btn btn-warning"><i class="fa fa-send"></i> EMAIL</button>
+                            <button class="btn btn-success" data-ng-click="copyto(checkboxes.PurchaseProducts)"><i class="fa fa-copy"></i> COPY TO</button>
+                            <button class="btn btn-danger" data-ng-click="removeGeneral(checkboxes.PurchaseProducts)"><i class="fa fa-trash-o"></i> REMOVE</button>
+                            <button class="btn btn-warning" data-ng-click="sendMailPdf(checkboxes.PurchaseProducts)"><i class="fa fa-send"></i> EMAIL</button>
                             <button class="btn btn-default" data-ng-click="print(checkboxes.PurchaseProducts)"><i
                                     class="fa fa-print"></i> PRINT
                             </button>

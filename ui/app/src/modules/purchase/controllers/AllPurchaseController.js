@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('purchase').controller('AllPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'User','ngTableParams', 'PurchaseOrder','$q','$state', '$location',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, User, ngTableParams, PurchaseOrder, $q, $state, $location) {
+angular.module('purchase').controller('AllPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'User','ngTableParams', 'PurchaseOrder','$q','$state',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, User, ngTableParams, PurchaseOrder, $q, $state) {
 
     $scope.page = 1;
     $scope.search = {purchaseOrder: ""};
@@ -53,29 +53,7 @@ angular.module('purchase').controller('AllPurchaseController', ['$scope', '$root
         });
     };
 
-     $scope.print = function (purchases) {
-         purchases = Object.keys(purchases).map(function (key) {
-             if (purchases[key]['checked']) return key
-         });
-         var count_check = 0;
-         var marcado = null;
-         angular.forEach(
-             purchases,
-             function (purchase) {
-                 if (purchase) {
-                     marcado = purchase;
-                     count_check++;
-                     console.log(count_check);
-                     if (count_check > 1) {
-                         toaster.pop('error', 'Error', 'Select only one purchase');
-                         return;
-                     }
-                 }
-             });
-         if (count_check == 1) {
-             $location.path("/purchase/print/" + marcado);
-         }
-        };
+
 
 
         $scope.checkboxes = { PurchaseProducts: {} };

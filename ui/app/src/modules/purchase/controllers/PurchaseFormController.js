@@ -34,8 +34,24 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
 
         $scope.save = function (form) {
             $validation.validate(form).success(function () {
-
+                var count = 0;
                 if (!_.isUndefined($scope.purchase.Id)) {
+
+                    $scope.purchase.PurchaseProducts = [];
+                    for (var i = 0; i < $scope.purchase.products.length; i++) {
+
+                        if (!_.isUndefined($scope.purchase.products[i].Product))
+
+                            if ($scope.purchase.products[i].Product.Name) {
+                                console.log($scope.purchase.products[i].Product.Name)
+                                $scope.purchase.PurchaseProducts[count] = $scope.purchase.products[i];
+                                count++;
+                            }
+                    }
+                    if ($scope.purchase.PurchaseProducts.length == 0) {
+                        toaster.pop('error', 'Error', 'You must add at least one product.');
+                        return;
+                    }
                     $scope.purchase.Status = 'draft';
                     $scope.purchase.$save().$then(function (response) {
                         //  $rootScope.$broadcast('product::updated');
@@ -45,7 +61,6 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
                     var purchase = PurchaseOrder.$build();
 
                     purchase.PurchaseProducts = [];
-                    var count = 0;
                     for (var i = 0; i < $scope.purchase.products.length; i++) {
                         if (!_.isUndefined($scope.purchase.products[i].Product))
                             if ($scope.purchase.products[i].Product.Name) {
@@ -61,7 +76,6 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
                     purchase.Date = $scope.purchase.Date;
                     purchase.ExpectedArrival = $scope.purchase.ExpectedArrival;
                     purchase.OrderNumber = $scope.purchase.OrderNumber;
-                    purchase.Reference = $scope.purchase.Reference;
                     purchase.Reference = $scope.purchase.Reference;
                     purchase.Currency = $scope.purchase.Currency;
                     purchase.Tax = $scope.purchase.TotalTax;

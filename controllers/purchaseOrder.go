@@ -13,6 +13,8 @@ import (
 	"models"
 	"validation"
 	"math"
+	"log"
+
 )
 
 type PurchaseOrderController struct {
@@ -23,7 +25,7 @@ func (c *PurchaseOrderController) RegisterHandlers(r *mux.Router) {
 	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Get)).Methods("GET")
 	r.Handle("/purchase", handler.New(c.GetAll)).Methods("GET")
 	r.Handle("/purchase", handler.New(c.Post)).Methods("POST")
-	r.Handle("/purchase", handler.New(c.Put)).Methods("PUT")
+	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Put)).Methods("PUT")
 	r.Handle("/purchase/{uid:[a-zA-Z0-9\\-]+}", handler.New(c.Delete)).Methods("DELETE")
 	r.Handle("/purchase/count", handler.New(c.Count)).Methods("GET")
 	r.Handle("/purchase/resume/{status}", handler.New(c.GetResumePurchases)).Methods("GET")
@@ -124,8 +126,10 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 	}
 
 	var purchaseOrder models.PurchaseOrder
-	json.Unmarshal(data, &purchaseOrder)
-
+	err=json.Unmarshal(data, &purchaseOrder)
+	if err != nil {
+		panic(err)
+	}
 	user, _ := models.GetCurrentUser(request)
 	purchaseOrder.Creator = user
 	purchaseOrder.Updater = user
@@ -192,6 +196,21 @@ func (c *PurchaseOrderController) Put(context appengine.Context, writer http.Res
 	purchaseOrder.Creator = user
 	purchaseOrder.Updater = user
 
+	purchaseProducts := purchaseOrder.PurchaseProducts
+	purchaseOrder.PurchaseProducts = nil
+
+	var subTotal float32 = 0
+	for i := 0; i < len(purchaseProducts); i++ {
+		subTotal += float32(purchaseProducts[i].Price) * float32(purchaseProducts[i].QuantitySolicited)
+		product, _ := models.GetProduct(purchaseProducts[i].Product.Id)
+		purchaseProducts[i].Product = product
+	}
+	purchaseOrder.SubTotal = PurchaseRoundPlus((subTotal), 2)
+	purchaseOrder.TotalTax = PurchaseRoundPlus((subTotal*float32(purchaseOrder.Tax))/100, 2)
+	purchaseOrder.Amount = purchaseOrder.TotalTax + purchaseOrder.SubTotal
+//	purchaseOrder.Status = models.PURCHASE_DRAFT
+
+
 	valid := validation.Validation{}
 	b, err := valid.Valid(&purchaseOrder)
 	if err != nil {
@@ -204,6 +223,18 @@ func (c *PurchaseOrderController) Put(context appengine.Context, writer http.Res
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdatePurchaseOrder(&purchaseOrder)
+		for i := 0; i < len(purchaseProducts); i++ {
+			log.Println("ok")
+			var purchaseProduct = purchaseProducts[i]
+			purchaseProduct.Updater = user
+			purchaseProduct.PurchaseOrder = &purchaseOrder
+			if purchaseProduct.Id !=""{
+				models.UpdatePurchaseOrderItem(purchaseProduct)
+			}else{
+				purchaseProduct.Creator = user
+				models.AddPurchaseOrderItem(purchaseProduct)
+			}
+		}
 	}
 
 	return purchaseOrder, nil

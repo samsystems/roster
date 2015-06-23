@@ -41,6 +41,12 @@ func AddPurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem) string {
 	return purchaseOrderItem.Id
 }
 
+func UpdatePurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem)  {
+	o := orm.NewOrm()
+	o.Update(purchaseOrderItem)
+}
+
+
 func GetAllPurchaseOrderItems(uidPurchase string) ([]PurchaseOrderItem) {
 	o := orm.NewOrm()
 	var purchaseOrderItems []PurchaseOrderItem

@@ -35,7 +35,7 @@ type PurchaseOrder struct {
 	SubTotal            float32   `json:",string"`
 	TotalTax            float32
 	Amount              float32   `json:",string"`
-	Tax                 float32   `json:",string"`
+	Tax                 float32
 	Company             *Company  `orm:"rel(one)" valid:"Entity(Company)"`
 	PurchaseProducts    []*PurchaseOrderItem `orm:"reverse(many)"`
 	Deleted             time.Time `orm:"type(datetime)"`

@@ -43,6 +43,10 @@ angular.module('purchase').controller('DraftPurchaseController', ['$scope', '$ro
             $scope.purchaseDraftTable.reload();
         });
 
+        $rootScope.$on('purchaseOrder::changeStatus', function() {
+            $scope.purchaseDraftTable.reload();
+        });
+
         $scope.removeProduct = function(purchaseOrder) {
             dialogs.confirm('Remove a Purchase Order', 'Are you sure you want to remove a Purchase Order?').result.then(function(btn){
                 purchaseOrder.$destroy().$then(function () {

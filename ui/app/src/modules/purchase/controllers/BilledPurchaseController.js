@@ -43,6 +43,10 @@ angular.module('purchase').controller('BilledPurchaseController', ['$scope', '$r
             $scope.purchaseBilledTable.reload();
         });
 
+        $rootScope.$on('purchaseOrder::changeStatus', function() {
+            $scope.purchaseBilledTable.reload();
+        });
+
         $scope.removeProduct = function(purchaseOrder) {
             dialogs.confirm('Remove a Purchase Order', 'Are you sure you want to remove a Purchase Order?').result.then(function(btn){
                 purchaseOrder.$destroy().$then(function () {

@@ -54,7 +54,5 @@ angular.module('purchase').controller('AllPurchaseController', ['$scope', '$root
     };
 
 
-
-
         $scope.checkboxes = { PurchaseProducts: {} };
 }]);

@@ -14,7 +14,7 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
                 $scope.purchase = PurchaseOrder.$find($stateParams.id).$then(function () {
                     if (!_.isUndefined($stateParams.action)) {
                         var id = $scope.purchase.Id;
-                        $scope.purchase.Id = null;
+                       delete $scope.purchase.Id;
                     }
 
                     $scope.purchase.products.$fetch().$asPromise().then(function (response) {
@@ -35,7 +35,7 @@ angular.module('purchase').controller('PurchaseFormController', ['$scope', '$roo
         $scope.save = function (form) {
             $validation.validate(form).success(function () {
                 var count = 0;
-                if (!_.isUndefined($scope.purchase.Id)) {
+                if (!_.isUndefined($scope.purchase.Id) ) {
 
                     $scope.purchase.PurchaseProducts = [];
                     for (var i = 0; i < $scope.purchase.products.length; i++) {

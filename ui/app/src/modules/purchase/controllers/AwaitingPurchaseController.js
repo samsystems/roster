@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'User','ngTableParams', 'PurchaseOrder','$q','$state',
-    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, User, ngTableParams, PurchaseOrder, $q,$state) {
+angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '$rootScope', '$stateParams', 'config', '$modal', 'dialogs', 'DateTimeService', 'toaster', 'User','ngTableParams', 'PurchaseOrder','$q','$state', '$timeout',
+    function ($scope, $rootScope, $stateParams, config, $modal, dialogs, DateTimeService, toaster, User, ngTableParams, PurchaseOrder, $q,$state, $timeout) {
 
         $scope.page = 1;
         $scope.search = {purchaseOrder: ""};
@@ -43,6 +43,11 @@ angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '
             $scope.purchaseAwaitingTable.reload();
         });
 
+        $rootScope.$on('purchaseOrder::changeStatus', function() {
+            $scope.purchaseAwaitingTable.reload();
+        });
+
+
         $scope.removeProduct = function(purchaseOrder) {
             dialogs.confirm('Remove a Purchase Order', 'Are you sure you want to remove a Purchase Order?').result.then(function(btn){
                 purchaseOrder.$destroy().$then(function () {
@@ -50,6 +55,43 @@ angular.module('purchase').controller('AwaitingPurchaseController', ['$scope', '
                     toaster.pop('success', 'Purchase Order Deleted', 'You have successfully deleted a purchase.')
                 });
             });
+        };
+
+
+        $scope.approve = function (purchases) {
+            purchases = Object.keys(purchases).map(function (key) {
+                if (purchases[key]['checked']) return {Id: key, 'Status': purchases[key]['Status']}
+            });
+            var count = 0;
+            var marcado = [];
+            var status = [];
+            angular.forEach(
+                purchases,
+                function (purchase) {
+                    if (purchase) {
+                        marcado[count] = purchase.Id;
+                        status[count] = purchase.Status;
+                        count++;
+                    }
+                });
+
+            if (marcado.length > 0) {
+                console.log(marcado.length);
+                dialogs.confirm('Change Status', 'Are you sure you want to change de status of Purchases?').result.then(function (btn) {
+                    for (var i = 0; i < marcado.length; i++) {
+                            PurchaseOrder.$find(marcado[i]).$asPromise().then(function (response) {
+                                response.Status = 'approved';
+                                response.$save().$then(function (response) {
+                                $rootScope.$broadcast('purchaseOrder::changeStatus');
+                                $rootScope.$broadcast('purchaseOrder::totalTab');
+                            });
+                        });
+                    }
+                    $timeout(function () {
+                        toaster.pop('success', 'Purchase Update', 'You have been successfully updated a purchase.');
+                    });
+                });
+            }
         };
 
         $scope.checkboxes = { PurchaseProducts: {} };

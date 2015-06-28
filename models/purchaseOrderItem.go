@@ -56,3 +56,19 @@ func GetAllPurchaseOrderItems(uidPurchase string) ([]PurchaseOrderItem) {
 	return purchaseOrderItems
 	
 }
+
+func GetAllPurchaseOrderItemsToDelete(uid string,idsPurchaseOrderItem []string) ([]PurchaseOrderItem) {
+	o := orm.NewOrm()
+	var purchaseOrderItems []PurchaseOrderItem
+	querySetter := o.QueryTable("purchase_order_item")
+	querySetter.Filter("purchase_order_id", uid).Filter("deleted__isnull", true).Exclude("id__in",idsPurchaseOrderItem).All(&purchaseOrderItems)
+	
+	return purchaseOrderItems
+	
+}
+
+func DeletePurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem) {
+	o := orm.NewOrm()
+	purchaseOrderItem.Deleted = time.Now()
+	o.Update(purchaseOrderItem)
+}

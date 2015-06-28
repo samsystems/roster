@@ -13,7 +13,6 @@ import (
 	"models"
 	"validation"
 	"math"
-	"log"
 
 )
 
@@ -136,14 +135,14 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 	
 	purchaseOrder.Company = user.Company
 	
-	purchaseProducts := purchaseOrder.PurchaseProducts
+	purchaseOrderItems := purchaseOrder.PurchaseProducts
 	purchaseOrder.PurchaseProducts = nil
 
 	var subTotal float32 = 0
-	for i := 0; i < len(purchaseProducts); i++ {
-		subTotal += float32(purchaseProducts[i].Price) * float32(purchaseProducts[i].QuantitySolicited)
-		product, _ := models.GetProduct(purchaseProducts[i].Product.Id)
-		purchaseProducts[i].Product = product
+	for i := 0; i < len(purchaseOrderItems); i++ {
+		subTotal += float32(purchaseOrderItems[i].Price) * float32(purchaseOrderItems[i].QuantitySolicited)
+		product, _ := models.GetProduct(purchaseOrderItems[i].Product.Id)
+		purchaseOrderItems[i].Product = product
 	}
 	purchaseOrder.SubTotal = PurchaseRoundPlus((subTotal), 2)
 	purchaseOrder.TotalTax = PurchaseRoundPlus((subTotal*float32(purchaseOrder.Tax))/100, 2)
@@ -164,12 +163,12 @@ func (c *PurchaseOrderController) Post(context appengine.Context, writer http.Re
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.AddPurchaseOrder(&purchaseOrder)
-		for i := 0; i < len(purchaseProducts); i++ {
-			var purchaseProduct = purchaseProducts[i]
-			purchaseProduct.Creator = user
-			purchaseProduct.Updater = user
-			purchaseProduct.PurchaseOrder = &purchaseOrder
-			models.AddPurchaseOrderItem(purchaseProduct)
+		for i := 0; i < len(purchaseOrderItems); i++ {
+			var purchaseOrderItem = purchaseOrderItems[i]
+			purchaseOrderItem.Creator = user
+			purchaseOrderItem.Updater = user
+			purchaseOrderItem.PurchaseOrder = &purchaseOrder
+			models.AddPurchaseOrderItem(purchaseOrderItem)
 		}
 	}
 
@@ -188,28 +187,32 @@ func (c *PurchaseOrderController) Put(context appengine.Context, writer http.Res
 	if err != nil {
 		return nil, &handler.Error{err, "Could not read request", http.StatusBadRequest}
 	}
-
 	var purchaseOrder models.PurchaseOrder
 	json.Unmarshal(data, &purchaseOrder)
-
 	user, _ := models.GetCurrentUser(request)
-	purchaseOrder.Creator = user
-	purchaseOrder.Updater = user
-
-	purchaseProducts := purchaseOrder.PurchaseProducts
-	purchaseOrder.PurchaseProducts = nil
-
-	var subTotal float32 = 0
-	for i := 0; i < len(purchaseProducts); i++ {
-		subTotal += float32(purchaseProducts[i].Price) * float32(purchaseProducts[i].QuantitySolicited)
-		product, _ := models.GetProduct(purchaseProducts[i].Product.Id)
-		purchaseProducts[i].Product = product
+	purchaseOrderItems := purchaseOrder.PurchaseProducts
+	if purchaseOrderItems != nil{
+		purchaseOrder.Updater = user
+		
+		purchaseOrder.PurchaseProducts = nil
+	
+		var subTotal float32 = 0
+		for i := 0; i < len(purchaseOrderItems); i++ {
+			subTotal += float32(purchaseOrderItems[i].Price) * float32(purchaseOrderItems[i].QuantitySolicited)
+			product, _ := models.GetProduct(purchaseOrderItems[i].Product.Id)
+			purchaseOrderItems[i].Product = product
+		}
+		purchaseOrder.SubTotal = PurchaseRoundPlus((subTotal), 2)
+		purchaseOrder.TotalTax = PurchaseRoundPlus((subTotal*float32(purchaseOrder.Tax))/100, 2)
+		purchaseOrder.Amount = purchaseOrder.TotalTax + purchaseOrder.SubTotal
+	//	purchaseOrder.Status = models.PURCHASE_DRAFT
+	} else{
+		uid := v["uid"]
+		purchaseOrderSave, _ := models.GetPurchaseOrder(uid)
+		purchaseOrderSave.Updater = user
+		purchaseOrderSave.Status = purchaseOrder.Status 
+		purchaseOrder = purchaseOrder
 	}
-	purchaseOrder.SubTotal = PurchaseRoundPlus((subTotal), 2)
-	purchaseOrder.TotalTax = PurchaseRoundPlus((subTotal*float32(purchaseOrder.Tax))/100, 2)
-	purchaseOrder.Amount = purchaseOrder.TotalTax + purchaseOrder.SubTotal
-//	purchaseOrder.Status = models.PURCHASE_DRAFT
-
 
 	valid := validation.Validation{}
 	b, err := valid.Valid(&purchaseOrder)
@@ -223,16 +226,23 @@ func (c *PurchaseOrderController) Put(context appengine.Context, writer http.Res
 		return nil, &handler.Error{nil, "Entity not found", http.StatusNoContent}
 	} else {
 		models.UpdatePurchaseOrder(&purchaseOrder)
-		for i := 0; i < len(purchaseProducts); i++ {
-			log.Println("ok")
-			var purchaseProduct = purchaseProducts[i]
-			purchaseProduct.Updater = user
-			purchaseProduct.PurchaseOrder = &purchaseOrder
-			if purchaseProduct.Id !=""{
-				models.UpdatePurchaseOrderItem(purchaseProduct)
-			}else{
-				purchaseProduct.Creator = user
-				models.AddPurchaseOrderItem(purchaseProduct)
+		if purchaseOrderItems != nil{
+			idsPurchaseOrderItem := make([]string, len(purchaseOrderItems))
+			for i := 0; i < len(purchaseOrderItems); i++ {
+				var purchaseOrderItem = purchaseOrderItems[i]
+				purchaseOrderItem.Updater = user
+				purchaseOrderItem.PurchaseOrder = &purchaseOrder
+				if purchaseOrderItem.Id !=""{
+					idsPurchaseOrderItem[i] = purchaseOrderItem.Id
+					models.UpdatePurchaseOrderItem(purchaseOrderItem)
+				}else{
+					purchaseOrderItem.Creator = user
+					idsPurchaseOrderItem[i] =models.AddPurchaseOrderItem(purchaseOrderItem)
+				}
+			}
+			purchaseOrderItemsDelete := models.GetAllPurchaseOrderItemsToDelete(purchaseOrder.Id, idsPurchaseOrderItem)
+				for i := 0; i < len(purchaseOrderItemsDelete); i++ {
+					models.DeletePurchaseOrderItem(&purchaseOrderItemsDelete[i])
 			}
 		}
 	}

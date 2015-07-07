@@ -87,5 +87,8 @@ func RegisterHandlers(r *mux.Router) {
 
 	commonController := controllers.CommonController{}
 	commonController.RegisterHandlers(router)
+	
+	billController := controllers.BillController{}
+	billController.RegisterHandlers(router)
 
 }

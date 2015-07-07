@@ -208,10 +208,10 @@ func (c *PurchaseOrderController) Put(context appengine.Context, writer http.Res
 	//	purchaseOrder.Status = models.PURCHASE_DRAFT
 	} else{
 		uid := v["uid"]
-		purchaseOrderSave, _ := models.GetPurchaseOrder(uid)
-		purchaseOrderSave.Updater = user
-		purchaseOrderSave.Status = purchaseOrder.Status 
-		purchaseOrder = purchaseOrder
+		status :=purchaseOrder.Status 
+		purchaseOrder, _ := models.GetPurchaseOrder(uid)
+		purchaseOrder.Updater = user
+		purchaseOrder.Status = status
 	}
 
 	valid := validation.Validation{}

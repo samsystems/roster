@@ -1,5 +1,15 @@
 <page-content-title title="Purchase">
-    <a href="#/purchase/create"><button class="btn btn-success"><i class="fa fa-plus"></i> {{'New Purchase Order' | translate}}</button></a>
+    <div class="btn-group mr10">
+        <button type="button" class="btn btn-primary"><i class="fa fa-plus"> New</i></button>
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
+            <li><a href="#/purchase/create">Purchase Order</a></li>
+            <li><a href="#/bill/create">Bill</a></li>
+        </ul>
+    </div>
 </page-content-title>
 
 <div class="row">

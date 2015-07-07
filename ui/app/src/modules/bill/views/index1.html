@@ -1,0 +1,19 @@
+<div data-ng-controller="InvoiceController">
+    <page-content-title title="Sales">
+        <button class="btn btn-success" data-ng-click="createInvoice()"><i class="fa fa-plus"></i> {{'New Invoice' |
+            translate}}
+        </button>
+    </page-content-title>
+    <div>
+        <div class="box-info no-margin">
+            <wizard data-hide-indicators="true">
+                <wz-step data-title="{{step.list}}">
+                    <ng-include src="'/src/modules/invoice/views/index.html'"></ng-include>
+                </wz-step>
+                <wz-step data-title="{{step.form}}">
+                    <ng-include src="'/src/modules/sale/views/form.html'"></ng-include>
+                </wz-step>
+            </wizard>
+        </div>
+    </div>
+</div>

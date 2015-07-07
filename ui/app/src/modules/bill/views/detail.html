@@ -1,0 +1,219 @@
+<page-content-title title="Detail">
+</page-content-title>
+<panel type="plain">
+<div class="row">
+<div class="box-info">
+<div class="row" style="margin: 0 0 10px 18px">
+    <div class="pull-right">
+        <button class="btn btn-warning" data-ng-click=""><i class="fa fa-send"></i> EMAIL</button>
+        <button class="btn btn-default" data-ng-click="print(invoice)"><i class="fa fa-print"></i> PRINT</button>
+        <button class="btn btn-dropbox" data-ng-click="pdf(invoice)"><i class="fa fa-file-pdf-o"></i> PDF</button>
+        <div class="btn-group mr10">
+            <button type="button" class="btn btn-primary"> Invoice Options</button>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu" style="margin-left: -31.5px;">
+                <li ng-show="invoice.Status == 'paid'"><a href="#/transaction/print/{{invoice.Id}}">PRINT</a></li>
+                <li><a href="#" data-ng-click="viewInvoice(invoice)">PREVIEW</a></li>
+                <li><a href="#" data-ng-click="pdf(invoice)">PDF</a></li>
+                <li><a href="#" data-ng-click="sendMailPdf(invoice)">EMAIL</a></li>
+                <li><a href="#/transaction/copyto/{{invoice.Id}}">COPY</a></li>
+                <li><a href="#" data-ng-click="void(invoice)">VOID</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="pull-left">
+        <h4 class="text-right"><strong>{{Status | ucfirst}}</strong></h4>
+    </div>
+</div>
+
+<panel type="plain">
+<div class="row">
+    <div class="col-md-5">
+        <div class="form-group">
+            <label class="control-label">{{'Customer' | translate}}:</label>
+            {{invoice.Customer.Name}}
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="form-group">
+            <label class="control-label">{{'Emails' | translate}}:</label>
+            {{invoice.Emails}}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <div class="form-group">
+            <label class="control-label">{{'Reference' | translate}}:</label>
+            {{invoice.ReferenceNumber}}
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'Currency' | translate}}:</label>
+                    {{invoice.Currency}}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'Date' | translate}}</label>
+                    {{invoice.Date | date:'MMM d, yyyy'}}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'Due Date' | translate}}</label>
+                    {{invoice.DueDate | date:'MMM d, yyyy'}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th style="width: 5%">No.</th>
+            <th style="width: 20%">Item</th>
+            <th style="width: 30%">Description</th>
+            <th style="width: 5%">Qty</th>
+            <th style="width: 10%">Unit Price</th>
+            <!--<th style="width: 10%">Disc %</th>-->
+            <th colspan="2" style="width: 10%">Amount USD</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr data-ng-repeat="(key,item) in InvoiceProducts">
+            <td>{{key +1 }}</td>
+            <td>{{item.Product.Name}}</td>
+            <td>{{item.Product.Description}}</td>
+            <td>{{item.Quantity}}</td>
+            <td>{{item.Price}}</td>
+            <td>{{item.Quantity *  item.Price | currency: 'USD'}}</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="no-border"></td>
+            <td>Subtoal</td>
+            <td colspan="2">{{invoice.SubTotal | currency: 'USD'}}</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="no-border"></td>
+            <td>Tax ({{invoice.Tax}}%)</td>
+            <td colspan="2">{{invoice.TotalTax}}</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="no-border"></td>
+            <td><h3><b>Total</b></h3></td>
+            <td colspan="2"><h3>{{invoice.Amount | currency: 'USD'}}</h3></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row" style="margin-top: 30px">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">{{'Billing Address' | translate}}:</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">{{'Street' | translate}}:</label>
+                    {{invoice.BillingLocation.Address}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">{{'Apt/suite' | translate}}:</label>
+                    {{invoice.BillingLocation.Address1}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'City' | translate}}:</label>
+                    {{invoice.BillingLocation.City}}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'State' | translate}}:</label>
+                    {{invoice.BillingLocation.State.Name}}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'Zipcode' | translate}}:</label>
+                    {{invoice.BillingLocation.Zipcode}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">{{'Shipping Address' | translate}}:</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">{{'Street' | translate}}:</label>
+                    {{invoice.ShippingLocation.Address}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">{{'Apt/suite' | translate}}:</label>
+                    {{invoice.ShippingLocation.Address1}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'City' | translate}}:</label>
+                    {{invoice.ShippingLocation.City}}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'State' | translate}}:</label>
+                    {{invoice.ShippingLocation.State.Name}}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">{{'Zipcode' | translate}}:</label>
+                    {{invoice.ShippingLocation.Zipcode}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top:20px;">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">{{'Memo Notes' |
+                translate}}:</label>
+            {{invoice.DeliveryInstruction}}
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</panel>

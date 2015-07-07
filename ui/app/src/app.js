@@ -39,6 +39,7 @@ angular.module('inventory', [
     'user',
     'purchase',
     'sale',
+    'bill',
     'magento',
     'ngTable',
     'oitozero.ngSweetAlert'

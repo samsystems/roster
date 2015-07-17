@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <h3>Copy contents to a new... {{user.getFullName()}}</h3>
+</div>
+
+<div class="row" style="margin-top: 20px">
+    <div class="col-md-12">
+        <form name="form.copyToForm" ng-submit="submitCopyToForm()" novalidate role="form" name="form"
+              class="form-horizontal" style="margin: 0 10px 0 10px">
+            <div class="row" style="padding-left: 70px">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <div class="row" style="margin-bottom: 10px">
+                                <div class="col-md-12" style="border: 1px solid #848D94;border-radius: 5px">
+                                    <div style="border-bottom: 1px solid #848D94">
+                                        <div style="margin: 15px">
+                                            <input type="radio" ng-model="radioCopyTo" value="radioBill" /> Bill
+                                            <span style="color: #848D94; margin-left: 20px"> Turn this purchase order into a bill to pay </span>
+                                        </div>
+                                    </div>
+                                    <div style="margin: 15px 0 15px 50px">
+                                        <input type="checkbox"/> Mark this purchase order as fully billed
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 10px">
+                                <div class="col-md-12"
+                                     style="border: 1px solid #848D94; padding: 15px;border-radius: 5px">
+                                    <input type="radio" ng-model="radioCopyTo" value="radioPO" /> Purshase Order
+                                    <span style="color: #848D94; margin-left: 20px"> Reuse the contents of this purchase order </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"
+                                     style="border: 1px solid #848D94; padding: 15px;border-radius: 5px">
+                                    <input type="radio" ng-model="radioCopyTo" value="radioInvoice" /> Invoice
+                                    <span style="color: #848D94; margin-left: 20px"> Charge this purchase order to a customer </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row modal-footer" style="border-top:0px;">
+                <div class="row col-md-5 pull-right">
+                    <button type="submit" class="btn btn-primary ng-binding">{{'Create draft' | translate}}</button>
+                    <a class="btn btn-default" data-ng-click="cancelChangeGroup()">{{'Cancel' | translate}}</a>
+                    <!--  <button class="btn btn-success ng-binding" data-ng-click="saveGroup(form)">{{'Save' | translate}} </button>-->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

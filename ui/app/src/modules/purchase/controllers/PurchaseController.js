@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('purchase').controller('PurchaseController', ['$scope', 'PurchaseOrder', '$rootScope', '$location', '$state', 'dialogs', '$timeout', 'toaster','WorkerService',
-    function ($scope, PurchaseOrder, $rootScope, $location, $state, dialogs, $timeout, toaster,WorkerService) {
+angular.module('purchase').controller('PurchaseController', ['$scope', 'PurchaseOrder', '$rootScope', '$location', '$state', 'dialogs', '$timeout', 'toaster', 'WorkerService', '$modal', '$log',
+    function ($scope, PurchaseOrder, $rootScope, $location, $state, dialogs, $timeout, toaster, WorkerService, $modal, $log) {
         $scope.status = {
             all: 'all',
             draft: 'draft',
@@ -178,6 +178,84 @@ angular.module('purchase').controller('PurchaseController', ['$scope', 'Purchase
                     });
                 });
             }
+        };
+
+
+        $scope.showCopyTo = function (purchases) {
+            purchases = Object.keys(purchases).map(function (key) {
+                if (purchases[key]['checked']) return key
+            });
+            var count_check = 0;
+            var marcado = null;
+            angular.forEach(
+                purchases,
+                function (purchase) {
+                    if (purchase) {
+                        marcado = purchase;
+                        count_check++;
+                        if (count_check > 1) {
+                            toaster.pop('error', 'Error', 'Select only one purchase');
+                            return;
+                        }
+                    }
+                });
+
+            if (count_check == 1) {
+                $scope.purchase = PurchaseOrder.$find(marcado).$then(function () {
+                    $scope.purchase.Status = 'draft';
+                    $scope.id = $scope.purchase.Id;
+                    $scope.purchase.Id = null;
+                    $scope.purchase.products.$fetch().$asPromise().then(function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            response[i] = {Product: response[i].Product, Price: response[i].Product.Price, Quantity: response[i].Quantity};
+                        }
+                        //disable(false, $scope.purchase);
+                        $scope.purchase.PurchaseProducts = response;
+                    })
+                    //   $state.go('app.purchaseOrder-copyto', {id: id, action: 'copyto'});
+                });
+
+
+            }
+            $scope.radioCopyTo = '';
+            var modalInstance = $modal.open({
+                templateUrl: 'src/modules/purchase/views/copyto.html',
+                controller: ModalCopyTo,
+                scope: $scope,
+                resolve: {
+                    copyToForm: function () {
+                        return $scope.copyToForm;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+
+        var ModalCopyTo = function ($scope, $modalInstance, copyToForm, toaster, $rootScope) {
+            $scope.form = {}
+            $scope.submitCopyToForm = function () {
+                if ($scope.form.copyToForm.$valid) {
+                    if ($scope.radioCopyTo == 'radioPO')
+                        $state.go('app.purchaseOrder-copyto', {id: $scope.id, action: 'copyto'});
+                    if ($scope.radioCopyTo == 'radioInvoice')
+                        $state.go('app.invoice-copyto', {id: $scope.id, action: 'purchasecopyto'});
+                    if ($scope.radioCopyTo == 'radioBill')
+                        $state.go('app.bill-copyto', {id: $scope.id, action: 'billcopyto'});
+                    $modalInstance.close('closed');
+                } else {
+                    console.log('copytoform is not in scope');
+                }
+            };
+
+            $scope.cancelChangeGroup = function () {
+                $modalInstance.dismiss('cancel');
+            };
         };
 
 

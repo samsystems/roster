@@ -33,6 +33,11 @@ angular.module('sale', [
             templateUrl: 'src/modules/sale/views/detail.html',
             controller: 'InvoiceViewController'
         })
+        .state('app.invoice-copyto', {
+            url: 'invoice/update/:id/:action',
+            templateUrl: 'src/modules/sale/views/form.html',
+            controller: 'InvoiceFormController'
+        })
         .state('app.invoice-update', {
             url: 'transaction/:action/:id',
             templateUrl: 'src/modules/sale/views/form.html',

@@ -103,7 +103,7 @@
                                 <li><a href="#/transaction/print/{{invoice.Id}}">PRINT</a></li>
                                 <li><a href="#" data-ng-click="pdf(invoice)">PDF</a></li>
                                 <li><a href="#" data-ng-click="sendMailPdf(invoice)">EMAIL</a></li>
-                                <li ng-show="invoice.Status != 'void'"><a href="#/transaction/copyto/{{invoice.Id}}">COPY</a>
+                                <li ng-show="invoice.Status != 'void'"><a href="#/transaction/invoicecopyto/{{invoice.Id}}">COPY</a>
                                 </li>
                                 <li ng-show="invoice.Status != 'void'"><a href="#"
                                                                           data-ng-click="void(invoice)">VOID</a></li>

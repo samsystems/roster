@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
-    function ($scope, $rootScope, $stateParams, config, $state, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company) {
+angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Invoice', 'Country', 'State', 'Customer', 'Product', 'User', 'Company', 'PurchaseOrder',
+    function ($scope, $rootScope, $stateParams, config, $state, $modal, dialogs, DateTimeService, toaster, $validation, Invoice, Country, State, Customer, Product, User, Company, PurchaseOrder) {
 
         $scope.invoice = {};
         $scope.Type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : 'invoice';
@@ -42,40 +42,66 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
             $scope.flagStatus = flagStatusInvoice;
         else
             $scope.flagStatus = flagStatusEstimate;
-
         $scope.TitleNumber = '';
+
         if (!_.isUndefined($stateParams.id)) {
-            $scope.invoice = Invoice.$find($stateParams.id).$then(function () {
-                /*    if ($scope.invoice.Status != 'draft') {
-                 disable(true, invoice);
-                 } else
-                 disable(false, invoice);*/
-                $scope.TitleNumber = $scope.invoice.OrderNumber;
-                $scope.invoice.itemProducts.$fetch().$asPromise().then(function (response) {
-                    for (var i = 0; i < response.length; i++) {
-                        response[i] = {
-                            Id: ($stateParams.action == 'update') ? response[i].Id : null,
-                            Product: response[i].Product,
-                            Price: response[i].Product.Price,
-                            Quantity: response[i].Quantity,
-                            QuantitySave: parseInt(response[i].Quantity)
-                        };
+            console.log($stateParams.action);
+            //if (!_.isUndefined($stateParams.action)) {
+            if ($stateParams.action == 'purchasecopyto') {
+                $scope.invoice = Invoice.$build();
+                $scope.invoice.itemProducts.$build().$reveal();
+                $scope.purchase = PurchaseOrder.$find($stateParams.id).$then(function () {
+                    $scope.invoice.Date = $scope.purchase.Date;
+                    $scope.invoice.DueDate = $scope.purchase.DueDate;
+
+                    $scope.invoice.ReferenceNumber = $scope.purchase.Reference;
+                    $scope.invoice.Currency = $scope.purchase.Currency;
+                    $scope.purchase.products.$fetch().$asPromise().then(function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            response[i] = {
+                                Id: null,
+                                Product: response[i].Product,
+                                Price: response[i].Product.Price,
+                                Quantity: response[i].Quantity,
+                                QuantitySave: parseInt(response[i].Quantity)
+                            };
+                        }
+                        $scope.invoice.itemProducts = response;
+                    })
+                    delete $scope.purchase;
+                });
+                //    var id = $scope.purchase.Id;
+
+            } else {
+                $scope.invoice = Invoice.$find($stateParams.id).$then(function () {
+                //    $scope.invoice.itemProducts.$build().$reveal();
+                    $scope.TitleNumber = $scope.invoice.OrderNumber;
+                    $scope.invoice.itemProducts.$fetch().$asPromise().then(function (response) {
+                        var j = 0;
+                        for (var i = 0; i < response.length; i++) {
+                            response[i] = {
+                                Id: ($stateParams.action == 'update') ? response[i].Id : null,
+                                Product: response[i].Product,
+                                Price: response[i].Product.Price,
+                                Quantity: response[i].Quantity,
+                                QuantitySave: parseInt(response[i].Quantity)
+                            };
+                            j++
+                        }
+                        $scope.invoice.itemProducts = response;
+
+                        delete $scope.invoice.Updater;
+                        delete $scope.invoice.SubTotal;
+                        delete $scope.invoice.TotalTax;
+                        delete $scope.invoice.Amount;
+                    })
+                    if ($stateParams.action == 'invoicecopyto') {
+                        $scope.invoice.Status = 'open';
+                        $scope.invoice.Id = null;
                     }
-                    $scope.invoice.InvoiceProducts = response;
-
-                    delete $scope.invoice.Updater;
-                    delete $scope.invoice.SubTotal;
-                    delete $scope.invoice.TotalTax;
-                    delete $scope.invoice.Amount;
-                })
-                if ($stateParams.action == 'copyto') {
-                    $scope.invoice.Status = 'open';
-                    $scope.invoice.Id = null;
-                }
-                $scope.Type = $scope.invoice.Type;
-            });
-
-
+                    $scope.Type = $scope.invoice.Type;
+                });
+            }
         } else {
             $scope.invoice = Invoice.$build();
             $scope.invoice.Currency = 'USD';
@@ -83,8 +109,8 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
             $scope.invoice.itemProducts.$build().$reveal();
 
             /*var invoiceNumber = Invoice.maxOrderNumber($scope.Type).success(function (response) {
-                $scope.invoice.OrderNumber = response.max;
-            });*/
+             $scope.invoice.OrderNumber = response.max;
+             });*/
         }
 
         $scope.BillShip = function () {
@@ -137,10 +163,10 @@ angular.module('sale').controller('InvoiceFormController', ['$scope', '$rootScop
                     $scope.invoice.BillingLocation.Id = idLocation;
                 }
                 /*if (customer.ShippingLocation) {
-                    idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
-                    $scope.invoice.ShippingLocation = customer.ShippingLocation;
-                    $scope.invoice.ShippingLocation.Id = idLocation;
-                }*/
+                 idLocation = (!_.isUndefined($scope.invoice.ShippingLocation)) ? $scope.invoice.ShippingLocation.Id : null;
+                 $scope.invoice.ShippingLocation = customer.ShippingLocation;
+                 $scope.invoice.ShippingLocation.Id = idLocation;
+                 }*/
             });
 
         }

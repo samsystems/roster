@@ -2011,6 +2011,73 @@ ALTER TABLE `user_groups`
   ADD CONSTRAINT `FK_21E210B2E37ECFB2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_21E210B2E37ECFB3` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE;
   
+  
+CREATE TABLE IF NOT EXISTS `bill` (
+  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `order_number` int(11) NOT NULL,
+  `reference` int(11) DEFAULT NULL,
+  `date` datetime NOT NULL,
+  `expected_arrival` datetime DEFAULT NULL,
+  `date_raised` datetime DEFAULT NULL,
+  `sent` tinyint(1) NOT NULL,
+  `currency` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `delivery_instruction` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `delivery_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `delivery_attention` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `delivery_phone` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `sub_total` double NOT NULL,
+  `total_tax` double NOT NULL,
+  `amount` double NOT NULL,
+  `tax` double NOT NULL,
+  `company_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `created_time_zone` int(11) DEFAULT NULL,
+  `updated` datetime NOT NULL,
+  `updated_time_zone` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_21E210B2BC06EA63` (`creator_id`),
+  KEY `IDX_21E210B2E37ECFB0` (`updater_id`),
+  KEY `company_id` (`company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `bill_item` (
+  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `bill_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `product_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `creator_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `updater_id` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `custom_product_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `quantity_solicited` int(11) DEFAULT NULL,
+  `quantity_received` int(11) DEFAULT NULL,
+  `discount_price` double DEFAULT NULL,
+  `price` double NOT NULL,
+  `deleted` tinyint(1) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `created_time_zone` int(11) DEFAULT NULL,
+  `updated` datetime NOT NULL,
+  `updated_time_zone` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_5ED948C3A45D7E6A` (`bill_id`),
+  KEY `IDX_5ED948C34584665A` (`product_id`),
+  KEY `IDX_5ED948C361220EA6` (`creator_id`),
+  KEY `IDX_5ED948C3E37ECFB0` (`updater_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;  
+ALTER TABLE `bill`
+  ADD CONSTRAINT `FK_01651744F52233F5` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
+  ADD CONSTRAINT `FK_31E210B2BC06EA63` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `FK_31E210B2E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`);
+ALTER TABLE `bill_item`
+  ADD CONSTRAINT `FK_6ED948C34584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_6ED948C361220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `FK_6ED948C3A45D7E6A` FOREIGN KEY (`bill_id`) REFERENCES `bill` (`id`),
+  ADD CONSTRAINT `FK_6ED948C3E37ECFB0` FOREIGN KEY (`updater_id`) REFERENCES `user` (`id`);  
+  
+  
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

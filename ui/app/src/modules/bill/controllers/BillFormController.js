@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('bill').controller('BillFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Bill', 'Country', 'State', 'Customer', 'Product', 'User', 'Company',
-    function ($scope, $rootScope, $stateParams, config, $state, $modal, dialogs, DateTimeService, toaster, $validation, Bill, Country, State, Customer, Product, User, Company) {
+angular.module('bill').controller('BillFormController', ['$scope', '$rootScope', '$stateParams', 'config', '$state', '$modal', 'dialogs', 'DateTimeService', 'toaster', '$validation', 'Bill', 'Country', 'State', 'Customer', 'Product', 'User', 'Company', 'PurchaseOrder',
+    function ($scope, $rootScope, $stateParams, config, $state, $modal, dialogs, DateTimeService, toaster, $validation, Bill, Country, State, Customer, Product, User, Company, PurchaseOrder) {
 
         $scope.bill = {};
         $scope.Type = (!_.isUndefined($stateParams.type)) ? $stateParams.type : 'bill';
@@ -37,37 +37,62 @@ angular.module('bill').controller('BillFormController', ['$scope', '$rootScope',
 
         $scope.TitleNumber = '';
         if (!_.isUndefined($stateParams.id)) {
-            $scope.bill = Bill.$find($stateParams.id).$then(function () {
-                /*    if ($scope.invoice.Status != 'draft') {
-                 disable(true, invoice);
-                 } else
-                 disable(false, invoice);*/
-                $scope.TitleNumber = $scope.bill.OrderNumber;
-                $scope.bill.itemProducts.$fetch().$asPromise().then(function (response) {
-                    for (var i = 0; i < response.length; i++) {
-                        response[i] = {
-                            Id: ($stateParams.action == 'update') ? response[i].Id : null,
-                            Product: response[i].Product,
-                            Price: response[i].Product.Price,
-                            Quantity: response[i].Quantity,
-                            QuantitySave: parseInt(response[i].Quantity)
-                        };
+            if ($stateParams.action == 'billcopyto') {
+                $scope.bill = Bill.$build();
+                $scope.bill.itemProducts.$build().$reveal();
+                $scope.purchase = PurchaseOrder.$find($stateParams.id).$then(function () {
+                    $scope.bill.Date = $scope.purchase.Date;
+                    $scope.bill.DueDate = $scope.purchase.DueDate;
+
+                    $scope.bill.ReferenceNumber = $scope.purchase.Reference;
+                    $scope.bill.Currency = $scope.purchase.Currency;
+                    $scope.purchase.products.$fetch().$asPromise().then(function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            response[i] = {
+                                Id: null,
+                                Product: response[i].Product,
+                                Price: response[i].Product.Price,
+                                Quantity: response[i].Quantity,
+                                QuantitySave: parseInt(response[i].Quantity)
+                            };
+                        }
+                        $scope.bill.itemProducts = response;
+                    })
+                    delete $scope.purchase;
+                });
+                //    var id = $scope.purchase.Id;
+
+            } else {
+                $scope.bill = Bill.$find($stateParams.id).$then(function () {
+                    /*    if ($scope.invoice.Status != 'draft') {
+                     disable(true, invoice);
+                     } else
+                     disable(false, invoice);*/
+                    $scope.TitleNumber = $scope.bill.OrderNumber;
+                    $scope.bill.itemProducts.$fetch().$asPromise().then(function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            response[i] = {
+                                Id: ($stateParams.action == 'update') ? response[i].Id : null,
+                                Product: response[i].Product,
+                                Price: response[i].Product.Price,
+                                Quantity: response[i].Quantity,
+                                QuantitySave: parseInt(response[i].Quantity)
+                            };
+                        }
+                        $scope.bill.itemProducts = response;
+
+                        delete $scope.bill.Updater;
+                        delete $scope.bill.SubTotal;
+                        delete $scope.bill.TotalTax;
+                        delete $scope.bill.Amount;
+                    })
+                    if ($stateParams.action == 'copyto') {
+                        $scope.bill.Status = 'open';
+                        $scope.bill.Id = null;
                     }
-                    $scope.bill.itemProducts = response;
-
-                    delete $scope.bill.Updater;
-                    delete $scope.bill.SubTotal;
-                    delete $scope.bill.TotalTax;
-                    delete $scope.bill.Amount;
-                })
-                if ($stateParams.action == 'copyto') {
-                    $scope.bill.Status = 'open';
-                    $scope.bill.Id = null;
-                }
-                $scope.Type = $scope.bill.Type;
-            });
-
-
+                    $scope.Type = $scope.bill.Type;
+                });
+            }
         } else {
             $scope.bill = Bill.$build();
             $scope.bill.Currency = 'USD';
@@ -75,10 +100,9 @@ angular.module('bill').controller('BillFormController', ['$scope', '$rootScope',
             $scope.bill.itemProducts.$build().$reveal();
 
             /*var invoiceNumber = Invoice.maxOrderNumber($scope.Type).success(function (response) {
-                $scope.invoice.OrderNumber = response.max;
-            });*/
+             $scope.invoice.OrderNumber = response.max;
+             });*/
         }
-
 
 
         // TODO: implement Invoice.getMaxOrderNumber()

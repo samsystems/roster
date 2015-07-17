@@ -28,6 +28,11 @@ angular.module('bill', [
             templateUrl: 'src/modules/bill/views/detail.html',
             controller: 'BillViewController'
         })
+        .state('app.bill-copyto', {
+            url: 'bill/update/:id/:action',
+            templateUrl: 'src/modules/bill/views/form.html',
+            controller: 'BillFormController'
+        })
         .state('app.bill-update', {
             url: 'vendors/update/:id',
             templateUrl: 'src/modules/bill/views/form.html',

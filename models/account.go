@@ -2,7 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 

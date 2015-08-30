@@ -2,7 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
@@ -98,7 +98,7 @@ func GetNotificationByKeyword(keyword string, user *User, page int, order string
 
 		// execute the raw query string
 		o := orm.NewOrm()
-		o.Raw(sql,  "%"+keyword+"%","%"+keyword+"%", user.Id).QueryRows(&notifications)
+		o.Raw(sql, "%"+keyword+"%", "%"+keyword+"%", user.Id).QueryRows(&notifications)
 		return notifications, nil
 	}
 

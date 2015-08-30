@@ -2,7 +2,7 @@ package validation
 
 import (
 	"fmt"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"reflect"
 )
 

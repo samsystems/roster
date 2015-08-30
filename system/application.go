@@ -1,8 +1,8 @@
 package system
 
 import (
-	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"orm"
 
 	//	"github.com/golang/glog"
 	"strings"

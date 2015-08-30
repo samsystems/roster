@@ -2,7 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
@@ -89,7 +89,6 @@ func GetVendorByKeyword(keyword string, user *User, page int, order string, coun
 	}
 	var vendors []Vendor
 
-	
 	if count == true {
 		qb, _ := orm.NewQueryBuilder("mysql")
 		qb.Select("count(vendor.id)")
@@ -109,20 +108,20 @@ func GetVendorByKeyword(keyword string, user *User, page int, order string, coun
 		qs = ParseQuerySetterOrder(qs, order)
 		qs.Offset(page * limit).Limit(limit).All(&vendors)
 		return vendors, nil
-		
-		/*
-		
-		
-		ParseQueryBuilderOrder(qb, order, "vendor")
-		qb.Limit(limit).Offset(page * VENDOR_LIMIT)
-		qb.InnerJoin("location")
-		// export raw query string from QueryBuilder object
-		sql := qb.String()
 
-		// execute the raw query string
-		o := orm.NewOrm()
-		o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&vendors)
-		return vendors, nil*/
+		/*
+
+
+			ParseQueryBuilderOrder(qb, order, "vendor")
+			qb.Limit(limit).Offset(page * VENDOR_LIMIT)
+			qb.InnerJoin("location")
+			// export raw query string from QueryBuilder object
+			sql := qb.String()
+
+			// execute the raw query string
+			o := orm.NewOrm()
+			o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&vendors)
+			return vendors, nil*/
 	}
 
 }
@@ -142,8 +141,7 @@ func GetAllVendorsWithoutPagination(user *User) ([]Vendor, interface{}) {
 	var vendors []Vendor
 	querySetter := o.QueryTable("vendor")
 	querySetter = querySetter.Filter("company", user.Company).Filter("deleted__isnull", true)
-	querySetter=querySetter.RelatedSel("Location").RelatedSel("Company").RelatedSel("Creator").RelatedSel("Updater")
+	querySetter = querySetter.RelatedSel("Location").RelatedSel("Company").RelatedSel("Creator").RelatedSel("Updater")
 	querySetter.All(&vendors)
 	return vendors, nil
 }
-

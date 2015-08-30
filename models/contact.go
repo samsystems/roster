@@ -2,27 +2,27 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
 const CONTACT_LIMIT int = 20
 
 type Contact struct {
-	Id                 string        `orm:"pk"`
-	Name               string
-	LastName           string
-	Email              string
-	Phone              string
-	IncludeEmail       bool
-	Owner              string
-	OwnerId            string
-	Deleted            time.Time     `orm:"type(datetime)"`
-	Creator            *User         `orm:"rel(one)" valid:"Entity(Creator)"`
-	Created            time.Time     `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone    int
-	Updater            *User         `orm:"rel(one)" valid:"Entity(Updater)"`
-	Updated            time.Time     `orm:"auto_now_add;type(datetime)"`
+	Id              string `orm:"pk"`
+	Name            string
+	LastName        string
+	Email           string
+	Phone           string
+	IncludeEmail    bool
+	Owner           string
+	OwnerId         string
+	Deleted         time.Time `orm:"type(datetime)"`
+	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
+	Created         time.Time `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone int
+	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
+	Updated         time.Time `orm:"auto_now_add;type(datetime)"`
 	UpdatedTimeZone int
 }
 
@@ -109,20 +109,20 @@ func DeleteContact(contact *Contact) {
 	o.Update(contact)
 }
 
-func GetAllContactByOwner(owner string, uidOwner string) ([]Contact) {
+func GetAllContactByOwner(owner string, uidOwner string) []Contact {
 	o := orm.NewOrm()
 	var contacts []Contact
 	querySetter := o.QueryTable("contact")
 	querySetter.Filter("deleted__isnull", true).Filter("owner_id", uidOwner).Filter("owner", owner).All(&contacts)
-	
+
 	return contacts
 }
 
-func GetAllContactToDeleteByIds(owner string,idOwner string, idsContact []string) ([]Contact) {
+func GetAllContactToDeleteByIds(owner string, idOwner string, idsContact []string) []Contact {
 	o := orm.NewOrm()
 	var contacts []Contact
 	querySetter := o.QueryTable("contact")
-	querySetter.Filter("owner", owner).Filter("owner_id", idOwner).Filter("deleted__isnull", true).Exclude("id__in",idsContact).All(&contacts)
-	
+	querySetter.Filter("owner", owner).Filter("owner_id", idOwner).Filter("deleted__isnull", true).Exclude("id__in", idsContact).All(&contacts)
+
 	return contacts
 }

@@ -5,30 +5,30 @@ import (
 
 	"time"
 
-	"github.com/astaxie/beego/orm"
+	"orm"
 )
 
 const COMPANY_LIMIT int = 5
 
 type Company struct {
-	Id                     string        `orm:"pk"`
-	Creator                *User         `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater                *User         `orm:"rel(one)" valid:"Entity(Updater)"`
-	Name                   string
-	IntId                  int           `json:",string"`
-	TaxId                  string
-	Location               *Location     `orm:"rel(one)" valid:"Entity(Location)"`
-	Phone                  string
-	Tax                    float32       `json:",string"`
-	Mobile                 string
-	Fax                    string
-	Email                  string
-	OrderNumber            int           `json:",string"`
-	Deleted                time.Time     `orm:"type(datetime)"`
-	Created                time.Time     `orm:"auto_now_add;type(datetime)"`
-	CreatedTimeZone        int
-	Updated                time.Time      `orm:"auto_now;type(datetime)"`
-	UpdatedTimeZone        int
+	Id              string `orm:"pk"`
+	Creator         *User  `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater         *User  `orm:"rel(one)" valid:"Entity(Updater)"`
+	Name            string
+	IntId           int `json:",string"`
+	TaxId           string
+	Location        *Location `orm:"rel(one)" valid:"Entity(Location)"`
+	Phone           string
+	Tax             float32 `json:",string"`
+	Mobile          string
+	Fax             string
+	Email           string
+	OrderNumber     int       `json:",string"`
+	Deleted         time.Time `orm:"type(datetime)"`
+	Created         time.Time `orm:"auto_now_add;type(datetime)"`
+	CreatedTimeZone int
+	Updated         time.Time `orm:"auto_now;type(datetime)"`
+	UpdatedTimeZone int
 }
 
 func init() {
@@ -57,7 +57,7 @@ func GetAllCompany(page int, order string, count bool, limit int) (*[]Company, i
 	} else {
 		qs = ParseQuerySetterOrder(qs, order)
 		qs.Offset(page * limit).Limit(limit).All(&companies)
-		
+
 		return &companies, nil
 	}
 }

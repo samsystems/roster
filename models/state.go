@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
@@ -12,7 +12,7 @@ type State struct {
 	Country         *Country `orm:"rel(fk)"`
 	Name            string
 	AccentName      string
-	Deleted         time.Time     `orm:"type(datetime)"`
+	Deleted         time.Time `orm:"type(datetime)"`
 	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
 	Updated         time.Time `orm:"auto_now_add;type(datetime)"`

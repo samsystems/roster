@@ -2,29 +2,29 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
 const LOCATION_LIMIT int = 10
 
 type Location struct {
-	Id              string      `orm:"pk"`
+	Id              string `orm:"pk"`
 	Name            string
 	Description     string
 	Address         string
 	Address1        string
 	City            string
 	Zipcode         string
-	State           *State      `orm:"rel(one)" valid:"Entity(State)"`
-	Country         *Country    `orm:"rel(one)" valid:"Entity(Country)"`
-	Company         *Company    `orm:"null;rel(one); valid:"Entity(Company)"`
-	Creator         *User       `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User       `orm:"rel(one)" valid:"Entity(Updater)"`
-	Deleted         time.Time   `orm:"type(datetime)"`
-	Created         time.Time   `orm:"auto_now_add;type(datetime)"`
+	State           *State    `orm:"rel(one)" valid:"Entity(State)"`
+	Country         *Country  `orm:"rel(one)" valid:"Entity(Country)"`
+	Company         *Company  `orm:"null;rel(one); valid:"Entity(Company)"`
+	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
+	Deleted         time.Time `orm:"type(datetime)"`
+	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
-	Updated         time.Time   `orm:"auto_now;type(datetime)"`
+	Updated         time.Time `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone int
 }
 
@@ -122,22 +122,22 @@ func DeleteLocation(g *Location) {
 	o.Update(g)
 }
 
-func LocationToString(location *Location) (string) {
-	var ShippingLocation string;
+func LocationToString(location *Location) string {
+	var ShippingLocation string
 	o := orm.NewOrm()
 	if location != nil {
-		ShippingLocation =	location.Address
-		if location.Address1 != ""{
-			ShippingLocation +=  ", "+ location.Address1
+		ShippingLocation = location.Address
+		if location.Address1 != "" {
+			ShippingLocation += ", " + location.Address1
 		}
 		if location.State != nil {
 			o.Read(location.State)
-			ShippingLocation += ", "+location.State.Name
+			ShippingLocation += ", " + location.State.Name
 		}
-		
+
 		if location.Country != nil {
 			o.Read(location.Country)
-			ShippingLocation +=  ", "+ location.Country.Name
+			ShippingLocation += ", " + location.Country.Name
 		}
 	}
 	return ShippingLocation

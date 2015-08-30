@@ -19,7 +19,6 @@ If you don't have `GoAppEngine` installed, follow installation instructions desc
 Install dependencies
 ```
 go get github.com/gorilla/mux
-go get github.com/astaxie/beego/orm
 go get github.com/go-sql-driver/mysql
 go get code.google.com/p/go-uuid/uuid
 go get github.com/golang/glog

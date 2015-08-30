@@ -1,9 +1,9 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
-	"time"
 	"code.google.com/p/go-uuid/uuid"
+	"orm"
+	"time"
 )
 
 const PURCHASEORDERITEM_LIMIT int = 5
@@ -41,30 +41,29 @@ func AddPurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem) string {
 	return purchaseOrderItem.Id
 }
 
-func UpdatePurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem)  {
+func UpdatePurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem) {
 	o := orm.NewOrm()
 	o.Update(purchaseOrderItem)
 }
 
-
-func GetAllPurchaseOrderItems(uidPurchase string) ([]PurchaseOrderItem) {
+func GetAllPurchaseOrderItems(uidPurchase string) []PurchaseOrderItem {
 	o := orm.NewOrm()
 	var purchaseOrderItems []PurchaseOrderItem
 	querySetter := o.QueryTable("purchase_order_item")
 	querySetter.RelatedSel("Product").Filter("deleted__isnull", true).Filter("purchase_order_id", uidPurchase).All(&purchaseOrderItems)
-	
+
 	return purchaseOrderItems
-	
+
 }
 
-func GetAllPurchaseOrderItemsToDelete(uid string,idsPurchaseOrderItem []string) ([]PurchaseOrderItem) {
+func GetAllPurchaseOrderItemsToDelete(uid string, idsPurchaseOrderItem []string) []PurchaseOrderItem {
 	o := orm.NewOrm()
 	var purchaseOrderItems []PurchaseOrderItem
 	querySetter := o.QueryTable("purchase_order_item")
-	querySetter.Filter("purchase_order_id", uid).Filter("deleted__isnull", true).Exclude("id__in",idsPurchaseOrderItem).All(&purchaseOrderItems)
-	
+	querySetter.Filter("purchase_order_id", uid).Filter("deleted__isnull", true).Exclude("id__in", idsPurchaseOrderItem).All(&purchaseOrderItems)
+
 	return purchaseOrderItems
-	
+
 }
 
 func DeletePurchaseOrderItem(purchaseOrderItem *PurchaseOrderItem) {

@@ -2,7 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
@@ -20,9 +20,9 @@ type Document struct {
 	DateTimeZone    int
 	Authority       *User `orm:"rel(one)"`
 	Hash            string
-	Company         *Company `orm:"rel(one)"`
-	Deleted         time.Time     `orm:"type(datetime)"`
-	Created         time.Time     `orm:"auto_now_add;type(datetime)"`
+	Company         *Company  `orm:"rel(one)"`
+	Deleted         time.Time `orm:"type(datetime)"`
+	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
 	Updated         time.Time `orm:"auto_now_add;type(datetime)"`
 	UpdatedTimeZone int

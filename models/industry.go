@@ -1,20 +1,20 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
 const INDUSTRY_LIMIT int = 20
 
 type Industry struct {
-	Id              string   `orm:"pk"`
+	Id              string `orm:"pk"`
 	Code            int
 	Group           string
 	Description     string
-	Deleted             time.Time         `orm:"type(datetime)"`
-	Creator         *User  `orm:"rel(one)" valid:"Entity(Creator)"`
-	Updater         *User  `orm:"rel(one)" valid:"Entity(Updater)"`
+	Deleted         time.Time `orm:"type(datetime)"`
+	Creator         *User     `orm:"rel(one)" valid:"Entity(Creator)"`
+	Updater         *User     `orm:"rel(one)" valid:"Entity(Updater)"`
 	Created         time.Time `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone int
 	Updated         time.Time `orm:"auto_now_add;type(datetime)"`

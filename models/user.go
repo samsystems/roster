@@ -6,11 +6,13 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"errors"
-	"github.com/astaxie/beego/orm"
 	"net/http"
+	"orm"
 	"time"
 )
+
 const USER_LIMIT int = 20
+
 func init() {
 	orm.RegisterModel(new(User))
 }
@@ -55,11 +57,11 @@ type User struct {
 	CreatedTimeZone        int
 	Updated                time.Time `orm:"auto_now_add;type(datetime)"`
 	UpdatedTimeZone        int
-	IsActive               bool `orm:"default(false)"`
+	IsActive               bool      `orm:"default(false)"`
 	Deleted                time.Time `orm:"type(datetime)"`
-//	Group                  *Group   `orm:"rel(one)"`
-	Groups                 []*Group `orm:"rel(m2m)"`
-	Company                *Company `orm:"null;rel(one)"`
+	//	Group                  *Group   `orm:"rel(one)"`
+	Groups  []*Group `orm:"rel(m2m)"`
+	Company *Company `orm:"null;rel(one)"`
 }
 
 type Token struct {
@@ -122,7 +124,7 @@ func GetAllUsersWithoutPagination() []*User {
 }
 
 func GetAllUsers(user *User, page int, order string, count bool, limit int) ([]User, interface{}) {
-	
+
 	page -= 1
 	if limit < 0 {
 		limit = USER_LIMIT
@@ -137,8 +139,8 @@ func GetAllUsers(user *User, page int, order string, count bool, limit int) ([]U
 	} else {
 		qs = ParseQuerySetterOrder(qs, order)
 		qs.Offset(page * limit).Limit(limit).All(&users)
-		for i := 0; i < len(users); i++ { 
-			_, err :=o.LoadRelated(&users[i], "Groups")
+		for i := 0; i < len(users); i++ {
+			_, err := o.LoadRelated(&users[i], "Groups")
 			if err != nil {
 				panic(err)
 			}
@@ -149,7 +151,7 @@ func GetAllUsers(user *User, page int, order string, count bool, limit int) ([]U
 
 func GetUserByKeyword(keyword string, user *User, page int, order string, count bool, limit int) ([]User, interface{}) {
 	var users []User
-//	qb, _ := orm.NewQueryBuilder("mysql")
+	//	qb, _ := orm.NewQueryBuilder("mysql")
 	page -= 1
 	if limit < 0 {
 		limit = USER_LIMIT
@@ -163,7 +165,7 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 
 	qb.From("user user").
 		Where("user.first_name LIKE ?").And("user.company_id = ?")
-*/
+	*/
 	if count == true {
 		qb, _ := orm.NewQueryBuilder("mysql")
 		qb.Select("count(user.id)").From("user user").Where("user.first_name LIKE ?").And("user.company_id = ?")
@@ -180,27 +182,27 @@ func GetUserByKeyword(keyword string, user *User, page int, order string, count 
 		qs = qs.Filter("company", user.Company).Filter("deleted__isnull", true).Filter("first_name__icontains", keyword)
 		qs = ParseQuerySetterOrder(qs, order)
 		qs.Offset(page * limit).Limit(limit).All(&users)
-		for i := 0; i < len(users); i++ { 
-			_, err :=o.LoadRelated(&users[i], "Groups")
+		for i := 0; i < len(users); i++ {
+			_, err := o.LoadRelated(&users[i], "Groups")
 			if err != nil {
 				panic(err)
 			}
 		}
 		return users, nil
 		/*
-		ParseQueryBuilderOrder(qb, order, "user")
-		qb.Limit(limit).Offset(page * USER_LIMIT)
+			ParseQueryBuilderOrder(qb, order, "user")
+			qb.Limit(limit).Offset(page * USER_LIMIT)
 
-		// export raw query string from QueryBuilder object
-		sql := qb.String()
+			// export raw query string from QueryBuilder object
+			sql := qb.String()
 
-		// execute the raw query string
-		o := orm.NewOrm()
-		_,err :=o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&users)
-		if err != nil {
-			panic(err)
-		}
-		return users, nil*/
+			// execute the raw query string
+			o := orm.NewOrm()
+			_,err :=o.Raw(sql, "%"+keyword+"%", user.Company.Id).QueryRows(&users)
+			if err != nil {
+				panic(err)
+			}
+			return users, nil*/
 	}
 
 }
@@ -277,11 +279,11 @@ func UpdateUserGroups(user *User) {
 	m2m := o.QueryM2M(user, "Groups")
 	_, err := m2m.Clear()
 	if err != nil {
-	    panic(err)
+		panic(err)
 	}
 	for _, group := range tempGroup {
 		m2m.Add(group)
 	}
 	//m2m.Remove(removeGroups)
-//	o.Update(user)
+	//	o.Update(user)
 }

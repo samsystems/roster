@@ -2,14 +2,14 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
 const (
-	BILL_LIMIT             int = 5
-	BILL_ALL               string = "all"
-	BILL_DRAFT             string = "draft"
+	BILL_LIMIT int    = 5
+	BILL_ALL   string = "all"
+	BILL_DRAFT string = "draft"
 )
 
 type Bill struct {
@@ -28,14 +28,14 @@ type Bill struct {
 	DeliveryAttention   string
 	DeliveryPhone       string
 	Status              string
-	SubTotal            float32   `json:",string"`
+	SubTotal            float32 `json:",string"`
 	TotalTax            float32
-	Amount              float32   `json:",string"`
+	Amount              float32 `json:",string"`
 	Tax                 float32
-	Company             *Company  `orm:"rel(one)" valid:"Entity(Company)"`
+	Company             *Company    `orm:"rel(one)" valid:"Entity(Company)"`
 	BillItems           []*BillItem `orm:"reverse(many)"`
-	Deleted             time.Time `orm:"type(datetime)"`
-	Created             time.Time `orm:"auto_now_add;type(datetime)"`
+	Deleted             time.Time   `orm:"type(datetime)"`
+	Created             time.Time   `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone     int
 	Updated             time.Time `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone     int
@@ -49,7 +49,7 @@ func GetBill(uid string) (*Bill, error) {
 	c := Bill{Id: uid}
 	o := orm.NewOrm()
 	err := o.Read(&c)
-	
+
 	return &c, err
 }
 
@@ -74,7 +74,7 @@ func GetAllBill(status string, page int, order string, count bool, limit int) (*
 		return &bills, cnt
 	} else {
 		querySetter = ParseQuerySetterOrder(querySetter, order)
-		
+
 		querySetter.Offset(page * limit).Limit(limit).All(&bills)
 		return &bills, nil
 	}
@@ -169,8 +169,8 @@ func GetBillMaxOrderNumber() int {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("max(b.order_number)").From("bill b")
 	sql := qb.String()
-	
-	err:=o.Raw(sql).QueryRow(&total)
+
+	err := o.Raw(sql).QueryRow(&total)
 	if err != nil {
 		panic(err)
 	}

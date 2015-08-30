@@ -2,12 +2,12 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
 const (
-	PURCHASE_LIMIT             int = 5
+	PURCHASE_LIMIT             int    = 5
 	PURCHASE_ALL               string = "all"
 	PURCHASE_DRAFT             string = "draft"
 	PURCHASE_AWAITING_APPROVAL string = "awaiting_approval"
@@ -19,7 +19,7 @@ type PurchaseOrder struct {
 	Id                  string    `orm:"pk"`
 	Creator             *User     `orm:"rel(one)" valid:"Entity(Creator)"`
 	Updater             *User     `orm:"rel(one)" valid:"Entity(Updater)"`
-	Supplier            *Vendor     `orm:"rel(one)" valid:"Entity(Vendor)"`
+	Supplier            *Vendor   `orm:"rel(one)" valid:"Entity(Vendor)"`
 	OrderNumber         int       `json:",string"`
 	Reference           int       `json:",string"`
 	Date                time.Time `orm:"type(datetime)"`
@@ -32,14 +32,14 @@ type PurchaseOrder struct {
 	DeliveryAttention   string
 	DeliveryPhone       string
 	Status              string
-	SubTotal            float32   `json:",string"`
+	SubTotal            float32 `json:",string"`
 	TotalTax            float32
-	Amount              float32   `json:",string"`
+	Amount              float32 `json:",string"`
 	Tax                 float32
-	Company             *Company  `orm:"rel(one)" valid:"Entity(Company)"`
+	Company             *Company             `orm:"rel(one)" valid:"Entity(Company)"`
 	PurchaseProducts    []*PurchaseOrderItem `orm:"reverse(many)"`
-	Deleted             time.Time `orm:"type(datetime)"`
-	Created             time.Time `orm:"auto_now_add;type(datetime)"`
+	Deleted             time.Time            `orm:"type(datetime)"`
+	Created             time.Time            `orm:"auto_now_add;type(datetime)"`
 	CreatedTimeZone     int
 	Updated             time.Time `orm:"auto_now;type(datetime)"`
 	UpdatedTimeZone     int
@@ -56,7 +56,7 @@ func GetPurchaseOrder(uid string) (*PurchaseOrder, error) {
 	if c.Supplier != nil {
 		o.Read(c.Supplier)
 	}
-	
+
 	return &c, err
 }
 
@@ -81,7 +81,7 @@ func GetAllPurchaseOrder(status string, page int, order string, count bool, limi
 		return &purchaseOrders, cnt
 	} else {
 		querySetter = ParseQuerySetterOrder(querySetter.RelatedSel("Supplier"), order)
-		
+
 		querySetter.Offset(page * limit).Limit(limit).All(&purchaseOrders)
 		return &purchaseOrders, nil
 	}
@@ -176,8 +176,8 @@ func GetPurchaseMaxOrderNumber() int {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("max(pur.order_number)").From("purchase_order pur")
 	sql := qb.String()
-	
-	err:=o.Raw(sql).QueryRow(&total)
+
+	err := o.Raw(sql).QueryRow(&total)
 	if err != nil {
 		panic(err)
 	}

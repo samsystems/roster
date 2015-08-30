@@ -2,7 +2,7 @@ package models
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"github.com/astaxie/beego/orm"
+	"orm"
 	"time"
 )
 
@@ -147,7 +147,7 @@ func GetAllCustomersWithoutPagination(user *User) ([]Customer, interface{}) {
 	var customers []Customer
 	querySetter := o.QueryTable("customer")
 	querySetter = querySetter.Filter("company", user.Company).Filter("deleted__isnull", true)
-	querySetter=querySetter.RelatedSel("ShippingLocation").RelatedSel("BillingLocation").RelatedSel("Company").RelatedSel("Creator").RelatedSel("Updater")
+	querySetter = querySetter.RelatedSel("ShippingLocation").RelatedSel("BillingLocation").RelatedSel("Company").RelatedSel("Creator").RelatedSel("Updater")
 	querySetter.All(&customers)
 	return customers, nil
 }
